@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import colors from "../utils/colors";
-import { responsiveWidth } from "../utils/layout";
+import layout, { responsiveWidth } from "../utils/layout";
 
 export default function BottomView ({children}) {
     return(
@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.paleGrayBg,
         alignItems: 'center', 
         justifyContent: 'flex-start',
-        height: responsiveWidth(50)
+        height: responsiveWidth(50),
+        width: layout.width
     }
 })

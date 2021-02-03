@@ -28,7 +28,11 @@ export default function useAuth ({userEmail, userPassword}) {
                 formData.append("email", userEmail);
                 formdata.append("password", userPassword);
 
-                const data = await axios.post('', formData, myHeaders);
+                const data = await axios.post(
+                    '{{BASE_URL_REPORTS}}/api/login', 
+                    formData, 
+                    myHeaders
+                );
 
                 authDispatch({
                     type: "SET_TOKEN",

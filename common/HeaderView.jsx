@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import useLogout from "../hooks/useLogOut";
 import colors from "../utils/colors";
 import { responsiveWidth } from "../utils/layout";
-import Button from "./Button";
+import CommonButton from "./CommonButton";
 
 export default function HeaderView({children}) {
     const [logOut] = useLogout();
@@ -16,7 +16,7 @@ export default function HeaderView({children}) {
                     
                 </View>
                 <View style={styles.headerRightButton}>
-                    <Button 
+                    <CommonButton 
                         title="Logout"
                         buttonHeight={responsiveWidth(20.5)}
                         buttonColor={colors.white}

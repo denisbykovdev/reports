@@ -48,12 +48,12 @@ const styles = StyleSheet.create({
         fontSize: fonts.regular
     },
     buttonShadow: {
-        shadowOpacity: 0,
-        shadowRadius: 0,
         shadowOffset: {
-          height: 9,
-          width: 0
+          width: 0,
+          height: 0
         },
-        elevation: 10
+        shadowRadius: 3.5,
+        shadowOpacity: 1,
+        elevation: 5
     }
 })
