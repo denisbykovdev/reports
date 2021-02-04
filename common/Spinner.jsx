@@ -1,11 +1,12 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
+import colors from '../utils/colors';
 import SafeView from './SafeView';
 
 export default function Spinner() {
   return (
     <SafeView style={styles.container}>
-      <ActivityIndicator size="large" color={} />
+      <ActivityIndicator size="large" color={colors.paleGrayBg} />
     </SafeView>
   );
 }

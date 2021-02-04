@@ -4,7 +4,7 @@ import { authInitial, authReducer } from "../reducers/authReducer";
 import * as SecureStore from 'expo-secure-store';
 import { useCallback } from "react/cjs/react.production.min";
 
-export default function useAuth ({userEmail, userPassword}) {
+export default function useAuth () {
     const [authState, authDispatch] = useReducer(
         authInitial,
         authReducer

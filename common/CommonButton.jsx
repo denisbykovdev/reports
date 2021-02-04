@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import fonts from "../utils/fonts";
 
-export default function Button({
+export default function CommonButton({
     buttonHeight,
     buttonColor,
     title,
@@ -12,7 +12,8 @@ export default function Button({
     buttonShadow=false,
     buttonShadowColor
 }) {
-    <TouchableOpacity
+    return(
+        <TouchableOpacity
         style={[
             styles.button,
             { 
@@ -37,6 +38,8 @@ export default function Button({
 
         {children}
     </TouchableOpacity>
+    )
+   
 }
 
 const styles = StyleSheet.create({

@@ -7,6 +7,6 @@ export const loginSchema = Yup.object().shape({
     .label("Email"),
   password: Yup.string()
     .required()
-    .min(6, "6 symbols, lowercase letter, uppercase letter, special symbol")
+    .min(6, "not less than 6 symbols")
     .label("Password"),
 });

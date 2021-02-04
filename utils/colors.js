@@ -9,5 +9,6 @@ export default {
     darkSkyBlue: "#3072e3",
     popUpBg: "#e4e4e4",
     slate: "#505b6e",
-    error: "red"
+    error: "red",
+    azul: "#2e72e4"
 }
