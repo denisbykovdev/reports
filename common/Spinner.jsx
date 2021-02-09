@@ -1,20 +1,18 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import colors from '../utils/colors';
-import SafeView from './SafeView';
+import { responsiveWidth } from '../utils/layout';
 
 export default function Spinner() {
   return (
-    <SafeView style={styles.container}>
-      <ActivityIndicator size="large" color={colors.paleGrayBg} />
-    </SafeView>
+    <View style={styles.container}>
+      <ActivityIndicator size="large" color={colors.black} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    marginBottom: responsiveWidth(10)
   }
 });

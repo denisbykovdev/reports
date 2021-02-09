@@ -1,9 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import colors from "../utils/colors";
 import fonts from "../utils/fonts";
+import { responsiveWidth } from "../utils/layout";
 
 export default function CommonButton({
     buttonHeight,
+    buttonWidth,
     buttonColor,
     title,
     titleColor,
@@ -19,7 +22,9 @@ export default function CommonButton({
             { 
                 backgroundColor: buttonColor,
                 height: buttonHeight,
-                shadowColor: buttonShadowColor
+                width: buttonWidth,
+                shadowColor: buttonShadowColor,
+                borderColor: buttonColor
             },
             buttonShadow ? styles.buttonShadow : ""
             ]}
@@ -45,10 +50,19 @@ export default function CommonButton({
 const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        borderStyle: "solid",
+        borderWidth: 1,
+        // borderColor: colors.darkWhite,
+        borderRadius: 5,
+        flexDirection: 'row',
+        alignItems: 'center', 
+        justifyContent: 'center',
+        padding: responsiveWidth(10)
     },
     buttonTitle: {
-        fontSize: fonts.regular
+        fontSize: fonts.regular,
+        marginRight: responsiveWidth(10)
     },
     buttonShadow: {
         shadowOffset: {

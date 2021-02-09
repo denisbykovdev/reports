@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.paleGrayBg,
         alignItems: 'center', 
         justifyContent: 'flex-start',
-        height: responsiveWidth(50),
-        width: layout.width
+        height: responsiveWidth(85),
+        width: layout.width,
+        
     }
 })

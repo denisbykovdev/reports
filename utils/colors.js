@@ -10,5 +10,7 @@ export default {
     popUpBg: "#e4e4e4",
     slate: "#505b6e",
     error: "red",
-    azul: "#2e72e4"
+    azul: "#2e72e4",
+    paleGrayLight: "rgba(0, 0, 0, 0.2)",
+    battleShipGrey: "#717988"
 }

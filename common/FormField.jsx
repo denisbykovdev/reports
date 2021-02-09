@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useFormikContext } from "formik";
 import FormErrorMessage from "./FormErrorMessage";
-import { StyleSheet, TextInput, View, I18nManager } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import colors from "../utils/colors";
 import { responsiveWidth, responsiveHeight } from "../utils/layout";
-
-// I18nManager.forceRTL(true);
 
 export default function FormField({
   name,
@@ -66,17 +64,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.white,
     justifyContent: "flex-end",
-    flexDirection: "row-reverse",
-    height: 25,
-  },
-  input: {
+    flexDirection: "row",
+    height: responsiveWidth(50),
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: colors.darkWhite,
     backgroundColor: colors.white,
+    padding: responsiveWidth(10)
+  },
+  input: {
     height: "100%",
     width: "100%",
     textAlign : "right",
-    writingDirection: 'rtl' 
+    // writingDirection: 'rtl',
+    marginRight: responsiveWidth(10)
   },
 });

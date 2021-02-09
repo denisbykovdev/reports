@@ -1,29 +1,36 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import useLogout from "../hooks/useLogOut";
+import Exit from "../icons/Exit";
+import LogoVertical from "../icons/LogoVertical";
 import colors from "../utils/colors";
 import { responsiveWidth } from "../utils/layout";
 import CommonButton from "./CommonButton";
 
-export default function HeaderView({children}) {
+export default function HeaderView({ children }) {
     const [logOut] = useLogout();
 
-    return(
+    return (
         <View style={styles.headerContainer}>
             <View style={styles.header}>
                 <View style={styles.headerInner}>
-                    <Text>Eitan Peretz</Text>
-                    
+                    <LogoVertical />
+
                 </View>
                 <View style={styles.headerRightButton}>
-                    <CommonButton 
-                        title="Logout"
-                        buttonHeight={responsiveWidth(20.5)}
+                    <CommonButton
+                        title="יציאה"
+                        titleColor={colors.battleShipGrey}
+                        buttonShadow={true}
+                        buttonShadowColor={colors.paleGrayLight}
+                        buttonHeight={responsiveWidth(40)}
                         buttonColor={colors.white}
-                        onPress={logOut}
-                    />
+                        onPress={() => logOut()}
+                    >
+                        <Exit />
+                    </CommonButton>
                 </View>
-                
+
             </View>
             <View elevation={10} style={styles.headerMain}>
                 {children}
@@ -35,10 +42,11 @@ export default function HeaderView({children}) {
 const styles = StyleSheet.create({
     headerContainer: {
         paddingHorizontal: responsiveWidth(13.5),
-        backgroundColor: colors.paleGrayBg
+        backgroundColor: colors.paleGrayBg,
+        marginBottom: 15
     },
     header: {
-        height: responsiveWidth(37),
+        height: responsiveWidth(60),
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -48,13 +56,27 @@ const styles = StyleSheet.create({
     },
     headerMain: {
         backgroundColor: colors.white,
-        shadowColor: colors.white,
-        shadowOpacity: 0,
-        shadowRadius: 0,
+
+        shadowColor: colors.paleGrayLight,
+
         shadowOffset: {
-          height: 9,
-          width: 0
-        }
+      
+          width: 0,
+      
+          height: 0
+      
+        },
+      
+        shadowRadius: 9,
+      
+        shadowOpacity: 1,
+
+        elevation: 5,
+
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: colors.white,
+        borderRadius: 5,
     },
 
 })

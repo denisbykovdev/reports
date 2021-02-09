@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import colors from "../utils/colors";
 import fonts from "../utils/fonts";
+import { responsiveWidth } from "../utils/layout";
 
 export default function FormErrorMessage({ error, visible }) {
   if (!error || !visible) {
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
       fontSize: fonts.small,
-      color: colors.error
+      color: colors.error, 
+      marginBottom: responsiveWidth(10)
   },
 });

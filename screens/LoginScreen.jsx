@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, Text, View, I18nManager } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import FormButton from "../common/FormButton";
 import FormContainer from "../common/FormContainer";
 import FormErrorMessage from "../common/FormErrorMessage";
@@ -13,18 +13,30 @@ import AvoidingView from "../common/AvoidingView";
 import { responsiveWidth } from "../utils/layout";
 import fonts from "../utils/fonts";
 import colors from "../utils/colors";
-
-// I18nManager.forceRTL(true);
+import Logo from "../icons/Logo";
+import EmailInput from "../icons/EmailInput";
+import PassInput from "../icons/PassInput";
+import Enter from "../icons/Enter";
 
 export default function LoginScreen({ navigation }) {
   useStatusBar("dark-content");
 
-  //   const [loading, token, error, logIn] = useAuth();
+  const [loading, token, error, logIn] = useAuth();
 
   async function handleOnLogin(values) {
     const { email, password } = values;
-    // await logIn(email, password);
-    // await token && navigation.navigate("AppStack");
+
+    console.log(
+      "---LoginScreen:handleOnLogin/creds:", email, password
+    )
+
+    await logIn(email, password);
+
+    console.log(
+      "---LoginScreen:handleOnLogin/after logIn:", token, loading, error
+    )
+
+    await token === null && navigation.navigate("AppStack")
   }
 
   return (
@@ -33,7 +45,7 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.loginContainer}>
 
           <View style={styles.logoContainer}>
-            <Text style={styles.logoTitle}>Eitan Peretz</Text>
+            <Logo />
           </View>
 
           <FormContainer
@@ -50,7 +62,9 @@ export default function LoginScreen({ navigation }) {
               // autoFocus={true}
               width={responsiveWidth(110)}
               style={styles.loginField}
-            ></FormField>
+            >
+              <EmailInput />
+            </FormField>
 
             <FormField
               name="password"
@@ -60,11 +74,24 @@ export default function LoginScreen({ navigation }) {
               textContentType="password"
               width={responsiveWidth(110)}
               style={styles.loginField}
-            ></FormField>
+            >
+              <PassInput />
+            </FormField>
 
-            {/* {loading && <Spinner />} */}
-            <FormButton title={"כניסה"} />
-            {/* {<FormErrorMessage error={error} visible={true} />} */}
+            {loading && <Spinner />}
+
+            {<FormErrorMessage error={error !== null && String(error)} visible={true} />}
+
+            <FormButton
+              title={"כניסה"}
+              titleColor={colors.white}
+              buttonHeight={50}
+              buttonColor={colors.darkSkyBlue}
+              buttonWidth={responsiveWidth(255)}
+              buttonShadow={true}
+            >
+              <Enter />
+            </FormButton>
           </FormContainer>
         </View>
       </AvoidingView>
@@ -73,20 +100,19 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  loginContainer: { 
-    alignItems: "center", 
+  loginContainer: {
+    alignItems: "center",
     justifyContent: "center",
     width: '100%',
     height: '100%'
   },
   logoContainer: {
-    marginBottom: responsiveWidth(12)
+    marginBottom: responsiveWidth(12),
+    alignItems: 'center',
+    // width: responsiveWidth(300)
   },
   loginField: {
-    marginBottom: responsiveWidth(12)
-  },
-  logoTitle: {
-    fontSize: fonts.xlarge,
-    color: colors.azul
+    marginBottom: responsiveWidth(12),
+    width: responsiveWidth(255)
   }
 })
