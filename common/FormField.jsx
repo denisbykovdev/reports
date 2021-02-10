@@ -9,7 +9,7 @@ export default function FormField({
   name,
   width = "100%",
   placeholder,
-  borderRadius = "5",
+  borderRadius = 5,
   children,
   style,
   ...otherProps
@@ -29,7 +29,7 @@ export default function FormField({
           styles.formField,
           {
             width: width,
-            borderRadius: borderRadius,
+            borderRadius,
           },
           style
         ]}

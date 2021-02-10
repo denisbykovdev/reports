@@ -60,7 +60,7 @@ export default function LoginScreen({ navigation }) {
               keyboardType="email-address"
               textContentType="emailAddress"
               // autoFocus={true}
-              width={responsiveWidth(110)}
+              width={responsiveWidth(180)}
               style={styles.loginField}
             >
               <EmailInput />
@@ -72,7 +72,7 @@ export default function LoginScreen({ navigation }) {
               autoCapitalize="none"
               autoCorrect={false}
               textContentType="password"
-              width={responsiveWidth(110)}
+              width={responsiveWidth(180)}
               style={styles.loginField}
             >
               <PassInput />
@@ -85,9 +85,9 @@ export default function LoginScreen({ navigation }) {
             <FormButton
               title={"כניסה"}
               titleColor={colors.white}
-              buttonHeight={50}
+              buttonHeight={43}
               buttonColor={colors.darkSkyBlue}
-              buttonWidth={responsiveWidth(255)}
+              buttonWidth={responsiveWidth(180)}
               buttonShadow={true}
             >
               <Enter />
@@ -108,11 +108,10 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     marginBottom: responsiveWidth(12),
-    alignItems: 'center',
-    // width: responsiveWidth(300)
+    alignItems: 'center'
   },
   loginField: {
     marginBottom: responsiveWidth(12),
-    width: responsiveWidth(255)
+    width: responsiveWidth(180)
   }
 })

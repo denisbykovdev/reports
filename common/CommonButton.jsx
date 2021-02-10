@@ -13,7 +13,10 @@ export default function CommonButton({
     onPress,
     children,
     buttonShadow=false,
-    buttonShadowColor
+    buttonShadowColor,
+    borderRadius = 5,
+    borderColor = buttonColor,
+    style
 }) {
     return(
         <TouchableOpacity
@@ -24,9 +27,11 @@ export default function CommonButton({
                 height: buttonHeight,
                 width: buttonWidth,
                 shadowColor: buttonShadowColor,
-                borderColor: buttonColor
+                borderColor,
+                borderRadius,
             },
-            buttonShadow ? styles.buttonShadow : ""
+            buttonShadow ? styles.buttonShadow : "",
+            style
             ]}
         onPress={onPress}
     >
@@ -54,7 +59,7 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderWidth: 1,
         // borderColor: colors.darkWhite,
-        borderRadius: 5,
+        // borderRadius: 5,
         flexDirection: 'row',
         alignItems: 'center', 
         justifyContent: 'center',
@@ -71,6 +76,6 @@ const styles = StyleSheet.create({
         },
         shadowRadius: 3.5,
         shadowOpacity: 1,
-        elevation: 5
+        elevation: 10
     }
 })

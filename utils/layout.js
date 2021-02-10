@@ -3,7 +3,7 @@ import { Dimensions } from 'react-native';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const widthScale = width < 600 ? 375 : 600;
+const widthScale = width < 600 ? 360 : 600;
 
 export const responsiveWidth = (length) => {
   const ratio = length / widthScale;
@@ -12,7 +12,7 @@ export const responsiveWidth = (length) => {
 }
 
 export const responsiveHeight = (length) => {
-  const scale = 812;
+  const scale = 630;
   const ratio = length / scale;
   const newLength = Math.round(ratio * height);
   return newLength;

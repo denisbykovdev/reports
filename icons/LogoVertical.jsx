@@ -1,9 +1,9 @@
 import React from "react";
 import { Svg, G, Path, Polygon, Rect } from "react-native-svg";
 
-const LogoVertical = () => (
-    <Svg x="0px" y="0px" width="104.333px"
-        height="52.999px" viewBox="0 0 204.333 52.999" enable-background="new 0 0 204.333 52.999">
+const LogoVertical = ({width = 104.333, height = 52.999}) => (
+    <Svg x="0px" y="0px" width={width}
+        height={height} viewBox="0 0 204.333 52.999" enable-background="new 0 0 204.333 52.999">
 
         <G>
             <G>

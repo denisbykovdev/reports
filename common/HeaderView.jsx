@@ -4,7 +4,7 @@ import useLogout from "../hooks/useLogOut";
 import Exit from "../icons/Exit";
 import LogoVertical from "../icons/LogoVertical";
 import colors from "../utils/colors";
-import { responsiveWidth } from "../utils/layout";
+import layout, { responsiveWidth } from "../utils/layout";
 import CommonButton from "./CommonButton";
 
 export default function HeaderView({ children }) {
@@ -12,9 +12,14 @@ export default function HeaderView({ children }) {
 
     return (
         <View style={styles.headerContainer}>
-            <View style={styles.header}>
+            <View style={[styles.header, {
+                alignItems: layout.width > 600 ? "center" : ""
+            }]}>
                 <View style={styles.headerInner}>
-                    <LogoVertical />
+                    <LogoVertical 
+                        height={41}
+                        width={149}
+                    />
 
                 </View>
                 <View style={styles.headerRightButton}>
@@ -23,16 +28,17 @@ export default function HeaderView({ children }) {
                         titleColor={colors.battleShipGrey}
                         buttonShadow={true}
                         buttonShadowColor={colors.paleGrayLight}
-                        buttonHeight={responsiveWidth(40)}
+                        buttonHeight={responsiveWidth(41)}
                         buttonColor={colors.white}
                         onPress={() => logOut()}
+                        borderRadius={10}
                     >
                         <Exit />
                     </CommonButton>
                 </View>
 
             </View>
-            <View elevation={10} style={styles.headerMain}>
+            <View elevation={5} style={styles.headerMain}>
                 {children}
             </View>
         </View>
@@ -41,13 +47,13 @@ export default function HeaderView({ children }) {
 
 const styles = StyleSheet.create({
     headerContainer: {
-        paddingHorizontal: responsiveWidth(13.5),
+        paddingHorizontal: responsiveWidth(31),
         backgroundColor: colors.paleGrayBg,
         marginBottom: 15
     },
     header: {
-        height: responsiveWidth(60),
-        alignItems: 'center',
+        height: responsiveWidth(77),
+        // alignItems: 'center',
         justifyContent: 'center'
     },
     headerRightButton: {
@@ -71,12 +77,12 @@ const styles = StyleSheet.create({
       
         shadowOpacity: 1,
 
-        elevation: 5,
+        elevation: 10,
 
         borderStyle: "solid",
         borderWidth: 1,
         borderColor: colors.white,
-        borderRadius: 5,
+        borderRadius: 10,
     },
 
 })
