@@ -1,5 +1,6 @@
 export const authInitial = {
     token: null,
+    isAdmin: false,
     loading: false,
     error: null
 }
@@ -17,8 +18,14 @@ export const authReducer = (
         case "SET_TOKEN":
             return {
                 ...state,
+                token: action.payload,
+                // isAdmin: true,
                 loading: false,
-                token: action.payload
+            };
+        case "SET_ADMIN":
+            return {
+                ...state,
+                isAdmin: action.payload
             };
         case "DEL_TOKEN":
             return {

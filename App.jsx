@@ -8,7 +8,13 @@ import * as SplashScreen from "expo-splash-screen";
 
 // I18nManager.forceRTL(false);
 
+// import { StateInspector } from "reinspect";
+
 export default function App() {
   SplashScreen.hideAsync();
-  return <Router />;
+  return (
+    // <StateInspector name="example">
+      <Router />
+    // </StateInspector>
+  )
 }

@@ -21,7 +21,7 @@ import Enter from "../icons/Enter";
 export default function LoginScreen({ navigation }) {
   useStatusBar("dark-content");
 
-  const [loading, token, error, logIn] = useAuth();
+  const [loading, token, isAdmin, error, logIn] = useAuth("useAuth");
 
   async function handleOnLogin(values) {
     const { email, password } = values;
@@ -33,10 +33,15 @@ export default function LoginScreen({ navigation }) {
     await logIn(email, password);
 
     console.log(
-      "---LoginScreen:handleOnLogin/after logIn:", token, loading, error
+      "---LoginScreen:handleOnLogin/after logIn:", loading, token, isAdmin, error
     )
+    
 
-    await token === null && navigation.navigate("AppStack")
+    await loading === false && navigation.navigate(
+      "AppStack", {
+        screen: "Reports",  params: {isAdmin: isAdmin}
+      }
+    )
   }
 
   return (

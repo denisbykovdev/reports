@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import * as SecureStore from 'expo-secure-store';
+import {useState} from "reinspect"
 
-export default function useToken() {
-    const [token, setToken] = useState(null);
+export default function useToken(id) {
+    const [token, setToken] = useState(null, id);
 
     useEffect(() => {
         (async function getToken(){
             const token = await SecureStore.getItemAsync("userToken");
-            await setToken(token);
+            setToken(token);
         })()
     }, [])
 
