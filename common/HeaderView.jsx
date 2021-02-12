@@ -13,12 +13,12 @@ export default function HeaderView({ children }) {
     return (
         <View style={styles.headerContainer}>
             <View style={[styles.header, {
-                // alignItems: layout.width > 600 ? "center" : "stretch"
+                alignItems: layout.width > 600 ? "center" : "stretch"
             }]}>
                 <View style={styles.headerInner}>
                     <LogoVertical 
-                        height={41}
-                        width={149}
+                        height={responsiveWidth(41)}
+                        width={responsiveWidth(149)}
                     />
 
                 </View>
@@ -33,7 +33,10 @@ export default function HeaderView({ children }) {
                         onPress={() => logOut()}
                         borderRadius={10}
                     >
-                        <Exit />
+                        <Exit 
+                            height={responsiveWidth(12)}
+                            width={responsiveWidth(12)}
+                        />
                     </CommonButton>
                 </View>
 

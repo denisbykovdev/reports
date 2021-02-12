@@ -9,12 +9,12 @@ const scaleFontSize = (fontSize) => {
 }
 
 //fontSize
-const xsmall = scaleFontSize(11);
-const small = scaleFontSize(12);
-const regular = scaleFontSize(13);
-const medium = scaleFontSize(15);
-const large = scaleFontSize(17);
-const xlarge = scaleFontSize(20);
+const xsmall = scaleFontSize(13);
+const small = scaleFontSize(14);
+const regular = scaleFontSize(15);
+const medium = scaleFontSize(16);
+const large = scaleFontSize(18);
+const xlarge = scaleFontSize(25);
 
 export default {
     xsmall,

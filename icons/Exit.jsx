@@ -1,9 +1,9 @@
 import React from "react";
 import { Svg, G, Path } from "react-native-svg";
 
-const Exit = () => (
-    <Svg x="0px" y="0px" width="10.083px"
-        height="10.958px" viewBox="0 0 10.083 10.958" enable-background="new 0 0 10.083 10.958" >
+const Exit = ({width = 10.083, height = 10.958}) => (
+    <Svg x="0px" y="0px" width={width}
+        height={height} viewBox="0 0 10.083 10.958" enable-background="new 0 0 10.083 10.958" >
 
         <G >
             <G>

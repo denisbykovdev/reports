@@ -4,6 +4,8 @@ import FormErrorMessage from "./FormErrorMessage";
 import { StyleSheet, TextInput, View } from "react-native";
 import colors from "../utils/colors";
 import { responsiveWidth, responsiveHeight } from "../utils/layout";
+import fonts from "../utils/fonts";
+import weights from "../utils/weights";
 
 export default function FormField({
   name,
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     justifyContent: "flex-end",
     flexDirection: "row",
-    height: responsiveWidth(50),
+    height: responsiveWidth(43),
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: colors.darkWhite,
@@ -77,6 +79,8 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign : "right",
     // writingDirection: 'rtl',
-    marginRight: responsiveWidth(10)
+    marginRight: responsiveWidth(10),
+    fontSize: fonts.xsmall,
+    fontWeight: weights.regular
   },
 });

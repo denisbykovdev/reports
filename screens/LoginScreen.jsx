@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useContext, useEffect } from "react";
+import { StyleSheet, View } from "react-native";
 import FormButton from "../common/FormButton";
 import FormContainer from "../common/FormContainer";
 import FormErrorMessage from "../common/FormErrorMessage";
@@ -7,22 +7,18 @@ import FormField from "../common/FormField";
 import SafeView from "../common/SafeView";
 import { loginSchema } from "../constants/validationSchema";
 import useStatusBar from "../hooks/useStatusBar";
-import useAuth from "../hooks/useAuth";
 import Spinner from "../common/Spinner";
 import AvoidingView from "../common/AvoidingView";
 import { responsiveWidth } from "../utils/layout";
-import fonts from "../utils/fonts";
 import colors from "../utils/colors";
 import Logo from "../icons/Logo";
 import EmailInput from "../icons/EmailInput";
 import PassInput from "../icons/PassInput";
 import Enter from "../icons/Enter";
 import { AuthContext } from "../providers/AuthProvider";
-import axios from "axios";
-import { useEffect } from "react";
 
 export default function LoginScreen({ navigation }) {
-  useStatusBar("dark-content");
+  useStatusBar("dark-content", colors.paleGrayBg);
 
   const {authState, logIn} = useContext(AuthContext);
 
@@ -93,7 +89,7 @@ export default function LoginScreen({ navigation }) {
             <FormButton
               title={"כניסה"}
               titleColor={colors.white}
-              buttonHeight={43}
+              buttonHeight={responsiveWidth(43)}
               buttonColor={colors.darkSkyBlue}
               buttonWidth={responsiveWidth(180)}
               buttonShadow={true}

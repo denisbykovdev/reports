@@ -11,7 +11,7 @@ export default function useStatusBar(
 
   useFocusEffect(
     useCallback(() => {
-      Platform.OS === `Android`
+      Platform.OS === "android"
         ? StatusBar.setBackgroundColor(color, animated)
         : StatusBar.setBarStyle(style, animated);
     }, [Platform.OS])

@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import colors from "../utils/colors";
 import fonts from "../utils/fonts";
 import { responsiveWidth } from "../utils/layout";
+import weights from "../utils/weights";
 
 export default function CommonButton({
     buttonHeight,
@@ -16,6 +17,7 @@ export default function CommonButton({
     buttonShadowColor,
     borderRadius = 5,
     borderColor = buttonColor,
+    titleFontSize = fonts.small,
     style
 }) {
     return(
@@ -39,7 +41,8 @@ export default function CommonButton({
             style={[
                 styles.buttonTitle,
                 {
-                    color: titleColor
+                    color: titleColor,
+                    fontSize: titleFontSize
                 }
             ]}
         >
@@ -61,13 +64,14 @@ const styles = StyleSheet.create({
         // borderColor: colors.darkWhite,
         // borderRadius: 5,
         flexDirection: 'row',
-        alignItems: 'center', 
-        justifyContent: 'center',
+        // alignItems: 'center', 
+        // justifyContent: 'center',
         padding: responsiveWidth(10)
     },
     buttonTitle: {
-        fontSize: fonts.regular,
-        marginRight: responsiveWidth(10)
+        // fontSize: fonts.regular,
+        marginRight: responsiveWidth(10),
+        fontWeight: weights.medium,
     },
     buttonShadow: {
         shadowOffset: {
