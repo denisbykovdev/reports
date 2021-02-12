@@ -18,20 +18,17 @@ export const authReducer = (
         case "SET_TOKEN":
             return {
                 ...state,
-                token: action.payload,
-                // isAdmin: true,
+                token: action.token,
+                isAdmin: action.isAdmin,
                 loading: false,
-            };
-        case "SET_ADMIN":
-            return {
-                ...state,
-                isAdmin: action.payload
             };
         case "DEL_TOKEN":
             return {
                 ...state,
-                loading: false,
-                token: null
+                token: null,
+                isAdmin: false,
+                error: null,
+                loading: false
             }
         case "ERROR_TOKEN":
             return {

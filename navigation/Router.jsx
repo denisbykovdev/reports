@@ -7,22 +7,18 @@ import AuthStack from "./AuthStack";
 import { createStackNavigator } from "@react-navigation/stack";
 
 // import { I18nManager } from "react-native";
-
 // I18nManager.forceRTL(false);
 
 import { StateInspector } from "reinspect";
-import useAuth from "../hooks/useAuth";
-
+// import useAuth from "../hooks/useAuth";
 
 export default function Router() {
-  // const token = useToken("useToken")
-  const [loading, token, isAdmin, error, logIn] = useAuth("useAuth");
-
+  // const {authState, logIn} = useAuth();
 
   const RouterStack = createStackNavigator();
 
   return (
-    <StateInspector name="app"> 
+    <StateInspector name="app">
       <NavigationContainer>
         <RouterStack.Navigator headerMode="none">
           <RouterStack.Screen name="AuthStack" component={AuthStack} />

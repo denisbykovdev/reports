@@ -3,22 +3,22 @@ import { authInitial, authReducer } from "../reducers/authReducer";
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
 
-export default function useLogout () {
+export default function useLogout() {
     const [authState, authDispatch] = useReducer(
         authReducer, authInitial
     )
-    
+
     const navigation = useNavigation();
 
     const logOut = useCallback(() => {
         (async function delToken() {
             const avaliableStore = await SecureStore.isAvailableAsync();
 
-            if(avaliableStore)
+            if (avaliableStore)
 
-            authDispatch({
-                type: "LOAD_TOKEN"
-            })
+                authDispatch({
+                    type: "LOAD_TOKEN"
+                })
 
             try {
                 await SecureStore.deleteItemAsync(
@@ -27,18 +27,18 @@ export default function useLogout () {
                 authDispatch({
                     type: "DEL_TOKEN"
                 });
-                navigation.navigate("AuthStack")  
+                navigation.navigate("AuthStack")
             }
-            catch(error){
+            catch (error) {
                 authDispatch({
                     type: "ERROR_TOKEN",
                     payload: error
                 })
             }
 
-        }) ()
-        
-    }, []) 
+        })()
+
+    }, [])
 
     return [
         logOut

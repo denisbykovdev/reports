@@ -11,13 +11,16 @@ import UserList from "../icons/UserList";
 import useAuth from "../hooks/useAuth";
 
 export default function ReportsScreen({ route }) {
-    // const { isAdmin } = route.params;
+    const { isAdmin } = route.params;
 
-    // console.log(
-    //     "---ReportsScreen/route.params.isAdmin", isAdmin
-    // )
+    console.log(
+        "---ReportsScreen/route.params.isAdmin", isAdmin
+    )
 
-    const [loading, token, isAdmin, error, logIn] = useAuth("useAuth");
+    
+    console.log(
+        "---ReportsScreen", isAdmin
+    )
 
     return (
         <SafeView>

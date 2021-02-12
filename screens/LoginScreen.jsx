@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import FormButton from "../common/FormButton";
 import FormContainer from "../common/FormContainer";
@@ -17,32 +17,35 @@ import Logo from "../icons/Logo";
 import EmailInput from "../icons/EmailInput";
 import PassInput from "../icons/PassInput";
 import Enter from "../icons/Enter";
+import { AuthContext } from "../providers/AuthProvider";
+import axios from "axios";
+import { useEffect } from "react";
 
 export default function LoginScreen({ navigation }) {
   useStatusBar("dark-content");
 
-  const [loading, token, isAdmin, error, logIn] = useAuth("useAuth");
+  const {authState, logIn} = useContext(AuthContext);
 
-  async function handleOnLogin(values) {
+  async function handleOnLogin(values, {resetForm}) {
     const { email, password } = values;
-
-    console.log(
-      "---LoginScreen:handleOnLogin/creds:", email, password
-    )
 
     await logIn(email, password);
 
-    console.log(
-      "---LoginScreen:handleOnLogin/after logIn:", loading, token, isAdmin, error
-    )
-    
+    await authState.token !== null && await resetForm();
+  }
 
-    await loading === false && navigation.navigate(
-      "AppStack", {
-        screen: "Reports",  params: {isAdmin: isAdmin}
+  console.log(
+      "---LoginScreen:handleOnLogin/after logIn:", authState
+  )
+
+  useEffect(() => {
+    authState.token !== null && navigation.navigate(
+      "AppStack", 
+      {
+        screen: "Reports",  params: {isAdmin: authState.isAdmin}
       }
     )
-  }
+  }, [authState.token])
 
   return (
     <SafeView>
@@ -56,7 +59,7 @@ export default function LoginScreen({ navigation }) {
           <FormContainer
             initialValues={{ email: "", password: "" }}
             validationSchema={loginSchema}
-            onSubmit={(values) => handleOnLogin(values)}
+            onSubmit={(values, {resetForm}) => handleOnLogin(values, {resetForm})}
           >
             <FormField
               name="email"
@@ -83,9 +86,9 @@ export default function LoginScreen({ navigation }) {
               <PassInput />
             </FormField>
 
-            {loading && <Spinner />}
+            {authState.loading && <Spinner />}
 
-            {<FormErrorMessage error={error !== null && String(error)} visible={true} />}
+            {<FormErrorMessage error={authState.error !== null && String(authState.error)} visible={true} />}
 
             <FormButton
               title={"כניסה"}
