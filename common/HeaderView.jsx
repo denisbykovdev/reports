@@ -13,7 +13,7 @@ export default function HeaderView({ children }) {
     return (
         <View style={styles.headerContainer}>
             <View style={[styles.header, {
-                alignItems: layout.width > 600 ? "center" : ""
+                // alignItems: layout.width > 600 ? "center" : "stretch"
             }]}>
                 <View style={styles.headerInner}>
                     <LogoVertical 
