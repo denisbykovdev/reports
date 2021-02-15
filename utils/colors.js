@@ -5,6 +5,7 @@ export default {
     white: "#fbfbfb",
     darkWhite: "#e1e1e1",
     darkBlueGray: "#212d46",
+    blueGray: "#abb4c1",
     black: "#000000",
     darkSkyBlue: "#3072e3",
     popUpBg: "#e4e4e4",
