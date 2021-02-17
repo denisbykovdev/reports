@@ -42,7 +42,7 @@ const useModal = () => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    shadowColor: "rgba(0, 0, 0, 0.2)",
+    shadowColor: colors.paleGrayLight,
     shadowOffset: {
       width: 0,
       height: 0,

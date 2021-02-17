@@ -13,5 +13,6 @@ export default {
     error: "red",
     azul: "#2e72e4",
     paleGrayLight: "rgba(0, 0, 0, 0.2)",
-    battleShipGrey: "#717988"
+    battleShipGrey: "#717988",
+    whiteTwo: "#e9e9e9"
 }

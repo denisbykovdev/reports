@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import useLogout from "../hooks/useLogOut";
 import Exit from "../icons/Exit";
 import LogoVertical from "../icons/LogoVertical";
@@ -41,7 +42,7 @@ export default function HeaderView({ children }) {
                 </View>
 
             </View>
-            <View elevation={5} style={styles.headerMain}>
+            <View elevation={10} style={styles.headerMain}>
                 {children}
             </View>
         </View>
@@ -62,30 +63,5 @@ const styles = StyleSheet.create({
     headerRightButton: {
         position: 'absolute',
         right: 0
-    },
-    headerMain: {
-        backgroundColor: colors.white,
-
-        shadowColor: colors.paleGrayLight,
-
-        shadowOffset: {
-      
-          width: 0,
-      
-          height: 0
-      
-        },
-      
-        shadowRadius: 9,
-      
-        shadowOpacity: 1,
-
-        elevation: 10,
-
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: colors.white,
-        borderRadius: 10,
-    },
-
+    }
 })
