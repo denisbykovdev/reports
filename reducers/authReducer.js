@@ -29,12 +29,12 @@ export const authReducer = (
                 isAdmin: false,
                 error: null,
                 loading: false
-            }
+            };
         case "ERROR_TOKEN":
             return {
                 ...state,
                 loading: false,
                 error: action.payload
-            }
+            };
     }
 }

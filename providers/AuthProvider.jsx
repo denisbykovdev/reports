@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { authInitial, authReducer } from "../reducers/authReducer";
 import * as SecureStore from 'expo-secure-store';
 import { useReducer } from "reinspect"
@@ -73,7 +73,9 @@ export default function AuthProvider({ children }) {
         
     }, [])
 
-
+    // const contextValue = useMemo(() => {
+    //     return { authState, authDispatch };
+    //   }, [authState, authDispatch]);
 
     return (
         <AuthContext.Provider value={{authState, logIn}}>
