@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         // borderRadius: 5,
         flexDirection: 'row',
         // alignItems: 'center', 
-        // justifyContent: 'center',
+        justifyContent: 'center',
         padding: responsiveWidth(10)
     },
     buttonTitle: {

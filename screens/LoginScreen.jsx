@@ -30,15 +30,15 @@ export default function LoginScreen({ navigation }) {
     await authState.token !== null && await resetForm();
   }
 
-  console.log(
-      "---LoginScreen:handleOnLogin/after logIn:", authState
-  )
+  // console.log(
+  //     "---LoginScreen:handleOnLogin/after logIn:", authState
+  // )
 
   useEffect(() => {
     authState.token !== null && navigation.navigate(
       "AppStack", 
       {
-        screen: "Reports",  params: {isAdmin: authState.isAdmin}
+        screen: "Reports",  params: {isAdmin: authState.isAdmin, token: authState.token}
       }
     )
   }, [authState.token])

@@ -12,17 +12,17 @@ export default function AuthProvider({ children }) {
         authReducer, authInitial
     )
 
-    console.log(
-        "***AuthProvider/authState:", authState
-    )
+    // console.log(
+    //     "***AuthProvider/authState:", authState
+    // )
 
     const logIn = useCallback((email, password) => {
 
         (async function () {
 
-            console.log(
-                ":::useAuth/logIn/creds:", email, password
-            )
+            // console.log(
+            //     "***AuthProvider/logIn/creds:", email, password
+            // )
 
             authDispatch({
                 type: "LOAD_TOKEN"

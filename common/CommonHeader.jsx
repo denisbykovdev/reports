@@ -31,21 +31,7 @@ const styles = StyleSheet.create({
     // paddingBottom: responsiveWidth(24),
     // backgroundColor: colors.white,
     flexDirection: "row",
-    justifyContent: "space-between",
- 
-    // borderTopLeftRadius: 10,
-    // borderTopRightRadius: 10,
-    // borderWidth: 1,
-    // borderColor: colors.white,
-
-    //  shadowColor: colors.paleGrayLight,
-    //     shadowOffset: {
-    //       width: 0,
-    //       height: 0
-    //     },
-    //     shadowRadius: 9,
-    //     shadowOpacity: 1,
-    //     elevation: 10,
+    justifyContent: "space-between"
   },
   contentContainer: {
     alignItems: "flex-end"
@@ -53,8 +39,8 @@ const styles = StyleSheet.create({
   modalHeaderClose: {
     height: responsiveWidth(20),
     width: responsiveWidth(20),
-    alignItems: "center",
-    justifyContent: 'center'
+    alignItems: "flex-start",
+    justifyContent: 'flex-end'
   },
   modalHeaderTitle: {
     color: colors.darkBlueGray,

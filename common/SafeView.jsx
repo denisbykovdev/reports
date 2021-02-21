@@ -6,7 +6,10 @@ import colors from '../utils/colors';
 
 export default function SafeView({ children, style }) {
   return (
-    <SafeAreaView style={[styles.safeAreaContainer, style]} forceInset={{ top: "always" }}>
+    <SafeAreaView 
+      style={[styles.safeAreaContainer, style]} 
+      forceInset={{ top: "always" }}
+    >
       <View style={[styles.container, style]}>
         {children}
       </View>

@@ -1,13 +1,12 @@
 export const reportsInitial = {
-    //reports: [] | null 
-    reports: [],
+    reports: null,
     loading: false,
     error: null,
     reportsSearch: null
 }
 
 export const reportsReducer = (
-    state = reportInitial,
+    state = reportsInitial,
     action
 ) => {
     switch (action.type) {

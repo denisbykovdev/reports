@@ -3,7 +3,8 @@ import { useState } from "react";
 import colors from "../utils/colors";
 import layout, { responsiveWidth } from "../utils/layout";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
+
 
 const useModal = () => {
   const [isVisible, setVisible] = useState(false);
@@ -25,15 +26,15 @@ const useModal = () => {
       onBackdropPress={() => closeModal()}
       deviceWidth={layout.width}
       deviceHeight={layout.height}
-      onSwipeComplete={() => closeModal()}
-      swipeDirection="down"
+      // onSwipeComplete={() => closeModal()}
+      // swipeDirection="down"
       supportedOrientations={["portrait", "landscape"]}
       propagateSwipe
       style={[modalStyle, styles.modalContainer]}
     >
-      <View style={modalContentStyle}>
+      <ScrollView style={modalContentStyle}>
         {children}
-      </View>
+      </ScrollView>
     </Modal>
   );
 
@@ -50,6 +51,8 @@ const styles = StyleSheet.create({
     shadowRadius: 18,
     shadowOpacity: 1,
     elevation: 10,
+
+    borderRadius: 10,
 
     marginTop: responsiveWidth(91),
     marginRight: responsiveWidth(31),

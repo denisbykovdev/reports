@@ -7,13 +7,14 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 
+
 export default function AvoidingView({ children, style }) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
       style={[styles.avoidingContainer, style]}
       enabled
-      keyboardVerticalOffset={Platform.select({ios: Constants.statusBarHeight , android: 78})}
+      keyboardVerticalOffset={Platform.select({ios: (Constants.statusBarHeight) , android: 78})}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         {children}

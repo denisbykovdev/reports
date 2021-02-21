@@ -12,11 +12,9 @@ const ShadowView = ({shadowStyle, children}) => (
 const styles = StyleSheet.create({
     shadowContainer: {
         backgroundColor: colors.white,
-
+        borderRadius: 10,
         paddingHorizontal: responsiveWidth(28),
         paddingVertical: responsiveWidth(24),
-
-        borderRadius: 10,
 
         shadowColor: colors.paleGrayLight,
         shadowOffset: {

@@ -11,16 +11,26 @@ import fonts from "../utils/fonts";
 import colors from "../utils/colors";
 import useInput from "../hooks/useInput";
 
-const DropDown = ({ array: arrayOfObjects, searchTitle, children }) => {
+const DropDown = ({ 
+    // array: arrayOfObjects, 
+    array,
+    searchTitle, 
+    children 
+}) => {
     //on the first render only!
-    const [array, setArray] = useState(arrayOfObjects);
+    // const [array, setArray] = useState(arrayOfObjects);
 
     const [text, AutoInput] = useInput();
 
+    console.log(
+        "___DD/props:", array
+    )
+
     // const autoSubmit = ({key, value}) => {}
-    useEffect(() => {
-        console.log("rerender")
-    })
+    
+    // useEffect(() => {
+    //     console.log("rerender")
+    // })
 
     // useEffect(() => {
     //     console.log(
@@ -47,49 +57,44 @@ const DropDown = ({ array: arrayOfObjects, searchTitle, children }) => {
     // }
 
     return (
-        <AvoidingView>
-            <View style={styles.ddContainer}>
+        <View style={styles.ddContainer}>
+            <View style={styles.line}></View>
+            <View style={styles.searchContainer}>
 
-                <View style={styles.searchContainer}>
-
-                    <View style={styles.searchHeader}>
-                        <View style={styles.searchIcon}>
-                            {children}
-                        </View>
-
-                        <Text style={styles.searchTitle}>
-                            {searchTitle}
-                        </Text>
+                <View style={styles.searchHeader}>
+                    <View style={styles.searchIcon}>
+                        {children}
                     </View>
 
-                    {/* <TextInput style={styles.searchInput} onChangeText={text => search(text)} /> */}
-                    <AutoInput />
-
+                    <Text style={styles.searchTitle}>
+                        {searchTitle}
+                    </Text>
                 </View>
 
-                {array.map((element, index) => {
-                    return (
-                        <View key={index}>
-                            <View style={{
-                                marginHorizontal: responsiveWidth(28),
-                                backgroundColor: colors.whiteTwo,
-                                height: responsiveWidth(1),
-                                display: index === 0 ? 'none' : "flex"
-                            }}></View>
-                            <DropDownItem  itemData={element} />
-                        </View>
-                    )
-                })}
-            </View>
-        </AvoidingView>
+                <AutoInput />
 
+            </View>
+
+            {array && array.map((element, index) => {
+                return (
+                    <View key={index}>
+                        <View style={{
+                            marginHorizontal: responsiveWidth(28),
+                            backgroundColor: colors.whiteTwo,
+                            height: responsiveWidth(1),
+                            display: index === 0 ? 'none' : "flex"
+                        }}></View>
+                        <DropDownItem itemData={element} />
+                    </View>
+                )
+            })}
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     searchContainer: {
-        // backgroundColor: 'yellow',
-        marginHorizontal: responsiveWidth(28),
+        marginHorizontal: responsiveWidth(28)
     },
     searchHeader: {
         flexDirection: 'row',
@@ -105,7 +110,12 @@ const styles = StyleSheet.create({
     searchIcon: {
         position: 'absolute',
         left: 0
-    }
+    },
+    line: {
+        marginHorizontal: responsiveWidth(28),
+        backgroundColor: colors.whiteTwo,
+        height: responsiveWidth(1)
+    },
 })
 
 export default DropDown;

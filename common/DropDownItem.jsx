@@ -10,14 +10,14 @@ import fonts from "../utils/fonts";
 import layout, { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 
-const DropDownItem = ({ itemData }) => {
+const DropDownItem = ({ itemData ,placeHolder }) => {
     const [isVisible, setVisible] = useState(false);
     const [text, AutoInput] = useInput();
 
     return (
 
         <View style={styles.itemContainer}>
-            
+
 
             <View style={{
                 backgroundColor: isVisible ? colors.paleGrayBg : colors.white
@@ -60,12 +60,15 @@ const DropDownItem = ({ itemData }) => {
                                     <Text style={styles.darkText}>
                                         {key}
                                     </Text>
-                                    <AutoInput />
+                                 
+                                    <AutoInput 
+                                        placeHolder={key === "data" ? 'dd.mm.yyyy' : ''} 
+                                    />
                                     <Text style={styles.blueText}>
                                         {value}
                                     </Text>
                                 </View>
-                               
+
                             </View>
                         ))
                     }
@@ -73,8 +76,6 @@ const DropDownItem = ({ itemData }) => {
 
                 </View>
             }
-
-            {/* <View style={styles.line}></View> */}
         </View>
     )
 }

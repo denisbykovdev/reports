@@ -16,9 +16,10 @@ const useInput = () => {
         setText(valueRef.current)
     }, [])
 
-    const AutoInput = () => (
+    const AutoInput = ({placeHolder}) => (
         <TextInput 
             ref={valueRef}
+            placeholder={placeHolder}
             // value={text}
             // textContentType=
             style={styles.autoInput}
