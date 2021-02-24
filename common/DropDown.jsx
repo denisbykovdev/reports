@@ -1,42 +1,36 @@
-import React from "react";
-import { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { useState } from "reinspect";
+import React, { memo, useEffect } from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { responsiveWidth } from "../utils/layout";
 import DropDownItem from "./DropDownItem";
-import AvoidingView from "./AvoidingView";
 import weights from "../utils/weights";
 import fonts from "../utils/fonts";
 import colors from "../utils/colors";
 import useInput from "../hooks/useInput";
+import { useState } from "reinspect";
 
-const DropDown = ({ 
-    // array: arrayOfObjects, 
-    array,
-    searchTitle, 
-    children 
+const DropDown = ({
+    arrayProp,
+    searchTitle,
+    children
 }) => {
-    //on the first render only!
-    // const [array, setArray] = useState(arrayOfObjects);
+    // on the first render only!
+    const [array, setArray] = useState();
 
-    const [text, AutoInput] = useInput();
+    const [inputText, onChange, onBlur] = useInput();
 
-    console.log(
-        "___DD/props:", array
-    )
+    // console.log(
+    //     "___DD/arrayProp", arrayProp, array, arrayProp === array
+    // )
 
-    // const autoSubmit = ({key, value}) => {}
-    
-    // useEffect(() => {
-    //     console.log("rerender")
-    // })
+    // connect prop to update render
 
-    // useEffect(() => {
-    //     console.log(
-    //         "___DD/useInput text/useEffect/output:", text
-    //     )
-    // }, [text])
+    // array === 'undefined'
+
+    useEffect(() => {
+        if(array === undefined || array === false) {
+            setArray(arrayProp)
+        }
+    }, [arrayProp])
 
     // const [selected, setSelected] = useState(null);
     // const [searchKey, setSearchKey] = useState(null);
@@ -46,15 +40,41 @@ const DropDown = ({
     //         setSelected(element.name === name)
     //     })
     // }
-    // useEffect(() => {
-    //     console.log(
-    //         "___DD:useEffect/selected", selected
-    //     )
-    // }, [selected])
 
-    // const search = (searchKey) => {
-    //     array.filter(element => Object.values(element).some(value => typeof value === String && value.includes(searchKey)))
-    // }
+
+
+    useEffect(() => {
+
+        if (inputText && inputText.length > 1) {
+            // console.log(
+            //     "___DD/useEffect/search:", inputText, array
+            // )
+
+            const filtered = arrayProp.filter(report => Object.values(report).some(reportValue => reportValue.toString().toLowerCase().includes(inputText.toLowerCase())))
+
+            // console.log(
+            //     "___DD/useEffect/search result:",
+            //     filtered
+            // );
+
+            setArray(filtered)
+            
+            // console.log(
+            //     "___DD/useEffect/search result array:",
+            //     array
+            // );
+        } 
+
+        // console.log(
+        //     "___DD/useEffect/check input: ", inputText.length, array
+        // )
+        
+        if (inputText.length === 0) {
+                setArray(arrayProp)
+        }
+
+    }, [inputText])
+
 
     return (
         <View style={styles.ddContainer}>
@@ -71,23 +91,64 @@ const DropDown = ({
                     </Text>
                 </View>
 
-                <AutoInput />
+                <TextInput
+                    onChangeText={onChange}
+                    // onBlur={onBlur} 
+                    style={styles.searchInput}
+                />
 
             </View>
+            {
+                array && array.map((element, index) => {
+                    return (
+                        <View key={index}>
+                            <View style={{
+                                marginHorizontal: responsiveWidth(28),
+                                backgroundColor: colors.whiteTwo,
+                                height: responsiveWidth(1),
+                                display: index === 0 ? 'none' : "flex"
+                            }}></View>
+                            <DropDownItem itemData={element} />
+                        </View>
+                    )
+                })
+            }
 
-            {array && array.map((element, index) => {
-                return (
-                    <View key={index}>
-                        <View style={{
-                            marginHorizontal: responsiveWidth(28),
-                            backgroundColor: colors.whiteTwo,
-                            height: responsiveWidth(1),
-                            display: index === 0 ? 'none' : "flex"
-                        }}></View>
-                        <DropDownItem itemData={element} />
-                    </View>
-                )
-            })}
+            {/* {
+                    (array && array !== null && array !== 'undefined' && array.length >= 0 )
+                    ?
+                    (
+                        array.map((element, index) => {
+                            return (
+                                <View key={index}>
+                                    <View style={{
+                                        marginHorizontal: responsiveWidth(28),
+                                        backgroundColor: colors.whiteTwo,
+                                        height: responsiveWidth(1),
+                                        display: index === 0 ? 'none' : "flex"
+                                    }}></View>
+                                    <DropDownItem itemData={element} />
+                                </View>
+                            )
+                        })
+                    )
+                    :
+                    (
+                        arrayProp && arrayProp.map((element, index) => {
+                            return (
+                                <View key={index}>
+                                    <View style={{
+                                        marginHorizontal: responsiveWidth(28),
+                                        backgroundColor: colors.whiteTwo,
+                                        height: responsiveWidth(1),
+                                        display: index === 0 ? 'none' : "flex"
+                                    }}></View>
+                                    <DropDownItem itemData={element} />
+                                </View>
+                            )
+                        })
+                    )
+            } */}
         </View>
     )
 }
@@ -116,6 +177,19 @@ const styles = StyleSheet.create({
         backgroundColor: colors.whiteTwo,
         height: responsiveWidth(1)
     },
+    searchInput: {
+        borderColor: colors.darkWhite,
+        borderWidth: responsiveWidth(2),
+        borderRadius: 20,
+        height: responsiveWidth(31),
+        width: responsiveWidth(239),
+        paddingHorizontal: responsiveWidth(10),
+
+        fontSize: fonts.xsmall,
+        fontWeight: weights.thin,
+        color: colors.darkBlueGray
+    }
 })
 
+// export default memo(DropDown);
 export default DropDown;

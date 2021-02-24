@@ -9,9 +9,9 @@ import { StyleSheet, View, ScrollView } from "react-native";
 const useModal = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const closeModal = () => setVisible(false);
+  const modalClose = () => setVisible(false);
 
-  const openModal = () => setVisible(true);
+  const modalOpen = () => setVisible(true);
 
   const ModalContent = ({
     children,
@@ -38,7 +38,7 @@ const useModal = () => {
     </Modal>
   );
 
-  return [openModal, closeModal, ModalContent];
+  return [modalOpen, modalClose, ModalContent];
 };
 
 const styles = StyleSheet.create({

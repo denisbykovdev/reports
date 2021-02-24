@@ -43,13 +43,17 @@ export default function ReportsScreen({ route }) {
 
   const { isAdmin, token } = route.params;
 
-  // console.log("---ReportsScreen/route.params:", isAdmin, token);
+  console.log("---ReportsScreen/route.params:", isAdmin, token);
 
-  const [openModal, closeModal, ModalContent] = useModal();
+  const [userModalOpen, userModalClose, UserModalContent] = useModal();
 
-  const [reportsState, reportsDispatch] = useReports({token});
+  const [reportsState, reportsDispatch] = useReports();
 
-  // console.log("---ReportsScreen/useReports", reportsState);
+  console.log(
+    "---ReportsScreen/reportsState.reports:", reportsState.reports
+  )
+
+  const [printModalOpen, printModalClose, PrintModalContent] = useModal();
 
   return (
     <SafeView>
@@ -76,7 +80,16 @@ export default function ReportsScreen({ route }) {
                     height={responsiveWidth(46)}
                   />
                 </CommonHeader>
-                <DropDown array={userData} searchTitle={"מזהה בדיקה"} />
+                <DropDown 
+                  arrayProp={
+                    // !reportsState.fetching && 
+                    reportsState.reports !== null && 
+                    reportsState.reports.length > 0 ?
+                    reportsState.reports :
+                    userData
+                  } 
+                  searchTitle={"מזהה בדיקה"} 
+                />
               </ShadowView>
             </HeaderView>
 
@@ -97,6 +110,7 @@ export default function ReportsScreen({ route }) {
                   marginBottom: responsiveWidth(24),
                   marginRight: layout.width > 600 ? responsiveWidth(10) : 0,
                 }}
+                onPress={() => printModalOpen()}
               >
                 <View
                   style={{
@@ -108,11 +122,15 @@ export default function ReportsScreen({ route }) {
                   <Plus />
                 </View>
               </CommonButton>
+              
+              <PrintModalContent>
+                <Text>test</Text>
+              </PrintModalContent>
 
               {isAdmin && (
                 <>
                   <CommonButton
-                    onPress={() => openModal()}
+                    onPress={() => userModalOpen()}
                     title={"ניהול משתמשים"}
                     titleColor={colors.darkSkyBlue}
                     titleFontSize={fonts.large}
@@ -135,12 +153,9 @@ export default function ReportsScreen({ route }) {
                     </View>
                   </CommonButton>
                   
-                  {/* <ScrollView> */}
-                  <ModalContent 
+                  <UserModalContent 
                     modalContentStyle={{ 
-                      flex: 1, 
-                      // backgroundColor: 'transparent'
-
+                      flex: 1,
                       borderRadius: 10,
                       // borderTopLeftRadius: 10,
                       // borderTopRightRadius: 10
@@ -151,21 +166,14 @@ export default function ReportsScreen({ route }) {
                       // borderRadius: 10,
                     }}
                   >
-                  
-                    <UsersListScreen closeModal={closeModal} />
-               
-                    
-                  </ModalContent>
-                  {/* </ScrollView> */}
-                  
+                    <UsersListScreen closeModal={userModalClose} />
+                  </UserModalContent>
                 </>
               )}
             </ButtomView>
           </>
         </ScrollView>
-
       </AvoidingView>
     </SafeView>
-
   );
 }

@@ -6401,6 +6401,11 @@ url-parse@^1.4.4:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
+use-reducer-logger@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/use-reducer-logger/-/use-reducer-logger-1.0.2.tgz#84b3531ebf269841b9c082fcbf154cb12516922e"
+  integrity sha512-i0SQtRrWqbgQ07V0Ty1Eznh9k37LCTp3eaSIAMLTdd6+mg3teREHMf10lk9cf5OzzT+woP0XS8E1FC4+hxcrJQ==
+
 use-reducer-with-side-effects@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/use-reducer-with-side-effects/-/use-reducer-with-side-effects-2.2.0.tgz#c314d5e76f1196799792af94fd1a20361697107d"

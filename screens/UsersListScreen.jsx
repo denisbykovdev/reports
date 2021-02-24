@@ -10,13 +10,13 @@ import UserPlus from "../icons/UserPlus"
 import { responsiveWidth } from "../utils/layout";
 import Spinner from "../common/Spinner"
 
-const UsersListScreen = ({ closeModal }) => {
+const UsersListScreen = ( closeModal ) => {
 
   const [usersState, usersDispatch] = useUsers()
 
-  console.log(
-    "___UsersList/usersState", usersState
-  )
+  // console.log(
+  //   "___UsersList/usersState.users:", usersState.users
+  // )
 
   return (
 
@@ -38,10 +38,10 @@ const UsersListScreen = ({ closeModal }) => {
             }}
           />
           <DropDown
-            array={
-              !usersState.fetchingUsers &&
+            arrayProp={
+              // !usersState.fetching &&
               usersState.users !== null &&
-              usersState.users.data
+              usersState.users
             }
             searchTitle={"not clear"}
           >

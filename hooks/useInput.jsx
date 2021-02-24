@@ -1,6 +1,7 @@
-import React, { useMemo, useRef } from "react";
+import React, { memo, useMemo, useRef } from "react";
 import { useCallback } from "react";
 import { StyleSheet, TextInput } from "react-native";
+import { useEffect } from "react/cjs/react.development";
 import { useState } from "reinspect";
 import colors from "../utils/colors";
 import fonts from "../utils/fonts";
@@ -8,30 +9,43 @@ import { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 
 const useInput = () => {
-    const [text, setText] = useState();
-
-    const valueRef = useRef();
+    const [inputText, setText] = useState('');
 
     const onChange = useCallback((text) => {
-        setText(valueRef.current)
+        // console.log(
+        //     "***useInput/onChange:", text
+        // )
+        setText(text)
     }, [])
 
-    const AutoInput = ({placeHolder}) => (
-        <TextInput 
-            ref={valueRef}
-            placeholder={placeHolder}
-            // value={text}
-            // textContentType=
-            style={styles.autoInput}
-            // onChangeText={
-            //     text => onChange(text)
-            // }
-        />
-    )
+    const onBlur = useCallback(() => {
+        setText('')
+    }, [])
+
+    // const AutoInput = ({
+    //     placeHolder,
+    //     type,
+    // }) => {
+    //     return useMemo(() => {
+    //         return  (
+    //             <TextInput
+    //                 placeholder={placeHolder}
+    //                 value={inputText}
+    //                 textContentType={type}
+    //                 style={styles.autoInput}
+    //                 onChangeText={(text) => onChange(text)}
+    //                 onBlur={() => onBlur()}
+                    
+    //             />
+    //         )
+    //     }, [])
+    // }
+   
 
     return [
-        text,
-        AutoInput
+        inputText,
+        onChange,
+        onBlur
     ]
 }
 
@@ -50,4 +64,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default useInput;
+export default useInput

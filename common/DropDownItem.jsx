@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
 import { useState } from "reinspect";
 import useInput from "../hooks/useInput";
 import Basket from "../icons/Basket";
@@ -10,9 +10,9 @@ import fonts from "../utils/fonts";
 import layout, { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 
-const DropDownItem = ({ itemData ,placeHolder }) => {
+const DropDownItem = ({ itemData , placeHolder }) => {
     const [isVisible, setVisible] = useState(false);
-    const [text, AutoInput] = useInput();
+    const [inputText, onChange, onBlur] = useInput();
 
     return (
 
@@ -61,8 +61,11 @@ const DropDownItem = ({ itemData ,placeHolder }) => {
                                         {key}
                                     </Text>
                                  
-                                    <AutoInput 
+                                    <TextInput 
+                                        onChangeText={onChange} 
+                                        onBlur={onBlur} 
                                         placeHolder={key === "data" ? 'dd.mm.yyyy' : ''} 
+                                        style={styles.input}
                                     />
                                     <Text style={styles.blueText}>
                                         {value}
@@ -124,6 +127,18 @@ const styles = StyleSheet.create({
         // backgroundColor: 'yellow',
         marginHorizontal: responsiveWidth(28),
         alignItems: 'flex-end'
+    },
+    input: {
+        borderColor: colors.darkWhite,
+        borderWidth: responsiveWidth(2),
+        borderRadius: 20,
+        height: responsiveWidth(31),
+        width: responsiveWidth(239),
+        paddingHorizontal: responsiveWidth(10),
+
+        fontSize: fonts.xsmall,
+        fontWeight: weights.thin,
+        color: colors.darkBlueGray
     }
 })
 

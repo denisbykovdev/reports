@@ -4,7 +4,6 @@ import { authInitial, authReducer } from "../reducers/authReducer";
 import * as SecureStore from 'expo-secure-store';
 import { useReducer } from "reinspect"
 import { createContext } from "react";
-
 export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
