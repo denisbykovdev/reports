@@ -4,7 +4,7 @@ import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-ef
 export const usersInitial = {
     users: null,
     error: null,
-    usersSearch: null
+    // usersSearch: null
 }
 
 export const usersReducer = (
@@ -19,7 +19,7 @@ export const usersReducer = (
                 ...state,
                 fetching: false,
                 users: action.users,
-                usersSearch: action.users
+                // usersSearch: action.users
             });
 
         case "ERROR_USERS":
@@ -54,7 +54,7 @@ export const usersReducer = (
                             users: response.data.data,
                         })
 
-                        console.log("***useUsers/GET_USERS:", response.data.data);
+                        console.log("***usersReducer/GET_USERS:", response.data.data);
 
                     } catch (error) {
 
@@ -63,43 +63,34 @@ export const usersReducer = (
                             error
                         });
 
-                        console.log("***useUsers/ERROR_USERS:", error);
+                        console.log("***useUsers/ERROR_USERS:", error, state);
                     }
                 }
             );
 
-        case "DELETE_USER":
-            return NoUpdate({
+        case "DELETE_ITEM":
+            console.log(
+                ":::usersReducer:", action.itemId
+            );
+            return Update({
                 ...state,
-                usersSearch: state.users.filter(user => user !== action.userName),
-                users: state.users.filter(user => user !== action.userName)
+                users: state.users.filter(user => user.id !== action.itemId)
             });
 
-        case "CHANGE_USER_VALUE":
-            return NoUpdate({
+        case "CHANGE_ITEM_VALUE":
+            console.log(
+                ":::usersReducer:", action.itemId, action.itemKey, action.itemNewValue
+            );
+            return Update({
                 ...state,
-                usersSearch: state.usersSearch.map(user =>
-                    user.name === action.userName ?
-                        {
-                            ...user,
-                            [action.userKey]: action.userKeyValue
-                        } :
-                        user
-                ),
                 users: state.users.map(user =>
-                    user.name === action.userName ?
+                    user.name === action.itemId ?
                         {
                             ...user,
-                            [action.userKey]: action.userKeyValue
+                            [action.itemKey]: action.itemNewValue
                         } :
                         user
                 )
-            });
-
-        case "RESET_USERS_SEARCH":
-            return NoUpdate({
-                ...state,
-                usersSearch: state.users
             });
     }
 }

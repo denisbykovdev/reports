@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
 import { useState } from "reinspect";
 import useInput from "../hooks/useInput";
+import useUsers from "../hooks/useUsersState";
 import Basket from "../icons/Basket";
 import CircleArrowDown from "../icons/CircleArrowDown";
 import CircleArrowUp from "../icons/CircleArrowUp";
@@ -9,11 +10,21 @@ import colors from "../utils/colors";
 import fonts from "../utils/fonts";
 import layout, { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
+import DropDownElement from "./DropDownElement";
 
-const DropDownItem = ({ itemData , placeHolder }) => {
+const DropDownItem = ({ itemData, dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
-    const [inputText, onChange, onBlur] = useInput();
 
+    const deleteHandler = (itemId) => {
+        dispatchMethod({
+            type: "DELETE_ITEM",
+            itemId
+        })
+        console.log(
+            "___DDItem/delete:", itemId
+        )
+    }
+ 
     return (
 
         <View style={styles.itemContainer}>
@@ -24,7 +35,7 @@ const DropDownItem = ({ itemData , placeHolder }) => {
             }}>
                 <View style={styles.itemButton}>
 
-                    <TouchableOpacity style={styles.basketIcon}>
+                    <TouchableOpacity style={styles.basketIcon} onPress={() => deleteHandler(itemData.id)}>
                         <Basket />
                     </TouchableOpacity>
 
@@ -46,34 +57,22 @@ const DropDownItem = ({ itemData , placeHolder }) => {
                     backgroundColor: isVisible ? colors.paleGrayBg : colors.white
                 }}>
                     {
-                        Object.entries(itemData).map(([key, value], index) => (
+                        Object.entries(itemData).map(([key, value], index) => {
 
-                            <View key={key} style={styles.itemMain}>
-                                <View style={{
-                                    marginHorizontal: responsiveWidth(28),
-                                    backgroundColor: colors.whiteTwo,
-                                    height: responsiveWidth(1),
-                                    display: index === 0 ? 'none' : "flex"
-                                }}></View>
+                            if(key !== "id") return (
 
-                                <View style={styles.itemElementContainer}>
-                                    <Text style={styles.darkText}>
-                                        {key}
-                                    </Text>
-                                 
-                                    <TextInput 
-                                        onChangeText={onChange} 
-                                        onBlur={onBlur} 
-                                        placeHolder={key === "data" ? 'dd.mm.yyyy' : ''} 
-                                        style={styles.input}
-                                    />
-                                    <Text style={styles.blueText}>
-                                        {value}
-                                    </Text>
-                                </View>
 
-                            </View>
-                        ))
+                                <DropDownElement
+                                    key={index}
+                                    itemId={itemData.id}
+                                    elementKey={key}
+                                    elementValue={value}
+                                    elementIndex={index}
+                                    dispatchMethod={dispatchMethod}
+                                />
+                            )
+                        }
+                        )
                     }
 
 
@@ -85,7 +84,7 @@ const DropDownItem = ({ itemData , placeHolder }) => {
 
 const styles = StyleSheet.create({
     itemContainer: {
-
+        backgroundColor: 'yellow'
     },
     itemButton: {
         flexDirection: 'row',

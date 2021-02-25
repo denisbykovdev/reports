@@ -16,32 +16,59 @@ import EmailInput from "../icons/EmailInput";
 import PassInput from "../icons/PassInput";
 import Enter from "../icons/Enter";
 import { AuthContext } from "../providers/AuthProvider";
+import useAuth from "../hooks/useAuth";
+import useSecureToken from "../hooks/useSecureToken";
+import useSecureAdmin from "../hooks/useSecureAdmin";
 
 export default function LoginScreen({ navigation }) {
   useStatusBar("dark-content", colors.paleGrayBg);
 
-  const {authState, logIn} = useContext(AuthContext);
+  const { authState, authDispatch, logIn } = useAuth()
+  const secureAdmin = useSecureAdmin()
+  const secureToken = useSecureToken()
 
-  async function handleOnLogin(values, {resetForm}) {
+  useEffect(() => {
+    console.log(
+      "---autoLogin", secureToken, secureAdmin
+    )
+    secureToken && secureToken !== null &&
+      authDispatch({
+        type: "SET_TOKEN",
+        token: secureToken,
+        isAdmin: secureAdmin
+      }) &&
+      navigation.navigate(
+        "AppStack",
+        {
+          screen: "Reports",
+          params: {
+            isAdmin: secureAdmin
+          }
+        }
+      )
+  }, [secureToken])
+
+  useEffect(() => {
+    authState.token !== null
+      &&
+      navigation.navigate(
+        "AppStack",
+        {
+          screen: "Reports",
+          params: {
+            isAdmin: authState.isAdmin
+          }
+        }
+      )
+  }, [authState.token])
+
+  async function handleOnLogin(values, { resetForm }) {
     const { email, password } = values;
 
     await logIn(email, password);
 
     await authState.token !== null && await resetForm();
   }
-
-  // console.log(
-  //     "---LoginScreen:handleOnLogin/after logIn:", authState
-  // )
-
-  useEffect(() => {
-    authState.token !== null && navigation.navigate(
-      "AppStack", 
-      {
-        screen: "Reports",  params: {isAdmin: authState.isAdmin, token: authState.token}
-      }
-    )
-  }, [authState.token])
 
   return (
     <SafeView>
@@ -55,7 +82,7 @@ export default function LoginScreen({ navigation }) {
           <FormContainer
             initialValues={{ email: "", password: "" }}
             validationSchema={loginSchema}
-            onSubmit={(values, {resetForm}) => handleOnLogin(values, {resetForm})}
+            onSubmit={(values, { resetForm }) => handleOnLogin(values, { resetForm })}
           >
             <FormField
               name="email"

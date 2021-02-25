@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
 // import {useState} from "reinspect"
 
-export default function useToken() {
-    const [token, setToken] = useState(null);
+export default function useSecureToken() {
+    const [secureToken, setSecureToken] = useState();
 
     useEffect(() => {
         (async function getToken(){
             const token = await SecureStore.getItemAsync("userToken");
-            setToken(token);
+            console.log("*******SStoken:", token)
+            setSecureToken(token);
         })()
+        
     }, [])
 
-    return token;
+    return secureToken;
 }

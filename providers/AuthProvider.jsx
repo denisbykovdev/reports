@@ -11,25 +11,16 @@ export default function AuthProvider({ children }) {
         authReducer, authInitial
     )
 
-    // console.log(
-    //     "***AuthProvider/authState:", authState
-    // )
-
     const logIn = useCallback((email, password) => {
 
         (async function () {
+            const avaliableStore = await SecureStore.isAvailableAsync();
 
-            // console.log(
-            //     "***AuthProvider/logIn/creds:", email, password
-            // )
+            if (avaliableStore)
 
-            authDispatch({
-                type: "LOAD_TOKEN"
-            })
-
-            console.log(
-                "***AuthProvider/LOAD_TOKEN", authState
-            )
+                authDispatch({
+                    type: "LOAD_TOKEN"
+                })
 
             try {
                 const response = await axios.post(
@@ -50,13 +41,13 @@ export default function AuthProvider({ children }) {
                     isAdmin: response.data.user.is_admin
                 })
 
-                console.log(
-                    "***AuthProvider/SET_TOKEN", authState
-                )
-
                 await SecureStore.setItemAsync(
                     "userToken",
-                    response.data.token.token
+                    JSON.stringify(response.data.token.token)
+                )
+                await SecureStore.setItemAsync(
+                    "userIsAdmin",
+                    JSON.stringify(response.data.user.is_admin)
                 )
 
             } catch (error) {
@@ -69,7 +60,7 @@ export default function AuthProvider({ children }) {
             }
 
         })()
-        
+
     }, [])
 
     // const contextValue = useMemo(() => {
@@ -77,7 +68,7 @@ export default function AuthProvider({ children }) {
     //   }, [authState, authDispatch]);
 
     return (
-        <AuthContext.Provider value={{authState, logIn}}>
+        <AuthContext.Provider value={{ authState, authDispatch, logIn }}>
             {children}
         </AuthContext.Provider>
     )

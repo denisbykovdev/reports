@@ -1,5 +1,4 @@
 import React from "react";
-import useToken from "../hooks/useToken";
 import 'react-native-gesture-handler';
 import { NavigationContainer } from "@react-navigation/native";
 import AppStack from "./AppStack";
@@ -10,11 +9,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 // I18nManager.forceRTL(false);
 
 import { StateInspector } from "reinspect";
-// import useAuth from "../hooks/useAuth";
 
 export default function Router() {
-  // const {authState, logIn} = useAuth();
-
   const RouterStack = createStackNavigator();
 
   return (
@@ -23,14 +19,6 @@ export default function Router() {
         <RouterStack.Navigator headerMode="none">
           <RouterStack.Screen name="AuthStack" component={AuthStack} />
           <RouterStack.Screen name="AppStack" component={AppStack} />
-
-
-          {/* {
-           token !== null
-            ? <RouterStack.Screen name="AppStack" component={AppStack} />
-            : <RouterStack.Screen name="AuthStack" component={AuthStack} />
-          } */}
-
         </RouterStack.Navigator>
       </NavigationContainer>
 

@@ -11,23 +11,21 @@ import { useState } from "reinspect";
 const DropDown = ({
     arrayProp,
     searchTitle,
-    children
+    children,
+    dispatchMethod
 }) => {
     // on the first render only!
     const [array, setArray] = useState();
 
     const [inputText, onChange, onBlur] = useInput();
 
-    // console.log(
-    //     "___DD/arrayProp", arrayProp, array, arrayProp === array
-    // )
+    console.log(
+        "---DD/prop:", arrayProp
+    )
 
     // connect prop to update render
-
-    // array === 'undefined'
-
     useEffect(() => {
-        if(array === undefined || array === false) {
+        if (array === undefined || array === false || array !== arrayProp || arrayProp === undefined) {
             setArray(arrayProp)
         }
     }, [arrayProp])
@@ -58,19 +56,19 @@ const DropDown = ({
             // );
 
             setArray(filtered)
-            
+
             // console.log(
             //     "___DD/useEffect/search result array:",
             //     array
             // );
-        } 
+        }
 
         // console.log(
         //     "___DD/useEffect/check input: ", inputText.length, array
         // )
-        
+
         if (inputText.length === 0) {
-                setArray(arrayProp)
+            setArray(arrayProp)
         }
 
     }, [inputText])
@@ -108,47 +106,15 @@ const DropDown = ({
                                 height: responsiveWidth(1),
                                 display: index === 0 ? 'none' : "flex"
                             }}></View>
-                            <DropDownItem itemData={element} />
+
+                            <DropDownItem 
+                                itemData={element} 
+                                dispatchMethod={dispatchMethod}
+                            />
                         </View>
                     )
                 })
             }
-
-            {/* {
-                    (array && array !== null && array !== 'undefined' && array.length >= 0 )
-                    ?
-                    (
-                        array.map((element, index) => {
-                            return (
-                                <View key={index}>
-                                    <View style={{
-                                        marginHorizontal: responsiveWidth(28),
-                                        backgroundColor: colors.whiteTwo,
-                                        height: responsiveWidth(1),
-                                        display: index === 0 ? 'none' : "flex"
-                                    }}></View>
-                                    <DropDownItem itemData={element} />
-                                </View>
-                            )
-                        })
-                    )
-                    :
-                    (
-                        arrayProp && arrayProp.map((element, index) => {
-                            return (
-                                <View key={index}>
-                                    <View style={{
-                                        marginHorizontal: responsiveWidth(28),
-                                        backgroundColor: colors.whiteTwo,
-                                        height: responsiveWidth(1),
-                                        display: index === 0 ? 'none' : "flex"
-                                    }}></View>
-                                    <DropDownItem itemData={element} />
-                                </View>
-                            )
-                        })
-                    )
-            } */}
         </View>
     )
 }

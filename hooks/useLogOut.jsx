@@ -24,6 +24,9 @@ export default function useLogout() {
                 await SecureStore.deleteItemAsync(
                     "userToken"
                 );
+                await SecureStore.deleteItemAsync(
+                    "userIsAdmin"
+                );
                 authDispatch({
                     type: "DEL_TOKEN"
                 });

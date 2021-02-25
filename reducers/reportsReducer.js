@@ -4,8 +4,27 @@ import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-ef
 export const reportsInitial = {
     reports: null,
     error: null,
-    reportsSearch: null
+    // reportsSearch: null
 }
+
+const userData = [
+    {
+        id: 1,
+        name: "first",
+        last_name: "one",
+        phone: "1234567",
+        email: "first@mail.com",
+        password: "123456"
+    },
+    {
+        id: 2,
+        name: "second",
+        last_name: "two",
+        phone: "7654321",
+        email: "second@mail.com",
+        password: "123456"
+    }
+]
 
 export const reportsReducer = (
     state = reportsInitial,
@@ -19,7 +38,7 @@ export const reportsReducer = (
                 ...state,
                 fetching: false,
                 reports: action.reports,
-                reportsSearch: action.reports
+                // reportsSearch: action.reports
             });
 
         case "ERROR_REPORTS":
@@ -30,6 +49,7 @@ export const reportsReducer = (
             });
 
         case "FETCH_REPORTS":
+
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -37,6 +57,9 @@ export const reportsReducer = (
                     token: action.payload
                 },
                 async (state, dispatch) => {
+                    console.log(
+                        "***ReportsReducer/FETCH_REPORTS/async/token", typeof action.payload
+                    );
                     try {
                         const response = await axios.get(
                             "http://160.153.254.153/api/project/all",
@@ -51,10 +74,10 @@ export const reportsReducer = (
 
                         dispatch({
                             type: "GET_REPORTS",
-                            reports: response.data.data,
+                            reports: response.data.data.length > 0 ? response.data.data : userData,
                         })
 
-                        console.log("***useReports/GET_REPORTS:", response.data.data);
+                        console.log("***reportsReducer/GET_REPORTS:", response.data.data, state);
 
                     } catch (error) {
 
@@ -63,43 +86,34 @@ export const reportsReducer = (
                             error
                         });
 
-                        console.log("***useReports/ERROR_REPORTS:", error);
+                        console.log("***reportsReducer/ERROR_REPORTS:", error, state);
                     }
                 }
             );
 
-        case "DELETE_USER":
-            return NoUpdate({
+        case "DELETE_ITEM":
+            console.log(
+                ":::reportsReducer:", action.itemId
+            );
+            return Update({
                 ...state,
-                reportsSearch: state.reports.filter(user => user !== action.userName),
-                reports: state.reports.filter(user => user !== action.userName)
+                reports: state.reports.filter(user => user.id !== action.itemId)
             });
 
-        case "CHANGE_REPORT_VALUE":
-            return NoUpdate({
+        case "CHANGE_ITEM_VALUE":
+            console.log(
+                ":::reportsReducer:", action.itemId, action.itemKey, action.itemNewValue
+            );
+            return Update({
                 ...state,
-                reportsSearch: state.reportsSearch.map(user =>
-                    user.name === action.userName ?
+                reports: state.reports.map(report =>
+                    report.id === action.itemId ?
                         {
-                            ...user,
-                            [action.userKey]: action.userKeyValue
+                            ...report,
+                            [action.itemKey]: action.itemNewValue
                         } :
-                        user
-                ),
-                reports: state.reports.map(user =>
-                    user.name === action.userName ?
-                        {
-                            ...user,
-                            [action.userKey]: action.userKeyValue
-                        } :
-                        user
+                        report
                 )
-            });
-
-        case "RESET_REPORTS_SEARCH":
-            return NoUpdate({
-                ...state,
-                reportsSearch: state.reports
             });
     }
 }

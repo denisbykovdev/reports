@@ -23,16 +23,19 @@ const useModal = () => {
       backdropColor={colors.popUpBg}
       // backdropOpacity={1}
       children
-      onBackdropPress={() => closeModal()}
+      onBackdropPress={() => modalClose()}
       deviceWidth={layout.width}
       deviceHeight={layout.height}
-      // onSwipeComplete={() => closeModal()}
+      // onSwipeComplete={() => modalClose()}
       // swipeDirection="down"
       supportedOrientations={["portrait", "landscape"]}
       propagateSwipe
       style={[modalStyle, styles.modalContainer]}
     >
-      <ScrollView style={modalContentStyle}>
+      <ScrollView 
+        style={modalContentStyle} 
+        showsVerticalScrollIndicator={false}
+      >
         {children}
       </ScrollView>
     </Modal>
