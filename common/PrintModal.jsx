@@ -1,78 +1,26 @@
-import React, { useEffect } from "react"
-import { TouchableOpacity, View } from "react-native"
+import React from "react"
+import { withExpenses, withPdf, withProfRegion } from "../constants/api"
+import { expDetails, printDetails, profDetails } from "../constants/printMadalButtons"
+import useRadioPair from "../hooks/useRadioPair"
+import colors from "../utils/colors"
+import { responsiveWidth } from "../utils/layout"
+import CommonButton from "./CommonButton"
 import CommonHeader from "./CommonHeader"
 import Line from "./Line"
 import ShadowView from "./ShadowView"
-import RadioButtonRN from 'radio-buttons-react-native';
-import { useState } from "reinspect"
-import { responsiveHeight, responsiveWidth } from "../utils/layout"
-import colors from "../utils/colors"
-
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import fonts from "../utils/fonts"
-
-//circle-slice-8 circle-outline circle-double
-
-const withProfRegion = "/api/withProfRegion"
-const withProf = "/api/withProf"
-const withExpenses = "/api/withExpenses"
-const withFree = "/api/withFree"
-const withPdf = "/api/withPdf"
-const withWord = "/api/withWord"
-
-const profDetails = [
-    {
-        label: 'דוח מקצוע לפי אזורים',
-        desc: withProfRegion,
-        accessibilityLabel: 'prof'
-        //Отчет подготовлен по профессии по региону
-    },
-    {
-        label: 'דוח ערוך לפי מקצוע',
-        desc: withProf,
-        accessibilityLabel: 'prof'
-        //Отчет подготовлен по профессии
-    },
-]
-
-const expDetails = [
-    {
-        label: 'דוח כולל עלויות',
-        desc: withExpenses,
-        accessibilityLabel: 'exp'
-        //Отчет включает затраты
-    },
-    {
-        label: 'דוח ללא עלויות',
-        desc: withFree,
-        accessibilityLabel: 'exp'
-        //Отчет о бесплатной стоимости
-    },
-]
-
-const printDetails = [
-    {
-        label: 'PDF יצוא לקובץ',
-        desc: withPdf,
-        accessibilityLabel: 'print'
-        //Отчет подготовлен по профессии по региону
-    },
-    {
-        label: 'Word יצוא לקובץ',
-        desc: withWord,
-        accessibilityLabel: 'print'
-        //Отчет подготовлен по профессии
-    }
-]
-
+import FormErrorMessage from "../common/FormErrorMessage";
 
 const PrintModal = ({ close }) => {
-    const [prof, setProf] = useState(withProfRegion)
-    const [exp, setExp] = useState(withExpenses)
-    const [print, setPrint] = useState(withPdf)
+    const [activeProf, RenderRadioPairProf] = useRadioPair(profDetails, withProfRegion)
+    const [activeExp, RenderRadioPairExp] = useRadioPair(expDetails, withExpenses)
+    const [activePrint, RenderRadioPairPrint] = useRadioPair(printDetails, withPdf)
 
-    const printHandler = async ({ prof, exp, print }) => {
-        const urlConcat = (prof) => (exp) => (print) => prof + exp + print
+    console.log(
+        "---PrintModal/printHandler:", activeProf, activeExp, activePrint
+    )
+
+    const printHandler = () => {
+        const urlConcat = `${activeProf}${activeExp}${activePrint}`
 
         console.log(
             "---PrintModal/printHandler/urlConcat:", urlConcat
@@ -82,88 +30,77 @@ const PrintModal = ({ close }) => {
         //     type: "PRINT",
         //     printUrl: urlConcat
         // })
+        close()
     }
 
     return (
-        <ShadowView>
+        <ShadowView
+            shadowStyle={{
+                paddingHorizontal: 0
+            }}
+        >
             <CommonHeader
                 title={"מבנה הדוח"}
                 close={close}
                 subTitle={"יש לבחור את המבניות ליצירת הדוח"}
+                headerStyles={{
+                    paddingHorizontal: responsiveWidth(28)
+                  }}
             />
-            <Line />
-
-            <RadioButtonRN
-                data={profDetails}
-                selectedBtn={(e) =>
-                    setProf(Object.values(e)[1])
-                }
-                initial={1}
-                boxStyle={{
-                    borderRadius: 100,
-                    // height: responsiveHeight(40),
-                    padding: responsiveWidth(10),
-                    marginVertical: responsiveWidth(4),
-                    borderWidth: responsiveWidth(2),
-                    borderColor: colors.lightGrayBorder,
-                    fontSize: fonts.large
+            <Line 
+                lineStyle={{
+                    marginHorizontal: responsiveWidth(28)
                 }}
+            />
+            <RenderRadioPairProf 
+                radioPairContainerStyle={{
+                    paddingHorizontal: responsiveWidth(28),
+                    paddingVertical: responsiveWidth(18)
+                }}    
+            />
+            <RenderRadioPairExp 
+                radioPairContainerStyle={{
+                    paddingHorizontal: responsiveWidth(28),
+                    backgroundColor: colors.paleGrayThree,
+                    paddingVertical: responsiveWidth(18)
+                }}    
+            />
+            <RenderRadioPairPrint 
+                radioPairContainerStyle={{
+                    paddingHorizontal: responsiveWidth(28),
+                    paddingVertical: responsiveWidth(18)
+                }}    
+            />
+            <Line 
+                lineStyle={{
+                    marginHorizontal: responsiveWidth(28)
+                }}
+            />
+            <FormErrorMessage 
+                error={ `${activeProf}, ${activeExp}, ${activePrint}`}
+                visible={true}
+            />
+            <CommonButton 
+                title={"יצוא"}
+                borderColor={colors.azul}
+                titleColor={colors.azul}
+                onPress={() => printHandler()}
                 style={{
-                    color: colors.white,
-                    padding: 0,
-                    fontSize: fonts.large
-                    
+                    marginHorizontal: responsiveWidth(28),
+                    marginTop: responsiveWidth(24)
                 }}
-                circleSize={responsiveWidth(15)}
-                activeColor={colors.white}
-                deactiveColor={colors.azul}
-                boxActiveBgColor={colors.azul}
-                textColor={colors.white}
             />
-
-            <RadioButtonRN
-                data={expDetails}
-                selectedBtn={(e) => setExp(Object.values(e)[1])}
-                initial={1}
-                boxStyle={{
-                    borderRadius: 100,
-                    height: responsiveHeight(40),
-                    padding: responsiveWidth(10),
-                    marginVertical: responsiveWidth(4),
-                    borderWidth: responsiveWidth(2),
-                    borderColor: colors.lightGrayBorder,
-                    
-                }}
-                circleSize={responsiveWidth(15)}
-                activeColor={colors.white}
-                deactiveColor={colors.azul}
-                boxActiveBgColor={colors.azul}
-                textColor={colors.azul}
-            />
-
-            <RadioButtonRN
-                data={printDetails}
-                selectedBtn={(e) => setPrint(Object.values(e)[1])}
-                initial={1}
-                boxStyle={{
-                    borderRadius: 100,
-                    height: responsiveHeight(40),
-                    padding: responsiveWidth(10),
-                    marginVertical: responsiveWidth(4),
-                    borderWidth: responsiveWidth(2),
-                    borderColor: colors.lightGrayBorder,
-                    
-                }}
-                circleSize={responsiveWidth(15)}
-                activeColor={colors.white}
-                deactiveColor={colors.azul}
-                boxActiveBgColor={colors.azul}
-                textColor={colors.azul}
-            />
-
         </ShadowView>
     )
 }
 
 export default PrintModal;
+
+
+
+
+
+
+
+
 

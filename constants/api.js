@@ -1,0 +1,6 @@
+export const withProfRegion = "/api/withProfRegion"
+export const withProf = "/api/withProf"
+export const withExpenses = "/api/withExpenses"
+export const withFree = "/api/withFree"
+export const withPdf = "/api/withPdf"
+export const withWord = "/api/withWord"

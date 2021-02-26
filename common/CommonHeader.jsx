@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
     // paddingBottom: responsiveWidth(24),
     // backgroundColor: colors.white,
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    marginBottom: responsiveWidth(24)
   },
   contentContainer: {
     alignItems: "flex-end"

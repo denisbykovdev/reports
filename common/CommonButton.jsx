@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         borderStyle: "solid",
-        borderWidth: 1,
+        borderWidth: responsiveWidth(2),
         // borderColor: colors.darkWhite,
         // borderRadius: 5,
         flexDirection: 'row',

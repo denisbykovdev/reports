@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
   errorContainer: {
     alignItems: "center",
     justifyContent: "center",
+    marginHorizontal: responsiveWidth(28)
   },
   errorText: {
       fontSize: fonts.small,
