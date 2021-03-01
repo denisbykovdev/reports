@@ -4,10 +4,12 @@ import useReducerWithSideEffects from 'use-reducer-with-side-effects';
 import useSecureToken from "../hooks/useSecureToken";
 import useAuth from "../hooks/useAuth";
 
-export const UsersStateContext = createContext({})
-export const UsersDispatchContext = createContext({})
+// export const UsersStateContext = createContext({})
+// export const UsersDispatchContext = createContext({})
 
-export default function UsersProvider({children}) {
+export function useUsersProvider(
+    // {children}
+    ) {
     const [usersState, usersDispatch] = useReducerWithSideEffects(
         usersReducer, 
         usersInitial
@@ -19,23 +21,24 @@ export default function UsersProvider({children}) {
 
     // const token = useSecureToken();
 
-   
-
     useEffect(() => {
-        console.log(
-            "---UsersProvider/token", token
-        )
+        // console.log(
+        //     "---UsersProvider/token", token
+        // )
         usersDispatch({
             type: "FETCH_USERS",
             payload: token
         })
     }, [])
 
-    return (
-        <UsersStateContext.Provider value={usersState}>
-            <UsersDispatchContext.Provider value={usersDispatch}>
-                {children}
-            </UsersDispatchContext.Provider>
-        </UsersStateContext.Provider>
-    )
+    // return (
+    //     <UsersStateContext.Provider value={usersState}>
+    //         <UsersDispatchContext.Provider value={usersDispatch}>
+    //             {children}
+    //         </UsersDispatchContext.Provider>
+    //     </UsersStateContext.Provider>
+    // )
+    return [
+        usersState, usersDispatch
+    ]
 }

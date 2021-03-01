@@ -31,32 +31,38 @@ export default function LoginScreen({ navigation }) {
     console.log(
       "---autoLogin", secureToken, secureAdmin
     )
-    secureToken && secureToken !== null &&
+    if(secureToken && secureToken !== null) {
+      authDispatch({
+        type: "LOAD_TOKEN"
+      })
       authDispatch({
         type: "SET_TOKEN",
-        token: secureToken,
+        token: JSON.parse(secureToken),
         isAdmin: secureAdmin
-      }) &&
-      navigation.navigate(
-        "AppStack",
-        {
-          screen: "Reports",
-          params: {
-            isAdmin: secureAdmin
-          }
-        }
-      )
+      });
+      // navigation.navigate(
+      //   "AppStack",
+      //   {
+      //     screen: "Reports",
+      //     params: {
+      //       isAdmin: secureAdmin
+      //     }
+      //   }
+      // );
+    }
+      
   }, [secureToken])
 
   useEffect(() => {
-    authState.token !== null
+    authState.token === null
       &&
       navigation.navigate(
         "AppStack",
         {
           screen: "Reports",
           params: {
-            isAdmin: authState.isAdmin
+            // isAdmin: authState.isAdmin
+            isAdmin: true
           }
         }
       )

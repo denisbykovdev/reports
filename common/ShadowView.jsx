@@ -13,6 +13,8 @@ const styles = StyleSheet.create({
     shadowContainer: {
         backgroundColor: colors.white,
         borderRadius: 10,
+        // borderWidth: responsiveWidth(1),
+        // borderColor: colors.white,
         paddingHorizontal: responsiveWidth(28),
         paddingVertical: responsiveWidth(24),
 

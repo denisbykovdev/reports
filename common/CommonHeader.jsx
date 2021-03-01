@@ -1,18 +1,22 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Close from "../icons/Close";
 import colors from "../utils/colors";
 import fonts from "../utils/fonts";
-import { responsiveWidth } from "../utils/layout";
+import layout, { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 
 const CommonHeader = ({ title, subTitle, close, children, closeButton = true, headerStyles }) => (
-  <View style={[styles.modalHeaderContainer, headerStyles]}>
+
+  <View style={[styles.modalHeaderContainer, headerStyles, {
+      justifyContent: layout.width > 600 && !children ? "center" : "space-between" ,
+      flexDirection: children && "row"
+  }]}>
+
     {
       closeButton &&
-      <TouchableOpacity style={styles.modalHeaderClose} onPress={close}>
-        <Close width={7} height={7} />
+      <TouchableOpacity style={styles.modalHeaderClose} onPress={() => close()}>
+        <Close width={responsiveWidth(7)} height={responsiveWidth(7)} />
       </TouchableOpacity>
     }
 
@@ -29,9 +33,10 @@ const styles = StyleSheet.create({
     // paddingTop: responsiveWidth(24),
     // paddingHorizontal: responsiveWidth(28),
     // paddingBottom: responsiveWidth(24),
-    // backgroundColor: colors.white,
-    flexDirection: "row",
+    // backgroundColor: 'yellow',
+    // flexDirection: "row",
     justifyContent: "space-between",
+
     marginBottom: responsiveWidth(24)
   },
   contentContainer: {
@@ -41,7 +46,9 @@ const styles = StyleSheet.create({
     height: responsiveWidth(20),
     width: responsiveWidth(20),
     alignItems: "flex-start",
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    position: 'absolute',
+    left: responsiveWidth(28)
   },
   modalHeaderTitle: {
     color: colors.darkBlueGray,

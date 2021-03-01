@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { memo } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import SafeView from "../common/SafeView";
 import HeaderView from "../common/HeaderView";
@@ -19,30 +19,10 @@ import DropDown from "../common/DropDown";
 import ShadowView from "../common/ShadowView";
 import AvoidingView from "../common/AvoidingView";
 import useReports from "../hooks/useReports";
-import useSecureAdmin from "../hooks/useSecureAdmin";
-import UsersProvider from "../providers/UsersProvider";
 import PrintModal from "../common/PrintModal";
+import Table from "../common/Table";
 
-// const userData = [
-//   {
-//     id: 1,
-//     name: "first",
-//     last_name: "one",
-//     phone: "1234567",
-//     email: "first@mail.com",
-//     password: "123456"
-//   },
-//   {
-//     id: 2,
-//     name: "second",
-//     last_name: "two",
-//     phone: "7654321",
-//     email: "second@mail.com",
-//     password: "123456"
-//   }
-// ]
-
-export default function ReportsScreen({ route }) {
+function ReportsScreen({ route }) {
 
   useStatusBar("dark-content", colors.paleGrayBg);
 
@@ -63,131 +43,132 @@ export default function ReportsScreen({ route }) {
   const [printModalOpen, printModalClose, PrintModalContent] = useModal();
 
   return (
-    <UsersProvider>
-      <SafeView>
-        <AvoidingView>
-          <ScrollView
-            automaticallyAdjustContentInsets={false}
-            showsVerticalScrollIndicator={false}
-          >
-            <>
-              <HeaderView>
-                <ShadowView
-                  shadowStyle={{
-                    paddingHorizontal: 0
+    <SafeView>
+      <AvoidingView>
+        <ScrollView
+          automaticallyAdjustContentInsets={false}
+          showsVerticalScrollIndicator={false}
+        >
+          <>
+            <HeaderView>
+              <ShadowView
+                shadowStyle={{
+                  paddingHorizontal: 0
+                }}
+              >
+                <CommonHeader
+                  closeButton={false}
+                  title={"מערכת דוחות"}
+                  subTitle={"ניהול טפסי בדיקות"}
+                  headerStyles={{
+                    paddingHorizontal: responsiveWidth(28)
                   }}
                 >
-                  <CommonHeader
-                    closeButton={false}
-                    title={"מערכת דוחות"}
-                    subTitle={"ניהול טפסי בדיקות"}
-                    headerStyles={{
-                      paddingHorizontal: responsiveWidth(28)
-                    }}
-                  >
-                    <Reports
-                      height={responsiveWidth(46)}
-                    />
-                  </CommonHeader>
-                  <DropDown
-                    arrayProp={
-                      // !reportsState.fetching && 
-                        reportsState.reports !== null &&
-                        reportsState.reports 
-                        // reportsState.reports.length > 0 ?
-                        // reportsState.reports :
-                        // userData
-                    }
-                    searchTitle={"מזהה בדיקה"}
-                    dispatchMethod={reportsDispatch}
+                  <Reports
+                    height={responsiveWidth(46)}
                   />
-                </ShadowView>
-              </HeaderView>
-
-              <ButtomView>
-                <CommonButton
-                  title={"הוסף בדיקה חדשה"}
-                  titleColor={colors.white}
-                  titleFontSize={fonts.large}
-                  buttonColor={colors.darkSkyBlue}
-                  buttonHeight={responsiveWidth(51)}
-                  // buttonWidth={responsiveWidth(300)}
-                  buttonWidth={layout.width < 600 ? "100%" : "37.5%"}
-                  buttonShadow={true}
-                  buttonShadowColor={colors.clearBlue}
-                  borderRadius={10}
-                  style={{
-                    marginTop: responsiveWidth(24),
-                    marginBottom: responsiveWidth(24),
-                    marginRight: layout.width > 600 ? responsiveWidth(10) : 0,
-                  }}
-                  onPress={() => printModalOpen()}
-                >
-                  <View
-                    style={{
-                      position: layout.width < 600 ? "absolute" : "relative",
-                      right: 0,
-                      marginRight: layout.width < 600 ? responsiveWidth(10) : 0,
-                    }}
-                  >
-                    <Plus />
-                  </View>
-                </CommonButton>
-
-                <PrintModalContent>
-                  <PrintModal 
-                    close={printModalClose}
-                  />
-                </PrintModalContent>
-
-                {isAdmin && (
-                  <>
-                    <CommonButton
-                      onPress={() => userModalOpen()}
-                      title={"ניהול משתמשים"}
-                      titleColor={colors.darkSkyBlue}
-                      titleFontSize={fonts.large}
-                      buttonColor={colors.white}
-                      buttonHeight={responsiveWidth(51)}
-                      // buttonWidth={responsiveWidth(300)}
-                      buttonWidth={layout.width < 600 ? "100%" : "37.5%"}
-                      buttonShadow={false}
-                      borderColor={colors.darkSkyBlue}
-                      borderRadius={10}
-                    >
-                      <View
-                        style={{
-                          position: layout.width < 600 ? "absolute" : "relative",
-                          right: 0,
-                          marginRight: layout.width < 600 ? responsiveWidth(10) : 0,
-                        }}
+                </CommonHeader>
+                {
+                  layout.width > 600 ?
+                    (
+                      <Table
+                        arrayProp={
+                          reportsState.reports !== null &&
+                          reportsState.reports
+                        }
+                        searchTitle={"שם"}
+                        dispatchMethod={reportsDispatch}
                       >
-                        <UserList />
-                      </View>
-                    </CommonButton>
+                      </Table>
+                    ) : (
+                      <DropDown
+                        arrayProp={
+                          reportsState.reports !== null &&
+                          reportsState.reports
+                        }
+                        searchTitle={"שם"}
+                        dispatchMethod={reportsDispatch}
+                      >
+                      </DropDown>
+                    )
+                }
+              </ShadowView>
+            </HeaderView>
 
-                    <UserModalContent
-                      modalContentStyle={{
-                        flex: 1,
-                        borderRadius: 10,
-                        // borderTopLeftRadius: 10,
-                        // borderTopRightRadius: 10
-                      }}
-                      modalStyle={{
-                        margin: 0,
-                        // backgroundColor: 'transparent',
-                        // borderRadius: 10,
+            <ButtomView>
+              <CommonButton
+                title={"הוסף בדיקה חדשה"}
+                titleColor={colors.white}
+                titleFontSize={fonts.large}
+                buttonColor={colors.darkSkyBlue}
+                buttonHeight={responsiveWidth(51)}
+                // buttonWidth={responsiveWidth(300)}
+                buttonWidth={layout.width < 600 ? "100%" : "37.5%"}
+                buttonShadow={true}
+                buttonShadowColor={colors.clearBlue}
+                borderRadius={10}
+                style={{
+                  marginTop: responsiveWidth(24),
+                  marginBottom: responsiveWidth(24),
+                  marginRight: layout.width > 600 ? responsiveWidth(10) : 0,
+                }}
+                onPress={() => printModalOpen()}
+              >
+                <View
+                  style={{
+                    position: layout.width < 600 ? "absolute" : "relative",
+                    right: 0,
+                    marginRight: layout.width < 600 ? responsiveWidth(10) : 0,
+                  }}
+                >
+                  <Plus />
+                </View>
+              </CommonButton>
+
+              <PrintModalContent>
+
+                <PrintModal
+                  close={printModalClose}
+                />
+
+              </PrintModalContent>
+
+              {isAdmin && (
+                <>
+                  <CommonButton
+                    onPress={() => userModalOpen()}
+                    title={"ניהול משתמשים"}
+                    titleColor={colors.darkSkyBlue}
+                    titleFontSize={fonts.large}
+                    buttonColor={colors.white}
+                    buttonHeight={responsiveWidth(51)}
+                    // buttonWidth={responsiveWidth(300)}
+                    buttonWidth={layout.width < 600 ? "100%" : "37.5%"}
+                    buttonShadow={false}
+                    borderColor={colors.darkSkyBlue}
+                    borderRadius={10}
+                  >
+                    <View
+                      style={{
+                        position: layout.width < 600 ? "absolute" : "relative",
+                        right: 0,
+                        marginRight: layout.width < 600 ? responsiveWidth(10) : 0,
                       }}
                     >
-                      <UsersListScreen closeModal={userModalClose} />
-                    </UserModalContent>
-                  </>
-                )}
-              </ButtomView>
-            </>
-          </ScrollView>
-        </AvoidingView>
-      </SafeView>
-     </UsersProvider>
+                      <UserList />
+                    </View>
+                  </CommonButton>
+                  <UserModalContent>
+                    <UsersListScreen closeModal={userModalClose} />
+                  </UserModalContent>
+                </>
+              )}
+            </ButtomView>
+          </>
+        </ScrollView>
+      </AvoidingView>
+    </SafeView>
   );
 }
+
+export default ReportsScreen;

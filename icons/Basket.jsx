@@ -6,8 +6,8 @@ const Basket = () => (
     <Svg 
 		x="0px" 
 		y="0px" 
-		width={responsiveWidth(17)}
-        height={responsiveWidth(21)} viewBox="0 0 17.333 21.917" enable-background="new 0 0 17.333 21.917" >
+		width={17}
+        height={21} viewBox="0 0 17.333 21.917" enable-background="new 0 0 17.333 21.917" >
 
         <G >
             <G>

@@ -95,12 +95,3 @@ const PrintModal = ({ close }) => {
 }
 
 export default PrintModal;
-
-
-
-
-
-
-
-
-

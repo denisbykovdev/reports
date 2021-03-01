@@ -84,7 +84,7 @@ export const usersReducer = (
             return Update({
                 ...state,
                 users: state.users.map(user =>
-                    user.name === action.itemId ?
+                    user.id === action.itemId ?
                         {
                             ...user,
                             [action.itemKey]: action.itemNewValue

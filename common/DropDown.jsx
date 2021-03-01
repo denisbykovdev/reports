@@ -1,12 +1,20 @@
 import React, { memo, useEffect } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { responsiveWidth } from "../utils/layout";
+import layout, { responsiveWidth } from "../utils/layout";
 import DropDownItem from "./DropDownItem";
 import weights from "../utils/weights";
 import fonts from "../utils/fonts";
 import colors from "../utils/colors";
 import useInput from "../hooks/useInput";
 import { useState } from "reinspect";
+import * as Device from 'expo-device';
+
+// const Device = Device.getDeviceTypeAsync()
+
+// console.log(
+//     "::::::::::::::::::DEVICETYPE:", Device
+// )
+
 
 const DropDown = ({
     arrayProp,
@@ -64,8 +72,7 @@ const DropDown = ({
         }
 
         // console.log(
-        //     "___DD/useEffect/check input: ", inputText.length, array
-        // )
+        //     "___DD/useEffect/check input: ", inputText.le
 
         if (inputText.length === 0) {
             setArray(arrayProp)
@@ -106,11 +113,11 @@ const DropDown = ({
                                 height: responsiveWidth(1),
                                 display: index === 0 ? 'none' : "flex"
                             }}></View>
-
-                            <DropDownItem 
-                                itemData={element} 
+                            <DropDownItem
+                                itemData={element}
                                 dispatchMethod={dispatchMethod}
                             />
+
                         </View>
                     )
                 })

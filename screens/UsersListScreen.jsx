@@ -5,24 +5,31 @@ import CommonHeader from "../common/CommonHeader";
 import DropDown from "../common/DropDown";
 import ShadowView from "../common/ShadowView";
 import UserPlus from "../icons/UserPlus"
-import { responsiveWidth } from "../utils/layout";
+import layout, { responsiveWidth } from "../utils/layout";
 import Spinner from "../common/Spinner"
 import useUsersState from "../hooks/useUsersState";
 import useUsersDispatch from "../hooks/useUsersDispatch";
-import UsersProvider from "../providers/UsersProvider";
+import { useUsersProvider } from "../providers/UsersProvider";
+import Table from "../common/Table";
+// import UsersProvider from "../providers/UsersProvider";
 
 const UsersListScreen = ({ closeModal }) => {
 
-  const usersState = useUsersState();
-  const usersDispatch = useUsersDispatch();
+  // const usersState = useUsersState();
+  // const usersDispatch = useUsersDispatch();
+
+  const [usersState, usersDispatch] = useUsersProvider()
 
   useEffect(() => {
     console.log(
-      "___UsersList/usersState.users:", usersState.users
+      "___UsersList/usersState.users:", 
+      usersState.users, 
+      layout.width
     )
   }, [usersState.users])
 
   return (
+
     <AvoidingView>
       <ShadowView shadowStyle={{
         paddingHorizontal: 0
@@ -34,21 +41,41 @@ const UsersListScreen = ({ closeModal }) => {
             paddingHorizontal: responsiveWidth(28)
           }}
         />
+
         {
           usersState && usersState.fetching && <Spinner />
         }
-        <DropDown
-          arrayProp={
-            usersState.users !== null &&
-            usersState.users
-          }
-          searchTitle={"not clear"}
-          dispatchMethod={usersDispatch}
-        >
-          <UserPlus />
-        </DropDown>
+        {
+          layout.width > 600 ?
+            (
+              <Table
+                arrayProp={
+                  usersState.users !== null &&
+                  usersState.users
+                }
+                searchTitle={"שם"}
+                dispatchMethod={usersDispatch}
+              >
+                <UserPlus />
+              </Table>
+            ) : (
+              <DropDown
+                arrayProp={
+                  usersState.users !== null &&
+                  usersState.users
+                }
+                searchTitle={"שם"}
+                dispatchMethod={usersDispatch}
+              >
+                <UserPlus />
+              </DropDown>
+            )
+        }
+
+
       </ShadowView>
     </AvoidingView>
+
   );
 };
 

@@ -1,12 +1,12 @@
 import Modal from "react-native-modal";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import colors from "../utils/colors";
 import layout, { responsiveWidth } from "../utils/layout";
 import React from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
-
+import { StyleSheet, ScrollView, View } from "react-native";
 
 const useModal = () => {
+
   const [isVisible, setVisible] = useState(false);
 
   const modalClose = () => setVisible(false);
@@ -14,31 +14,35 @@ const useModal = () => {
   const modalOpen = () => setVisible(true);
 
   const ModalContent = ({
-    children,
-    modalStyle,
-    modalContentStyle,
+    children
   }) => (
+
     <Modal
       isVisible={isVisible}
       backdropColor={colors.popUpBg}
-      // backdropOpacity={1}
       children
       onBackdropPress={() => modalClose()}
       deviceWidth={layout.width}
       deviceHeight={layout.height}
-      // onSwipeComplete={() => modalClose()}
-      // swipeDirection="down"
+      onSwipeComplete={() => modalClose()}
       supportedOrientations={["portrait", "landscape"]}
-      propagateSwipe
-      style={[modalStyle, styles.modalContainer]}
+      style={styles.modalContainer}
+      propagateSwipe={true}
+      scrollVertical={true}
     >
-      <ScrollView 
-        style={modalContentStyle} 
+      <ScrollView
+        contentContainerStyle={styles.modalScrollContainer}
         showsVerticalScrollIndicator={false}
+        onPress
       >
-        {children}
+        <View style={styles.modalContent}>
+          {children}
+        </View>
+        
+
       </ScrollView>
-    </Modal>
+    </Modal >
+
   );
 
   return [modalOpen, modalClose, ModalContent];
@@ -46,21 +50,13 @@ const useModal = () => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    shadowColor: colors.paleGrayLight,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowRadius: 18,
-    shadowOpacity: 1,
-    elevation: 10,
-
-    borderRadius: 10,
-
-    marginTop: responsiveWidth(91),
-    marginRight: responsiveWidth(31),
-    marginLeft: responsiveWidth(31),
+    margin: 0,
+    paddingHorizontal: responsiveWidth(31),
+    justifyContent: 'flex-end'
   },
+  modalScrollContainer: {
+    paddingTop: responsiveWidth(91)
+  }
 });
 
 export default useModal;

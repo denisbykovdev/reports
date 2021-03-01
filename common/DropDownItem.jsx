@@ -59,7 +59,8 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                     {
                         Object.entries(itemData).map(([key, value], index) => {
 
-                            if(key !== "id") return (
+                            if(key !== "id") 
+                            return (
 
 
                                 <DropDownElement
