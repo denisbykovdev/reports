@@ -2,7 +2,7 @@ import React from "react";
 import { Svg, G, Line, Rect } from "react-native-svg";
 import colors from "../utils/colors";
 
-const Close = ({ width = 18.563, height = 18.438 }) => (
+const Close = ({ width = 18.563, height = 18.438, stroke = colors.paleGrayLight, strokeWidth = 2 }) => (
   <Svg
     x="0px"
     y="0px"
@@ -11,8 +11,8 @@ const Close = ({ width = 18.563, height = 18.438 }) => (
     viewBox="0 0 18.563 18.438"
     enable-background="new 0 0 18.563 18.438"
     // fill={colors.paleGrayLight}
-    stroke={colors.paleGrayLight}
-    strokeWidth={2}
+    stroke={stroke}
+    strokeWidth={strokeWidth}
   >
     <G>
       <G>

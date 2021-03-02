@@ -7,6 +7,25 @@ export const usersInitial = {
     // usersSearch: null
 }
 
+const userData = [
+    {
+        id: 1,
+        name: "first",
+        last_name: "one",
+        phone: "1234567",
+        email: "first@mail.com",
+        password: "123456"
+    },
+    {
+        id: 2,
+        name: "second",
+        last_name: "two",
+        phone: "7654321",
+        email: "second@mail.com",
+        password: "123456"
+    }
+]
+
 export const usersReducer = (
     state = usersInitial,
     action
@@ -26,7 +45,8 @@ export const usersReducer = (
             return Update({
                 ...state,
                 fetching: false,
-                error: action.error
+                error: action.error,
+                users: userData
             });
 
         case "FETCH_USERS":
@@ -60,7 +80,8 @@ export const usersReducer = (
 
                         dispatch({
                             type: "ERROR_USERS",
-                            error
+                            error,
+                            // users: userData
                         });
 
                         console.log("***useUsers/ERROR_USERS:", error, state);

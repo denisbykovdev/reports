@@ -92,7 +92,7 @@ const Table = ({
                             <View key={i} style={[styles.tableRowTitle, {
                                 width: itemWidth + "%"
                             }]}>
-                                <Text key={i}>
+                                <Text key={i} style={styles.darkText}>
                                     {titles[atom] ? titles[atom] : atom}
                                 </Text>
                             </View>
@@ -139,6 +139,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
 
+    },
+    darkText: {
+        color: colors.darkBlueGray,
+        fontWeight: weights.medium,
+        fontSize: fonts.small,
+        marginBottom: responsiveWidth(8),
+        marginTop: responsiveWidth(18)
     },
     searchContainer: {
         // marginHorizontal: responsiveWidth(28),

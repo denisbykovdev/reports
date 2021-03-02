@@ -3,7 +3,7 @@ import { withExpenses, withPdf, withProfRegion } from "../constants/api"
 import { expDetails, printDetails, profDetails } from "../constants/printMadalButtons"
 import useRadioPair from "../hooks/useRadioPair"
 import colors from "../utils/colors"
-import { responsiveWidth } from "../utils/layout"
+import layout, { responsiveWidth } from "../utils/layout"
 import CommonButton from "./CommonButton"
 import CommonHeader from "./CommonHeader"
 import Line from "./Line"
@@ -36,7 +36,8 @@ const PrintModal = ({ close }) => {
     return (
         <ShadowView
             shadowStyle={{
-                paddingHorizontal: 0
+                paddingHorizontal: 0,
+                // maxWidth: layout.width > 600 ? responsiveWidth(360) : "100%"
             }}
         >
             <CommonHeader

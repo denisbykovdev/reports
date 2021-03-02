@@ -3,7 +3,10 @@ import { StyleSheet, View, Text } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Basket from "../icons/Basket"
 import UserPlus from "../icons/UserPlus"
+import colors from "../utils/colors"
+import fonts from "../utils/fonts"
 import { responsiveWidth } from "../utils/layout"
+import weights from "../utils/weights"
 
 const TableRow = ({ itemData, dispatchMethod, children }) => {
 
@@ -50,7 +53,7 @@ const TableRow = ({ itemData, dispatchMethod, children }) => {
                             style={[styles.rowData, {
                             width: itemWidth + "%"
                         }]}>
-                            <Text >
+                            <Text style={styles.blueText}>
                                 {
                                     typeof value === 'boolean' ? JSON.stringify(value) : value
                                 }
@@ -86,7 +89,13 @@ const styles = StyleSheet.create({
     rowData: {
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+    blueText: {
+        color: colors.darkSkyBlue,
+        fontWeight: weights.medium,
+        fontSize: fonts.small,
+        marginVertical: responsiveWidth(18)
+    },
 })
 
 export default TableRow;

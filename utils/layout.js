@@ -4,7 +4,7 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 
-const widthScale = width < 600 ? 360 : 800;
+const widthScale = width < 600 ? 360 : 900;
 
 // console.log(width)
 

@@ -57,7 +57,7 @@ function ReportsScreen({ route }) {
                 }}
               >
                 <CommonHeader
-                  closeButton={false}
+                  closeButton={true}
                   title={"מערכת דוחות"}
                   subTitle={"ניהול טפסי בדיקות"}
                   headerStyles={{

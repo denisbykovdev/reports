@@ -26,7 +26,9 @@ const useModal = () => {
       deviceHeight={layout.height}
       onSwipeComplete={() => modalClose()}
       supportedOrientations={["portrait", "landscape"]}
-      style={styles.modalContainer}
+      style={[styles.modalContainer, {
+        alignItems: layout.width > 600 ? "center" : 'stretch'
+      }]}
       propagateSwipe={true}
       scrollVertical={true}
     >
@@ -51,11 +53,10 @@ const useModal = () => {
 const styles = StyleSheet.create({
   modalContainer: {
     margin: 0,
-    paddingHorizontal: responsiveWidth(31),
-    justifyContent: 'flex-end'
+    paddingHorizontal: responsiveWidth(31)
   },
   modalScrollContainer: {
-    paddingTop: responsiveWidth(91)
+    paddingTop: responsiveWidth(91),
   }
 });
 

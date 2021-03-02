@@ -7,22 +7,24 @@ export const reportsInitial = {
     // reportsSearch: null
 }
 
-const userData = [
+const reportsData = [
     {
-        id: 1,
-        name: "first",
-        last_name: "one",
-        phone: "1234567",
-        email: "first@mail.com",
-        password: "123456"
+        testId: "1",
+        status: "inDeveloping", //положение дел
+        customerNumber: "1",
+        client: "firstClient",
+        address: "planet Earth",
+        date: "02.03.21",
+        editorsName: "firstEditor"
     },
     {
-        id: 2,
-        name: "second",
-        last_name: "two",
-        phone: "7654321",
-        email: "second@mail.com",
-        password: "123456"
+        testId: "2",
+        status: "done", //положение дел
+        customerNumber: "2",
+        client: "secondCLient",
+        address: "web",
+        date: "13.02.21",
+        editorsName: "secondEditor"
     }
 ]
 
@@ -45,7 +47,8 @@ export const reportsReducer = (
             return Update({
                 ...state,
                 fetching: false,
-                error: action.error
+                error: action.error,
+                reports: reportsData
             });
 
         case "FETCH_REPORTS":

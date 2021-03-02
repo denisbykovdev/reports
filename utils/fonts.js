@@ -1,6 +1,6 @@
 import layout from "./layout";
 
-const scale = layout.width < 600 ? 360 : 800;
+const scale = layout.width < 600 ? 360 : 900;
 
 const scaleFontSize = (fontSize) => {
     const ratio = fontSize / scale;

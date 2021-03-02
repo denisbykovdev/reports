@@ -9,14 +9,19 @@ import weights from "../utils/weights";
 const CommonHeader = ({ title, subTitle, close, children, closeButton = true, headerStyles }) => (
 
   <View style={[styles.modalHeaderContainer, headerStyles, {
-      justifyContent: layout.width > 600 && !children ? "center" : "space-between" ,
+      justifyContent: layout.width > 600 && !children ? "center" : "flex-end",
       flexDirection: children && "row"
   }]}>
 
     {
       closeButton &&
-      <TouchableOpacity style={styles.modalHeaderClose} onPress={() => close()}>
-        <Close width={responsiveWidth(7)} height={responsiveWidth(7)} />
+      <TouchableOpacity style={styles.modalHeaderClose} onPress={close}>
+        <Close 
+          width={layout.width > 600 ? responsiveWidth(15) : responsiveWidth(7)} 
+          height={layout.width > 600 ? responsiveWidth(15) : responsiveWidth(7)} 
+          stroke={layout.width > 600 ? colors.black : colors.paleGrayLight}
+          strokeWidth={layout.width > 600 ? 0.5 : 2}
+        />
       </TouchableOpacity>
     }
 
@@ -24,31 +29,32 @@ const CommonHeader = ({ title, subTitle, close, children, closeButton = true, he
       <Text style={styles.modalHeaderTitle}>{title}</Text>
       <Text style={styles.modalHeaderSubTitle}>{subTitle}</Text>
     </View>
-    {children}
+
+    <View style={styles.modalIcon}>
+      {children}
+    </View>
+  
   </View>
 );
 
 const styles = StyleSheet.create({
   modalHeaderContainer: {
-    // paddingTop: responsiveWidth(24),
-    // paddingHorizontal: responsiveWidth(28),
-    // paddingBottom: responsiveWidth(24),
-    // backgroundColor: 'yellow',
-    // flexDirection: "row",
-    justifyContent: "space-between",
-
+    alignItems: 'center',
+    flexDirection: 'row',
     marginBottom: responsiveWidth(24)
   },
   contentContainer: {
     alignItems: "flex-end"
   },
   modalHeaderClose: {
-    height: responsiveWidth(20),
-    width: responsiveWidth(20),
-    alignItems: "flex-start",
-    justifyContent: 'flex-end',
+    // height: '100%',
+    // width: '100%',
+    // alignItems: "center",
+    // justifyContent: 'center',
     position: 'absolute',
-    left: responsiveWidth(28)
+    left: responsiveWidth(28),
+    top: responsiveWidth(15)
+    // alignSelf: 'f'
   },
   modalHeaderTitle: {
     color: colors.darkBlueGray,
@@ -60,6 +66,9 @@ const styles = StyleSheet.create({
     fontSize: fonts.medium,
     fontWeight: weights.regular
   },
+  modalIcon: {
+    marginLeft: responsiveWidth(20)
+  }
 });
 
 export default CommonHeader;
