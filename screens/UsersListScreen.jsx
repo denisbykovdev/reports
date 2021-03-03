@@ -11,6 +11,8 @@ import useUsersState from "../hooks/useUsersState";
 import useUsersDispatch from "../hooks/useUsersDispatch";
 import { useUsersProvider } from "../providers/UsersProvider";
 import Table from "../common/Table";
+import DropDownItem from "../common/DropDownItem";
+import DropDownAddUser from "../components/DropDownAddUser";
 // import UsersProvider from "../providers/UsersProvider";
 
 const UsersListScreen = ({ closeModal }) => {
@@ -64,10 +66,13 @@ const UsersListScreen = ({ closeModal }) => {
                   usersState.users !== null &&
                   usersState.users
                 }
-                searchTitle={"שם"}
+                // searchTitle={"שם"}
                 dispatchMethod={usersDispatch}
               >
-                <UserPlus />
+                {/* <UserPlus /> */}
+                <DropDownAddUser 
+                  dispatchMethod={usersDispatch}
+                />
               </DropDown>
             )
         }

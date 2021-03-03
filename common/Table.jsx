@@ -1,29 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { StyleSheet, Text, TextInput, View } from "react-native";
+import firstLevelTitles from "../constants/firstLevelTitles";
 import useInput from "../hooks/useInput";
 import colors from "../utils/colors";
 import fonts from "../utils/fonts";
 import { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 import TableRow from "./TableRow";
-
-const titles = {
-    name: "שם",
-    last_name: "שם משפחה",
-    phone: "טלפון",
-    email: "מייל",
-    password: "סיסמא",
-
-    testId: "מזהה בדיקה",
-    status: "סטטוס", //положение дел
-    customerNumber: "מספר לקוח",
-    client: "לקוח",
-    address: "כתובת",
-    date: "תאריך",
-    editorsName: "שם העורך"
-};
-
-
 
 const Table = ({
     arrayProp,
@@ -93,7 +76,7 @@ const Table = ({
                                 width: itemWidth + "%"
                             }]}>
                                 <Text key={i} style={styles.darkText}>
-                                    {titles[atom] ? titles[atom] : atom}
+                                    {firstLevelTitles[atom] ? firstLevelTitles[atom] : atom}
                                 </Text>
                             </View>
                         ))

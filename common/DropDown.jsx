@@ -84,12 +84,18 @@ const DropDown = ({
     return (
         <View style={styles.ddContainer}>
             <View style={styles.line}></View>
+            {children}
             <View style={styles.searchContainer}>
 
-                <View style={styles.searchHeader}>
-                    <View style={styles.searchIcon}>
-                        {children}
-                    </View>
+               
+
+                <View style={[styles.searchHeader, {
+                        marginVertical: searchTitle && responsiveWidth(34)
+                        }]}
+                >
+                    {/* <View style={styles.searchIcon}>
+                        
+                    </View> */}
 
                     <Text style={styles.searchTitle}>
                         {searchTitle}
@@ -100,6 +106,7 @@ const DropDown = ({
                     onChangeText={onChange}
                     // onBlur={onBlur} 
                     style={styles.searchInput}
+                    placeholder={"לחפש"}
                 />
 
             </View>
@@ -133,8 +140,7 @@ const styles = StyleSheet.create({
     searchHeader: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        alignItems: 'center',
-        marginVertical: responsiveWidth(34)
+        alignItems: 'center'
     },
     searchTitle: {
         color: colors.darkBlueGray,
@@ -160,7 +166,8 @@ const styles = StyleSheet.create({
 
         fontSize: fonts.xsmall,
         fontWeight: weights.thin,
-        color: colors.darkBlueGray
+        color: colors.darkBlueGray,
+        textAlign: 'right'
     }
 })
 

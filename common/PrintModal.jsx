@@ -37,7 +37,7 @@ const PrintModal = ({ close }) => {
         <ShadowView
             shadowStyle={{
                 paddingHorizontal: 0,
-                // maxWidth: layout.width > 600 ? responsiveWidth(360) : "100%"
+                maxWidth: layout.width > 600 ? responsiveWidth(360) : "100%"
             }}
         >
             <CommonHeader

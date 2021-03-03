@@ -57,7 +57,7 @@ function ReportsScreen({ route }) {
                 }}
               >
                 <CommonHeader
-                  closeButton={true}
+                  closeButton={false}
                   title={"מערכת דוחות"}
                   subTitle={"ניהול טפסי בדיקות"}
                   headerStyles={{
@@ -76,7 +76,7 @@ function ReportsScreen({ route }) {
                           reportsState.reports !== null &&
                           reportsState.reports
                         }
-                        searchTitle={"שם"}
+                        searchTitle={"מזהה בדיקה"}
                         dispatchMethod={reportsDispatch}
                       >
                       </Table>
@@ -86,7 +86,7 @@ function ReportsScreen({ route }) {
                           reportsState.reports !== null &&
                           reportsState.reports
                         }
-                        searchTitle={"שם"}
+                        searchTitle={"מזהה בדיקה"}
                         dispatchMethod={reportsDispatch}
                       >
                       </DropDown>

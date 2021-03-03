@@ -13,7 +13,7 @@ const xsmall = scaleFontSize(13);
 const small = scaleFontSize(14);
 const regular = scaleFontSize(15);
 const medium = scaleFontSize(16);
-const large = scaleFontSize(18);
+const large = scaleFontSize(20);
 const xlarge = scaleFontSize(25);
 
 export default {

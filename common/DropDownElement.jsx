@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native";
 import { useState } from "reinspect";
 import { useDebouncedCallback } from "use-debounce/lib";
+import firstLevelTitles from "../constants/firstLevelTitles";
 import useInput from "../hooks/useInput";
 import useUsers from "../hooks/useUsersState";
 import colors from "../utils/colors";
@@ -98,7 +99,11 @@ const DropDownElement = ({ elementKey, elementValue, elementIndex, dispatchMetho
             }}></View>
             <View style={styles.itemElementContainer}>
                 <Text style={styles.darkText}>
-                    {elementKey}
+                    {
+                        firstLevelTitles[elementKey]
+                            ? firstLevelTitles[elementKey]
+                            : elementKey
+                }
                 </Text>
 
                 <TextInput

@@ -10,7 +10,7 @@ const CommonHeader = ({ title, subTitle, close, children, closeButton = true, he
 
   <View style={[styles.modalHeaderContainer, headerStyles, {
       justifyContent: layout.width > 600 && !children ? "center" : "flex-end",
-      flexDirection: children && "row"
+      flexDirection:"row"
   }]}>
 
     {
@@ -25,12 +25,16 @@ const CommonHeader = ({ title, subTitle, close, children, closeButton = true, he
       </TouchableOpacity>
     }
 
-    <View style={styles.contentContainer}>
+    <View style={[styles.contentContainer, {
+      width: children || closeButton === true ? "90%" : "100%"
+    }]}>
       <Text style={styles.modalHeaderTitle}>{title}</Text>
       <Text style={styles.modalHeaderSubTitle}>{subTitle}</Text>
     </View>
 
-    <View style={styles.modalIcon}>
+    <View style={{
+      marginLeft: children && responsiveWidth(20)
+    }}>
       {children}
     </View>
   
@@ -47,27 +51,25 @@ const styles = StyleSheet.create({
     alignItems: "flex-end"
   },
   modalHeaderClose: {
-    // height: '100%',
-    // width: '100%',
-    // alignItems: "center",
-    // justifyContent: 'center',
-    position: 'absolute',
-    left: responsiveWidth(28),
-    top: responsiveWidth(15)
-    // alignSelf: 'f'
+    height: responsiveWidth(22),
+    width: responsiveWidth(22),
+    // backgroundColor: 'yellow',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    alignSelf: "flex-start"
   },
   modalHeaderTitle: {
     color: colors.darkBlueGray,
     fontSize: fonts.xlarge,
     fontWeight: weights.semiBold,
+    textAlign: "right"
   },
   modalHeaderSubTitle: {
     color: colors.blueGray,
     fontSize: fonts.medium,
-    fontWeight: weights.regular
-  },
-  modalIcon: {
-    marginLeft: responsiveWidth(20)
+    fontWeight: weights.regular,
+    textAlign: "right"
   }
 });
 

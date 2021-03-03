@@ -113,5 +113,10 @@ export const usersReducer = (
                         user
                 )
             });
+        case "ADD_USER":
+            return Update({
+                ...state,
+                users: [...state.users, action.payload]
+            })
     }
 }

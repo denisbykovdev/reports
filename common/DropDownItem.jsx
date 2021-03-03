@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
 import { useState } from "reinspect";
@@ -15,6 +16,8 @@ import DropDownElement from "./DropDownElement";
 const DropDownItem = ({ itemData, dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
 
+    const navigation = useNavigation()
+
     const deleteHandler = (itemId) => {
         dispatchMethod({
             type: "DELETE_ITEM",
@@ -24,7 +27,19 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
             "___DDItem/delete:", itemId
         )
     }
- 
+
+    const openReportHandler = (id) =>
+        navigation.navigate(
+            "AppStack",
+            {
+                screen: "Report",
+                params: {
+                    reportId: id
+                }
+            }
+        )
+
+
     return (
 
         <View style={styles.itemContainer}>
@@ -35,13 +50,29 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
             }}>
                 <View style={styles.itemButton}>
 
-                    <TouchableOpacity style={styles.basketIcon} onPress={() => deleteHandler(itemData.id)}>
+                    <TouchableOpacity
+                        style={styles.basketIcon}
+                        onPress={() => deleteHandler(itemData.id)}
+                    >
                         <Basket />
                     </TouchableOpacity>
 
-                    <Text style={styles.itemTitle}>
-                        {itemData.name}
-                    </Text>
+                    {
+                        itemData.client ?
+                            (
+                                <TouchableOpacity onPress={() => openReportHandler(itemData.testId)}>
+                                    <Text style={styles.itemTitle}>
+                                        {itemData.client}
+                                    </Text>
+                                </TouchableOpacity>
+                            ) : (
+                                <Text style={styles.itemTitle}>
+                                    {itemData.name}
+                                </Text>
+                            )
+                    }
+
+
                     <TouchableOpacity onPress={() => setVisible(!isVisible)}>
                         {
                             isVisible ? <CircleArrowUp /> : <CircleArrowDown />
@@ -59,19 +90,19 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                     {
                         Object.entries(itemData).map(([key, value], index) => {
 
-                            if(key !== "id") 
-                            return (
+                            if (key !== "id")
+                                return (
 
 
-                                <DropDownElement
-                                    key={index}
-                                    itemId={itemData.id}
-                                    elementKey={key}
-                                    elementValue={value}
-                                    elementIndex={index}
-                                    dispatchMethod={dispatchMethod}
-                                />
-                            )
+                                    <DropDownElement
+                                        key={index}
+                                        itemId={itemData.id}
+                                        elementKey={key}
+                                        elementValue={value}
+                                        elementIndex={index}
+                                        dispatchMethod={dispatchMethod}
+                                    />
+                                )
                         }
                         )
                     }
