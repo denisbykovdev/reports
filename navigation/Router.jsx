@@ -5,9 +5,6 @@ import AppStack from "./AppStack";
 import AuthStack from "./AuthStack";
 import { createStackNavigator } from "@react-navigation/stack";
 
-// import { I18nManager } from "react-native";
-// I18nManager.forceRTL(false);
-
 import { StateInspector } from "reinspect";
 
 export default function Router() {

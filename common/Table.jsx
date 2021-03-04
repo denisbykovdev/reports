@@ -12,7 +12,8 @@ const Table = ({
     arrayProp,
     searchTitle,
     children,
-    dispatchMethod
+    dispatchMethod,
+    tableTitles
 }) => {
     // on the first render only!
     const [array, setArray] = useState();
@@ -43,18 +44,22 @@ const Table = ({
 
     }, [inputText])
 
-    const itemWidth = array && 100 / Object.keys(array[0]).length
+    const itemWidth =  100 / Object.keys(tableTitles).length
 
+    console.log(
+        "___Table/props:", Object.keys(tableTitles)
+    )
 
     return (
         <View style={styles.tableContainer}>
             <View style={styles.line}></View>
             <View style={styles.searchContainer}>
-
-                <View style={styles.searchHeader}>
-                    <View style={styles.searchIcon}>
-                        {/* {children} */}
-                    </View>
+                
+                  <View style={[styles.searchHeader, {
+                        marginVertical: searchTitle && responsiveWidth(34)
+                        }]}
+                >
+                      {children}
 
                     <Text style={styles.searchTitle}>
                         {searchTitle}
@@ -65,12 +70,11 @@ const Table = ({
                     onChangeText={onChange}
                     style={styles.searchInput}
                 />
-                {/* <View style={styles.line}></View> */}
             </View>
             <View>
                 <View style={styles.tableRowTitles}>
                     {
-                        array && Object.keys(array[0]).map((atom, i) =>
+                        Object.keys(tableTitles).map((atom, i) =>
                         (
                             <View key={i} style={[styles.tableRowTitle, {
                                 width: itemWidth + "%"
@@ -95,7 +99,6 @@ const Table = ({
                                 <TableRow
                                     itemData={element}
                                     dispatchMethod={dispatchMethod}
-                                    children={children}
                                 />
 
                             </View>

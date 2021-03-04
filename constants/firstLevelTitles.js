@@ -5,7 +5,7 @@ export default {
     email: "מייל",
     password: "סיסמא",
 
-    testId: "מזהה בדיקה",
+    id: "מזהה בדיקה",
     status: "סטטוס", //положение дел
     customerNumber: "מספר לקוח",
     client: "לקוח",

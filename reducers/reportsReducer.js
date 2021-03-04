@@ -9,7 +9,7 @@ export const reportsInitial = {
 
 const reportsData = [
     {
-        testId: "1",
+        id: "1",
         status: "inDeveloping", //положение дел
         customerNumber: "1",
         client: "firstClient",
@@ -18,7 +18,7 @@ const reportsData = [
         editorsName: "firstEditor"
     },
     {
-        testId: "2",
+        id: "2",
         status: "done", //положение дел
         customerNumber: "2",
         client: "secondCLient",
@@ -100,7 +100,7 @@ export const reportsReducer = (
             );
             return Update({
                 ...state,
-                reports: state.reports.filter(user => user.id !== action.itemId)
+                reports: state.reports.filter(report => report.id !== action.itemId)
             });
 
         case "CHANGE_ITEM_VALUE":

@@ -1,14 +1,12 @@
 import React from "react"
-import { StyleSheet, View, Text } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native"
 import Basket from "../icons/Basket"
-import UserPlus from "../icons/UserPlus"
 import colors from "../utils/colors"
 import fonts from "../utils/fonts"
 import { responsiveWidth } from "../utils/layout"
 import weights from "../utils/weights"
 
-const TableRow = ({ itemData, dispatchMethod, children }) => {
+const TableRow = ({ itemData, dispatchMethod }) => {
 
     const deleteHandler = (itemId) => {
         dispatchMethod({
@@ -29,25 +27,13 @@ const TableRow = ({ itemData, dispatchMethod, children }) => {
                 <TouchableOpacity onPress={() => deleteHandler(itemData.id)}>
                     <Basket />
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    {children}
-                </TouchableOpacity>
+               
             </View>
             {
                 Object.entries(itemData).map(([key, value], index) => {
 
                     // if (key !== "id") 
                     return (
-
-
-                        // <DropDownElement
-                        //     key={index}
-                        //     itemId={itemData.id}
-                        //     elementKey={key}
-                        //     elementValue={value}
-                        //     elementIndex={index}
-                        //     dispatchMethod={dispatchMethod}
-                        // />
                         <View 
                             key={index}
                             style={[styles.rowData, {

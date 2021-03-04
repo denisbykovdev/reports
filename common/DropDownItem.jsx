@@ -1,9 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
-import { useState } from "reinspect";
-import useInput from "../hooks/useInput";
-import useUsers from "../hooks/useUsersState";
+import React, { useState }  from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Basket from "../icons/Basket";
 import CircleArrowDown from "../icons/CircleArrowDown";
 import CircleArrowUp from "../icons/CircleArrowUp";
@@ -58,9 +55,13 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                     </TouchableOpacity>
 
                     {
-                        itemData.client ?
+                        itemData && itemData.client ?
                             (
-                                <TouchableOpacity onPress={() => openReportHandler(itemData.testId)}>
+                                <TouchableOpacity 
+                                    onPress={
+                                        () => openReportHandler(itemData.id)
+                                    }
+                                >
                                     <Text style={styles.itemTitle}>
                                         {itemData.client}
                                     </Text>

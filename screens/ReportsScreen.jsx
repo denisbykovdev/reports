@@ -42,6 +42,16 @@ function ReportsScreen({ route }) {
 
   const [printModalOpen, printModalClose, PrintModalContent] = useModal();
 
+  const reportsTitles = {
+    id: "",
+    status: "", //положение дел
+    customerNumber: "",
+    client: "",
+    address: "",
+    date: "",
+    editorsName: ""
+  }
+
   return (
     <SafeView>
       <AvoidingView>
@@ -78,6 +88,7 @@ function ReportsScreen({ route }) {
                         }
                         searchTitle={"מזהה בדיקה"}
                         dispatchMethod={reportsDispatch}
+                        tableTitles={reportsTitles}
                       >
                       </Table>
                     ) : (

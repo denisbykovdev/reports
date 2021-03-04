@@ -18,7 +18,8 @@ export default function CommonButton({
     borderRadius = 5,
     borderColor = buttonColor,
     titleFontSize = fonts.small,
-    style
+    style,
+    titleStyle
 }) {
     return(
         <TouchableOpacity
@@ -43,7 +44,8 @@ export default function CommonButton({
                 {
                     color: titleColor,
                     fontSize: titleFontSize
-                }
+                },
+                titleStyle
             ]}
         >
             {title}

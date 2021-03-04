@@ -13,6 +13,7 @@ import { useUsersProvider } from "../providers/UsersProvider";
 import Table from "../common/Table";
 import DropDownItem from "../common/DropDownItem";
 import DropDownAddUser from "../components/DropDownAddUser";
+import TableAddUser from "../components/TableAddUser";
 // import UsersProvider from "../providers/UsersProvider";
 
 const UsersListScreen = ({ closeModal }) => {
@@ -30,6 +31,16 @@ const UsersListScreen = ({ closeModal }) => {
     )
   }, [usersState.users])
 
+
+  const usersTitles = {
+    id: "",
+    name: "",
+    last_name: "",
+    phone: "",
+    email: "",
+    password: ""
+}
+
   return (
 
     <AvoidingView>
@@ -40,7 +51,7 @@ const UsersListScreen = ({ closeModal }) => {
           title={"ניהול משתמשים"}
           close={closeModal}
           headerStyles={{
-            paddingHorizontal: responsiveWidth(28)
+            paddingHorizontal: layout.width < 600 ? responsiveWidth(28): 0
           }}
         />
 
@@ -55,10 +66,13 @@ const UsersListScreen = ({ closeModal }) => {
                   usersState.users !== null &&
                   usersState.users
                 }
-                searchTitle={"שם"}
+                // searchTitle={"שם"}
                 dispatchMethod={usersDispatch}
+                tableTitles={usersTitles}
               >
-                <UserPlus />
+                <TableAddUser 
+                  dispatchMethod={usersDispatch}
+                />
               </Table>
             ) : (
               <DropDown
@@ -69,7 +83,6 @@ const UsersListScreen = ({ closeModal }) => {
                 // searchTitle={"שם"}
                 dispatchMethod={usersDispatch}
               >
-                {/* <UserPlus /> */}
                 <DropDownAddUser 
                   dispatchMethod={usersDispatch}
                 />
