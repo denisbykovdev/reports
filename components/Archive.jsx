@@ -1,12 +1,12 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-const DefectsList = () => {
+const Archive = () => {
     return (
         <View>
-            <Text>/defects</Text>
+            <Text>/archive</Text>
         </View>
     )
 }
 
-export default DefectsList;
+export default Archive;

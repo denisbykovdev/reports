@@ -35,6 +35,8 @@ const DropDownAddUser = ({ dispatchMethod }) => {
         await addUser(values)
 
         await resetForm();
+
+        setVisible(false)
     }
 
     const addUser = (newUser) => dispatchMethod({
@@ -136,9 +138,6 @@ const AddUserElement = ({ elementIndex, elementKey, elementValue }) => (
                 name={elementKey}
                 placeholder={elementValue}
                 autoCapitalize="none"
-                // keyboardType="text"
-                // textContentType="text"
-                // width={responsiveWidth(180)}
                 inputStyle={styles.input}
                 style={styles.inputContainer}
             />

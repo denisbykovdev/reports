@@ -1,17 +1,16 @@
-import React, { memo } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { ScrollView, View } from "react-native";
 import SafeView from "../common/SafeView";
 import HeaderView from "../common/HeaderView";
 import ButtomView from "../common/BottomView";
 import CommonButton from "../common/CommonButton";
 import colors from "../utils/colors";
-import layout, { responsiveHeight, responsiveWidth } from "../utils/layout";
+import layout, { responsiveWidth } from "../utils/layout";
 import Plus from "../icons/Plus";
 import UserList from "../icons/UserList";
 import useStatusBar from "../hooks/useStatusBar";
 import fonts from "../utils/fonts";
 import useModal from "../hooks/useModal";
-import ModalHeader from "../common/CommonHeader";
 import UsersListScreen from "./UsersListScreen";
 import CommonHeader from "../common/CommonHeader";
 import Reports from "../icons/Reports";
@@ -19,8 +18,8 @@ import DropDown from "../common/DropDown";
 import ShadowView from "../common/ShadowView";
 import AvoidingView from "../common/AvoidingView";
 import useReports from "../hooks/useReports";
-import PrintModal from "../common/PrintModal";
 import Table from "../common/Table";
+import { useNavigation } from "@react-navigation/core";
 
 function ReportsScreen({ route }) {
 
@@ -40,7 +39,18 @@ function ReportsScreen({ route }) {
     "---ReportsScreen/reportsState.reports:", reportsState.reports
   )
 
-  const [printModalOpen, printModalClose, PrintModalContent] = useModal();
+  const navigation = useNavigation()
+
+  const openReportHandler = () =>
+    navigation.navigate(
+      "AppStack",
+      {
+        screen: "Report",
+        params: {
+          reportId: null
+        }
+      }
+    )
 
   const reportsTitles = {
     id: "",
@@ -123,7 +133,9 @@ function ReportsScreen({ route }) {
                   marginBottom: responsiveWidth(24),
                   marginRight: layout.width > 600 ? responsiveWidth(10) : 0,
                 }}
-                onPress={() => printModalOpen()}
+                onPress={
+                  () => openReportHandler()
+                }
               >
                 <View
                   style={{
@@ -135,14 +147,6 @@ function ReportsScreen({ route }) {
                   <Plus />
                 </View>
               </CommonButton>
-
-              <PrintModalContent>
-
-                <PrintModal
-                  close={printModalClose}
-                />
-
-              </PrintModalContent>
 
               {isAdmin && (
                 <>

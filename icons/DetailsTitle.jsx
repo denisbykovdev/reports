@@ -1,9 +1,16 @@
 import React from "react"
 import { Svg, G, Path } from "react-native-svg"
+import { responsiveWidth } from "../utils/layout";
 
 const DetailsTitle = () => (
-    <Svg x="0px" y="0px" width="15.354px"
-        height="15.167px" viewBox="0 0 15.354 15.167" enable-background="new 0 0 15.354 15.167">
+    <Svg 
+		x="0px" 
+		y="0px" 
+		width={responsiveWidth(15)}
+        height={responsiveWidth(15)}  
+		viewBox="0 0 15.354 15.167" 
+		enable-background="new 0 0 15.354 15.167"
+	>
 
         <G>
             <G>

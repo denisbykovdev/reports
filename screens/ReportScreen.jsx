@@ -1,5 +1,5 @@
-import React from "react"
-import { ScrollView, StyleSheet, Text, View } from "react-native"
+import React, { useState } from "react"
+import { ScrollView, View } from "react-native"
 import AvoidingView from "../common/AvoidingView"
 import CommonHeader from "../common/CommonHeader"
 import HeaderView from "../common/HeaderView"
@@ -7,21 +7,29 @@ import SafeView from "../common/SafeView"
 import ShadowView from "../common/ShadowView"
 import BottomView from "../common/BottomView"
 import Reports from "../icons/Reports"
-import { responsiveHeight, responsiveWidth } from "../utils/layout"
-import useReportData from "../hooks/useReportData"
-import { reportDataReducer } from "../reducers/reportDataReducer"
+import layout, { responsiveWidth } from "../utils/layout"
+import Details from "../components/Details"
+import Defects from "../components/Defects"
+import Resume from "../components/Resume"
+import Archive from "../components/Archive"
+import useMenu from "../hooks/useMenu"
+import FormContainer from "../common/FormContainer"
+import FormButton from "../common/FormButton"
 import CommonButton from "../common/CommonButton"
-import { useState } from "react/cjs/react.development"
+import Check from "../icons/Check"
 import colors from "../utils/colors"
-import DetailsList from "../components/DetailsLiist"
-import DefectsList from "../components/DefectsList"
+import fonts from "../utils/fonts"
+import useModal from "../hooks/useModal"
+import PrintModal from "../common/PrintModal"
 
 const ReportScreen = ({ route }) => {
     const { reportId } = route.params
 
-    const [reportDataState, reportDataDispatch] = useReportData(reportId)
+    const [offsetX, setOffsetX] = useState(0)
 
-    const dualStatic = [
+    const [printModalOpen, printModalClose, PrintModalContent] = useModal();
+
+    const menuTitles = [
         {
             label: "פרטי הבדיקה",
             desc: "details"
@@ -29,14 +37,52 @@ const ReportScreen = ({ route }) => {
         {
             label: "ליקוים",
             desc: "defects"
+        },
+        {
+            label: "סיכום",
+            desc: "resume"
+        },
+        {
+            label: "יומן עדכונים",
+            desc: "archive"
         }
     ]
 
-    const [active, DualMenu] = useDualMenu(dualStatic, "details")
+    const [active, Menu] = useMenu(menuTitles, "details", scrollCatcher)
 
-    console.log(
-        "___ReportScreen:", active
-    )
+    function activeComponent() {
+        switch (active) {
+            case "details": return <Details reportId={reportId} />;
+            case "defects": return <Defects reportId={reportId} />;
+            case "resume": return <Resume reportId={reportId} />;
+            case "archive": return <Archive reportId={reportId} />;
+            default: return <Details reportId={reportId} />;
+        }
+    }
+
+    const submitReport = async (values, { resetForm }) => {
+        console.log(
+            "___ReportScreen/submitReport/values", values
+        )
+    }
+
+    function scrollCatcher(event) {
+        console.log(
+            "___ReportScreen/scroll:", event.nativeEvent.contentOffset.x 
+        )
+
+        setOffsetX(event.nativeEvent.contentOffset.x)
+    }
+
+    function scrollComponent() {
+        switch (offsetX) {
+            case 0: return <Details reportId={reportId} />;
+            case 264: return <Defects reportId={reportId} />;
+            case 528: return <Resume reportId={reportId} />;
+            case 792: return <Archive reportId={reportId} />;
+            // default: return <Details reportId={reportId} />;
+        }
+    }
 
     return (
         <SafeView>
@@ -45,7 +91,12 @@ const ReportScreen = ({ route }) => {
                     automaticallyAdjustContentInsets={false}
                     showsVerticalScrollIndicator={false}
                 >
-                    <>
+                    <FormContainer
+                        initialValues={{ test: "" }}
+                        onSubmit={
+                            (values, { resetForm }) => submitReport(values, { resetForm })
+                        }
+                    >
                         <HeaderView>
                             <ShadowView
                                 shadowStyle={{
@@ -66,25 +117,55 @@ const ReportScreen = ({ route }) => {
                                         height={responsiveWidth(46)}
                                     />
                                 </CommonHeader>
-
-                                <DualMenu />
-
-                                {
-                                    active === "details"
-                                        ?
-                                        <DetailsList
-                                            details={
-                                                reportDataState.reportData
-                                            }
-                                        />
-                                        :
-                                        <DefectsList />
-                                }
+                                <Menu />
+                                    { scrollComponent() }
+                                {/* {activeComponent()} */}
 
                             </ShadowView>
                         </HeaderView>
-                        <BottomView></BottomView>
-                    </>
+                        <BottomView>
+                            <FormButton
+                                buttonShadow={true}
+                                buttonColor={colors.azul}
+                                buttonHeight={responsiveWidth(52)}
+                                buttonWidth={layout.width < 600 ? "100%" : "37.5%"}
+                                title={"עדכון"}
+                                titleStyle={{ marginEnd: 0 }}
+                                titleColor={colors.white}
+                                style={{ marginVertical: responsiveWidth(24) }}
+                                titleFontSize={fonts.large}
+                            >
+                                <View style={{
+                                    position: "absolute",
+                                    right: responsiveWidth(10)
+                                }}>
+                                    <Check />
+                                </View>
+                                
+                            </FormButton>
+                            <CommonButton
+                                onPress={() => printModalOpen()}
+                                title={"יצוא קובץ"}
+                                titleColor={colors.darkSkyBlue}
+                                titleFontSize={fonts.large}
+                                buttonColor={colors.white}
+                                buttonHeight={responsiveWidth(52)}
+                                // buttonWidth={responsiveWidth(300)}
+                                buttonWidth={layout.width < 600 ? "100%" : "37.5%"}
+                                buttonShadow={false}
+                                borderColor={colors.darkSkyBlue}
+                                borderRadius={10}
+                                titleStyle={{ marginEnd: 0 }}
+                            />
+                        </BottomView>
+                        <PrintModalContent>
+
+                            <PrintModal
+                                close={printModalClose}
+                            />
+
+                        </PrintModalContent>
+                    </FormContainer>
                 </ScrollView>
             </AvoidingView>
         </SafeView>
@@ -92,73 +173,3 @@ const ReportScreen = ({ route }) => {
 }
 
 export default ReportScreen;
-
-
-const useDualMenu = (array, init) => {
-    const [active, setActive] = useState(init)
-
-    console.log(
-        "___useDual:", active, init
-    )
-
-    const DualMenuRender = () => {
-        return (
-            <View style={styles.dualMenu}>
-                <View style={styles.dualInner}>
-                    {
-                        array.map(element => (
-                            <CommonButton
-                                key={element.label}
-                                onPress={() => setActive(element.desc)}
-                                title={element.label}
-                                titleColor={
-                                    active === element.desc ? colors.azul : colors.darkBlueGray
-                                }
-                                buttonColor={
-                                    active === element.desc ? colors.white : colors.paleGrayBg
-                                }
-                                borderRadius={25}
-                                buttonWidth={"50%"}
-                            />
-                        ))
-                    }
-                </View>
-
-                <View style={[styles.activeLineContainer, {
-                    justifyContent: active === init ? "flex-start" : "flex-end"
-                }]}>
-                    <View style={styles.activeLine}></View>
-                </View>
-            </View>
-        )
-    }
-
-    return [active, DualMenuRender]
-}
-
-const styles = StyleSheet.create({
-    dualMenu: {
-        borderTopColor: colors.whiteTwo,
-        borderTopWidth: responsiveWidth(1),
-    },
-    dualInner: {
-        borderBottomColor: colors.whiteTwo,
-        borderBottomWidth: responsiveWidth(3),
-
-        flexDirection: 'row',
-        paddingVertical: responsiveWidth(8),
-        paddingHorizontal: responsiveWidth(30)
-    },
-    activeLineContainer: {
-        paddingVertical: responsiveWidth(8),
-        paddingHorizontal: responsiveWidth(31),
-
-        flexDirection: "row"
-    },
-    activeLine: {
-        width: responsiveWidth(140),
-        height: responsiveHeight(4),
-        backgroundColor: colors.silver,
-        borderRadius: responsiveWidth(25)
-    }
-})

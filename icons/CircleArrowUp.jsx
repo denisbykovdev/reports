@@ -1,11 +1,17 @@
 import React from "react"
 import { Svg, G, Path, Circle } from "react-native-svg"
+import { responsiveWidth } from "../utils/layout";
 
 const CircleArrowUp = () => (
-    <Svg x="0px" y="0px" width="31.083px"
-        height="30.833px" viewBox="0 0 31.083 30.833" enable-background="new 0 0 31.083 30.833" >
-
-        <G >
+    <Svg 
+        x="0px" 
+        y="0px" 
+        width={responsiveWidth(23)}
+        height={responsiveWidth(23)} 
+        viewBox="0 0 31.083 30.833" 
+        enable-background="new 0 0 31.083 30.833" 
+    >
+        <G>
             <Circle fill-rule="evenodd" clip-rule="evenodd" fill="#dadfe7" cx="15.552" cy="15.479" r="15.167" />
             <Path fill-rule="evenodd" clip-rule="evenodd" fill="#4E546C" d="M20.309,17.769c-0.254,0.267-0.746,0.226-1.102-0.093
 			L15.551,14.4l-3.656,3.275c-0.355,0.318-0.848,0.359-1.102,0.093c-0.254-0.266-0.173-0.739,0.181-1.056l3.845-3.445

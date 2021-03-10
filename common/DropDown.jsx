@@ -7,14 +7,6 @@ import fonts from "../utils/fonts";
 import colors from "../utils/colors";
 import useInput from "../hooks/useInput";
 import { useState } from "reinspect";
-import * as Device from 'expo-device';
-
-// const Device = Device.getDeviceTypeAsync()
-
-// console.log(
-//     "::::::::::::::::::DEVICETYPE:", Device
-// )
-
 
 const DropDown = ({
     arrayProp,
@@ -37,17 +29,6 @@ const DropDown = ({
             setArray(arrayProp)
         }
     }, [arrayProp])
-
-    // const [selected, setSelected] = useState(null);
-    // const [searchKey, setSearchKey] = useState(null);
-
-    // const getSelected = (name) => {
-    //     arrayOfObjects.find(element => {
-    //         setSelected(element.name === name)
-    //     })
-    // }
-
-
 
     useEffect(() => {
 

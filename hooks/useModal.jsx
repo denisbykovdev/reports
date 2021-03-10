@@ -25,6 +25,7 @@ const useModal = () => {
       deviceWidth={layout.width}
       deviceHeight={layout.height}
       onSwipeComplete={() => modalClose()}
+      swipeDirection={"down"}
       supportedOrientations={["portrait", "landscape"]}
       style={[styles.modalContainer, {
         alignItems: layout.width > 600 ? "center" : 'stretch'

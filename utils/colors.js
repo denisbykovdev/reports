@@ -16,5 +16,6 @@ export default {
     battleShipGrey: "#717988",
     whiteTwo: "#e9e9e9",
     paleGrayThree: "#f1f4f7",
-    silver: "#cacbce"
+    silver: "#cacbce",
+    slateGrey: "#61646d"
 }

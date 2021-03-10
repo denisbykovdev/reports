@@ -35,6 +35,8 @@ const TableAddUser = ({ dispatchMethod }) => {
         await addUser(values)
 
         await resetForm();
+
+        setVisible(false)
     }
 
     const addUser = (newUser) => dispatchMethod({

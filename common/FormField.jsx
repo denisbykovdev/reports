@@ -15,6 +15,7 @@ export default function FormField({
   children,
   style,
   inputStyle,
+  area = false,
   ...otherProps
 }) {
   const {
@@ -44,9 +45,10 @@ export default function FormField({
             setFieldValue(name, text);
           }}
           onBlur={() => setFieldTouched(name)}
-          placeholder={placeholder}
           // placeholderTextColor={}
           style={[styles.input, inputStyle]}
+          placeholder={placeholder}
+          multiline={area}
           {...otherProps}
         />
 
