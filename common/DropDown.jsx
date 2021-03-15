@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import layout, { responsiveWidth } from "../utils/layout";
 import DropDownItem from "./DropDownItem";
@@ -6,7 +6,6 @@ import weights from "../utils/weights";
 import fonts from "../utils/fonts";
 import colors from "../utils/colors";
 import useInput from "../hooks/useInput";
-import { useState } from "reinspect";
 
 const DropDown = ({
     arrayProp,

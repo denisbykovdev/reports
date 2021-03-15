@@ -21,9 +21,12 @@ import colors from "../utils/colors"
 import fonts from "../utils/fonts"
 import useModal from "../hooks/useModal"
 import PrintModal from "../common/PrintModal"
+import useStatusBar from "../hooks/useStatusBar"
+import { loginSchema } from "../constants/validationSchema"
 
 const ReportScreen = ({ route }) => {
-    const { reportId } = route.params
+    // const { reportId } = route.params
+    useStatusBar("dark-content", colors.paleGrayBg);
 
     const [offsetX, setOffsetX] = useState(0)
 
@@ -52,11 +55,11 @@ const ReportScreen = ({ route }) => {
 
     function activeComponent() {
         switch (active) {
-            case "details": return <Details reportId={reportId} />;
-            case "defects": return <Defects reportId={reportId} />;
-            case "resume": return <Resume reportId={reportId} />;
-            case "archive": return <Archive reportId={reportId} />;
-            default: return <Details reportId={reportId} />;
+            case "details": return <Details />;
+            case "defects": return <Defects />;
+            case "resume": return <Resume />;
+            case "archive": return <Archive />;
+            default: return <Details />;
         }
     }
 
@@ -76,11 +79,10 @@ const ReportScreen = ({ route }) => {
 
     function scrollComponent() {
         switch (offsetX) {
-            case 0: return <Details reportId={reportId} />;
-            case 264: return <Defects reportId={reportId} />;
-            case 528: return <Resume reportId={reportId} />;
-            case 792: return <Archive reportId={reportId} />;
-            // default: return <Details reportId={reportId} />;
+            case 0: return <Details />;
+            case 264: return <Defects />;
+            case 528: return <Resume />;
+            case 792: return <Archive />;
         }
     }
 
@@ -92,10 +94,11 @@ const ReportScreen = ({ route }) => {
                     showsVerticalScrollIndicator={false}
                 >
                     <FormContainer
-                        initialValues={{ test: "" }}
+                        initialValues={{ id: "" }}
                         onSubmit={
                             (values, { resetForm }) => submitReport(values, { resetForm })
                         }
+                        // validationSchema={loginSchema}
                     >
                         <HeaderView>
                             <ShadowView

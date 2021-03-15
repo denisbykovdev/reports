@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
 import useLogout from "../hooks/useLogOut";
 import Exit from "../icons/Exit";
 import LogoVertical from "../icons/LogoVertical";

@@ -1,9 +1,9 @@
-import { MaterialIcons } from "@expo/vector-icons"
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useState } from 'react'
 import { ScrollView, StyleSheet, View } from "react-native"
 import CommonButton from "../common/CommonButton"
 import colors from "../utils/colors"
 import layout, { responsiveHeight, responsiveWidth } from "../utils/layout"
+import { MaterialIcons } from "@expo/vector-icons"
 
 const useMenu = (array, init, scrollCatcher) => {
     const [active, setActive] = useState(init)
@@ -55,13 +55,13 @@ const useMenu = (array, init, scrollCatcher) => {
                                         // active === element.desc ?
                                         //     colors.azul
                                         //     : 
-                                            colors.darkBlueGray
+                                        colors.darkBlueGray
                                     }
                                     buttonColor={
                                         // active === element.desc ?
                                         //     colors.white 
                                         //     :
-                                            colors.paleGrayBg
+                                        colors.paleGrayBg
                                     }
                                     borderRadius={25}
                                     buttonWidth={(layout.width - responsiveWidth(63)) / 2}

@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useState }  from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Basket from "../icons/Basket";
@@ -9,6 +8,7 @@ import fonts from "../utils/fonts";
 import layout, { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 import DropDownElement from "./DropDownElement";
+import { useNavigation } from "@react-navigation/native";
 
 const DropDownItem = ({ itemData, dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);

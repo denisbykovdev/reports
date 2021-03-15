@@ -5,8 +5,8 @@ import fonts from "../utils/fonts";
 import { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 
-const ItemTitle = ({titleStyle, title}) => (
-    <View style={styles.itemTitleContainer}>
+const ItemTitle = ({titleStyle, title, style}) => (
+    <View style={[styles.itemTitleContainer, style]}>
         <Text style={[styles.itemTitleText, titleStyle]}>
             {title}
         </Text>

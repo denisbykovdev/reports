@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import FormButton from "../common/FormButton";
 import FormContainer from "../common/FormContainer";
@@ -15,7 +15,6 @@ import Logo from "../icons/Logo";
 import EmailInput from "../icons/EmailInput";
 import PassInput from "../icons/PassInput";
 import Enter from "../icons/Enter";
-import { AuthContext } from "../providers/AuthProvider";
 import useAuth from "../hooks/useAuth";
 import useSecureToken from "../hooks/useSecureToken";
 import useSecureAdmin from "../hooks/useSecureAdmin";
@@ -27,36 +26,42 @@ export default function LoginScreen({ navigation }) {
   const secureAdmin = useSecureAdmin()
   const secureToken = useSecureToken()
 
-  useEffect(() => {
-    console.log(
-      "---autoLogin", secureToken, secureAdmin
-    )
-    if(secureToken && secureToken !== null) {
-      authDispatch({
-        type: "LOAD_TOKEN"
-      })
-      authDispatch({
-        type: "SET_TOKEN",
-        token: JSON.parse(secureToken),
-        isAdmin: secureAdmin
-      });
-      // navigation.navigate(
-      //   "AppStack",
-      //   {
-      //     screen: "Reports",
-      //     params: {
-      //       isAdmin: secureAdmin
-      //     }
-      //   }
-      // );
-    }
+  // useEffect(() => {
+  //   console.log(
+  //     "---autoLogin", secureToken, secureAdmin
+  //   )
+  //   if(secureToken && secureToken !== null) {
+  //     authDispatch({
+  //       type: "LOAD_TOKEN"
+  //     })
+  //     authDispatch({
+  //       type: "SET_TOKEN",
+  //       token: JSON.parse(secureToken),
+  //       isAdmin: secureAdmin
+  //     });
+
+  //   }
       
-  }, [secureToken])
+  // }, [secureToken])
+
+  // useEffect(() => {
+  //   authState.token === null
+  //     &&
+  //     navigation.navigate(
+  //       "AppStack",
+  //       {
+  //         screen: "Reports",
+  //         params: {
+  //           // isAdmin: authState.isAdmin
+  //           isAdmin: true
+  //         }
+  //       }
+  //     )
+  // }, [authState.token])
 
   useEffect(() => {
-    authState.token === null
-      &&
-      navigation.navigate(
+ 
+       navigation.navigate(
         "AppStack",
         {
           screen: "Reports",
@@ -66,7 +71,7 @@ export default function LoginScreen({ navigation }) {
           }
         }
       )
-  }, [authState.token])
+  }, [])
 
   async function handleOnLogin(values, { resetForm }) {
     const { email, password } = values;

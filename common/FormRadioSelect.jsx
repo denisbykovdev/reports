@@ -1,5 +1,4 @@
-import { useFormikContext } from "formik"
-import React, { useState } from "react"
+import React from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useEffect } from "react/cjs/react.development"
 import Tick from "../icons/Tick"
@@ -7,6 +6,7 @@ import colors from "../utils/colors"
 import fonts from "../utils/fonts"
 import { responsiveWidth } from "../utils/layout"
 import weights from "../utils/weights"
+import { useFormikContext } from "formik"
 
 const FormRadioSelect = ({ name, array }) => {
 
@@ -18,10 +18,11 @@ const FormRadioSelect = ({ name, array }) => {
         touched,
     } = useFormikContext();
 
-    useEffect(() => {
-        array && setFieldValue(name, array[0])
-    }, [])
+    // useEffect(() => {
+    //     setFieldValue(name, array[0])
+    // }, [])
 
+//maybe with callback within array in deps
     const radioSelectHandler = (radioValue) => {
         setFieldTouched(name)
         setFieldValue(name, radioValue)
@@ -42,8 +43,8 @@ const FormRadioSelect = ({ name, array }) => {
                             <Text style={styles.radioSelectText}>
                                 {element}
                             </Text>
-                            <TouchableOpacity 
-                                onPress={() => radioSelectHandler(element)} 
+                            <TouchableOpacity
+                                onPress={() => radioSelectHandler(element)}
                                 style={[styles.tickContainer, {
                                     backgroundColor: values[name] === element ? colors.paleGrayBg : colors.white
                                 }]}

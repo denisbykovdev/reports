@@ -19,9 +19,9 @@ import ShadowView from "../common/ShadowView";
 import AvoidingView from "../common/AvoidingView";
 import useReports from "../hooks/useReports";
 import Table from "../common/Table";
-import { useNavigation } from "@react-navigation/core";
+// import { useNavigation } from "@react-navigation/stack";
 
-function ReportsScreen({ route }) {
+function ReportsScreen({ route, navigation }) {
 
   useStatusBar("dark-content", colors.paleGrayBg);
 
@@ -39,17 +39,18 @@ function ReportsScreen({ route }) {
     "---ReportsScreen/reportsState.reports:", reportsState.reports
   )
 
-  const navigation = useNavigation()
+  // const navigation = useNavigation()
 
   const openReportHandler = () =>
     navigation.navigate(
-      "AppStack",
-      {
-        screen: "Report",
-        params: {
-          reportId: null
-        }
-      }
+      // "AppStack",
+      // {
+      //   screen: "Report",
+      //   params: {
+      //     reportId: null
+      //   }
+      // }
+      "Report"
     )
 
   const reportsTitles = {

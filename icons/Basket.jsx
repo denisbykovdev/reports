@@ -6,9 +6,11 @@ const Basket = () => (
     <Svg 
 		x="0px" 
 		y="0px" 
-		width={17}
-        height={21} viewBox="0 0 17.333 21.917" enable-background="new 0 0 17.333 21.917" >
-
+		width={responsiveWidth(17)}
+        height={responsiveWidth(21)} 
+		viewBox="0 0 17.333 21.917" 
+		enable-background="new 0 0 17.333 21.917" 
+	>
         <G >
             <G>
                 <Path fill-rule="evenodd" clip-rule="evenodd" fill="#646B7D" d="M0.895,7.114C0.298,6.966,0.122,6.739,0.122,6.146

@@ -1,6 +1,5 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormikContext } from "formik";
-import FormErrorMessage from "./FormErrorMessage";
 import { Animated, Easing, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import colors from "../utils/colors";
 import { responsiveWidth, responsiveHeight } from "../utils/layout";
@@ -43,9 +42,9 @@ export default function FormSelect({
         setOpen(!isOpen)
     }
 
-    useEffect(() => {
-        array && setFieldValue(name, array[0])
-    }, [])
+    // useEffect(() => {
+    //     setFieldValue(name, array[0])
+    // }, [])
 
     useEffect(() => {
         if (isOpen) {
@@ -55,12 +54,7 @@ export default function FormSelect({
                 toValue: 0,
                 useNativeDriver: true,
             }).start();
-            // setOpen(false)
-        }
-
-        if (!isOpen) {
-            // setFieldTouched(name)
-            // setOpen(true)
+        } else if (!isOpen) {
             Animated.timing(animatedIconRotation, {
                 duration: 300,
                 easing: Easing.linear,
@@ -81,7 +75,7 @@ export default function FormSelect({
                 </Animated.View>
 
                 <Text style={styles.selectText}>
-                    {placeholder && placeholder.lenght > 0 ? placeholder : values[name]}
+                    {placeholder ? placeholder : values[name]}
                 </Text>
 
             </TouchableOpacity>

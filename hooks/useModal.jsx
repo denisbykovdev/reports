@@ -1,9 +1,8 @@
-import Modal from "react-native-modal";
-import { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import colors from "../utils/colors";
 import layout, { responsiveWidth } from "../utils/layout";
-import React from "react";
 import { StyleSheet, ScrollView, View } from "react-native";
+import Modal from "react-native-modal";
 
 const useModal = () => {
 

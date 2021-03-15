@@ -1,36 +1,18 @@
-import React, { useEffect, useMemo, useRef } from "react";
-import { ScrollView, View } from "react-native";
+import React from "react";
 import AvoidingView from "../common/AvoidingView";
 import CommonHeader from "../common/CommonHeader";
 import DropDown from "../common/DropDown";
 import ShadowView from "../common/ShadowView";
-import UserPlus from "../icons/UserPlus"
 import layout, { responsiveWidth } from "../utils/layout";
 import Spinner from "../common/Spinner"
-import useUsersState from "../hooks/useUsersState";
-import useUsersDispatch from "../hooks/useUsersDispatch";
-import { useUsersProvider } from "../providers/UsersProvider";
 import Table from "../common/Table";
-import DropDownItem from "../common/DropDownItem";
 import DropDownAddUser from "../components/DropDownAddUser";
 import TableAddUser from "../components/TableAddUser";
-// import UsersProvider from "../providers/UsersProvider";
+import useUsers from "../hooks/useUsers";
 
 const UsersListScreen = ({ closeModal }) => {
 
-  // const usersState = useUsersState();
-  // const usersDispatch = useUsersDispatch();
-
-  const [usersState, usersDispatch] = useUsersProvider()
-
-  useEffect(() => {
-    console.log(
-      "___UsersList/usersState.users:", 
-      usersState.users, 
-      layout.width
-    )
-  }, [usersState.users])
-
+  const [usersState, usersDispatch] = useUsers()
 
   const usersTitles = {
     id: "",
@@ -39,10 +21,8 @@ const UsersListScreen = ({ closeModal }) => {
     phone: "",
     email: "",
     password: ""
-}
-
+  }
   return (
-
     <AvoidingView>
       <ShadowView shadowStyle={{
         paddingHorizontal: 0
@@ -51,7 +31,7 @@ const UsersListScreen = ({ closeModal }) => {
           title={"ניהול משתמשים"}
           close={closeModal}
           headerStyles={{
-            paddingHorizontal: layout.width < 600 ? responsiveWidth(28): 0
+            paddingHorizontal: layout.width < 600 ? responsiveWidth(28) : 0
           }}
         />
 
@@ -70,7 +50,7 @@ const UsersListScreen = ({ closeModal }) => {
                 dispatchMethod={usersDispatch}
                 tableTitles={usersTitles}
               >
-                <TableAddUser 
+                <TableAddUser
                   dispatchMethod={usersDispatch}
                 />
               </Table>
@@ -83,7 +63,7 @@ const UsersListScreen = ({ closeModal }) => {
                 // searchTitle={"שם"}
                 dispatchMethod={usersDispatch}
               >
-                <DropDownAddUser 
+                <DropDownAddUser
                   dispatchMethod={usersDispatch}
                 />
               </DropDown>

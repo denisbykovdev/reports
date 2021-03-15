@@ -1,4 +1,3 @@
-import { useFormikContext } from "formik"
 import React, { useState } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import CircleArrowDown from "../icons/CircleArrowDown"
@@ -12,6 +11,7 @@ import weights from "../utils/weights"
 import CommonSubHeader from "./CommonSubHeader"
 import FormField from "./FormField"
 import Line from "./Line"
+import { useFormikContext } from "formik"
 
 const ResumeDropDown = () => {
     const [isOpen, setOpen] = useState(false)
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
         marginVertical: responsiveWidth(26)
     },
     tickContainer: {
-        height: responsiveWidth(26),
-        width: responsiveWidth(26),
+        height: responsiveWidth(24),
+        width: responsiveWidth(24),
         borderWidth: responsiveWidth(2),
         borderColor: colors.whiteTwo,
         borderRadius: 4,

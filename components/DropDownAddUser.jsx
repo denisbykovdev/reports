@@ -1,12 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
-import { useState } from "reinspect";
-import DropDownElement from "../common/DropDownElement";
 import FormButton from "../common/FormButton";
 import FormContainer from "../common/FormContainer";
 import FormField from "../common/FormField";
 import firstLevelTitles from "../constants/firstLevelTitles";
-import Basket from "../icons/Basket";
 import CircleArrowDown from "../icons/CircleArrowDown";
 import CircleArrowUp from "../icons/CircleArrowUp";
 import colors from "../utils/colors";
