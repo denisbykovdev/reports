@@ -7,7 +7,7 @@ import AddImage from "../icons/AddImage";
 import { responsiveWidth } from "../utils/layout";
 import colors from "../utils/colors";
 
-const FormImagePicker = ({ name }) => {
+const FormImagePicker = ({ name, style }) => {
     const [image, setImage] = useState(null);
 
     const {
@@ -29,11 +29,12 @@ const FormImagePicker = ({ name }) => {
                     base64: true
                 });
         
-                console.log(result);
+                console.log(result.base64);
         
-                if (!result.cancelled) {
-                    await setImage(result.uri);
-                    await setFieldValue(name, image)
+                if (result) {
+                    setImage(result.base64);
+                    setFieldTouched(name)
+                    setFieldValue(name, result.base64)
                 }
             }
 
@@ -47,12 +48,12 @@ const FormImagePicker = ({ name }) => {
             borderRadius={20}
             buttonHeight={responsiveWidth(33)}
             borderColor={colors.darkSkyBlue}
-            style={{
-                marginBottom: responsiveWidth(24),
+            style={[{
+                marginBottom: responsiveWidth(22),
                 padding: 0,
                 marginTop: responsiveWidth(10),
-                marginBottom: responsiveWidth(26)
-            }}
+                // marginBottom: responsiveWidth(26)
+            }, style]}
             titleStyle={{
                 marginRight: 0
             }}

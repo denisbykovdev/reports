@@ -24,19 +24,4 @@ const useInput = () => {
     ]
 }
 
-const styles = StyleSheet.create({
-    autoInput: {
-        borderColor: colors.darkWhite,
-        borderWidth: responsiveWidth(2),
-        borderRadius: 20,
-        height: responsiveWidth(31),
-        width: responsiveWidth(239),
-        paddingHorizontal: responsiveWidth(10),
-
-        fontSize: fonts.xsmall,
-        fontWeight: weights.thin,
-        color: colors.darkBlueGray
-    }
-})
-
 export default useInput

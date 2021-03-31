@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import CircleArrowDown from "../icons/CircleArrowDown"
 import CircleArrowUp from "../icons/CircleArrowUp"
@@ -8,31 +8,43 @@ import colors from "../utils/colors"
 import fonts from "../utils/fonts"
 import { responsiveHeight, responsiveWidth } from "../utils/layout"
 import weights from "../utils/weights"
-import CommonSubHeader from "./CommonSubHeader"
-import FormField from "./FormField"
-import Line from "./Line"
+import CommonSubHeader from "../common/CommonSubHeader"
+import FormField from "../common/FormField"
+import Line from "../common/Line"
 import { useFormikContext } from "formik"
+import useResumes from "../hooks/useResumes"
+import useAuth from "../hooks/useAuth"
 
 const ResumeDropDown = () => {
     const [isOpen, setOpen] = useState(false)
 
     const [isSaved, setSaved] = useState(false)
 
+    const [resumesState, resumesDispatch] = useResumes()
+
     const {
         setFieldValue,
         setFieldTouched,
-        values,
-        errors,
-        touched,
+        values
     } = useFormikContext();
 
-    const saveHandler = () => {
-        setSaved(!isSaved)
+    const {authState} = useAuth()
 
+    const {token} = authState
+
+    const saveHandler = () => {
+        setSaved(true)
+        resumesDispatch({
+            type: "POST_NEW_RESUME",
+            token,
+            newResume: values.resume
+        })
+        setFieldTouched("is_resume_template")
         setFieldValue(
-            "is_resume_template", isSaved ? 1 : 0
+            "is_resume_template", !isSaved ? 1 : 0
         )
     }
+
     return (
         <View>
             <Line />
@@ -79,7 +91,7 @@ const ResumeDropDown = () => {
                                 }]}
                             >
                                 {
-                                    isSaved && <Tick />
+                                    isSaved === true && <Tick />
                                 }
                             </TouchableOpacity>
 

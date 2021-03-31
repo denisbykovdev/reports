@@ -16,6 +16,7 @@ export default function FormField({
   style,
   inputStyle,
   area = false,
+  interSepter,
   ...otherProps
 }) {
   const {
@@ -43,6 +44,7 @@ export default function FormField({
           value={values[name]}
           onChangeText={(text) => {
             setFieldValue(name, text);
+            interSepter && interSepter(name, text)
           }}
           onBlur={() => setFieldTouched(name)}
           // placeholderTextColor={}

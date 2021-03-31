@@ -52,8 +52,8 @@ export default function LoginScreen({ navigation }) {
   //       {
   //         screen: "Reports",
   //         params: {
-  //           // isAdmin: authState.isAdmin
-  //           isAdmin: true
+  //           isAdmin: authState.isAdmin
+  //           // isAdmin: true
   //         }
   //       }
   //     )

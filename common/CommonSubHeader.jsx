@@ -4,9 +4,9 @@ import fonts from "../utils/fonts";
 import { responsiveHeight, responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 
-const CommonSubHeader = ({title, children, subHeaderStyle}) => (
+const CommonSubHeader = ({title, children, subHeaderStyle, subHeaderTitleStyle}) => (
     <View style={[styles.subHeader, subHeaderStyle]}>
-        <Text style={styles.subHeaderTitle}>
+        <Text style={[styles.subHeaderTitle, subHeaderTitleStyle]}>
             {title}
         </Text>
         <View style={styles.subHeaderChildren}>

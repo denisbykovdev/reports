@@ -5,7 +5,7 @@ import HeaderView from "../common/HeaderView";
 import ButtomView from "../common/BottomView";
 import CommonButton from "../common/CommonButton";
 import colors from "../utils/colors";
-import layout, { responsiveWidth } from "../utils/layout";
+import { responsiveWidth } from "../utils/layout";
 import Plus from "../icons/Plus";
 import UserList from "../icons/UserList";
 import useStatusBar from "../hooks/useStatusBar";
@@ -19,7 +19,7 @@ import ShadowView from "../common/ShadowView";
 import AvoidingView from "../common/AvoidingView";
 import useReports from "../hooks/useReports";
 import Table from "../common/Table";
-// import { useNavigation } from "@react-navigation/stack";
+import useType from "../hooks/useType";
 
 function ReportsScreen({ route, navigation }) {
 
@@ -27,19 +27,15 @@ function ReportsScreen({ route, navigation }) {
 
   const { isAdmin } = route.params;
 
-  console.log(
-    "---ReportsScreen/params.isAdmin:", isAdmin
-  )
-
   const [userModalOpen, userModalClose, UserModalContent] = useModal();
 
   const [reportsState, reportsDispatch] = useReports();
 
-  console.log(
-    "---ReportsScreen/reportsState.reports:", reportsState.reports
-  )
+  const { type } = useType()
 
-  // const navigation = useNavigation()
+  // console.log(
+  //   "---ReportsScreen:", isAdmin, reportsState.reports
+  // )
 
   const openReportHandler = () =>
     navigation.navigate(
@@ -90,7 +86,7 @@ function ReportsScreen({ route, navigation }) {
                   />
                 </CommonHeader>
                 {
-                  layout.width > 600 ?
+                  type === 2 ?
                     (
                       <Table
                         arrayProp={
@@ -125,14 +121,14 @@ function ReportsScreen({ route, navigation }) {
                 buttonColor={colors.darkSkyBlue}
                 buttonHeight={responsiveWidth(51)}
                 // buttonWidth={responsiveWidth(300)}
-                buttonWidth={layout.width < 600 ? "100%" : "37.5%"}
+                buttonWidth={type === 2 ? "37.5%" : "100%"}
                 buttonShadow={true}
                 buttonShadowColor={colors.clearBlue}
                 borderRadius={10}
                 style={{
                   marginTop: responsiveWidth(24),
                   marginBottom: responsiveWidth(24),
-                  marginRight: layout.width > 600 ? responsiveWidth(10) : 0,
+                  marginRight: type === 2 ? responsiveWidth(10) : 0,
                 }}
                 onPress={
                   () => openReportHandler()
@@ -140,9 +136,9 @@ function ReportsScreen({ route, navigation }) {
               >
                 <View
                   style={{
-                    position: layout.width < 600 ? "absolute" : "relative",
+                    position: type === 2 ? "absolute" : "relative",
                     right: 0,
-                    marginRight: layout.width < 600 ? responsiveWidth(10) : 0,
+                    marginRight: type === 2 ? responsiveWidth(10) : 0,
                   }}
                 >
                   <Plus />
@@ -158,17 +154,16 @@ function ReportsScreen({ route, navigation }) {
                     titleFontSize={fonts.large}
                     buttonColor={colors.white}
                     buttonHeight={responsiveWidth(51)}
-                    // buttonWidth={responsiveWidth(300)}
-                    buttonWidth={layout.width < 600 ? "100%" : "37.5%"}
+                    buttonWidth={type === 2 ? "37.5%" : "100%"}
                     buttonShadow={false}
                     borderColor={colors.darkSkyBlue}
                     borderRadius={10}
                   >
                     <View
                       style={{
-                        position: layout.width < 600 ? "absolute" : "relative",
+                        position: type === 2 ? "absolute" : "relative",
                         right: 0,
-                        marginRight: layout.width < 600 ? responsiveWidth(10) : 0,
+                        marginRight: type === 2 ? responsiveWidth(10) : 0,
                       }}
                     >
                       <UserList />

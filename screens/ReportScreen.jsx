@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { ScrollView, View } from "react-native"
 import AvoidingView from "../common/AvoidingView"
 import CommonHeader from "../common/CommonHeader"
@@ -20,15 +20,22 @@ import Check from "../icons/Check"
 import colors from "../utils/colors"
 import fonts from "../utils/fonts"
 import useModal from "../hooks/useModal"
-import PrintModal from "../common/PrintModal"
+import PrintModal from "../modals/PrintModal"
 import useStatusBar from "../hooks/useStatusBar"
 import { loginSchema } from "../constants/validationSchema"
+import DefectsProvider from "../providers/DefectsProvider"
+import { DeviceType } from 'expo-device'
+import useType from "../hooks/useType"
 
 const ReportScreen = ({ route }) => {
+
     // const { reportId } = route.params
+
     useStatusBar("dark-content", colors.paleGrayBg);
 
     const [offsetX, setOffsetX] = useState(0)
+
+    const [viewWidth, setViewWidth] = useState(0)
 
     const [printModalOpen, printModalClose, PrintModalContent] = useModal();
 
@@ -51,17 +58,16 @@ const ReportScreen = ({ route }) => {
         }
     ]
 
-    const [active, Menu] = useMenu(menuTitles, "details", scrollCatcher)
+    const [active, Menu] = useMenu(menuTitles, "details", scrollCatcher, layoutCatcher)
 
-    function activeComponent() {
-        switch (active) {
-            case "details": return <Details />;
-            case "defects": return <Defects />;
-            case "resume": return <Resume />;
-            case "archive": return <Archive />;
-            default: return <Details />;
-        }
-    }
+    const {type} = useType()
+
+    useEffect(() => {
+        console.log(
+            "___ReportScreen/active", active
+        );
+    }, [active])
+    
 
     const submitReport = async (values, { resetForm }) => {
         console.log(
@@ -69,10 +75,18 @@ const ReportScreen = ({ route }) => {
         )
     }
 
+    function layoutCatcher({ nativeEvent: { layout: { x, y, width, height }, target} }) {
+        // console.log(
+        //     "___ReportScreen/scroll/layout:", x, width,
+        // )
+
+        setViewWidth(width)
+    }
+
     function scrollCatcher(event) {
-        console.log(
-            "___ReportScreen/scroll:", event.nativeEvent.contentOffset.x 
-        )
+        // console.log(
+        //     "___ReportScreen/scroll:", event.nativeEvent.contentOffset.x
+        // )
 
         setOffsetX(event.nativeEvent.contentOffset.x)
     }
@@ -80,9 +94,19 @@ const ReportScreen = ({ route }) => {
     function scrollComponent() {
         switch (offsetX) {
             case 0: return <Details />;
-            case 264: return <Defects />;
-            case 528: return <Resume />;
-            case 792: return <Archive />;
+            case viewWidth: return <Defects />;
+            case viewWidth * 2: return <Resume />;
+            case viewWidth * 3: return <Archive />;
+        }
+    }
+
+    const switchComponent = () => {
+        switch (active) {
+            case "details": return <Details />;
+            case "defects": return <Defects />;
+            case "resume": return <Resume />;
+            case "archive": return <Archive />;
+            default: return <Details />;
         }
     }
 
@@ -103,7 +127,8 @@ const ReportScreen = ({ route }) => {
                         <HeaderView>
                             <ShadowView
                                 shadowStyle={{
-                                    paddingHorizontal: 0
+                                    paddingHorizontal: 0,
+                                    paddingBottom: 0
                                 }}
                             >
                                 <CommonHeader
@@ -121,8 +146,13 @@ const ReportScreen = ({ route }) => {
                                     />
                                 </CommonHeader>
                                 <Menu />
-                                    { scrollComponent() }
-                                {/* {activeComponent()} */}
+                                <DefectsProvider>
+                                    { 
+                                        type === 2 
+                                        ? switchComponent()
+                                        : scrollComponent()
+                                    }
+                                </DefectsProvider>
 
                             </ShadowView>
                         </HeaderView>
@@ -135,8 +165,12 @@ const ReportScreen = ({ route }) => {
                                 title={"עדכון"}
                                 titleStyle={{ marginEnd: 0 }}
                                 titleColor={colors.white}
-                                style={{ marginVertical: responsiveWidth(24) }}
+                                style={{ 
+                                    marginVertical: responsiveWidth(24),
+                                    marginRight: type === 2 ? responsiveWidth(10) : 0,
+                                }}
                                 titleFontSize={fonts.large}
+                                borderRadius={10}
                             >
                                 <View style={{
                                     position: "absolute",

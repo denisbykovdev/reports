@@ -23,8 +23,8 @@ const useModal = () => {
       onBackdropPress={() => modalClose()}
       deviceWidth={layout.width}
       deviceHeight={layout.height}
-      onSwipeComplete={() => modalClose()}
-      swipeDirection={"down"}
+      // onSwipeComplete={() => modalClose()}
+      // swipeDirection={"down"}
       supportedOrientations={["portrait", "landscape"]}
       style={[styles.modalContainer, {
         alignItems: layout.width > 600 ? "center" : 'stretch'
@@ -35,7 +35,7 @@ const useModal = () => {
       <ScrollView
         contentContainerStyle={styles.modalScrollContainer}
         showsVerticalScrollIndicator={false}
-        onPress
+        nestedScrollEnabled 
       >
         <View style={styles.modalContent}>
           {children}

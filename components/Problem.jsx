@@ -1,0 +1,491 @@
+import React, { useState } from "react"
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
+import CommonButton from "../common/CommonButton"
+import FormField from "../common/FormField"
+import FormSelect from "../common/FormSelect"
+import ItemTitle from "../common/ItemTitle"
+import Line from "../common/Line"
+import Basket from "../icons/Basket"
+import CircleArrowDown from "../icons/CircleArrowDown"
+import CircleArrowUp from "../icons/CircleArrowUp"
+import Tick from "../icons/Tick"
+import colors from "../utils/colors"
+import fonts from "../utils/fonts"
+import layout, { responsiveHeight, responsiveWidth } from "../utils/layout"
+import weights from "../utils/weights"
+import Copy from "../icons/Copy"
+import FormPhotoCamera from "../common/FormPhotoCamera"
+import FormContainer from "../common/FormContainer"
+import FormButton from "../common/FormButton"
+import useSavedProblems from "../hooks/useSavedProblems"
+import useModal from "../hooks/useModal"
+import Standarts from "../modals/Standarts"
+import AltImage from "../icons/AltImage"
+import Professions from "../modals/Professions"
+import useProfs from "../hooks/useProfs"
+import useType from "../hooks/useType"
+
+const testArray = ['one', 'two', 'three']
+
+export default function Problem({ problem, areaId, defectsDispatch }) {
+
+    const [isProblemOpen, setProblemOpen] = useState(false)
+
+    const [isProblemForPrint, setProblemForPrint] = useState(true)
+
+    const [problemsState, problemsDispatch] = useSavedProblems()
+
+    const [standartsModalOpen, standartsModalClose, StandartsModal] = useModal()
+
+    const [profModalOpen, profModalClose, ProfModal] = useModal()
+
+    const [openName, setOpenName] = useState(false)
+
+    const [profsState, profsReducer] = useProfs()
+
+    const { type } = useType()
+
+    const submitProblem = async (values) => {
+        problemsDispatch({
+            type: "POST_PROBLEM",
+            problem: { ...values, standarts: [...problem.standarts] }
+        })
+        console.log(
+            "___Problem:", { ...values, standarts: [...problem.standarts] }
+        )
+    }
+
+    const interSepter = (name, text) => {
+        console.log(
+            "_______Problem/intersepter:", text, name, areaId
+        )
+        defectsDispatch({
+            type: "CHANGE_PROBLEM_VALUE",
+            areaId,
+            problemId: problem.id,
+            problemKey: name,
+            problemNewValue: text
+        })
+    }
+
+    const deleteProblem = () => {
+        defectsDispatch({
+            type: "DELETE_PROBLEM",
+            areaId,
+            problemId: problem.id
+        })
+    }
+
+
+
+    return (
+        <View
+            style={styles.problemContainer}
+        >
+            {
+                !isProblemOpen && <Line />
+            }
+            <FormContainer
+                initialValues={{
+                    id: problem.id,
+                    name: problem.name,
+                    details_of_eclipse: problem.details_of_eclipse,
+                    profession_name: problem.profession_name,
+                    solution: problem.solution,
+                    image: problem.image,
+                    cost: problem.cost,
+                }}
+                onSubmit={
+                    (values) => submitProblem(values)
+                }
+            >
+                <View
+                    style={[
+                        styles.problemHeader,
+                        {
+                            backgroundColor: isProblemOpen ? colors.paleGrayBg : colors.white,
+                            borderRadius: 5,
+                            // flexDirection: 'column',
+                        }
+                    ]}
+                >
+                    <View style={[styles.problemHeaderOptionals, {
+                        justifyContent: type === 2 ? 'center' : 'flex-start'
+                    }]}>
+                        <TouchableOpacity
+                            onPress={() => deleteProblem()}
+                        >
+                            <Basket />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={[styles.problemHeaderActions, {
+                        flexDirection: type === 2 ? 'row-reverse' : 'column',
+                        alignItems: type === 2 ? 'center' : 'flex-end',
+                    }]}>
+                        <View style={[styles.problemHeaderActionsButtons, {
+                            marginBottom: type === 2 ? 0 : responsiveWidth(8)
+                        }]}>
+                            <TouchableOpacity
+                                onPress={() => setProblemForPrint(!isDefectSaved)}
+                                style={[
+                                    styles.tickContainer,
+                                    {
+                                        backgroundColor: isProblemForPrint ? colors.paleGrayBg : colors.white
+                                    }
+                                ]}
+                            >
+                                {
+                                    isProblemForPrint && <Tick />
+                                }
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => setProblemOpen(!isProblemOpen)}
+                                style={{
+                                    marginStart: responsiveWidth(14)
+                                }}
+                            >
+                                {
+                                    isProblemOpen
+                                        ? <CircleArrowUp />
+                                        : <CircleArrowDown />
+                                }
+                            </TouchableOpacity>
+                        </View>
+
+                        <TouchableWithoutFeedback onPress={() => setOpenName(!openName)}>
+                            <View style={styles.problemHeaderActionsTitleGroup}>
+
+                                <TouchableOpacity onPress={() => setOpenName(!openName)}>
+                                    {
+                                        openName
+                                            ? <FormField
+                                                area={true}
+                                                placeholder={problem.name}
+                                                style={{
+                                                    padding: 0,
+                                                    height: responsiveWidth(31),
+                                                    borderColor: colors.darkWhite,
+                                                    borderWidth: responsiveWidth(2),
+                                                    borderRadius: 20,
+                                                    alignSelf: 'flex-end'
+                                                }}
+                                                width="80%"
+                                                name="name"
+                                                interSepter={interSepter}
+                                            />
+                                            : <Text
+                                                style={styles.problemHeaderActionsTitle}
+                                            >{problem.name}</Text>
+                                    }
+                                </TouchableOpacity>
+
+
+                                <Text
+                                    style={styles.problemHeaderActionsTitle}
+                                > | {areaId}.{problem.id}</Text>
+
+                            </View>
+                        </TouchableWithoutFeedback>
+
+                    </View>
+                </View>
+
+                {
+                    isProblemOpen &&
+                    <View >
+
+                        <View style={{
+                            flexDirection: type === 2 ? 'row-reverse' : 'column',
+                            justifyContent: type === 2 ? 'space-between' : 'flex-start',
+                            marginBottom: type === 2 ? responsiveWidth(18) : 0
+                        }}>
+
+                            <View style={{
+                                width: type === 2 ? '60%' : '100%'
+                            }}>
+                                <ItemTitle
+                                    style={styles.titles}
+                                    title="מקצוע" />
+                                <FormSelect
+                                    placeholder="בחר מקצוע"
+                                    array={profsState.profs}
+                                    name="profession_name"
+                                    interSepter={interSepter}
+                                />
+                                <CommonButton
+                                    title="לערוך את רשימת המקצועות"
+                                    borderRadius={20}
+                                    buttonHeight={responsiveWidth(33)}
+                                    borderColor={colors.darkSkyBlue}
+                                    style={{
+                                        padding: 0,
+                                        paddingHorizontal: responsiveWidth(70),
+                                        marginBottom: responsiveWidth(22)
+                                    }}
+                                    titleStyle={{
+                                        marginRight: 0
+                                    }}
+                                    titleColor={colors.darkSkyBlue}
+                                    onPress={() => profModalOpen()}
+                                />
+                                <ProfModal>
+                                    <Professions
+                                        profModalClose={profModalClose}
+                                    />
+                                </ProfModal>
+
+                                <Line />
+                                <ItemTitle
+                                    style={styles.titles}
+                                    title="פרטי הליקוי" />
+                                <FormField
+                                    area={true}
+                                    placeholder="בחר מקצוע"
+                                    style={styles.inputContainerArea}
+                                    inputStyle={{
+                                        marginEnd: 0
+                                    }}
+                                    name="details_of_eclipse"
+                                    interSepter={interSepter}
+                                />
+                                <ItemTitle
+                                    style={styles.titles}
+                                    title="פתרון" />
+                                <FormField
+                                    area={true}
+                                    placeholder="רשום פתרון לליקוי"
+                                    style={styles.inputContainerArea}
+                                    inputStyle={{
+                                        marginEnd: 0
+                                    }}
+                                    name="solution"
+                                    interSepter={interSepter}
+                                />
+                            </View>
+
+                            <View style={{
+                                width: type === 2 ? '30%' : '100%',
+                                // paddingEnd: responsiveWidth(30)
+                            }}>
+                                <ItemTitle
+                                    style={styles.titles}
+                                    title="דחיפות הבדיקה"
+                                />
+                                <FormPhotoCamera
+                                    name="image"
+                                    interSepter={interSepter}
+                                />
+                            </View>
+                        </View>
+                        <Line />
+
+                        <View
+                            style={{
+                                width: type === 2 ? '60%' : '100%',
+                                alignSelf: 'flex-end'
+                            }}
+                        >
+                            <ItemTitle
+                                style={styles.titles}
+                                title="הערכת עלות" />
+                            <FormField
+                                placeholder="רשום הערכת עלות"
+                                style={styles.inputContainer}
+                                name="cost"
+                                interSepter={interSepter}
+                            />
+
+                            <CommonButton
+                                title="הוספת תקן"
+                                borderRadius={20}
+                                buttonHeight={responsiveWidth(33)}
+                                borderColor={colors.darkSkyBlue}
+                                style={{
+                                    padding: 0,
+                                    paddingHorizontal: responsiveWidth(70),
+                                    marginVertical: responsiveWidth(22)
+                                }}
+                                titleStyle={{
+                                    marginRight: 0
+                                }}
+                                titleColor={colors.darkSkyBlue}
+                                onPress={() => standartsModalOpen()}
+                            />
+
+                            <StandartsModal>
+                                <Standarts
+                                    standartsModalClose={standartsModalClose}
+                                    areaId={areaId}
+                                    problemId={problem.id}
+                                />
+                            </StandartsModal>
+                        </View>
+
+                        <ScrollView
+                            horizontal={type === 2 ? false : true}
+                            contentContainerStyle={{
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            {
+                                problem.standarts && problem.standarts.length >= 0 && problem.standarts.map((standart, i) => (
+                                    <View
+                                        key={i}
+                                        style={[
+                                            styles.problemStandartsContainer,
+                                            {
+                                                flexDirection: type === 2 ? 'row' : 'column-reverse',
+                                                alignItems: type === 2 ? 'center' : 'flex-start',
+                                                width: type === 2 ? '100%' : 'auto'
+                                            }
+                                        ]}
+                                    >
+                                        <View style={{
+                                            height: responsiveWidth(73),
+                                            width: responsiveWidth(68),
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            backgroundColor: colors.paleGrayBg
+                                        }}>
+                                            {
+                                                standart.image && standart.image.length > 1
+                                                    ? <Image
+                                                        source={{ uri: standart.image }}
+                                                    />
+                                                    : <AltImage
+                                                        height={responsiveWidth(42)}
+                                                        width={responsiveWidth(38)}
+                                                    />
+
+                                            }
+                                        </View>
+
+                                        <View
+                                            style={[
+                                                styles.problemStandartBody,
+                                                {
+                                                    flexDirection: 'row',
+                                                    marginVertical: responsiveWidth(22),
+                                                    width: layout.width - responsiveWidth(118)
+                                                }
+                                            ]}
+                                        >
+                                            <Text
+                                                style={[
+                                                    styles.problemStandartText,
+                                                    {
+                                                        width: type === 2 ? '85%' : '90%'
+                                                    }
+                                                ]}
+                                            >
+                                                {standart.text}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    width: '10%',
+                                                    marginLeft: type === 2 ? responsiveWidth(10) : 0
+                                                }}
+                                            >
+                                                {'\u2B24'}
+                                            </Text>
+                                        </View>
+
+                                    </View>
+                                ))
+                            }
+                        </ScrollView>
+
+                        <FormButton
+                            title="הוספת הליקוי והפתרון לארכיון"
+                            borderRadius={20}
+                            buttonHeight={responsiveWidth(33)}
+                            borderColor={colors.darkSkyBlue}
+                            style={{
+                                padding: 0,
+                                marginVertical: responsiveWidth(22),
+                                alignSelf: 'flex-end'
+                            }}
+                            buttonWidth={type === 2 ? '60%' : '100%'}
+                            titleStyle={{
+                                marginRight: 0
+                            }}
+                            titleColor={colors.darkSkyBlue}
+                        />
+
+                    </View>
+                }
+            </FormContainer>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    problemContainer: {
+        paddingHorizontal: responsiveWidth(28),
+    },
+    problemEclipsesBoard: {
+        paddingVertical: responsiveWidth(18)
+    },
+    problemHeader: {
+        flexDirection: 'row',
+        paddingHorizontal: responsiveWidth(18),
+        paddingVertical: responsiveWidth(18),
+        justifyContent: 'space-between',
+        height: responsiveWidth(96)
+    },
+    problemHeaderOptionals: {
+        justifyContent: 'space-between'
+    },
+    problemHeaderActions: {
+        // alignItems: 'flex-end',
+        maxWidth: '75%',
+        justifyContent: "space-between"
+    },
+    problemHeaderActionsButtons: {
+        flexDirection: 'row',
+        // marginBottom: responsiveWidth(8)
+    },
+    tickContainer: {
+        height: responsiveWidth(24),
+        width: responsiveWidth(24),
+        borderWidth: responsiveWidth(2),
+        borderColor: colors.whiteTwo,
+        borderRadius: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginStart: responsiveWidth(14)
+    },
+    problemHeaderActionsTitleGroup: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: "flex-end"
+    },
+    problemHeaderActionsTitle: {
+        fontSize: fonts.medium,
+        fontWeight: weights.semiBold,
+        textAlign: 'right'
+    },
+    titles: {
+        marginTop: responsiveWidth(24)
+    },
+    inputContainer: {
+        padding: 0,
+        height: responsiveWidth(31),
+        borderColor: colors.darkWhite,
+        borderWidth: responsiveWidth(2),
+        borderRadius: 20,
+        marginBottom: responsiveWidth(24)
+    },
+    inputContainerArea: {
+        // padding: 0,
+        height: responsiveWidth(31),
+        borderColor: colors.darkWhite,
+        borderWidth: responsiveWidth(2),
+        borderRadius: 10,
+        marginVertical: responsiveWidth(24),
+        minHeight: responsiveHeight(69),
+        textAlign: 'right'
+    }
+})

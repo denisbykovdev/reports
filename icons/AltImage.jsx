@@ -2,12 +2,15 @@ import React from "react"
 import { Svg, G, Path, Circle } from "react-native-svg"
 import { responsiveWidth } from "../utils/layout";
 
-const AltImage = () => (
+const AltImage = ({
+        width=responsiveWidth(81),
+        height=responsiveWidth(98)
+}) => (
     <Svg 
         x="0px" 
         y="0px" 
-        width={responsiveWidth(81)}
-        height={responsiveWidth(98)}
+        width={width}
+        height={height}
         viewBox="0 0 106.333 128.833" 
         enable-background="new 0 0 106.333 128.833" 
     >

@@ -11,7 +11,7 @@ import Add from '../icons/Add';
 import Edit from '../icons/Edit';
 import Signature from 'react-native-signature-canvas';
 
-export default function FormPhotoCamera({ name }) {
+export default function FormPhotoCamera({ name, interSepter }) {
   const cameraRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -39,7 +39,7 @@ export default function FormPhotoCamera({ name }) {
       setFieldTouched(name)
       // setFieldValue(name, " ")
       setFieldValue(name, data.uri)
-
+      interSepter && interSepter(name, data.uri)
       setOpenCam(false)
     }
   }
@@ -47,6 +47,7 @@ export default function FormPhotoCamera({ name }) {
   const deleteSavedPhoto = () => {
     setFieldTouched(name)
     setFieldValue(name, ' ')
+    interSepter && interSepter(name, ' ')
   }
 
   useEffect(() => {
@@ -68,7 +69,7 @@ export default function FormPhotoCamera({ name }) {
             ?
             <>
               {
-                !values[name] || values[name].length < 2
+                !values[name] || values[name].length < 1
                   ?
                   <AltImage />
                   :

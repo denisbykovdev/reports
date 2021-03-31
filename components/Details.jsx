@@ -3,16 +3,22 @@ import { View } from "react-native";
 import CommonSubHeader from "../common/CommonSubHeader";
 import DetailsTitle from "../icons/DetailsTitle";
 import { responsiveWidth } from "../utils/layout";
-import TestDetails from "../common/TestDetails";
+import TestDetails from "./TestDetails";
 import StructureTitle from "../icons/StructureTitle";
-import StructureDescription from "../common/StructureDescription";
-import ResumeDropDown from "../common/ResumeDropDown";
+import StructureDescription from "./StructureDescription";
+import ResumeDropDown from "./ResumeDropDown";
 
 const Details = () => {
+    // const submitReport = async (values, { resetForm }) => {
+    //     console.log(
+    //         "___ReportScreen/submitReport/values", values
+    //     )
+    // }
     return (
         <View
             style={{ paddingHorizontal: responsiveWidth(28) }}
         >
+
                 <CommonSubHeader
                     title={"פרטי הבדיקה"}
                 >

@@ -4,6 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import AuthProvider from "./providers/AuthProvider";
 
 import { I18nManager } from "react-native";
+import TypeProvider from "./providers/TypeProvider";
 
 // import * as ScreenOrientation from 'expo-screen-orientation';
 // import { useLayoutEffect } from "react";
@@ -24,7 +25,9 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <Router />
+      <TypeProvider>
+        <Router />
+      </TypeProvider>
     </AuthProvider>
   )
 }

@@ -11,6 +11,7 @@ export default function FormSelect({
     name,
     array,
     placeholder,
+    interSepter,
     ...otherProps
 }) {
     const [isOpen, setOpen] = useState(false);
@@ -35,6 +36,7 @@ export default function FormSelect({
             "___FormSelect:", values, e
         );
         setFieldValue(name, e);
+        interSepter && interSepter(name, e)
         setOpen(false)
     }
 
@@ -75,7 +77,7 @@ export default function FormSelect({
                 </Animated.View>
 
                 <Text style={styles.selectText}>
-                    {placeholder ? placeholder : values[name]}
+                    {values[name] ? values[name] : placeholder}
                 </Text>
 
             </TouchableOpacity>

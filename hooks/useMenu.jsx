@@ -5,7 +5,7 @@ import colors from "../utils/colors"
 import layout, { responsiveHeight, responsiveWidth } from "../utils/layout"
 import { MaterialIcons } from "@expo/vector-icons"
 
-const useMenu = (array, init, scrollCatcher) => {
+const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
     const [active, setActive] = useState(init)
 
     // useEffect(() => {
@@ -22,21 +22,33 @@ const useMenu = (array, init, scrollCatcher) => {
 
                 <ScrollView
                     style={styles.menuInner}
-                    contentContainerStyle={styles.scrollViewContainerStyle}
+                    contentContainerStyle={[
+                        styles.scrollViewContainerStyle,
+                        {
+                            width: layout.width > 600 ? '100%' : 'auto'
+                        }
+                    ]}
                     horizontal
                     pagingEnabled
                     showsHorizontalScrollIndicator={false}
                     scrollEventThrottle={200}
                     onScroll={scrollCatcher}
+                    scrollEnabled={layout.width < 600}
                 >
                     {
                         array.map((element, i) => (
                             <View
                                 key={i}
-                                style={styles.scrollViewItemContainer}
+                                style={[
+                                    styles.scrollViewItemContainer,
+                                    {
+                                        width: layout.width < 600 ? layout.width - responsiveWidth(63) : layout.width / 4
+                                    }
+                                ]}
+                                onLayout={layoutCatcher}
                             >
                                 {
-                                    i !== 0 &&
+                                    layout.width < 600 && i !== 0 &&
                                     <MaterialIcons
                                         name="keyboard-arrow-left"
                                         size={responsiveWidth(23)}
@@ -64,7 +76,7 @@ const useMenu = (array, init, scrollCatcher) => {
                                         colors.paleGrayBg
                                     }
                                     borderRadius={25}
-                                    buttonWidth={(layout.width - responsiveWidth(63)) / 2}
+                                    buttonWidth={layout.width < 600 ? ((layout.width - responsiveWidth(63)) / 2) : ((layout.width - responsiveWidth(63)) / 8)}
                                     // buttonWidth={responsiveWidth(121)}
                                     // buttonWidth={'50%'}
                                     buttonHeight={responsiveHeight(38)}
@@ -73,7 +85,7 @@ const useMenu = (array, init, scrollCatcher) => {
                                 />
 
                                 {
-                                    i !== array.length - 1 &&
+                                    layout.width < 600 && i !== array.length - 1 &&
                                     <MaterialIcons
                                         name="keyboard-arrow-right"
                                         size={responsiveWidth(23)}
@@ -133,7 +145,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     scrollViewItemContainer: {
-        width: layout.width - responsiveWidth(63),
+        // width: layout.width - responsiveWidth(63),
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'

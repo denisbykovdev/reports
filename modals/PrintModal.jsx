@@ -4,10 +4,10 @@ import { expDetails, printDetails, profDetails } from "../constants/printMadalBu
 import useRadioPair from "../hooks/useRadioPair"
 import colors from "../utils/colors"
 import layout, { responsiveWidth } from "../utils/layout"
-import CommonButton from "./CommonButton"
-import CommonHeader from "./CommonHeader"
-import Line from "./Line"
-import ShadowView from "./ShadowView"
+import CommonButton from "../common/CommonButton"
+import CommonHeader from "../common/CommonHeader"
+import Line from "../common/Line"
+import ShadowView from "../common/ShadowView"
 import FormErrorMessage from "../common/FormErrorMessage";
 
 const PrintModal = ({ close }) => {

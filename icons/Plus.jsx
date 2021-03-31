@@ -1,9 +1,16 @@
 import React from "react";
 import { Svg, G, Path } from "react-native-svg"
+import { responsiveWidth } from "../utils/layout";
 
 const Plus = () => (
-    <Svg x="0px" y="0px" width="29.667px"
-        height="29.582px" viewBox="0 0 29.667 29.582" enable-background="new 0 0 29.667 29.582" >
+    <Svg 
+        x="0px" 
+        y="0px" 
+        width={responsiveWidth(21)}
+        height={responsiveWidth(21)} 
+        viewBox="0 0 29.667 29.582" 
+        enable-background="new 0 0 29.667 29.582" 
+    >
 
         <G>
             <G>
