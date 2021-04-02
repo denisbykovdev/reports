@@ -386,9 +386,9 @@ export const defectsReducer = (
             })
 
         case "ADD_NOTE_TO_SAVENOTES":
-            console.log(
-                "***defectsDispatch/ADD_NOTE_TO_SAVENOTES/action:", action.saveNote
-            )
+            // console.log(
+            //     "***defectsDispatch/ADD_NOTE_TO_SAVENOTES/action:", action.saveNote
+            // )
             return Update({
                 ...state,
                 saveNotes: [...state.saveNotes, action.saveNote]
@@ -404,10 +404,10 @@ export const defectsReducer = (
             })
 
         case "POST_REPORT":
-            console.log(
-                "***defectsDispatch/ADD_NOTE_TO_SAVENOTES/action:", 
-                {...action.data, areas: state.areas, notes: state.saveNotes}
-            )
+            // console.log(
+            //     "***defectsDispatch/ADD_NOTE_TO_SAVENOTES/action:",
+            //     { ...action.data, areas: state.areas, notes: state.saveNotes }
+            // )
             return UpdateWithSideEffect({
                 ...state,
                 posting: true,
@@ -422,15 +422,12 @@ export const defectsReducer = (
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 },
-                                data: {...action.data, areas: state.areas, notes: state.saveNotes}
+                                data: { ...action.data, areas: state.areas, notes: state.saveNotes }
                             },
-                            // {
-                                
-                            // }
                         );
 
                         dispatch({
-                            type: "END_POST_REPORT",
+                            type: "UPDATE_REPORT",
                             activeReport: response.data.data
                         })
                     } catch (error) {
@@ -442,10 +439,42 @@ export const defectsReducer = (
                 }
             )
 
-        case "END_POST_REPORT":
+        case "REPOST_REPORT":
+            return UpdateWithSideEffect({
+                ...state,
+                posting: true,
+                token: action.token
+            },
+                async (state, dispatch) => {
+                    try {
+                        const response = await axios.post(
+                            `http://160.153.254.153/api/project/store${action.projectId}`,
+
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                },
+                                data: { ...action.data, areas: state.areas, notes: state.saveNotes }
+                            },
+                        );
+                        dispatch({
+                            type: "UPDATE_REPORT",
+                            activeReport: response.data.data
+                        })
+                    } catch (error) {
+                        dispatch({
+                            type: "ERROR_POST_REPORT",
+                            error
+                        })
+                    }
+                }
+            )
+
+        case "UPDATE_REPORT":
             return Update({
                 ...state,
-                posting: false
+                posting: false,
+                activeReport: action.activeReport
             })
 
         case "ERROR_POST_REPORT":

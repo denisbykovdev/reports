@@ -7,6 +7,7 @@ import fonts from "../utils/fonts"
 import { responsiveWidth } from "../utils/layout"
 import weights from "../utils/weights"
 import { useFormikContext } from "formik"
+import useChecked from "../hooks/useChecked"
 
 const FormRadioSelect = ({ name, array }) => {
 
@@ -18,6 +19,8 @@ const FormRadioSelect = ({ name, array }) => {
         touched,
     } = useFormikContext();
 
+    const {isChecked, setChecked} = useChecked()
+
     // useEffect(() => {
     //     setFieldValue(name, array[0])
     // }, [])
@@ -26,6 +29,7 @@ const FormRadioSelect = ({ name, array }) => {
     const radioSelectHandler = (radioValue) => {
         setFieldTouched(name)
         setFieldValue(name, radioValue)
+        isChecked && setChecked(false)
     }
 
     return (

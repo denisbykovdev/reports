@@ -6,6 +6,7 @@ import { responsiveWidth, responsiveHeight } from "../utils/layout";
 import fonts from "../utils/fonts";
 import weights from "../utils/weights";
 import ArrowDown from "../icons/ArrowDown"
+import useChecked from "../hooks/useChecked";
 
 export default function FormSelect({
     name,
@@ -24,6 +25,8 @@ export default function FormSelect({
         touched,
     } = useFormikContext();
 
+    const {isChecked, setChecked} = useChecked()
+
     const animatedIconRotation = useRef(new Animated.Value(0)).current;
 
     const interIcon = animatedIconRotation.interpolate({
@@ -37,6 +40,7 @@ export default function FormSelect({
         );
         setFieldValue(name, e);
         interSepter && interSepter(name, e)
+        isChecked && setChecked(false)
         setOpen(false)
     }
 

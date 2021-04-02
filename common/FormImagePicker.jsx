@@ -6,6 +6,7 @@ import CommonButton from "./CommonButton";
 import AddImage from "../icons/AddImage";
 import { responsiveWidth } from "../utils/layout";
 import colors from "../utils/colors";
+import useChecked from "../hooks/useChecked";
 
 const FormImagePicker = ({ name, style }) => {
     const [image, setImage] = useState(null);
@@ -15,6 +16,8 @@ const FormImagePicker = ({ name, style }) => {
         setFieldTouched,
         values
     } = useFormikContext();
+
+    const {isChecked, setChecked} = useChecked()
 
     const pickImage = async () => {
         if (Platform.OS !== 'web') {
@@ -35,6 +38,7 @@ const FormImagePicker = ({ name, style }) => {
                     setImage(result.base64);
                     setFieldTouched(name)
                     setFieldValue(name, result.base64)
+                    isChecked && setChecked(false)
                 }
             }
 

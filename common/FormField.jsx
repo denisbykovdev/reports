@@ -6,6 +6,7 @@ import colors from "../utils/colors";
 import { responsiveWidth, responsiveHeight } from "../utils/layout";
 import fonts from "../utils/fonts";
 import weights from "../utils/weights";
+import useChecked from "../hooks/useChecked";
 
 export default function FormField({
   name,
@@ -27,6 +28,8 @@ export default function FormField({
     touched,
   } = useFormikContext();
 
+  const {isChecked, setChecked} = useChecked()
+
   return (
     <View style={[styles.formFieldContainer]}>
       <View
@@ -40,14 +43,13 @@ export default function FormField({
         ]}
       >
         <TextInput
-          // placeholderStyle={}
           value={values[name]}
           onChangeText={(text) => {
             setFieldValue(name, text);
             interSepter && interSepter(name, text)
+            isChecked && setChecked(false)
           }}
           onBlur={() => setFieldTouched(name)}
-          // placeholderTextColor={}
           style={[styles.input, inputStyle]}
           placeholder={placeholder}
           multiline={area}

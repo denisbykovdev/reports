@@ -9,10 +9,13 @@ import Table from "../common/Table";
 import DropDownAddUser from "../components/DropDownAddUser";
 import TableAddUser from "../components/TableAddUser";
 import useUsers from "../hooks/useUsers";
+import useType from "../hooks/useType";
 
 const UsersListScreen = ({ closeModal }) => {
 
   const [usersState, usersDispatch] = useUsers()
+
+  const {type} = useType()
 
   const usersTitles = {
     id: "",
@@ -31,7 +34,7 @@ const UsersListScreen = ({ closeModal }) => {
           title={"ניהול משתמשים"}
           close={closeModal}
           headerStyles={{
-            paddingHorizontal: layout.width < 600 ? responsiveWidth(28) : 0
+            paddingHorizontal: type === 2 ? responsiveWidth(28) : 0
           }}
         />
 
@@ -39,7 +42,7 @@ const UsersListScreen = ({ closeModal }) => {
           usersState && usersState.fetching && <Spinner />
         }
         {
-          layout.width > 600 ?
+          type === 2 ?
             (
               <Table
                 arrayProp={

@@ -10,6 +10,7 @@ import Remove from '../icons/Remove';
 import Add from '../icons/Add';
 import Edit from '../icons/Edit';
 import Signature from 'react-native-signature-canvas';
+import useChecked from '../hooks/useChecked';
 
 export default function FormPhotoCamera({ name, interSepter }) {
   const cameraRef = useRef(null);
@@ -26,6 +27,8 @@ export default function FormPhotoCamera({ name, interSepter }) {
     values
   } = useFormikContext();
 
+  const {isChecked, setChecked} = useChecked()
+
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
@@ -37,8 +40,8 @@ export default function FormPhotoCamera({ name, interSepter }) {
     if (cameraRef.current) {
       const data = await cameraRef.current.takePictureAsync();
       setFieldTouched(name)
-      // setFieldValue(name, " ")
       setFieldValue(name, data.uri)
+      isChecked && setChecked(false)
       interSepter && interSepter(name, data.uri)
       setOpenCam(false)
     }

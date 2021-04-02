@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import AvoidingView from "../common/AvoidingView"
-import CommonHeader from "../common/CommonHeader"
 import HeaderView from "../common/HeaderView"
 import SafeView from "../common/SafeView"
 import ShadowView from "../common/ShadowView"
@@ -22,14 +21,12 @@ import fonts from "../utils/fonts"
 import useModal from "../hooks/useModal"
 import PrintModal from "../modals/PrintModal"
 import useStatusBar from "../hooks/useStatusBar"
-import { loginSchema } from "../constants/validationSchema"
-import DefectsProvider from "../providers/DefectsProvider"
-import { DeviceType } from 'expo-device'
 import useType from "../hooks/useType"
 import useDefects from "../hooks/useDefects"
 import useAuth from "../hooks/useAuth"
 import FormField from "../common/FormField"
 import weights from "../utils/weights"
+import useChecked from "../hooks/useChecked"
 
 const ReportScreen = ({ route }) => {
 
@@ -76,22 +73,29 @@ const ReportScreen = ({ route }) => {
 
     const { type } = useType()
 
-    useEffect(() => {
-        console.log(
-            "___ReportScreen/activeReport", defectsState.activeReport
-        );
-    }, [defectsState.activeReport])
+    const { isChecked, setChecked } = useChecked()
 
-    const submitReport = async (values, { resetForm }) => {
+    const submitReport = async (values) => {
         console.log(
             "___ReportScreen/submitReport/values", values
         )
 
-        defectsDispatch({
-            type: "POST_REPORT",
-            data: values,
-            token
-        })
+        if (defectsState.activeReport === null) {
+            defectsDispatch({
+                type: "POST_REPORT",
+                data: values,
+                token
+            })
+        } else {
+            defectsDispatch({
+                type: "REPOST_REPORT",
+                data: values,
+                token,
+                reportId: defectsState.activeReport.id
+            })
+        }
+
+        setChecked(true)
     }
 
     function layoutCatcher({ nativeEvent: { layout: { x, y, width, height }, target } }) {
@@ -141,7 +145,6 @@ const ReportScreen = ({ route }) => {
                         onSubmit={
                             (values, { resetForm }) => submitReport(values, { resetForm })
                         }
-                    // validationSchema={loginSchema}
                     >
                         <HeaderView>
                             <ShadowView
@@ -189,7 +192,7 @@ const ReportScreen = ({ route }) => {
                                                             }}
                                                             width="80%"
                                                             name="report_adress"
-                                                        // interSepter={interSepter}
+
                                                         />
                                                         : <Text
                                                             style={{
@@ -226,7 +229,7 @@ const ReportScreen = ({ route }) => {
                                                             }}
                                                             width="80%"
                                                             name="report_name"
-                                                        // interSepter={interSepter}
+
                                                         />
                                                         : <Text
                                                             style={{
@@ -282,7 +285,9 @@ const ReportScreen = ({ route }) => {
                                     position: "absolute",
                                     right: responsiveWidth(10)
                                 }}>
-                                    <Check />
+                                    {
+                                        isChecked === true && <Check />
+                                    }
                                 </View>
 
                             </FormButton>
