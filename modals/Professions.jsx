@@ -28,7 +28,7 @@ export default function Proffessions({
 
     const { token } = authState
 
-    const [searchText, searchArray, RenderSearch] = useSearch({ array: profsState.profs })
+    const [searchArray, RenderSearch] = useSearch({ array: profsState.profs })
 
     const submitNewProf = async (values) => {
         await profsDispatch({
@@ -43,12 +43,6 @@ export default function Proffessions({
             type: "DELETE_PROF",
             profName
         })
-    }, [])
-
-    useEffect(() => {
-        console.log(
-            "___Profession/useEffect:", profsState.profs, searchArray
-        )
     }, [])
 
     return (
@@ -100,7 +94,7 @@ export default function Proffessions({
             />
 
             {
-                searchArray && searchArray.length >= 0
+                searchArray && searchArray.length > 0
                     ? searchArray.map((prof, i) => (
                         <ProfItem
                             key={i}
@@ -132,6 +126,7 @@ export default function Proffessions({
                 title="שמירה"
             /> */}
         </ShadowView>
+
     )
 }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { ScrollView, View } from "react-native"
+import { ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import AvoidingView from "../common/AvoidingView"
 import CommonHeader from "../common/CommonHeader"
 import HeaderView from "../common/HeaderView"
@@ -26,6 +26,10 @@ import { loginSchema } from "../constants/validationSchema"
 import DefectsProvider from "../providers/DefectsProvider"
 import { DeviceType } from 'expo-device'
 import useType from "../hooks/useType"
+import useDefects from "../hooks/useDefects"
+import useAuth from "../hooks/useAuth"
+import FormField from "../common/FormField"
+import weights from "../utils/weights"
 
 const ReportScreen = ({ route }) => {
 
@@ -37,7 +41,17 @@ const ReportScreen = ({ route }) => {
 
     const [viewWidth, setViewWidth] = useState(0)
 
-    const [printModalOpen, printModalClose, PrintModalContent] = useModal();
+    const [printModalOpen, printModalClose, PrintModalContent] = useModal()
+
+    const { defectsState, defectsDispatch } = useDefects()
+
+    const { authState } = useAuth()
+
+    const { token } = authState
+
+    const [isNameOpen, setIsNameOpen] = useState(false)
+
+    const [isAdressOpen, setIsAdressOpen] = useState(false)
 
     const menuTitles = [
         {
@@ -60,22 +74,27 @@ const ReportScreen = ({ route }) => {
 
     const [active, Menu] = useMenu(menuTitles, "details", scrollCatcher, layoutCatcher)
 
-    const {type} = useType()
+    const { type } = useType()
 
     useEffect(() => {
         console.log(
-            "___ReportScreen/active", active
+            "___ReportScreen/activeReport", defectsState.activeReport
         );
-    }, [active])
-    
+    }, [defectsState.activeReport])
 
     const submitReport = async (values, { resetForm }) => {
         console.log(
             "___ReportScreen/submitReport/values", values
         )
+
+        defectsDispatch({
+            type: "POST_REPORT",
+            data: values,
+            token
+        })
     }
 
-    function layoutCatcher({ nativeEvent: { layout: { x, y, width, height }, target} }) {
+    function layoutCatcher({ nativeEvent: { layout: { x, y, width, height }, target } }) {
         // console.log(
         //     "___ReportScreen/scroll/layout:", x, width,
         // )
@@ -122,7 +141,7 @@ const ReportScreen = ({ route }) => {
                         onSubmit={
                             (values, { resetForm }) => submitReport(values, { resetForm })
                         }
-                        // validationSchema={loginSchema}
+                    // validationSchema={loginSchema}
                     >
                         <HeaderView>
                             <ShadowView
@@ -131,29 +150,116 @@ const ReportScreen = ({ route }) => {
                                     paddingBottom: 0
                                 }}
                             >
-                                <CommonHeader
-                                    closeButton={false}
-                                    title={
-                                        "Clarification needed"
-                                    }
-                                    subTitle={"רכוש משותף"}
-                                    headerStyles={{
+
+                                <View
+                                    style={{
+                                        justifyContent: "flex-end",
+                                        flexDirection: "row",
+                                        alignItems: 'center',
+                                        flexDirection: 'row',
+                                        marginBottom: responsiveWidth(24),
                                         paddingHorizontal: responsiveWidth(28)
                                     }}
                                 >
-                                    <Reports
-                                        height={responsiveWidth(46)}
-                                    />
-                                </CommonHeader>
+                                    <View
+                                        style={{
+                                            width: "100%",
+                                            alignItems: "flex-end"
+                                        }}
+                                    >
+
+                                        <TouchableWithoutFeedback
+                                            onPress={() => setIsAdressOpen(!isAdressOpen)}
+                                        >
+                                            <TouchableOpacity
+                                                onPress={() => setIsAdressOpen(!isAdressOpen)}
+                                            >
+                                                {
+                                                    isAdressOpen
+                                                        ? <FormField
+                                                            // area={true}
+                                                            placeholder={"כתובת הבדיקה"}
+                                                            style={{
+                                                                padding: 0,
+                                                                height: responsiveWidth(31),
+                                                                borderColor: colors.darkWhite,
+                                                                borderWidth: responsiveWidth(2),
+                                                                borderRadius: 20,
+                                                                alignSelf: 'flex-end'
+                                                            }}
+                                                            width="80%"
+                                                            name="report_adress"
+                                                        // interSepter={interSepter}
+                                                        />
+                                                        : <Text
+                                                            style={{
+                                                                color: colors.darkBlueGray,
+                                                                fontSize: fonts.xlarge,
+                                                                fontWeight: weights.semiBold,
+                                                                textAlign: "right"
+                                                            }}
+                                                        >
+                                                            {"כתובת הבדיקה"}
+                                                        </Text>
+                                                }
+                                            </TouchableOpacity>
+                                        </TouchableWithoutFeedback>
+
+                                        <TouchableWithoutFeedback
+                                            onPress={() => setIsNameOpen(!isNameOpen)}
+                                        >
+                                            <TouchableOpacity
+                                                onPress={() => setIsNameOpen(!isNameOpen)}
+                                            >
+                                                {
+                                                    isNameOpen
+                                                        ? <FormField
+                                                            // area={true}
+                                                            placeholder={"שם הבדיקה "}
+                                                            style={{
+                                                                padding: 0,
+                                                                height: responsiveWidth(31),
+                                                                borderColor: colors.darkWhite,
+                                                                borderWidth: responsiveWidth(2),
+                                                                borderRadius: 20,
+                                                                alignSelf: 'flex-end'
+                                                            }}
+                                                            width="80%"
+                                                            name="report_name"
+                                                        // interSepter={interSepter}
+                                                        />
+                                                        : <Text
+                                                            style={{
+                                                                color: colors.blueGray,
+                                                                fontSize: fonts.medium,
+                                                                fontWeight: weights.regular,
+                                                                textAlign: "right"
+                                                            }}
+                                                        >
+                                                            {"שם הבדיקה "}
+                                                        </Text>
+                                                }
+                                            </TouchableOpacity>
+                                        </TouchableWithoutFeedback>
+
+                                    </View>
+
+                                    <View style={{
+                                        marginLeft: responsiveWidth(20)
+                                    }}>
+                                        <Reports
+                                            height={responsiveWidth(46)}
+                                        />
+                                    </View>
+
+                                </View>
+
                                 <Menu />
-                                <DefectsProvider>
-                                    { 
-                                        type === 2 
+                                {
+                                    type === 2
                                         ? switchComponent()
                                         : scrollComponent()
-                                    }
-                                </DefectsProvider>
-
+                                }
                             </ShadowView>
                         </HeaderView>
                         <BottomView>
@@ -165,7 +271,7 @@ const ReportScreen = ({ route }) => {
                                 title={"עדכון"}
                                 titleStyle={{ marginEnd: 0 }}
                                 titleColor={colors.white}
-                                style={{ 
+                                style={{
                                     marginVertical: responsiveWidth(24),
                                     marginRight: type === 2 ? responsiveWidth(10) : 0,
                                 }}
@@ -178,7 +284,7 @@ const ReportScreen = ({ route }) => {
                                 }}>
                                     <Check />
                                 </View>
-                                
+
                             </FormButton>
                             <CommonButton
                                 onPress={() => printModalOpen()}

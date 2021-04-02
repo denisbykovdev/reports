@@ -6,22 +6,24 @@ import ShadowView from "../common/ShadowView"
 import CommonSubHeader from "../common/CommonSubHeader"
 import CommonButton from "../common/CommonButton"
 import { responsiveWidth } from "../utils/layout"
-import useDefects from "../hooks/useDefects"
 import colors from "../utils/colors"
 import fonts from "../utils/fonts"
 import weights from "../utils/weights"
 import AddArea from "../icons/AddArea"
 import SearchArea from "../icons/SearchArea"
 import SavedAreaItem from "../components/SavedAreaItem"
+import useSearch from "../hooks/useSearch"
 
-export default function SavedAreas({ 
+export default function SavedAreas({
     savedAreasModalClose,
     defectsDispatch,
     defectsState,
     deleteSavedArea
 }) {
 
-    const [ checkedAreasList, setUpdateAreasList ] = useState([])
+    const [checkedAreasList, setUpdateAreasList] = useState([])
+
+    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: defectsState.savedAreas })
 
     const addCheckedArea = (name) => {
 
@@ -82,16 +84,28 @@ export default function SavedAreas({
                 <SearchArea />
             </CommonSubHeader>
 
+            <RenderSearch />
+
             {
-                defectsState && defectsState.savedAreas && defectsState.savedAreas.map((savedArea, i) => (
-                    <SavedAreaItem
-                        key={i}
-                        addCheckedArea={addCheckedArea}
-                        removeCheckedArea={removeCheckedArea}
-                        savedArea={savedArea}
-                        deleteSavedArea={deleteSavedArea}
-                    />
-                ))
+                searchArray && searchArray.length > 0
+                    ? searchArray.map((savedArea, i) => (
+                        <SavedAreaItem
+                            key={i}
+                            addCheckedArea={addCheckedArea}
+                            removeCheckedArea={removeCheckedArea}
+                            savedArea={savedArea}
+                            deleteSavedArea={deleteSavedArea}
+                        />
+                    ))
+                    : defectsState.savedAreas && defectsState.savedAreas.map((savedArea, i) => (
+                        <SavedAreaItem
+                            key={i}
+                            addCheckedArea={addCheckedArea}
+                            removeCheckedArea={removeCheckedArea}
+                            savedArea={savedArea}
+                            deleteSavedArea={deleteSavedArea}
+                        />
+                    ))
             }
 
             <CommonButton
@@ -121,7 +135,7 @@ const styles = StyleSheet.create({
         borderWidth: responsiveWidth(2),
         borderRadius: 20,
         height: responsiveWidth(31),
-        width: responsiveWidth(239),
+        // width: responsiveWidth(239),
         paddingHorizontal: responsiveWidth(10),
 
         fontSize: fonts.xsmall,

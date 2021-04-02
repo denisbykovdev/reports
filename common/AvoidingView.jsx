@@ -14,7 +14,14 @@ export default function AvoidingView({ children, style }) {
       behavior={Platform.OS == "ios" ? "padding" : "height"}
       style={[styles.avoidingContainer, style]}
       enabled
-      keyboardVerticalOffset={Platform.select({ios: (Constants.statusBarHeight) , android: 78})}
+      // keyboardVerticalOffset={Platform.select({
+      //   ios: (Constants.statusBarHeight), 
+      //   // ios: 40,
+      //   android: 78
+      // })}
+      // style={{
+      //   backgroundColor: 'rgba(0, 0, 0, 0)',
+      // }}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         {children}

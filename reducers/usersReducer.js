@@ -3,8 +3,7 @@ import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-ef
 
 export const usersInitial = {
     users: null,
-    error: null,
-    // usersSearch: null
+    error: null
 }
 
 const userData = [
@@ -37,57 +36,61 @@ export const usersReducer = (
             return Update({
                 ...state,
                 fetching: false,
-                users: action.users,
-                // usersSearch: action.users
-            });
+                users: action.users
+            })
 
         case "ERROR_USERS":
             return Update({
                 ...state,
                 fetching: false,
-                error: action.error,
-                users: userData
-            });
+                error: action.error
+            })
 
         case "FETCH_USERS":
-            return UpdateWithSideEffect(
-                {
-                    ...state,
-                    fetching: true,
-                    token: action.payload
-                },
-                async (state, dispatch) => {
-                    try {
-                        const response = await axios.get(
-                            "http://160.153.254.153/api/user/get",
+            return Update({
+                ...state,
+                users: userData
+            })
 
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${action.payload}`
-                                }
-                            }
+        // case "FETCH_USERS":
+        //     return UpdateWithSideEffect(
+        //         {
+        //             ...state,
+        //             fetching: true,
+        //             token: action.payload
+        //         },
+        //         async (state, dispatch) => {
+        //             try {
+        //                 const response = await axios.get(
+        //                     "http://160.153.254.153/api/user/get",
 
-                        );
+        //                     {
+        //                         headers: {
+        //                             'Authorization': `Bearer ${action.payload}`
+        //                         }
+        //                     }
 
-                        dispatch({
-                            type: "GET_USERS",
-                            users: response.data.data,
-                        })
+        //                 );
 
-                        console.log("***usersReducer/GET_USERS:", response.data.data);
+        //                 dispatch({
+        //                     type: "GET_USERS",
+        //                     users: response.data.data,
+        //                 })
 
-                    } catch (error) {
+        //                 console.log("***usersReducer/GET_USERS:", response.data.data);
 
-                        dispatch({
-                            type: "ERROR_USERS",
-                            error,
-                            // users: userData
-                        });
+        //             } catch (error) {
 
-                        console.log("***useUsers/ERROR_USERS:", error, state);
-                    }
-                }
-            );
+        //                 dispatch({
+        //                     type: "ERROR_USERS",
+        //                     error,
+        //                     // users: userData
+        //                 });
+
+        //                 console.log("***useUsers/ERROR_USERS:", error, state);
+        //             }
+        //         }
+        //     )
 
         case "DELETE_ITEM":
             console.log(
@@ -96,7 +99,7 @@ export const usersReducer = (
             return Update({
                 ...state,
                 users: state.users.filter(user => user.id !== action.itemId)
-            });
+            })
 
         case "CHANGE_ITEM_VALUE":
             console.log(
@@ -112,7 +115,8 @@ export const usersReducer = (
                         } :
                         user
                 )
-            });
+            })
+
         case "ADD_USER":
             return Update({
                 ...state,

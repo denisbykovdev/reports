@@ -3,8 +3,11 @@ import colors from "../utils/colors";
 import layout, { responsiveWidth } from "../utils/layout";
 import { StyleSheet, ScrollView, View } from "react-native";
 import Modal from "react-native-modal";
+import AvoidingView from "../common/AvoidingView";
+import useType from "../hooks/useType"
 
 const useModal = () => {
+  const {type} = useType()
 
   const [isVisible, setVisible] = useState(false);
 
@@ -32,17 +35,25 @@ const useModal = () => {
       propagateSwipe={true}
       scrollVertical={true}
     >
-      <ScrollView
-        contentContainerStyle={styles.modalScrollContainer}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled 
-      >
-        <View style={styles.modalContent}>
-          {children}
-        </View>
-        
+      <AvoidingView>
+        <ScrollView
+          contentContainerStyle={[
+            styles.modalScrollContainer,
+            {
+              width: type === 2 ? responsiveWidth(360) : '100%'
+            }
+          ]}
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled
+        >
 
-      </ScrollView>
+          {/* <View style={styles.modalContent}> */}
+          {children}
+          {/* </View> */}
+
+
+        </ScrollView>
+      </AvoidingView>
     </Modal >
 
   );

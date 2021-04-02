@@ -5,6 +5,7 @@ import AuthProvider from "./providers/AuthProvider";
 
 import { I18nManager } from "react-native";
 import TypeProvider from "./providers/TypeProvider";
+import DefectsProvider from "./providers/DefectsProvider";
 
 // import * as ScreenOrientation from 'expo-screen-orientation';
 // import { useLayoutEffect } from "react";
@@ -26,7 +27,9 @@ export default function App() {
   return (
     <AuthProvider>
       <TypeProvider>
-        <Router />
+        <DefectsProvider>
+          <Router />
+        </DefectsProvider>
       </TypeProvider>
     </AuthProvider>
   )

@@ -6,8 +6,8 @@ import Line from "../common/Line"
 import ShadowView from "../common/ShadowView"
 import SavedProblemItem from "../components/SavedProblemItem"
 import useDefects from "../hooks/useDefects"
-import useInput from "../hooks/useInput"
 import useSavedProblems from "../hooks/useSavedProblems"
+import useSearch from "../hooks/useSearch"
 import colors from "../utils/colors"
 import { responsiveWidth } from "../utils/layout"
 
@@ -23,22 +23,7 @@ export default function SavedProblems({
 
     const [checkedProblems, setUpdateCheckedProblems] = useState([])
 
-    const [inputText, onChange] = useInput()
-
-    const [initSavedProblems, setSearchSavedProblems] = useState(problemsState.problems)
-
-    const [savedProblemsState, savedProblemsDispatch] = useSavedProblems()
-
-    useEffect(() => {
-        if (inputText && inputText.length > 0) {
-
-            const filtered = initSavedProblems.filter(savedProblem => Object.values(savedProblem).some(problemValue => problemValue.toString().toLowerCase().includes(inputText.toLowerCase())))
-
-
-            setSearchSavedProblems(filtered)
-
-        } else if (inputText <= 0) setSearchSavedProblems(problemsState.problems)
-    }, [inputText])
+    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: problemsState.problems })
 
     const addCheckedProblem = (checkedName) => {
         const newCheckedProblem = problemsState.problems.find(savedProblem => savedProblem.name === checkedName)
@@ -76,15 +61,20 @@ export default function SavedProblems({
             />
             <Line />
 
-            <View style={styles.savedProblemsSearchContainer}>
-                <TextInput
-                    onChangeText={onChange}
-                />
-            </View>
-
+            <RenderSearch />
 
             {
-                problemsState && problemsState.problems.map((problem, i) => (
+                searchArray && searchArray.length > 0 
+                ? searchArray.map((problem, i) => (
+                    <SavedProblemItem
+                        key={i}
+                        problem={problem}
+                        addCheckedProblem={addCheckedProblem}
+                        removeCheckedProblem={removeCheckedProblem}
+                        problemsDispatch={problemsDispatch}
+                    />
+                ))
+                : problemsState && problemsState.problems.map((problem, i) => (
                     <SavedProblemItem
                         key={i}
                         problem={problem}

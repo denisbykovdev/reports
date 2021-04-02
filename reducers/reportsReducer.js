@@ -3,8 +3,7 @@ import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-ef
 
 export const reportsInitial = {
     reports: null,
-    error: null,
-    // reportsSearch: null
+    error: null
 }
 
 const reportsData = [
@@ -39,60 +38,63 @@ export const reportsReducer = (
             return Update({
                 ...state,
                 fetching: false,
-                reports: action.reports,
-                // reportsSearch: action.reports
+                reports: action.reports
             });
 
         case "ERROR_REPORTS":
             return Update({
                 ...state,
                 fetching: false,
-                error: action.error,
-                reports: reportsData
+                error: action.error
             });
 
         case "FETCH_REPORTS":
+            return Update({
+                ...state,
+                reports: reportsData
+            })
 
-            return UpdateWithSideEffect(
-                {
-                    ...state,
-                    fetching: true,
-                    token: action.payload
-                },
-                async (state, dispatch) => {
-                    console.log(
-                        "***ReportsReducer/FETCH_REPORTS/async/token", typeof action.payload
-                    );
-                    try {
-                        const response = await axios.get(
-                            "http://160.153.254.153/api/project/all",
+        // case "FETCH_REPORTS":
+        //     return UpdateWithSideEffect(
+        //         {
+        //             ...state,
+        //             fetching: true,
+        //             token: action.payload
+        //         },
+        //         async (state, dispatch) => {
+        //             console.log(
+        //                 "***ReportsReducer/FETCH_REPORTS/async/token", typeof action.payload
+        //             );
+        //             try {
+        //                 const response = await axios.get(
+        //                     "http://160.153.254.153/api/project/all",
 
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${action.payload}`
-                                }
-                            }
+        //                     {
+        //                         headers: {
+        //                             'Authorization': `Bearer ${action.payload}`
+        //                         }
+        //                     }
 
-                        );
+        //                 );
 
-                        dispatch({
-                            type: "GET_REPORTS",
-                            reports: response.data.data.length > 0 ? response.data.data : userData,
-                        })
+        //                 dispatch({
+        //                     type: "GET_REPORTS",
+        //                     reports: response.data.data.length > 0 ? response.data.data : userData,
+        //                 })
 
-                        console.log("***reportsReducer/GET_REPORTS:", response.data.data, state);
+        //                 console.log("***reportsReducer/GET_REPORTS:", response.data.data, state);
 
-                    } catch (error) {
+        //             } catch (error) {
 
-                        dispatch({
-                            type: "ERROR_REPORTS",
-                            error
-                        });
+        //                 dispatch({
+        //                     type: "ERROR_REPORTS",
+        //                     error
+        //                 });
 
-                        console.log("***reportsReducer/ERROR_REPORTS:", error, state);
-                    }
-                }
-            );
+        //                 console.log("***reportsReducer/ERROR_REPORTS:", error, state);
+        //             }
+        //         }
+        //     );
 
         case "DELETE_ITEM":
             console.log(

@@ -16,6 +16,7 @@ import Plus from "../icons/Plus"
 import useModal from "../hooks/useModal"
 import NewStandart from "./NewStandart"
 import useType from "../hooks/useType"
+import useSearch from "../hooks/useSearch"
 
 export default function Standarts({
     standartsModalClose,
@@ -31,6 +32,8 @@ export default function Standarts({
     const { _, defectsDispatch } = useDefects()
 
     const [newStandartModalOpen, newStandartModalClose, NewStandartModal] = useModal()
+
+    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: standartsState.standarts })
 
     const addCheckedStandart = (checkedId) => {
         const newCheckedStandart = standartsState.standarts.find(standart => standart.id === checkedId)
@@ -69,15 +72,26 @@ export default function Standarts({
             />
             <Line />
 
+            <RenderSearch />
+
             {
-                standartsState && standartsState.standarts.map((standart, i) =>
-                    <StandartItem
-                        key={i}
-                        standart={standart}
-                        addCheckedStandart={addCheckedStandart}
-                        removeCheckedStandart={removeCheckedStandart}
-                    />
-                )
+                searchArray && searchArray.length > 0
+                    ? searchArray.map((standart, i) =>
+                        <StandartItem
+                            key={i}
+                            standart={standart}
+                            addCheckedStandart={addCheckedStandart}
+                            removeCheckedStandart={removeCheckedStandart}
+                        />
+                    )
+                    : standartsState && standartsState.standarts.map((standart, i) =>
+                        <StandartItem
+                            key={i}
+                            standart={standart}
+                            addCheckedStandart={addCheckedStandart}
+                            removeCheckedStandart={removeCheckedStandart}
+                        />
+                    )
             }
 
             <CommonButton
@@ -162,7 +176,7 @@ const StandartItem = ({
     return (
         <View
             style={{
-                flexDirection: type === 2 ?'row-reverse' : 'column',
+                flexDirection: type === 2 ? 'row-reverse' : 'column',
                 alignItems: type === 2 ? 'center' : 'stretch',
                 // justifyContent: 'center'
             }}
@@ -241,7 +255,7 @@ const StandartItem = ({
             {
                 type === 2 && <Text
                     style={{
-                        width: '80%',
+                        width: '70%',
                         paddingEnd: responsiveWidth(18)
                     }}
                 >

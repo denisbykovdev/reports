@@ -55,7 +55,6 @@ export default function Area({ areaId, areaName, areaProblems, dispatch }) {
     }
 
     return (
-
         <>
             <View style={[styles.areaHeader, {
                 backgroundColor: isAreaOpen ? colors.paleGrayBg : colors.white,
@@ -63,7 +62,6 @@ export default function Area({ areaId, areaName, areaProblems, dispatch }) {
                 justifyContent: 'space-between',
                 // alignItems: 'center'
             }]}>
-
                 <View style={styles.areaHeaderActions}>
 
                     <TouchableWithoutFeedback onPress={() => setOpenName(!openName)}>
@@ -72,7 +70,6 @@ export default function Area({ areaId, areaName, areaProblems, dispatch }) {
                                 alignItems: 'center',
                                 paddingLeft: responsiveWidth(30)
                             }}>
-
                                 <TouchableOpacity onPress={() => setOpenName(!openName)}>
                                     {
                                         openName

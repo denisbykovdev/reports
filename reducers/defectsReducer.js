@@ -58,7 +58,9 @@ export const defectsInitial = {
     error: null,
 
     notes: [],
-    saveNotes: []
+    saveNotes: [],
+
+    activeReport: null
 }
 
 export const defectsReducer = (
@@ -402,6 +404,10 @@ export const defectsReducer = (
             })
 
         case "POST_REPORT":
+            console.log(
+                "***defectsDispatch/ADD_NOTE_TO_SAVENOTES/action:", 
+                {...action.data, areas: state.areas, notes: state.saveNotes}
+            )
             return UpdateWithSideEffect({
                 ...state,
                 posting: true,
@@ -410,30 +416,43 @@ export const defectsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
-                            `http://160.153.254.153/api/area/store/${action.areaName}`,
+                            `http://160.153.254.153/api/project/store`,
 
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
-                                }
+                                },
+                                data: {...action.data, areas: state.areas, notes: state.saveNotes}
                             },
-                            {
-                                area_name: action.areaName,
-                                problems: action.areaProblems
-                            }
+                            // {
+                                
+                            // }
                         );
 
                         dispatch({
-                            type: "UPDATE_SAVED_AREAS",
-                            savedAreas: response.data.data
+                            type: "END_POST_REPORT",
+                            activeReport: response.data.data
                         })
                     } catch (error) {
                         dispatch({
-                            type: "ERROR_SAVED_AREA",
+                            type: "ERROR_POST_REPORT",
                             error
                         })
                     }
                 }
             )
+
+        case "END_POST_REPORT":
+            return Update({
+                ...state,
+                posting: false
+            })
+
+        case "ERROR_POST_REPORT":
+            return Update({
+                ...state,
+                posting: false,
+                error: action.error
+            })
     }
 }

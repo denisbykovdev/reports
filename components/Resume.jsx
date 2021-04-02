@@ -2,6 +2,7 @@ import { useFormikContext } from "formik";
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import CommonButton from "../common/CommonButton";
+import FormContainer from "../common/FormContainer";
 import FormField from "../common/FormField";
 import Line from "../common/Line";
 import useDefects from "../hooks/useDefects";
@@ -29,6 +30,10 @@ const Resume = () => {
     const addToSaveNote = (note) => defectsDispatch({
         type: "ADD_NOTE_TO_SAVENOTES",
         saveNote: note
+        // {
+        //     note,
+        //     id: defectsState.notes.length > 0 ? defectsState.notes.length + 1 : 1
+        // }
     })
 
     const deleteFromSaveNotes = (saveNoteId) => defectsDispatch({
@@ -85,19 +90,21 @@ const NoteItem = ({
     const { type } = useType()
 
     const {
-        setFieldValue,
-        setFieldTouched,
-        values
+        // setFieldValue,
+        // setFieldTouched,
+        // values,
+        handleSubmit
     } = useFormikContext()
 
-    const addHandler = () => {
+    const submitNote = (values) => {
         setNoteAdded(!isNoteAdded)
         if (!isNoteAdded) {
             addToSaveNote(
-                note,
+                // note,
                 {
-                    ...note,
-                    note: values.note
+                    // ...note,
+                    note: values.note,
+                    id: note.id
                 }
             )
         }
@@ -106,9 +113,14 @@ const NoteItem = ({
         }
     }
 
-    return (
-        <View style={styles.noteContainer}>
 
+
+    return (
+        <FormContainer
+            initialValues={{ note: '' }}
+            onSubmit={submitNote}
+            style={styles.noteContainer}
+        >
             <View style={[styles.noteActions]}>
                 <View style={[styles.noteActionsGroup, {
                     flexDirection: type === 2 ? 'column' : 'row',
@@ -127,20 +139,22 @@ const NoteItem = ({
                         <Copy />
                     </TouchableOpacity>
                 </View>
-
                 {
-                    type === 2 && <FormField
-                        area
-                        style={{
-                            height: responsiveHeight(103),
-                            textAlign: 'right',
-                            width: '90%'
-                        }}
-                        inputStyle={{
-                            marginEnd: 0
-                        }}
-                        name="note"
-                    />
+                    type === 2
+                    && (
+                        <FormField
+                            area
+                            style={{
+                                height: responsiveHeight(103),
+                                textAlign: 'right',
+                                width: '90%'
+                            }}
+                            inputStyle={{
+                                marginEnd: 0
+                            }}
+                            name="note"
+                        />
+                    )
                 }
 
                 <View style={[styles.noteActionsGroup, {
@@ -152,7 +166,8 @@ const NoteItem = ({
                         {note.id}
                     </Text>
                     <TouchableOpacity
-                        onPress={() => addHandler()}
+                        // onPress={() => addHandler()}
+                        onPress={handleSubmit}
                         style={[styles.tickContainer, {
                             backgroundColor: isNoteAdded ? colors.paleGrayBg : colors.white
                         }]}
@@ -164,23 +179,24 @@ const NoteItem = ({
                 </View>
 
             </View>
-
             {
-                type !== 2 && <FormField
-                    area
-                    style={{
-                        height: responsiveHeight(103),
-                        textAlign: 'right'
-                    }}
-                    inputStyle={{
-                        marginEnd: 0
-                    }}
-                    name="note"
-                />
+                type !== 2
+                && (
+                    <FormField
+                        area
+                        style={{
+                            height: responsiveHeight(103),
+                            textAlign: 'right',
+                            width: '90%'
+                        }}
+                        inputStyle={{
+                            marginEnd: 0
+                        }}
+                        name="note"
+                    />
+                )
             }
-
-
-        </View>
+        </FormContainer>
     )
 }
 
