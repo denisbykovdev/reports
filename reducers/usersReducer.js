@@ -32,7 +32,7 @@ export const usersReducer = (
 
     switch (action.type) {
 
-        case "GET_USERS":
+        case "UPDATE_USERS":
             return Update({
                 ...state,
                 fetching: false,
@@ -73,11 +73,11 @@ export const usersReducer = (
         //                 );
 
         //                 dispatch({
-        //                     type: "GET_USERS",
+        //                     type: "UPDATE_USERS",
         //                     users: response.data.data,
         //                 })
 
-        //                 console.log("***usersReducer/GET_USERS:", response.data.data);
+        //                 console.log("***usersReducer/UPDATE_USERS:", response.data.data);
 
         //             } catch (error) {
 
@@ -120,7 +120,41 @@ export const usersReducer = (
         case "ADD_USER":
             return Update({
                 ...state,
-                users: [...state.users, action.payload]
+                users: [...state.users, action.user]
             })
+
+        case "ADD_USER":
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    token: action.token
+                },
+                async (state, dispatch) => {
+                    try {
+                        const response = await axios.post(
+                            "http://160.153.254.153/api/user/store",
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.payload}`
+                                }
+                            },
+                            {
+                                user: action.user
+                            }
+
+                        );
+                        dispatch({
+                            type: "UPDATE_USERS",
+                            users: response.data.data
+                        })
+                    } catch (error) {
+
+                        dispatch({
+                            type: "ERROR_USERS",
+                            error
+                        });
+                    }
+                }
+            )
     }
 }

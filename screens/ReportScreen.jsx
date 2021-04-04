@@ -99,17 +99,17 @@ const ReportScreen = ({ route }) => {
     }
 
     function layoutCatcher({ nativeEvent: { layout: { x, y, width, height }, target } }) {
-        // console.log(
-        //     "___ReportScreen/scroll/layout:", x, width,
-        // )
+        console.log(
+            "___ReportScreen/scroll/layout:",  width
+        )
 
         setViewWidth(width)
     }
 
     function scrollCatcher(event) {
-        // console.log(
-        //     "___ReportScreen/scroll:", event.nativeEvent.contentOffset.x
-        // )
+        console.log(
+            "___ReportScreen/scroll:", event.nativeEvent.contentOffset.x
+        )
 
         setOffsetX(event.nativeEvent.contentOffset.x)
     }

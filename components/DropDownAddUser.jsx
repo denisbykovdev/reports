@@ -38,7 +38,7 @@ const DropDownAddUser = ({ dispatchMethod }) => {
 
     const addUser = (newUser) => dispatchMethod({
         type: "ADD_USER",
-        payload: newUser
+        user: newUser
     })
 
     return (

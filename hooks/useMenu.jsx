@@ -4,6 +4,7 @@ import CommonButton from "../common/CommonButton"
 import colors from "../utils/colors"
 import layout, { responsiveHeight, responsiveWidth } from "../utils/layout"
 import { MaterialIcons } from "@expo/vector-icons"
+import useType from "../hooks/useType"
 
 const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
     const [active, setActive] = useState(init)
@@ -16,6 +17,8 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
     //     setActive(desc)
     // }, [])
 
+    const {type} = useType()
+
     const MenuRender = useCallback(() => {
         return (
             <View style={styles.menu}>
@@ -25,7 +28,9 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                     contentContainerStyle={[
                         styles.scrollViewContainerStyle,
                         {
-                            width: layout.width > 600 ? '100%' : 'auto'
+                            width: type === 2 ? '100%' : 'auto',
+                            padding: 0,
+                            margin: 0
                         }
                     ]}
                     horizontal
@@ -33,7 +38,7 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                     showsHorizontalScrollIndicator={false}
                     scrollEventThrottle={200}
                     onScroll={scrollCatcher}
-                    scrollEnabled={layout.width < 600}
+                    scrollEnabled={type !== 2}
                 >
                     {
                         array.map((element, i) => (
@@ -42,16 +47,19 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                                 style={[
                                     styles.scrollViewItemContainer,
                                     {
-                                        width: layout.width < 600 ? layout.width - responsiveWidth(63) : layout.width / 4
+                                        width: type === 1 
+                                        ? layout.width - responsiveWidth(63)
+                                        : layout.width / 4,
+                                        alignSelf: 'center'
                                     }
                                 ]}
                                 onLayout={layoutCatcher}
                             >
                                 {
-                                    layout.width < 600 && i !== 0 &&
+                                    type !== 2 && i !== 0 &&
                                     <MaterialIcons
                                         name="keyboard-arrow-left"
-                                        size={responsiveWidth(23)}
+                                        size={23}
                                         color={colors.slateGrey}
                                         style={{
                                             position: 'absolute',
@@ -76,7 +84,11 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                                         colors.paleGrayBg
                                     }
                                     borderRadius={25}
-                                    buttonWidth={layout.width < 600 ? ((layout.width - responsiveWidth(63)) / 2) : ((layout.width - responsiveWidth(63)) / 8)}
+                                    buttonWidth={
+                                        type !== 2 
+                                        ? ((layout.width - responsiveWidth(63)) / 2) 
+                                        : ((layout.width - responsiveWidth(63)) / 8)
+                                    }
                                     // buttonWidth={responsiveWidth(121)}
                                     // buttonWidth={'50%'}
                                     buttonHeight={responsiveHeight(38)}
@@ -85,10 +97,10 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                                 />
 
                                 {
-                                    layout.width < 600 && i !== array.length - 1 &&
+                                    type !== 2 && i !== array.length - 1 &&
                                     <MaterialIcons
                                         name="keyboard-arrow-right"
-                                        size={responsiveWidth(23)}
+                                        size={23}
                                         color={colors.slateGrey}
                                         style={{
                                             position: 'absolute',
@@ -116,7 +128,8 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
 const styles = StyleSheet.create({
     menu: {
         borderTopColor: colors.whiteTwo,
-        borderTopWidth: responsiveWidth(1)
+        borderTopWidth: responsiveWidth(1),
+        width: layout.width - responsiveWidth(63)
     },
     menuInner: {
         borderBottomColor: colors.whiteTwo,
@@ -137,7 +150,7 @@ const styles = StyleSheet.create({
         width: responsiveWidth(140),
         height: responsiveHeight(4),
         backgroundColor: colors.silver,
-        borderRadius: responsiveWidth(25)
+        borderRadius: 25
     },
     scrollViewContainerStyle: {
         // alignContent: 'center',
