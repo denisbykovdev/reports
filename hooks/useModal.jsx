@@ -16,7 +16,10 @@ const useModal = () => {
   const modalOpen = () => setVisible(true);
 
   const ModalContent = ({
-    children
+    children,
+    fullWidth = false,
+    modalContainerStyle,
+    modalContentStyle
   }) => (
 
     <Modal
@@ -29,9 +32,13 @@ const useModal = () => {
       // onSwipeComplete={() => modalClose()}
       // swipeDirection={"down"}
       supportedOrientations={["portrait", "landscape"]}
-      style={[styles.modalContainer, {
-        alignItems: layout.width > 600 ? "center" : 'stretch'
-      }]}
+      style={[
+        styles.modalContainer, 
+        {
+          alignItems: layout.width > 600 ? "center" : 'stretch'
+        },
+        modalContainerStyle
+      ]}
       propagateSwipe={true}
       scrollVertical={true}
     >
@@ -40,8 +47,9 @@ const useModal = () => {
           contentContainerStyle={[
             styles.modalScrollContainer,
             {
-              width: type === 2 ? responsiveWidth(360) : '100%'
-            }
+              width: type === 2 && fullWidth === false ? responsiveWidth(360) : '100%'
+            },
+            modalContentStyle
           ]}
           showsVerticalScrollIndicator={false}
           nestedScrollEnabled

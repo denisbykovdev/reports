@@ -35,7 +35,7 @@ export default function ProblemsChoice({
             }}>
                 <CommonButton
                     borderRadius={0}
-                    buttonHeight={responsiveHeight(51)}
+                    buttonHeight={responsiveWidth(51)}
                     buttonWidth={'50%'}
                     buttonColor={colors.white}
                     titleColor={colors.azul}
@@ -52,7 +52,7 @@ export default function ProblemsChoice({
                 />
                 <CommonButton
                     borderRadius={0}
-                    buttonHeight={responsiveHeight(51)}
+                    buttonHeight={responsiveWidth(51)}
                     buttonWidth={'50%'}
                     buttonColor={colors.paleGrayBg}
                     titleColor={colors.azul}

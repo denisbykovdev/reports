@@ -52,11 +52,14 @@ export default function useSearch({
         setSearchText(text)
     }
 
-    const RenderSearch = useCallback(() => {
+    const RenderSearch = useCallback(({searchInputWidth}) => {
         return (
             <TextInput
                 onChangeText={onChangeSearchInput}
-                style={styles.searchInput}
+                style={[styles.searchInput,
+                {
+                    width: searchInputWidth || responsiveWidth(239),
+                }]}
                 placeholder="לחפש"
             />
         )
@@ -74,14 +77,15 @@ const styles = StyleSheet.create({
         borderWidth: responsiveWidth(2),
         borderRadius: 20,
         height: responsiveWidth(31),
-        // width: responsiveWidth(239),
-        paddingHorizontal: responsiveWidth(10),
 
+        // width: responsiveWidth(300),
+        paddingHorizontal: responsiveWidth(10),
+        alignSelf: 'flex-end',
         fontSize: fonts.xsmall,
         fontWeight: weights.thin,
         color: colors.darkBlueGray,
         textAlign: 'right',
-
+        marginBottom: responsiveWidth(8),
         marginTop: responsiveWidth(22)
     }
 })

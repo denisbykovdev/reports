@@ -18,6 +18,7 @@ export default function FormField({
   inputStyle,
   area = false,
   interSepter,
+  height,
   ...otherProps
 }) {
   const {
@@ -38,6 +39,7 @@ export default function FormField({
           {
             width: width,
             borderRadius,
+            height: height || responsiveWidth(43),
           },
           style
         ]}
@@ -67,19 +69,22 @@ const styles = StyleSheet.create({
   formFieldContainer: {
     flexDirection: "column",
     justifyContent: "center",
-    alignItems: 'center'
+    alignItems: 'center',
+    // width: responsiveWidth(239),
   },
   formField: {
     alignItems: "center",
     backgroundColor: colors.white,
     justifyContent: "flex-end",
     flexDirection: "row",
-    height: responsiveWidth(43),
+    // height: responsiveWidth(43),
+    // width: responsiveWidth(239),
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: colors.darkWhite,
     backgroundColor: colors.white,
-    padding: responsiveWidth(10)
+    padding: responsiveWidth(10),
+    paddingStart: responsiveWidth(28)
   },
   input: {
     height: "100%",

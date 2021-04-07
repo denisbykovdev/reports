@@ -72,7 +72,9 @@ export default function Standarts({
             />
             <Line />
 
-            <RenderSearch />
+            <RenderSearch 
+                searchInputWidth={'100%'}
+            />
 
             {
                 searchArray && searchArray.length > 0
@@ -176,8 +178,8 @@ const StandartItem = ({
     return (
         <View
             style={{
-                flexDirection: type === 2 ? 'row-reverse' : 'column',
-                alignItems: type === 2 ? 'center' : 'stretch',
+                // flexDirection: type === 2 ? 'row-reverse' : 'column',
+                // alignItems: type === 2 ? 'center' : 'stretch',
                 // justifyContent: 'center'
             }}
         >
@@ -191,7 +193,7 @@ const StandartItem = ({
                     alignItems: 'center'
                 }}
             >
-                {type !== 2 &&
+                {/* {type !== 2 && */}
                     <TouchableOpacity
                         onPress={() => setOpen(!isOpen)}
                         style={{
@@ -205,7 +207,7 @@ const StandartItem = ({
                                 : <CircleArrowDown />
                         }
                     </TouchableOpacity>
-                }
+                {/* } */}
 
                 <View style={{
                     height: responsiveWidth(73),
@@ -240,7 +242,7 @@ const StandartItem = ({
                         checked && <Tick />
                     }
                 </TouchableOpacity>
-
+              
             </View>
             {
                 isOpen
@@ -252,7 +254,7 @@ const StandartItem = ({
                 </Text>
             }
 
-            {
+            {/* {
                 type === 2 && <Text
                     style={{
                         width: '70%',
@@ -260,8 +262,9 @@ const StandartItem = ({
                     }}
                 >
                     {standart.text}
+                   
                 </Text>
-            }
+            } */}
             <Line />
         </View>
     )

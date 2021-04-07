@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import AvoidingView from "../common/AvoidingView"
 import HeaderView from "../common/HeaderView"
@@ -27,10 +27,13 @@ import useAuth from "../hooks/useAuth"
 import FormField from "../common/FormField"
 import weights from "../utils/weights"
 import useChecked from "../hooks/useChecked"
+import { useFormikContext } from "formik"
 
 const ReportScreen = ({ route }) => {
 
     // const { reportId } = route.params
+
+    const formikRef = useRef({});
 
     useStatusBar("dark-content", colors.paleGrayBg);
 
@@ -100,7 +103,7 @@ const ReportScreen = ({ route }) => {
 
     function layoutCatcher({ nativeEvent: { layout: { x, y, width, height }, target } }) {
         console.log(
-            "___ReportScreen/scroll/layout:",  width
+            "___ReportScreen/scroll/layout:", width
         )
 
         setViewWidth(width)
@@ -115,11 +118,11 @@ const ReportScreen = ({ route }) => {
     }
 
     function scrollComponent() {
-        switch (offsetX) {
-            case 0: return <Details />;
-            case viewWidth: return <Defects />;
-            case viewWidth * 2: return <Resume />;
-            case viewWidth * 3: return <Archive />;
+        switch (true) {
+            case offsetX === 0: return <Details />;
+            case offsetX === viewWidth: return <Defects />;
+            case offsetX === (viewWidth) * 2: return <Resume />;
+            case offsetX >= (viewWidth) * 3: return <Archive />;
         }
     }
 
@@ -136,16 +139,27 @@ const ReportScreen = ({ route }) => {
     return (
         <SafeView>
             <AvoidingView>
-                <ScrollView
-                    automaticallyAdjustContentInsets={false}
-                    showsVerticalScrollIndicator={false}
+                <FormContainer
+                    innerRef={formikRef}
+                    initialValues={{ id: "" }}
+                    onSubmit={
+                        (values, { resetForm }) => submitReport(values, { resetForm })
+                    }
                 >
-                    <FormContainer
-                        initialValues={{ id: "" }}
-                        onSubmit={
-                            (values, { resetForm }) => submitReport(values, { resetForm })
-                        }
+                    <ScrollView
+                        automaticallyAdjustContentInsets={false}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{
+                            flexGrow: 1,
+                            justifyContent: 'space-between'
+                        }}
                     >
+                        {/* <View style={{
+                            flexGrow: 1,
+
+                            justifyContent: 'space-between'
+                        }}> */}
+
                         <HeaderView>
                             <ShadowView
                                 shadowStyle={{
@@ -202,7 +216,12 @@ const ReportScreen = ({ route }) => {
                                                                 textAlign: "right"
                                                             }}
                                                         >
-                                                            {"כתובת הבדיקה"}
+                                                            {
+                                                                formikRef.current.values && formikRef.current.values.report_adress
+                                                                    ? formikRef.current.values.report_adress
+                                                                    :
+                                                                    "כתובת הבדיקה"
+                                                            }
                                                         </Text>
                                                 }
                                             </TouchableOpacity>
@@ -239,7 +258,11 @@ const ReportScreen = ({ route }) => {
                                                                 textAlign: "right"
                                                             }}
                                                         >
-                                                            {"שם הבדיקה "}
+                                                            {
+                                                                formikRef.current.values && formikRef.current.values.report_name
+                                                                    ? formikRef.current.values.report_name
+                                                                    : "שם הבדיקה "
+                                                            }
                                                         </Text>
                                                 }
                                             </TouchableOpacity>
@@ -270,9 +293,11 @@ const ReportScreen = ({ route }) => {
                                 buttonShadow={true}
                                 buttonColor={colors.azul}
                                 buttonHeight={responsiveWidth(52)}
-                                buttonWidth={layout.width < 600 ? "100%" : "37.5%"}
+                                buttonWidth={type !== 2 ? "100%" : "17%"}
                                 title={"עדכון"}
-                                titleStyle={{ marginEnd: 0 }}
+                                titleStyle={{
+                                    marginEnd: type === 2 && isChecked ? responsiveWidth(10) : 0
+                                }}
                                 titleColor={colors.white}
                                 style={{
                                     marginVertical: responsiveWidth(24),
@@ -282,8 +307,8 @@ const ReportScreen = ({ route }) => {
                                 borderRadius={10}
                             >
                                 <View style={{
-                                    position: "absolute",
-                                    right: responsiveWidth(10)
+                                    position: type === 2 ? "relative" : "absolute",
+                                    right: type === 2 ? 0 : responsiveWidth(10)
                                 }}>
                                     {
                                         isChecked === true && <Check />
@@ -299,13 +324,15 @@ const ReportScreen = ({ route }) => {
                                 buttonColor={colors.white}
                                 buttonHeight={responsiveWidth(52)}
                                 // buttonWidth={responsiveWidth(300)}
-                                buttonWidth={layout.width < 600 ? "100%" : "37.5%"}
+                                buttonWidth={type !== 2 ? "100%" : "17%"}
                                 buttonShadow={false}
                                 borderColor={colors.darkSkyBlue}
                                 borderRadius={10}
                                 titleStyle={{ marginEnd: 0 }}
                             />
                         </BottomView>
+                        {/* </View> */}
+
                         <PrintModalContent>
 
                             <PrintModal
@@ -313,8 +340,9 @@ const ReportScreen = ({ route }) => {
                             />
 
                         </PrintModalContent>
-                    </FormContainer>
-                </ScrollView>
+
+                    </ScrollView>
+                </FormContainer>
             </AvoidingView>
         </SafeView>
     )

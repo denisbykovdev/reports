@@ -59,13 +59,14 @@ export default function NewStandart({
                     name="text"
                     area={true}
                     style={{
-                        height: responsiveHeight(69),
+                        height: responsiveHeight(140),
                         textAlign: 'right',
                         marginBottom: responsiveHeight(22)
                     }}
                     inputStyle={{
                         marginEnd: 0
                     }}
+                 
                 />
 
                 <Line />

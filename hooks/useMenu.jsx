@@ -28,7 +28,8 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                     contentContainerStyle={[
                         styles.scrollViewContainerStyle,
                         {
-                            width: type === 2 ? '100%' : 'auto',
+                            width: type === 2 ? '100%' : 
+                            'auto',
                             padding: 0,
                             margin: 0
                         }
@@ -39,6 +40,9 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                     scrollEventThrottle={200}
                     onScroll={scrollCatcher}
                     scrollEnabled={type !== 2}
+                    alwaysBounceHorizontal={false}
+                    alwaysBounceVertical={false}
+                    bounces={false}
                 >
                     {
                         array.map((element, i) => (
@@ -47,9 +51,11 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                                 style={[
                                     styles.scrollViewItemContainer,
                                     {
-                                        width: type === 1 
+                                        width: 
+                                        type === 1 
                                         ? layout.width - responsiveWidth(63)
-                                        : layout.width / 4,
+                                        : 
+                                        layout.width / 4,
                                         alignSelf: 'center'
                                     }
                                 ]}
@@ -91,7 +97,7 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                                     }
                                     // buttonWidth={responsiveWidth(121)}
                                     // buttonWidth={'50%'}
-                                    buttonHeight={responsiveHeight(38)}
+                                    buttonHeight={responsiveWidth(38)}
                                     titleStyle={{ marginRight: 0 }}
                                     style={{ padding: 0 }}
                                 />
@@ -129,6 +135,7 @@ const styles = StyleSheet.create({
     menu: {
         borderTopColor: colors.whiteTwo,
         borderTopWidth: responsiveWidth(1),
+
         width: layout.width - responsiveWidth(63)
     },
     menuInner: {

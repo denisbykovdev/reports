@@ -1,4 +1,3 @@
-import { useFormikContext } from "formik";
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import CommonButton from "../common/CommonButton";
@@ -12,6 +11,11 @@ import Copy from "../icons/Copy";
 import Tick from "../icons/Tick";
 import colors from "../utils/colors";
 import { responsiveHeight, responsiveWidth } from "../utils/layout";
+import useModal from "../hooks/useModal"
+import Delete from "../modals/Delete";
+import Clipboard from 'expo-clipboard';
+import { useFormikContext } from "formik";
+import AvoidingView from "../common/AvoidingView";
 
 const Resume = () => {
     const { defectsState, defectsDispatch } = useDefects()
@@ -27,18 +31,14 @@ const Resume = () => {
         noteId
     })
 
-    const addToSaveNote = (note) => defectsDispatch({
-        type: "ADD_NOTE_TO_SAVENOTES",
-        saveNote: note
-        // {
-        //     note,
-        //     id: defectsState.notes.length > 0 ? defectsState.notes.length + 1 : 1
-        // }
+    const saveNoteToReport = (noteId) => defectsDispatch({
+        type: "SAVE_NOTE_TO_REPORT",
+        noteId
     })
 
-    const deleteFromSaveNotes = (saveNoteId) => defectsDispatch({
-        type: "DELETE_NOTE_FROM_SAVENOTES",
-        saveNoteId
+    const removeNoteFromReport = (noteId) => defectsDispatch({
+        type: "REMOVE_NOTE_FROM_REPORT",
+        noteId
     })
 
     return (
@@ -71,54 +71,62 @@ const Resume = () => {
                             key={note.id}
                             note={note}
                             deleteNote={deleteNote}
-                            addToSaveNote={addToSaveNote}
-                            deleteFromSaveNotes={deleteFromSaveNotes}
+                            saveNoteToReport={saveNoteToReport}
+                            removeNoteFromReport={removeNoteFromReport}
+                            defectsDispatch={defectsDispatch}
                         />
                 )
             }
         </View>
+
     )
 }
 
-export default Resume;
-
 const NoteItem = ({
-    note, deleteNote, addToSaveNote, deleteFromSaveNotes
+    note,
+    deleteNote,
+    saveNoteToReport,
+    removeNoteFromReport,
+    defectsDispatch
 }) => {
-    const [isNoteAdded, setNoteAdded] = useState(false)
-
     const { type } = useType()
 
-    const {
-        // setFieldValue,
-        // setFieldTouched,
-        // values,
-        handleSubmit
-    } = useFormikContext()
+    const [openDeleteModal, closeDeleteModal, DeleteModal] = useModal()
 
-    const submitNote = (values) => {
-        setNoteAdded(!isNoteAdded)
-        if (!isNoteAdded) {
-            addToSaveNote(
-                // note,
-                {
-                    // ...note,
-                    note: values.note,
-                    id: note.id
-                }
-            )
-        }
-        if (isNoteAdded) {
-            deleteFromSaveNotes(note.id)
+    // const [copiedText, setCopiedText] = useState('')
+
+    const noteToReport = (noteId) => {
+        if (note.isSavedToReport) {
+            removeNoteFromReport(noteId)
+        } else if (!note.isSavedToReport) {
+            saveNoteToReport(noteId)
         }
     }
 
+    const copyToClipboard = () => {
+        Clipboard.setString(note.note)
+    }
 
+    // const fetchCopiedText = async () => {
+    //     const text = await Clipboard.getStringAsync();
+    //     setCopiedText(text);
+    // }
+
+    const interSepter = (name, text) => {
+        console.log(
+            "___Resume(notes)/intersepter:", name, text
+        )
+        defectsDispatch({
+            type: "CHANGE_NOTE_VALUE",
+            noteId: note.id,
+            noteNewValue: text
+        })
+    }
 
     return (
         <FormContainer
             initialValues={{ note: '' }}
-            onSubmit={submitNote}
+            // onSubmit={submitNote}
             style={styles.noteContainer}
         >
             <View style={[styles.noteActions]}>
@@ -130,12 +138,30 @@ const NoteItem = ({
                     <TouchableOpacity
                         style={styles.noteAtionsBasket}
                         onPress={
-                            () => deleteNote(note.id)
+                            // () => deleteNote(note.id)
+                            () => openDeleteModal()
                         }
                     >
                         <Basket />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+
+                    <DeleteModal
+                        modalContainerStyle={{
+                            paddingHorizontal: 0,
+                            marginVertical: '60%'
+                        }}
+                        modalContentStyle={{
+                            paddingTop: 0
+                        }}
+                    >
+                        <Delete
+                            closeDeleteModal={closeDeleteModal}
+                            deleteNote={deleteNote}
+                            id={note.id}
+                        />
+                    </DeleteModal>
+
+                    <TouchableOpacity onPress={() => copyToClipboard()}>
                         <Copy />
                     </TouchableOpacity>
                 </View>
@@ -153,6 +179,8 @@ const NoteItem = ({
                                 marginEnd: 0
                             }}
                             name="note"
+                            interSepter={interSepter}
+                            placeholder={note.note}
                         />
                     )
                 }
@@ -166,14 +194,14 @@ const NoteItem = ({
                         {note.id}
                     </Text>
                     <TouchableOpacity
-                        // onPress={() => addHandler()}
-                        onPress={handleSubmit}
+                        onPress={() => noteToReport(note.id)}
+                        // onPress={handleSubmit}
                         style={[styles.tickContainer, {
-                            backgroundColor: isNoteAdded ? colors.paleGrayBg : colors.white
+                            backgroundColor: note.isSavedToReport ? colors.paleGrayBg : colors.white
                         }]}
                     >
                         {
-                            isNoteAdded && <Tick />
+                            note.isSavedToReport && <Tick />
                         }
                     </TouchableOpacity>
                 </View>
@@ -193,6 +221,8 @@ const NoteItem = ({
                             marginEnd: 0
                         }}
                         name="note"
+                        interSepter={interSepter}
+                        placeholder={note.note}
                     />
                 )
             }
@@ -227,3 +257,5 @@ const styles = StyleSheet.create({
         marginRight: responsiveWidth(12)
     }
 })
+
+export default Resume

@@ -29,7 +29,14 @@ const CommonHeader = ({ title, subTitle, close, children, closeButton = true, he
       width: children || closeButton === true ? "90%" : "100%"
     }]}>
       <Text style={styles.modalHeaderTitle}>{title}</Text>
-      <Text style={styles.modalHeaderSubTitle}>{subTitle}</Text>
+      <Text 
+        style={[
+          styles.modalHeaderSubTitle,
+          {
+            display: subTitle ? 'flex' : 'none'
+          }
+        ]}
+      >{subTitle}</Text>
     </View>
 
     <View style={{

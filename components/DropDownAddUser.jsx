@@ -60,7 +60,8 @@ const DropDownAddUser = ({ dispatchMethod }) => {
                         </View>
                         
                         <Text style={styles.itemTitle}>
-                            Add user
+                            {/* Add user */}
+                            הוסף משתמש
                         </Text>
                         {
                             isVisible ? <CircleArrowUp /> : <CircleArrowDown />

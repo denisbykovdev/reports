@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         height: responsiveWidth(31),
         width: responsiveWidth(239),
         paddingHorizontal: responsiveWidth(10),
-
+        textAlign : "right",
         fontSize: fonts.xsmall,
         fontWeight: weights.thin,
         color: colors.darkBlueGray

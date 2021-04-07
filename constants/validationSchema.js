@@ -6,7 +6,7 @@ export const loginSchema = Yup.object().shape({
   //   .email()
   //   .label("Email"),
   password: Yup.string()
-    .required()
+    .required(' יש טעות באחד השדות')
     .min(6, "not less than 6 symbols")
     .label("Password"),
 });

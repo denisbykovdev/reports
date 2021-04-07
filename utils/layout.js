@@ -5,7 +5,7 @@ const height = Dimensions.get('window').height;
 
 
 const widthScale = width < 600 ? 360 : 900;
-
+// widthScale = 360
 // console.log(width)
 
 export const responsiveWidth = (length) => {

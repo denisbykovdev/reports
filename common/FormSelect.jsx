@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
     },
     selectItem: {
-        height: responsiveHeight(31),
+        height: responsiveWidth(31),
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',

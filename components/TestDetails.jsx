@@ -11,6 +11,7 @@ import FormRadioSelect from "../common/FormRadioSelect"
 import FormSelect from "../common/FormSelect"
 import ItemTitle from "../common/ItemTitle"
 import useType from "../hooks/useType"
+import fonts from "../utils/fonts"
 
 const testArray = ['one', 'two', 'three']
 
@@ -69,6 +70,7 @@ const TestDetails = () => {
                     name="examination_date"
                     inputStyle={styles.input}
                     style={styles.inputContainer}
+                    placeholder="dd . mm . yyyy"
                 />
 
                 <ItemTitle
@@ -78,6 +80,7 @@ const TestDetails = () => {
                     name="test_time"
                     inputStyle={styles.input}
                     style={styles.inputContainer}
+                    placeholder="10 : 00"
                 />
 
                 <ItemTitle
@@ -114,7 +117,8 @@ const TestDetails = () => {
                 <ItemTitle
                     title="עיר"
                     titleStyle={{
-                        fontWeight: weights.thin
+                        fontWeight: weights.thin,
+                        fontSize: fonts.xxsmall
                     }}
                 />
                 <FormField
@@ -126,7 +130,8 @@ const TestDetails = () => {
                 <ItemTitle
                     title="כתובת"
                     titleStyle={{
-                        fontWeight: weights.thin
+                        fontWeight: weights.thin,
+                        fontSize: fonts.xxsmall
                     }}
                 />
                 <FormField
@@ -142,7 +147,8 @@ const TestDetails = () => {
                 <ItemTitle
                     title="עיר"
                     titleStyle={{
-                        fontWeight: weights.thin
+                        fontWeight: weights.thin,
+                        fontSize: fonts.xxsmall
                     }}
                 />
                 <FormField
@@ -161,7 +167,8 @@ const TestDetails = () => {
                 <ItemTitle
                     title="כתובת"
                     titleStyle={{
-                        fontWeight: weights.thin
+                        fontWeight: weights.thin,
+                        fontSize: fonts.xxsmall
                     }}
                 />
                 <FormField
@@ -216,7 +223,8 @@ const TestDetails = () => {
                 <ItemTitle
                     title="שמו המלא של הלקוח"
                     titleStyle={{
-                        fontWeight: weights.thin
+                        fontWeight: weights.thin,
+                        fontSize: fonts.xxsmall
                     }}
                 />
                 <FormField
@@ -228,7 +236,8 @@ const TestDetails = () => {
                 <ItemTitle
                     title="הצד הנגדי"
                     titleStyle={{
-                        fontWeight: weights.thin
+                        fontWeight: weights.thin,
+                        fontSize: fonts.xxsmall
                     }}
                 />
                 <FormField
@@ -281,7 +290,7 @@ const TestDetails = () => {
                 />
 
                 <ItemTitle
-                    title="(%) מע'מ באחוזים"
+                    title="מע'מ באחוזים (%)"
                 />
                 <FormField
                     name="vat_in_percent"
@@ -296,6 +305,8 @@ const TestDetails = () => {
 const styles = StyleSheet.create({
     inputContainer: {
         padding: 0,
+        paddingStart: responsiveWidth(18),
+
         height: responsiveWidth(31),
         borderColor: colors.darkWhite,
         borderWidth: responsiveWidth(2),

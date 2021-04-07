@@ -6,6 +6,7 @@ export default function FormContainer({
   initialValues,
   onSubmit,
   validationSchema,
+  innerRef
 }) {
   return (
     <Formik
@@ -13,6 +14,7 @@ export default function FormContainer({
       validationSchema={validationSchema}
       onSubmit={onSubmit}
       validateOnMount
+      innerRef={innerRef}
     >
       {() => <Fragment>{children}</Fragment>}
     </Formik>

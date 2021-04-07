@@ -160,7 +160,7 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                                     {
                                         openName
                                             ? <FormField
-                                                area={true}
+                                                // area={true}
                                                 placeholder={problem.name}
                                                 style={{
                                                     padding: 0,
@@ -170,7 +170,7 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                                                     borderRadius: 20,
                                                     alignSelf: 'flex-end'
                                                 }}
-                                                width="80%"
+                                                width="90%"
                                                 name="name"
                                                 interSepter={interSepter}
                                             />
@@ -182,7 +182,7 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
 
 
                                 <Text
-                                    style={styles.problemHeaderActionsTitle}
+                                    style={styles.problemHeaderActionsId}
                                 > | {areaId}.{problem.id}</Text>
 
                             </View>
@@ -193,7 +193,7 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
 
                 {
                     isProblemOpen &&
-                    <View >
+                    <View>
 
                         <View style={{
                             flexDirection: type === 2 ? 'row-reverse' : 'column',
@@ -202,7 +202,7 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                         }}>
 
                             <View style={{
-                                width: type === 2 ? '60%' : '100%'
+                                width: type === 2 ? '50%' : '100%'
                             }}>
                                 <ItemTitle
                                     style={styles.titles}
@@ -214,7 +214,7 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                                     interSepter={interSepter}
                                 />
                                 <CommonButton
-                                    title="לערוך את רשימת המקצועות"
+                                    title="תקנים"
                                     borderRadius={20}
                                     buttonHeight={responsiveWidth(33)}
                                     borderColor={colors.darkSkyBlue}
@@ -224,7 +224,8 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                                         marginBottom: responsiveWidth(22)
                                     }}
                                     titleStyle={{
-                                        marginRight: 0
+                                        marginRight: 0,
+                                        flexDirection: 'row'
                                     }}
                                     titleColor={colors.darkSkyBlue}
                                     onPress={() => profModalOpen()}
@@ -265,8 +266,8 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                             </View>
 
                             <View style={{
-                                width: type === 2 ? '30%' : '100%',
-                                // paddingEnd: responsiveWidth(30)
+                                width: type === 2 ? '40%' : '100%',
+                                alignItems: 'flex-end'
                             }}>
                                 <ItemTitle
                                     style={styles.titles}
@@ -277,12 +278,14 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                                     interSepter={interSepter}
                                 />
                             </View>
+
                         </View>
-                        <Line />
+
+                        {type !== 2 && <Line />}
 
                         <View
                             style={{
-                                width: type === 2 ? '60%' : '100%',
+                                width: type === 2 ? '50%' : '100%',
                                 alignSelf: 'flex-end'
                             }}
                         >
@@ -304,16 +307,22 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                                 style={{
                                     padding: 0,
                                     paddingHorizontal: responsiveWidth(70),
-                                    marginVertical: responsiveWidth(22)
+                                    marginVertical: responsiveWidth(22),
+                                    paddingHorizontal: type === 2 ? responsiveWidth(18) : 0
                                 }}
                                 titleStyle={{
                                     marginRight: 0
                                 }}
                                 titleColor={colors.darkSkyBlue}
                                 onPress={() => standartsModalOpen()}
+                                buttonWidth={type === 2 ? 'auto' : '100%'}
                             />
 
-                            <StandartsModal>
+                            <StandartsModal 
+                                // modalContentStyle={{
+                                //     width: type === 2 ? responsiveWidth(600) : 'auto'
+                                // }}
+                            >
                                 <Standarts
                                     standartsModalClose={standartsModalClose}
                                     areaId={areaId}
@@ -405,9 +414,10 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                             style={{
                                 padding: 0,
                                 marginVertical: responsiveWidth(22),
-                                alignSelf: 'flex-end'
+                                alignSelf: 'flex-end',
+                                paddingHorizontal: type === 2 ? responsiveWidth(18) : 0
                             }}
-                            buttonWidth={type === 2 ? '60%' : '100%'}
+                            buttonWidth={type === 2 ? 'auto' : '100%'}
                             titleStyle={{
                                 marginRight: 0
                             }}
@@ -467,6 +477,11 @@ const styles = StyleSheet.create({
         fontWeight: weights.semiBold,
         textAlign: 'right'
     },
+    problemHeaderActionsId: {
+        fontSize: fonts.small,
+        fontWeight: weights.thin,
+        textAlign: 'right'
+    },
     titles: {
         marginTop: responsiveWidth(24)
     },
@@ -480,12 +495,12 @@ const styles = StyleSheet.create({
     },
     inputContainerArea: {
         // padding: 0,
-        height: responsiveWidth(31),
+        height: responsiveWidth(69),
         borderColor: colors.darkWhite,
         borderWidth: responsiveWidth(2),
         borderRadius: 10,
-        marginVertical: responsiveWidth(24),
-        minHeight: responsiveHeight(69),
+        // marginVertical: responsiveWidth(24),
+        // minHeight: responsiveHeight(69),
         textAlign: 'right'
     }
 })

@@ -121,24 +121,25 @@ function ReportsScreen({ route, navigation }) {
                 buttonColor={colors.darkSkyBlue}
                 buttonHeight={responsiveWidth(51)}
                 // buttonWidth={responsiveWidth(300)}
-                buttonWidth={type === 2 ? "37.5%" : "100%"}
+                buttonWidth={type === 2 ? "27%" : "100%"}
                 buttonShadow={true}
                 buttonShadowColor={colors.clearBlue}
                 borderRadius={10}
                 style={{
-                  marginTop: responsiveWidth(24),
-                  marginBottom: responsiveWidth(24),
+                  marginVertical: responsiveWidth(24),
                   marginRight: type === 2 ? responsiveWidth(10) : 0,
                 }}
                 onPress={
                   () => openReportHandler()
                 }
+                titleStyle={{
+                  marginEnd: type === 2 ? responsiveWidth(10) : 0
+                }}
               >
                 <View
                   style={{
-                    position: type === 2 ? "absolute" : "relative",
-                    right: 0,
-                    marginRight: type === 2 ? responsiveWidth(10) : 0,
+                    position: type === 2 ? "relative" : "absolute",
+                    right: type === 2 ? 0 : responsiveWidth(10)
                   }}
                 >
                   <Plus />
@@ -154,22 +155,28 @@ function ReportsScreen({ route, navigation }) {
                     titleFontSize={fonts.large}
                     buttonColor={colors.white}
                     buttonHeight={responsiveWidth(51)}
-                    buttonWidth={type === 2 ? "37.5%" : "100%"}
+                    buttonWidth={type === 2 ? "27%" : "100%"}
                     buttonShadow={false}
                     borderColor={colors.darkSkyBlue}
                     borderRadius={10}
+                    titleStyle={{
+                      marginEnd: type === 2 ? responsiveWidth(10) : 0
+                    }}
+                    style={{
+
+                      marginRight: type === 2 ? responsiveWidth(10) : 0,
+                    }}
                   >
                     <View
                       style={{
-                        position: type === 2 ? "absolute" : "relative",
-                        right: 0,
-                        marginRight: type === 2 ? responsiveWidth(10) : 0,
+                        position: type === 2 ? "relative" : "absolute",
+                        right: type === 2 ? 0 : responsiveWidth(10)
                       }}
                     >
                       <UserList />
                     </View>
                   </CommonButton>
-                  <UserModalContent>
+                  <UserModalContent fullWidth>
                     <UsersListScreen closeModal={userModalClose} />
                   </UserModalContent>
                 </>

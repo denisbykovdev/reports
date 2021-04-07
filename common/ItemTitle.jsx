@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         marginBottom: responsiveWidth(6)
     },
     itemTitleText: {
-        fontSize: fonts.xsmall,
+        fontSize: fonts.small,
         fontWeight: weights.regular,
         color: colors.darkBlueGray,
     }

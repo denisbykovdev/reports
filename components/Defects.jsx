@@ -80,7 +80,7 @@ const Defects = () => {
             }}>
                 <CommonButton
                     borderRadius={0}
-                    buttonHeight={responsiveHeight(51)}
+                    buttonHeight={responsiveWidth(51)}
                     buttonWidth={'50%'}
                     buttonColor={colors.white}
                     titleColor={colors.azul}
@@ -97,7 +97,7 @@ const Defects = () => {
                 />
                 <CommonButton
                     borderRadius={0}
-                    buttonHeight={responsiveHeight(51)}
+                    buttonHeight={responsiveWidth(51)}
                     buttonWidth={'50%'}
                     buttonColor={colors.paleGrayBg}
                     titleColor={colors.azul}
@@ -129,7 +129,7 @@ const Defects = () => {
 const styles = StyleSheet.create({
     defectsAreasSearch: {
         marginHorizontal: responsiveWidth(28),
-        marginVertical: responsiveHeight(24)
+        marginVertical: responsiveWidth(24)
     },
     searchInput: {
         borderColor: colors.darkWhite,

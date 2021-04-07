@@ -11,10 +11,13 @@ import Add from '../icons/Add';
 import Edit from '../icons/Edit';
 import Signature from 'react-native-signature-canvas';
 import useChecked from '../hooks/useChecked';
+import useType from '../hooks/useType';
 
 export default function FormPhotoCamera({ name, interSepter }) {
   const cameraRef = useRef(null);
   const canvasRef = useRef(null);
+
+  const {type} = useType()
 
   const [hasPermission, setHasPermission] = useState(null);
   // const [type, setType] = useState(Camera.Constants.Type.back);
@@ -66,7 +69,13 @@ export default function FormPhotoCamera({ name, interSepter }) {
   return (
     <View style={styles.formPhotoCameraContainer}>
 
-      <View style={styles.formPhotoContainer}>
+      <View style={[
+        styles.formPhotoContainer,
+        {
+          height: responsiveWidth(278),
+          width: responsiveWidth(239),
+        }
+        ]}>
         {
           !openCam
             ?
@@ -134,8 +143,6 @@ export default function FormPhotoCamera({ name, interSepter }) {
 
 const styles = StyleSheet.create({
   formPhotoContainer: {
-    height: responsiveHeight(278),
-    width: responsiveWidth(239),
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.paleGrayBg

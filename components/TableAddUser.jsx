@@ -58,7 +58,8 @@ const TableAddUser = ({ dispatchMethod }) => {
                 </View>
 
                 <Text style={styles.itemTitle}>
-                    Add user
+                    {/* Add user */}
+                    הוסף משתמש
                 </Text>
             </TouchableOpacity>
 

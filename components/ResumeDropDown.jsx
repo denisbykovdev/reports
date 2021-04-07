@@ -33,7 +33,8 @@ const ResumeDropDown = () => {
     const {token} = authState
 
     const saveHandler = () => {
-        setSaved(true)
+        setSaved(!isSaved)
+        isSaved === true &&
         resumesDispatch({
             type: "POST_NEW_RESUME",
             token,

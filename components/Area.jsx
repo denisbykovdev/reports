@@ -74,7 +74,7 @@ export default function Area({ areaId, areaName, areaProblems, dispatch }) {
                                     {
                                         openName
                                             ? <FormField
-                                                area={true}
+                                                // area={true}
                                                 placeholder={areaName}
                                                 style={{
                                                     padding: 0,
@@ -96,7 +96,7 @@ export default function Area({ areaId, areaName, areaProblems, dispatch }) {
 
 
                                 <Text
-                                    style={styles.areaHeaderTitle}
+                                    style={styles.areaHeaderId}
                                 > | {areaId}.0</Text>
 
                             </View>
@@ -242,6 +242,11 @@ const styles = StyleSheet.create({
     areaHeaderTitle: {
         fontSize: fonts.medium,
         fontWeight: weights.semiBold,
+        textAlign: 'right'
+    },
+    areaHeaderId: {
+        fontSize: fonts.small,
+        fontWeight: weights.thin,
         textAlign: 'right'
     },
     areaHeaderOptionals: {

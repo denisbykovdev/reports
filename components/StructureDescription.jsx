@@ -9,6 +9,8 @@ import useType from "../hooks/useType"
 
 const testArray = ['one', 'two', 'three']
 
+const yesNoArray = ['לא', 'כן']
+
 const StructureDescription = () => {
     const { type } = useType()
 
@@ -114,8 +116,8 @@ const StructureDescription = () => {
                 />
                 <FormSelect
                     name="bottom_reservoir"
-                    array={testArray}
-                    placeholder="אין"
+                    array={yesNoArray}
+                    placeholder="לא"
                 />
 
                 <ItemTitle
@@ -123,8 +125,8 @@ const StructureDescription = () => {
                 />
                 <FormSelect
                     name="shared_systems_with_additional_buildings"
-                    array={testArray}
-                    placeholder="אין"
+                    array={yesNoArray}
+                    placeholder="לא"
                 />
 
                 <ItemTitle
@@ -132,8 +134,8 @@ const StructureDescription = () => {
                 />
                 <FormSelect
                     name="com_areas_in_test"
-                    array={testArray}
-                    placeholder="אין"
+                    array={yesNoArray}
+                    placeholder="לא"
                 />
 
                 <ItemTitle
@@ -141,8 +143,8 @@ const StructureDescription = () => {
                 />
                 <FormSelect
                     name="exam_comm_areas"
-                    array={testArray}
-                    placeholder="אין"
+                    array={yesNoArray}
+                    placeholder="לא"
                 />
             </View>
         </View>

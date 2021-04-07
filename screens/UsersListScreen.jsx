@@ -34,7 +34,7 @@ const UsersListScreen = ({ closeModal }) => {
           title={"ניהול משתמשים"}
           close={closeModal}
           headerStyles={{
-            paddingHorizontal: type === 2 ? responsiveWidth(28) : 0
+            paddingHorizontal: type !== 2 ? responsiveWidth(28) : 0
           }}
         />
 

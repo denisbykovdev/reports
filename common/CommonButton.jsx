@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     buttonTitle: {
         // fontSize: fonts.regular,
         marginRight: responsiveWidth(10),
-        fontWeight: weights.medium,
+        fontWeight: weights.medium
     },
     buttonShadow: {
         shadowOffset: {

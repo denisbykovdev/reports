@@ -99,6 +99,7 @@ export const defectsReducer = (
                             details_of_eclipse: null,
                             cost: null,
                             image: null,
+                            standarts: []
                         }
                     ]
                 } : area
@@ -116,7 +117,10 @@ export const defectsReducer = (
                 ...state,
                 areas: state.areas.map(area => area.id === action.areaId ? {
                     ...area,
-                    problems: area.problems.filter(problem => problem.id === action.problemId)
+                    problems: 
+                        area.problems.filter(
+                        problem => problem.id !== action.problemId
+                        )
                 } : area)
             });
 
@@ -355,10 +359,13 @@ export const defectsReducer = (
                                 problem => problem.id === action.problemId
                                     ? {
                                         ...problem,
-                                        standarts: problem.standarts && problem.standarts.length > 0 ? [
-                                            ...problem.standarts,
-                                            action.standarts
-                                        ] : [...action.standarts]
+                                        standarts: problem.standarts 
+                                            && problem.standarts.length >= 0
+                                            ? [
+                                                ...problem.standarts,
+                                                ...action.standarts
+                                            ]
+                                            : [...action.standarts]
                                     }
                                     : problem
                             )
@@ -374,7 +381,8 @@ export const defectsReducer = (
                     ...state.notes,
                     {
                         id: state.notes !== null && state.notes.length > 0 ? state.notes.length + 1 : 1,
-                        note: ''
+                        note: '',
+                        isSavedToReport: false
                     }
                 ]
             })
@@ -385,22 +393,43 @@ export const defectsReducer = (
                 notes: state.notes.filter(note => note.id !== action.noteId)
             })
 
-        case "ADD_NOTE_TO_SAVENOTES":
-            // console.log(
-            //     "***defectsDispatch/ADD_NOTE_TO_SAVENOTES/action:", action.saveNote
-            // )
+        case "CHANGE_NOTE_VALUE":
             return Update({
                 ...state,
-                saveNotes: [...state.saveNotes, action.saveNote]
+                notes: state.notes.map(note =>
+                    note.id === action.noteId ?
+                        {
+                            ...note,
+                            note: action.noteNewValue
+                        } :
+                        note
+                )
+            });
+
+        case "SAVE_NOTE_TO_REPORT":
+            return Update({
+                ...state,
+                notes: state.notes.map(
+                    note => note.id === action.noteId
+                        ? {
+                            ...note,
+                            isSavedToReport: true
+                        }
+                        : note
+                )
             })
 
-        case "DELETE_NOTE_FROM_SAVENOTES":
-            console.log(
-                "***defectsDispatch/DELETE_NOTE_FROM_SAVENOTES", action.saveNoteId
-            )
+        case "REMOVE_NOTE_FROM_REPORT":
             return Update({
                 ...state,
-                saveNotes: state.saveNotes.filter(note => note.id === action.saveNoteId)
+                notes: state.notes.map(
+                    note => note.id === action.noteId
+                        ? {
+                            ...note,
+                            isSavedToReport: false
+                        }
+                        : note
+                )
             })
 
         case "POST_REPORT":
@@ -422,7 +451,14 @@ export const defectsReducer = (
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 },
-                                data: { ...action.data, areas: state.areas, notes: state.saveNotes }
+                                data: { 
+                                    ...action.data, 
+                                    areas: state.areas, 
+                                    notes: state.notes.map(
+                                        note => note.isSavedToReport === true
+                                        && note
+                                    )
+                                }
                             },
                         );
 
@@ -454,7 +490,14 @@ export const defectsReducer = (
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 },
-                                data: { ...action.data, areas: state.areas, notes: state.saveNotes }
+                                data: { 
+                                    ...action.data, 
+                                    areas: state.areas, 
+                                    notes: state.notes.map(
+                                        note => note.isSavedToReport === true
+                                        && note
+                                    )
+                                }
                             },
                         );
                         dispatch({
