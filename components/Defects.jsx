@@ -48,7 +48,7 @@ const Defects = () => {
 
     return (
         <>
-            {
+            {/* {
                 defectsState.areas.length > 1 && (
                     <View style={styles.defectsAreasSearch}>
                         <TextInput
@@ -57,7 +57,7 @@ const Defects = () => {
                         />
                     </View>
                 )
-            }
+            } */}
 
 
 

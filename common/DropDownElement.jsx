@@ -8,6 +8,8 @@ import fonts from "../utils/fonts";
 import { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 import { FastField, Formik } from "formik";
+import FormSelect from "./FormSelect";
+import FormField from "./FormField";
 
 const INPUT_DELAY = 200;
 
@@ -72,18 +74,32 @@ const OptimisationTextFieldWrapper = ({
     );
 };
 
+const testArray = ['לביצוע', 'נבדק']
+
 const DropDownElement = ({ elementKey, elementValue, elementIndex, dispatchMethod, itemId }) => {
 
-    const onChange = (text) => {
+    // const onChange = (text) => {
+    //     dispatchMethod({
+    //         type: "CHANGE_ITEM_VALUE",
+    //         itemId,
+    //         itemKey: elementKey,
+    //         itemNewValue: text
+    //     })
+    //     console.log(
+    //         "___DDElement/onchange:", text
+    //     )
+    // }
+
+    const interSepter = (name, text) => {
+        console.log(
+            "_______DDElement/intersepter:", text, name
+        )
         dispatchMethod({
             type: "CHANGE_ITEM_VALUE",
             itemId,
-            itemKey: elementKey,
+            itemKey: name,
             itemNewValue: text
         })
-        console.log(
-            "___DDElement/onchange:", text
-        )
     }
 
     return (
@@ -100,14 +116,34 @@ const DropDownElement = ({ elementKey, elementValue, elementIndex, dispatchMetho
                         firstLevelTitles[elementKey]
                             ? firstLevelTitles[elementKey]
                             : elementKey
-                }
+                    }
                 </Text>
 
-                <TextInput
+                {/* <TextInput
                     onChangeText={(text) => onChange(text)}
                     placeHolder={elementKey === "data" ? 'dd.mm.yyyy' : ''}
                     style={styles.input}
-                />
+                /> */}
+
+                {
+                    elementKey === 'status'
+                        ? <FormSelect 
+                            interSepter={interSepter}
+                            placeholder="לביצוע"
+                            array={testArray}
+                            name="status"
+                            style={{
+                                width: '100%'
+                            }}
+                        />
+                        : <FormField
+                            style={styles.input}
+                            name={elementKey}
+                            // placeholder={elementValue}
+                            autoCapitalize="none"
+                            interSepter={interSepter}
+                        />
+                }
 
                 <Text style={styles.blueText}>
                     {elementValue}
@@ -120,18 +156,19 @@ const DropDownElement = ({ elementKey, elementValue, elementIndex, dispatchMetho
 
 const styles = StyleSheet.create({
     itemElementContainer: {
-        // backgroundColor: 'yellow',
+        // width: '100%',
         marginHorizontal: responsiveWidth(28),
         alignItems: 'flex-end'
     },
     input: {
+        padding: 0,
         borderColor: colors.darkWhite,
         borderWidth: responsiveWidth(2),
         borderRadius: 20,
         height: responsiveWidth(31),
         width: responsiveWidth(239),
         paddingHorizontal: responsiveWidth(10),
-        textAlign : "right",
+        textAlign: "right",
         fontSize: fonts.xsmall,
         fontWeight: weights.thin,
         color: colors.darkBlueGray

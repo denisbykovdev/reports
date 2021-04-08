@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { StyleSheet, TextInput } from "react-native"
+import { StyleSheet, TextInput, View } from "react-native"
+import Search from "../icons/Search"
 import colors from "../utils/colors"
 import fonts from "../utils/fonts"
 import { responsiveWidth } from "../utils/layout"
@@ -52,16 +53,34 @@ export default function useSearch({
         setSearchText(text)
     }
 
-    const RenderSearch = useCallback(({searchInputWidth}) => {
+    const RenderSearch = useCallback(({ searchInputWidth }) => {
         return (
-            <TextInput
-                onChangeText={onChangeSearchInput}
-                style={[styles.searchInput,
-                {
-                    width: searchInputWidth || responsiveWidth(239),
-                }]}
-                placeholder="לחפש"
-            />
+            <View
+                style={{
+                    justifyContent: "flex-end",
+                    flexDirection: "row",
+                    alignItems: 'center',
+                    borderColor: colors.darkWhite,
+                    borderWidth: responsiveWidth(2),
+                    borderRadius: 20,
+                    height: responsiveWidth(31),
+                    paddingHorizontal: responsiveWidth(8),
+                    marginBottom: responsiveWidth(8),
+                    marginTop: responsiveWidth(22)
+                }}
+            >
+                <TextInput
+                    onChangeText={onChangeSearchInput}
+                    style={[styles.searchInput,
+                    {
+                        width: searchInputWidth || responsiveWidth(239),
+                        writingDirection: 'rtl',
+                    }]}
+                    placeholder=" חיפוש לפי בדיקות ..."
+                />
+                <Search />
+            </View>
+
         )
     }, [])
 
@@ -73,19 +92,13 @@ export default function useSearch({
 
 const styles = StyleSheet.create({
     searchInput: {
-        borderColor: colors.darkWhite,
-        borderWidth: responsiveWidth(2),
-        borderRadius: 20,
-        height: responsiveWidth(31),
-
-        // width: responsiveWidth(300),
-        paddingHorizontal: responsiveWidth(10),
         alignSelf: 'flex-end',
         fontSize: fonts.xsmall,
         fontWeight: weights.thin,
         color: colors.darkBlueGray,
         textAlign: 'right',
-        marginBottom: responsiveWidth(8),
-        marginTop: responsiveWidth(22)
+        height: "100%",
+        width: "100%",
+        marginRight: responsiveWidth(8)
     }
 })

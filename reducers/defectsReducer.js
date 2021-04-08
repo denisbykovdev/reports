@@ -109,7 +109,15 @@ export const defectsReducer = (
         case "DELETE_AREA":
             return Update({
                 ...state,
-                areas: state.areas.filter(area => area.id !== action.areaId)
+                areas: state.areas.filter(area => area.id !== action.areaId).map(
+                    (area, i) => area.id + 1 !== i
+                        ? {
+                            ...area,
+                            id: i + 1
+                        }
+                        : area
+                )
+
             });
 
         case "DELETE_PROBLEM":
@@ -117,10 +125,18 @@ export const defectsReducer = (
                 ...state,
                 areas: state.areas.map(area => area.id === action.areaId ? {
                     ...area,
-                    problems: 
+                    problems:
                         area.problems.filter(
-                        problem => problem.id !== action.problemId
+                            problem => problem.id !== action.problemId
+                        ).map(
+                            (problem, i) => problem.id + 1 !== i
+                                ? {
+                                    ...problem,
+                                    id: i + 1
+                                }
+                                : problem
                         )
+        
                 } : area)
             });
 
@@ -359,7 +375,7 @@ export const defectsReducer = (
                                 problem => problem.id === action.problemId
                                     ? {
                                         ...problem,
-                                        standarts: problem.standarts 
+                                        standarts: problem.standarts
                                             && problem.standarts.length >= 0
                                             ? [
                                                 ...problem.standarts,
@@ -451,12 +467,12 @@ export const defectsReducer = (
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 },
-                                data: { 
-                                    ...action.data, 
-                                    areas: state.areas, 
+                                data: {
+                                    ...action.data,
+                                    areas: state.areas,
                                     notes: state.notes.map(
                                         note => note.isSavedToReport === true
-                                        && note
+                                            && note
                                     )
                                 }
                             },
@@ -490,12 +506,12 @@ export const defectsReducer = (
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 },
-                                data: { 
-                                    ...action.data, 
-                                    areas: state.areas, 
+                                data: {
+                                    ...action.data,
+                                    areas: state.areas,
                                     notes: state.notes.map(
                                         note => note.isSavedToReport === true
-                                        && note
+                                            && note
                                     )
                                 }
                             },

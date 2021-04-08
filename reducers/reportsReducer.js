@@ -9,7 +9,7 @@ export const reportsInitial = {
 const reportsData = [
     {
         id: "1",
-        status: "inDeveloping", //положение дел
+        status: "נבד", //положение дел
         customerNumber: "1",
         client: "firstClient",
         address: "planet Earth",
@@ -18,7 +18,7 @@ const reportsData = [
     },
     {
         id: "2",
-        status: "done", //положение дел
+        status: "נבד", //положение дел
         customerNumber: "2",
         client: "secondCLient",
         address: "web",

@@ -13,6 +13,7 @@ export default function FormSelect({
     array,
     placeholder,
     interSepter,
+    style,
     ...otherProps
 }) {
     const [isOpen, setOpen] = useState(false);
@@ -71,7 +72,10 @@ export default function FormSelect({
     }, [isOpen])
 
     return (
-        <View style={styles.selectContainer}>
+        <View style={[
+            styles.selectContainer,
+            style
+            ]}>
             <TouchableOpacity
                 style={styles.selectButton}
                 onPress={() => openSelectHandler()}

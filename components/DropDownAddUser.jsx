@@ -72,7 +72,7 @@ const DropDownAddUser = ({ dispatchMethod }) => {
             {
                 isVisible &&
                 <FormContainer
-                    initialValues={{ email: "", password: "" }}
+                    initialValues={{ id: '' }}
 
                     onSubmit={
                         (values, { resetForm }) => addUserHandler(values, { resetForm })

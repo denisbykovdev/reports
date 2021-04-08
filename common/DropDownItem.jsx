@@ -1,4 +1,4 @@
-import React, { useState }  from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Basket from "../icons/Basket";
 import CircleArrowDown from "../icons/CircleArrowDown";
@@ -9,6 +9,7 @@ import layout, { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 import DropDownElement from "./DropDownElement";
 import { useNavigation } from "@react-navigation/native";
+import FormContainer from "./FormContainer";
 
 const DropDownItem = ({ itemData, dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
@@ -55,15 +56,15 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                     </TouchableOpacity>
 
                     {
-                        itemData && itemData.client ?
+                        itemData && itemData.status ?
                             (
-                                <TouchableOpacity 
+                                <TouchableOpacity
                                     onPress={
                                         () => openReportHandler(itemData.id)
                                     }
                                 >
                                     <Text style={styles.itemTitle}>
-                                        {itemData.client}
+                                        {itemData.id}
                                     </Text>
                                 </TouchableOpacity>
                             ) : (
@@ -88,27 +89,27 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                 <View style={{
                     backgroundColor: isVisible ? colors.paleGrayBg : colors.white
                 }}>
-                    {
-                        Object.entries(itemData).map(([key, value], index) => {
-
-                            if (key !== "id")
-                                return (
-
-
-                                    <DropDownElement
-                                        key={index}
-                                        itemId={itemData.id}
-                                        elementKey={key}
-                                        elementValue={value}
-                                        elementIndex={index}
-                                        dispatchMethod={dispatchMethod}
-                                    />
-                                )
+                    <FormContainer
+                        initialValues={{ id : '' }}
+                    >
+                        {
+                            Object.entries(itemData).map(
+                                ([key, value], index) => {
+                                    if (key !== "id")
+                                        return (
+                                            <DropDownElement
+                                                key={index}
+                                                itemId={itemData.id}
+                                                elementKey={key}
+                                                elementValue={value}
+                                                elementIndex={index}
+                                                dispatchMethod={dispatchMethod}
+                                            />
+                                        )
+                                }
+                            )
                         }
-                        )
-                    }
-
-
+                    </FormContainer>
                 </View>
             }
         </View>
