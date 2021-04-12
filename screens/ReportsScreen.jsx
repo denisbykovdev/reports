@@ -33,9 +33,9 @@ function ReportsScreen({ route, navigation }) {
 
   const { type } = useType()
 
-  // console.log(
-  //   "---ReportsScreen:", isAdmin, reportsState.reports
-  // )
+  console.log(
+    "---ReportsScreen:", isAdmin, reportsState.reports
+  )
 
   const openReportHandler = () =>
     navigation.navigate(

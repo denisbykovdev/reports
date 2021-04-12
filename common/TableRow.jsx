@@ -1,12 +1,14 @@
-import React from "react"
+import React, { memo, useEffect, useMemo, useState } from "react"
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native"
 import Basket from "../icons/Basket"
 import colors from "../utils/colors"
 import fonts from "../utils/fonts"
 import { responsiveWidth } from "../utils/layout"
 import weights from "../utils/weights"
+import FormContainer from "./FormContainer"
+import FormMaskedField from "./FormMaskedField"
 
-const TableRow = ({ itemData, dispatchMethod }) => {
+const TableRow = ({ itemData, dispatchMethod, itemWidth }) => {
 
     const deleteHandler = (itemId) => {
         dispatchMethod({
@@ -18,8 +20,6 @@ const TableRow = ({ itemData, dispatchMethod }) => {
         )
     }
 
-    const itemWidth = 100 / Object.keys(itemData).length
-
     return (
 
         <View style={styles.rowContainer}>
@@ -27,30 +27,31 @@ const TableRow = ({ itemData, dispatchMethod }) => {
                 <TouchableOpacity onPress={() => deleteHandler(itemData.id)}>
                     <Basket />
                 </TouchableOpacity>
-               
+
             </View>
-            {
-                Object.entries(itemData).map(([key, value], index) => {
 
-                    // if (key !== "id") 
-                    return (
-                        <View 
-                            key={index}
-                            style={[styles.rowData, {
-                            width: itemWidth + "%"
-                        }]}>
-                            <Text style={styles.blueText}>
-                                {
-                                    typeof value === 'boolean' ? JSON.stringify(value) : value
-                                }
-                            </Text>
-                        </View>
+            <FormContainer
+                initialValues={{ id: '' }}
+            >
+                {
+                    Object.entries(itemData).map(([key, value], index) => {
+                        return (
 
+                            <FormMaskedField
+                                key={index}
+                                fieldName={key}
+                                placeholder={typeof value === 'boolean' ? JSON.stringify(value) : value}
+                                dispatchMethod={dispatchMethod}
+                                itemId={itemData.id}
+                                itemWidth={itemWidth}
+                            />
+
+                        )
+                    }
                     )
                 }
-                )
-            }
 
+            </FormContainer>
         </View>
 
     )
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         padding: responsiveWidth(15),
         paddingLeft: "10%",
-        alignItems: 'center'
+        alignItems: 'flex-start'
     },
     rowIconsContainer: {
         position: 'absolute',
@@ -70,11 +71,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '7.5%',
-        paddingVertical: responsiveWidth(15),
-    },
-    rowData: {
-        alignItems: 'center',
-        justifyContent: 'center'
+        paddingVertical: responsiveWidth(18),
     },
     blueText: {
         color: colors.darkSkyBlue,
@@ -84,4 +81,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default TableRow;
+export default TableRow

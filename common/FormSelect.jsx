@@ -14,6 +14,7 @@ export default function FormSelect({
     placeholder,
     interSepter,
     style,
+    selectStyle,
     ...otherProps
 }) {
     const [isOpen, setOpen] = useState(false);
@@ -91,7 +92,7 @@ export default function FormSelect({
             </TouchableOpacity>
             {
                 isOpen && (
-                    <View style={styles.selectSelect}>
+                    <View style={[styles.selectSelect, selectStyle]}>
                         {
                             array && array.map((e, i) => (
                                 <TouchableOpacity
@@ -151,10 +152,9 @@ const styles = StyleSheet.create({
         flex: 1,
         borderWidth: responsiveWidth(2),
         borderRadius: 10,
-        // position: 'absolute',
-        // width: '100%',
-        // zIndex: 1,
         backgroundColor: colors.white,
+        // position: 'relative',
+        // zIndex: 2
     },
     selectItem: {
         height: responsiveWidth(31),
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         paddingHorizontal: responsiveWidth(10)
     },
-
     selectText: {
         fontSize: fonts.xsmall,
         fontWeight: weights.thin,

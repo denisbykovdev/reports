@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { memo, useEffect, useMemo, useState } from "react"
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import firstLevelTitles from "../constants/firstLevelTitles";
 import useInput from "../hooks/useInput";
+import useReports from "../hooks/useReports";
 import colors from "../utils/colors";
 import fonts from "../utils/fonts";
 import { responsiveWidth } from "../utils/layout";
@@ -15,57 +16,52 @@ const Table = ({
     dispatchMethod,
     tableTitles
 }) => {
-    // on the first render only!
-    const [array, setArray] = useState();
+    const [array, setArray] = useState()
 
-    const [inputText, onChange] = useInput();
+    const [inputText, onChange] = useInput()
 
-    console.log(
-        "---DD/prop:", arrayProp
-    )
-    // connect prop to update render
     useEffect(() => {
-        if (array === undefined || array === false || array !== arrayProp || arrayProp === undefined) {
+        if (
+            array === undefined
+            || array === false
+            // || array !== arrayProp 
+            || arrayProp === undefined
+        ) {
             setArray(arrayProp)
         }
     }, [arrayProp])
 
     useEffect(() => {
-
-        if (inputText && inputText.length > 1) {
+        if (inputText && inputText.length > 0) {
             const filtered = arrayProp.filter(report => Object.values(report).some(reportValue => reportValue.toString().toLowerCase().includes(inputText.toLowerCase())))
 
             setArray(filtered)
         }
-
         if (inputText.length === 0) {
             setArray(arrayProp)
         }
-
     }, [inputText])
 
-    const itemWidth =  100 / Object.keys(tableTitles).length
+    const widthHandler = (tableTitles) => 100 / Object.keys(tableTitles).length
 
-    console.log(
-        "___Table/props:", Object.keys(tableTitles)
-    )
+    const itemWidth = useMemo(() =>
+        widthHandler(tableTitles)
+        , [tableTitles])
 
     return (
         <View style={styles.tableContainer}>
             <View style={styles.line}></View>
             <View style={styles.searchContainer}>
-                
-                  <View style={[styles.searchHeader, {
-                        marginVertical: searchTitle && responsiveWidth(34)
-                        }]}
-                >
-                      {children}
 
+                <View style={[styles.searchHeader, {
+                    marginVertical: searchTitle && responsiveWidth(34)
+                }]}
+                >
+                    {children}
                     <Text style={styles.searchTitle}>
                         {searchTitle}
                     </Text>
                 </View>
-
                 <TextInput
                     onChangeText={onChange}
                     style={styles.searchInput}
@@ -76,22 +72,31 @@ const Table = ({
                     {
                         Object.keys(tableTitles).map((atom, i) =>
                         (
-                            <View key={i} style={[styles.tableRowTitle, {
-                                width: itemWidth + "%"
-                            }]}>
-                                <Text key={i} style={styles.darkText}>
-                                    {firstLevelTitles[atom] ? firstLevelTitles[atom] : atom}
+                            <View
+                                key={i}
+                                style={[
+                                    styles.tableRowTitle,
+                                    {
+                                        width: itemWidth + "%"
+                                    }
+                                ]}
+                            >
+                                <Text style={styles.darkText}>
+                                    {
+                                        firstLevelTitles[atom]
+                                            ? firstLevelTitles[atom]
+                                            : atom
+                                    }
                                 </Text>
                             </View>
                         ))
                     }
                 </View>
-                {
-                    array && array.map((element, index) => {
-                        return (
+                <View style={styles.tableRows}>
+                    {
+                        array && array.map((element, index) => (
                             <View key={index}>
                                 <View style={{
-                                    // marginHorizontal: responsiveWidth(28),
                                     backgroundColor: colors.whiteTwo,
                                     height: responsiveWidth(1),
                                     display: index === 0 ? 'none' : "flex"
@@ -99,12 +104,13 @@ const Table = ({
                                 <TableRow
                                     itemData={element}
                                     dispatchMethod={dispatchMethod}
+                                    itemWidth={itemWidth}
+                                    key={index}
                                 />
-
                             </View>
-                        )
-                    })
-                }
+                        ))
+                    }
+                </View>
             </View>
 
         </View>
@@ -124,7 +130,6 @@ const styles = StyleSheet.create({
     tableRowTitle: {
         alignItems: 'center',
         justifyContent: 'center',
-
     },
     darkText: {
         color: colors.darkBlueGray,
@@ -171,4 +176,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Table;
+export default Table

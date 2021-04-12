@@ -45,6 +45,7 @@ const Resume = () => {
         <View style={styles.notesContainer}>
             <CommonButton
                 title="+ הוספת הערה"
+                // title="somw other long"
                 onPress={
                     () => addNewNote()
                 }
@@ -53,12 +54,14 @@ const Resume = () => {
                 buttonColor={colors.darkSkyBlue}
                 style={{
                     padding: 0,
-                    paddingHorizontal: responsiveWidth(70),
+                    // paddingHorizontal: responsiveWidth(70),
                     marginVertical: responsiveWidth(22),
-                    alignSelf: 'flex-end'
+                    alignSelf: 'flex-end',
+                    // width: '100%'
                 }}
                 titleStyle={{
-                    marginRight: 0
+                    marginRight: 0,
+                    
                 }}
                 titleColor={colors.white}
                 buttonWidth={type === 2 ? '30%' : '100%'}
@@ -148,10 +151,10 @@ const NoteItem = ({
                     <DeleteModal
                         modalContainerStyle={{
                             paddingHorizontal: 0,
-                            marginVertical: '60%'
+                            // marginVertical: '40%'
                         }}
                         modalContentStyle={{
-                            paddingTop: 0
+                            // paddingTop: 0
                         }}
                     >
                         <Delete

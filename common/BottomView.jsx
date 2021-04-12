@@ -22,5 +22,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: responsiveWidth(30),
         paddingHorizontal: responsiveWidth(31),
+
+        position: 'relative',
+        zIndex: -1
     }
 })

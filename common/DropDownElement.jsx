@@ -76,19 +76,13 @@ const OptimisationTextFieldWrapper = ({
 
 const testArray = ['לביצוע', 'נבדק']
 
-const DropDownElement = ({ elementKey, elementValue, elementIndex, dispatchMethod, itemId }) => {
-
-    // const onChange = (text) => {
-    //     dispatchMethod({
-    //         type: "CHANGE_ITEM_VALUE",
-    //         itemId,
-    //         itemKey: elementKey,
-    //         itemNewValue: text
-    //     })
-    //     console.log(
-    //         "___DDElement/onchange:", text
-    //     )
-    // }
+const DropDownElement = ({ 
+    elementKey, 
+    elementValue, 
+    elementIndex, 
+    dispatchMethod, 
+    itemId 
+}) => {
 
     const interSepter = (name, text) => {
         console.log(

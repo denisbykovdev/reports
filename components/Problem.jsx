@@ -271,7 +271,7 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                             }}>
                                 <ItemTitle
                                     style={styles.titles}
-                                    title="דחיפות הבדיקה"
+                                    title="תמונות"
                                 />
                                 <FormPhotoCamera
                                     name="image"
