@@ -8,6 +8,7 @@ import fonts from "../utils/fonts";
 import layout, { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 import UserPlus from "../icons/UserPlus"
+import firstLevelTitles from "../constants/firstLevelTitles";
 
 const TableAddUser = ({ dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
@@ -91,7 +92,7 @@ const TableAddUser = ({ dispatchMethod }) => {
                                 <FormField
                                     key={index}
                                     name={key}
-                                    placeholder={value}
+                                    placeholder={firstLevelTitles[key]}
                                     autoCapitalize="none"
                                     width={fieldWidth}
                                     style={styles.inputContainer}

@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import firstLevelTitles from "../constants/firstLevelTitles";
 import useInput from "../hooks/useInput";
 import useReports from "../hooks/useReports";
+import useSearch from "../hooks/useSearch";
 import colors from "../utils/colors";
 import fonts from "../utils/fonts";
 import { responsiveWidth } from "../utils/layout";
@@ -19,6 +20,8 @@ const Table = ({
     const [array, setArray] = useState()
 
     const [inputText, onChange] = useInput()
+
+    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: array })
 
     useEffect(() => {
         if (
@@ -62,10 +65,11 @@ const Table = ({
                         {searchTitle}
                     </Text>
                 </View>
-                <TextInput
+                {/* <TextInput
                     onChangeText={onChange}
                     style={styles.searchInput}
-                />
+                /> */}
+                <RenderSearch/>
             </View>
             <View>
                 <View style={styles.tableRowTitles}>
@@ -94,7 +98,8 @@ const Table = ({
                 </View>
                 <View style={styles.tableRows}>
                     {
-                        array && array.map((element, index) => (
+                        searchArray && searchArray.length > 0 
+                        ? searchArray.map((element, index) => (
                             <View key={index}>
                                 <View style={{
                                     backgroundColor: colors.whiteTwo,
@@ -108,7 +113,22 @@ const Table = ({
                                     key={index}
                                 />
                             </View>
-                        ))
+                            ))
+                        : array && array.map((element, index) => (
+                            <View key={index}>
+                                <View style={{
+                                    backgroundColor: colors.whiteTwo,
+                                    height: responsiveWidth(1),
+                                    display: index === 0 ? 'none' : "flex"
+                                }}></View>
+                                <TableRow
+                                    itemData={element}
+                                    dispatchMethod={dispatchMethod}
+                                    itemWidth={itemWidth}
+                                    key={index}
+                                />
+                            </View>
+                            ))
                     }
                 </View>
             </View>
@@ -139,7 +159,8 @@ const styles = StyleSheet.create({
         marginTop: responsiveWidth(18)
     },
     searchContainer: {
-        // marginHorizontal: responsiveWidth(28),
+        // width: responsiveWidth(239),
+        // alignSelf: 'flex-end'
     },
     searchHeader: {
         flexDirection: 'row',
@@ -162,17 +183,17 @@ const styles = StyleSheet.create({
         height: responsiveWidth(1)
     },
     searchInput: {
-        borderColor: colors.darkWhite,
-        borderWidth: responsiveWidth(2),
-        borderRadius: 20,
-        height: responsiveWidth(31),
+        // borderColor: colors.darkWhite,
+        // borderWidth: responsiveWidth(2),
+        // borderRadius: 20,
+        // height: responsiveWidth(31),
         width: responsiveWidth(239),
-        paddingHorizontal: responsiveWidth(10),
+        // paddingHorizontal: responsiveWidth(10),
 
-        fontSize: fonts.xsmall,
-        fontWeight: weights.thin,
-        color: colors.darkBlueGray,
-        alignSelf: 'flex-end'
+        // fontSize: fonts.xsmall,
+        // fontWeight: weights.thin,
+        // color: colors.darkBlueGray,
+        // alignSelf: 'flex-end'
     }
 })
 

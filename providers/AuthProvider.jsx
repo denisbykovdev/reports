@@ -24,7 +24,8 @@ export default function AuthProvider({ children }) {
 
             try {
                 const response = await axios.post(
-                    "http://160.153.254.153/api/login",
+                    // "http://160.153.254.153/api/login",
+                    `http://eitanperetz.com/api/auth`,
                     {
                         "email": email,
                         "password": password

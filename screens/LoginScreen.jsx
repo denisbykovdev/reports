@@ -45,7 +45,7 @@ export default function LoginScreen({ navigation }) {
   // }, [secureToken])
 
   // useEffect(() => {
-  //   authState.token === null
+  //   authState.token !== null
   //     &&
   //     navigation.navigate(
   //       "AppStack",
