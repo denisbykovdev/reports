@@ -21,7 +21,7 @@ export default function useReports() {
     useEffect(() => 
         reportsDispatch({
             type: "FETCH_REPORTS",
-            payload: token
+            token
         })
     , [])
 

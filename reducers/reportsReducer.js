@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-effects';
+import { deleteReport, reportsAll } from '../constants/api';
 
 export const reportsInitial = {
     reports: null,
@@ -48,77 +49,138 @@ export const reportsReducer = (
                 error: action.error
             });
 
-        case "FETCH_REPORTS":
-            return Update({
-                ...state,
-                reports: reportsData
-            })
-
         // case "FETCH_REPORTS":
-        //     return UpdateWithSideEffect(
-        //         {
-        //             ...state,
-        //             fetching: true,
-        //             token: action.payload
-        //         },
-        //         async (state, dispatch) => {
-        //             console.log(
-        //                 "***ReportsReducer/FETCH_REPORTS/async/token", typeof action.payload
-        //             );
-        //             try {
-        //                 const response = await axios.get(
-        //                     "http://160.153.254.153/api/project/all",
+        //     return Update({
+        //         ...state,
+        //         reports: reportsData
+        //     });
 
-        //                     {
-        //                         headers: {
-        //                             'Authorization': `Bearer ${action.payload}`
-        //                         }
-        //                     }
+        case "FETCH_REPORTS":
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    fetching: true,
+                    token: action.token
+                },
+                async (state, dispatch) => {
+                    console.log(
+                        "***ReportsReducer/FETCH_REPORTS/async/token", typeof action.payload
+                    );
+                    try {
+                        const response = await axios.get(
+                            `${reportsAll}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
 
-        //                 );
+                        );
 
-        //                 dispatch({
-        //                     type: "GET_REPORTS",
-        //                     reports: response.data.data.length > 0 ? response.data.data : userData,
-        //                 })
+                        dispatch({
+                            type: "GET_REPORTS",
+                            reports: response.data.data,
+                        })
 
-        //                 console.log("***reportsReducer/GET_REPORTS:", response.data.data, state);
+                        console.log("***reportsReducer/GET_REPORTS:", response.data.data);
 
-        //             } catch (error) {
+                    } catch (error) {
 
-        //                 dispatch({
-        //                     type: "ERROR_REPORTS",
-        //                     error
-        //                 });
+                        dispatch({
+                            type: "ERROR_REPORTS",
+                            error
+                        });
 
-        //                 console.log("***reportsReducer/ERROR_REPORTS:", error, state);
-        //             }
-        //         }
-        //     );
+                        console.log("***reportsReducer/ERROR_REPORTS:", error);
+                    }
+                }
+            );
 
         case "DELETE_ITEM":
-            console.log(
-                ":::reportsReducer:", action.itemId
+            // console.log(
+            //     ":::reportsReducer:", action.itemId
+            // );
+            // return Update({
+            //     ...state,
+            //     reports: state.reports.filter(report => report.id !== action.itemId)
+            // });
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    token: action.token,
+                    fetching: true
+                },
+                async(state, dispatch) => {
+                    try{
+                        const response = await axios.post(
+                            `${deleteReport(action.itemId)}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+                        )
+
+                        dispatch({
+                            type: "GET_REPORTS",
+                            reports: response.data.data,
+                        })
+                    }catch(error){
+                        dispatch({
+                            type: "ERROR_REPORTS",
+                            error
+                        })
+                    }
+                }
             );
-            return Update({
-                ...state,
-                reports: state.reports.filter(report => report.id !== action.itemId)
-            });
 
         case "CHANGE_ITEM_VALUE":
-            console.log(
-                ":::reportsReducer:", action.itemId, action.itemKey, action.itemNewValue
+            // console.log(
+            //     ":::reportsReducer:", action.itemId, action.itemKey, action.itemNewValue
+            // );
+            // return Update({
+            //     ...state,
+            //     reports: state.reports.map(report =>
+            //         report.id === action.itemId ?
+            //             {
+            //                 ...report,
+            //                 [action.itemKey]: action.itemNewValue
+            //             } :
+            //             report
+            //     )
+            // });
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    token: action.token,
+                    fetching: true
+                },
+                async(state, dispatch) => {
+                    try{
+                        const response = await axios.post(
+                            `${updateReport(action.itemId)}`,
+                            {
+                                key: action.itemKey,
+                                value: action.itemNewValue
+                            },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+                        )
+
+                        dispatch({
+                            type: "UPDATE_USERS",
+                            users: response.data.data,
+                        })
+                    }catch(error){
+                        dispatch({
+                            type: "ERROR_USERS",
+                            error
+                        })
+                    }
+                }
             );
-            return Update({
-                ...state,
-                reports: state.reports.map(report =>
-                    report.id === action.itemId ?
-                        {
-                            ...report,
-                            [action.itemKey]: action.itemNewValue
-                        } :
-                        report
-                )
-            });
     }
 }

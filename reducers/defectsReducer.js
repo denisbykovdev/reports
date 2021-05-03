@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-effects';
+import { createReport, updateReport } from '../constants/api';
 
 const staticSavedAreas = [
     {
@@ -56,10 +57,8 @@ export const defectsInitial = {
     areas: [],
     savedAreas: null,
     error: null,
-
     notes: [],
     saveNotes: [],
-
     activeReport: null
 }
 
@@ -136,7 +135,7 @@ export const defectsReducer = (
                                 }
                                 : problem
                         )
-        
+
                 } : area)
             });
 
@@ -226,7 +225,7 @@ export const defectsReducer = (
                 ...state,
                 token: action.token,
                 savedAreas: staticSavedAreas
-            })
+            });
 
         case "ADD_SAVED_AREAS":
             console.log(
@@ -265,7 +264,7 @@ export const defectsReducer = (
                 ...state,
                 posting: false,
                 savedAreas: action.updatedSavedAreas
-            })
+            });
 
         case "POST_SAVED_AREA_TO_DELETE":
             return UpdateWithSideEffect(
@@ -278,18 +277,15 @@ export const defectsReducer = (
                     try {
                         const response = await axios.post(
                             `http://160.153.254.153/api/area/store/${action.areaName}`,
-
+                            {
+                                area_name: action.areaName
+                            },
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 }
-                            },
-                            {
-                                area_name: action.areaName
                             }
-
                         );
-
                         dispatch({
                             type: "UPDATE_SAVED_AREAS",
                             savedAreas: response.data.data
@@ -316,13 +312,13 @@ export const defectsReducer = (
                             `http://160.153.254.153/api/area/store/${action.areaName}`,
 
                             {
+                                area_name: action.areaName,
+                                problems: action.areaProblems
+                            },
+                            {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 }
-                            },
-                            {
-                                area_name: action.areaName,
-                                problems: action.areaProblems
                             }
                         );
 
@@ -362,7 +358,7 @@ export const defectsReducer = (
                         })
                     ]
                 } : area)
-            })
+            });
 
         case "ADD_STANDARTS_TO_PROBLEM":
             return Update({
@@ -388,7 +384,7 @@ export const defectsReducer = (
                         }
                         : area
                 )
-            })
+            });
 
         case "ADD_NEW_NOTE":
             return Update({
@@ -401,13 +397,13 @@ export const defectsReducer = (
                         isSavedToReport: false
                     }
                 ]
-            })
+            });
 
         case "DELETE_NOTE":
             return Update({
                 ...state,
                 notes: state.notes.filter(note => note.id !== action.noteId)
-            })
+            });
 
         case "CHANGE_NOTE_VALUE":
             return Update({
@@ -433,7 +429,7 @@ export const defectsReducer = (
                         }
                         : note
                 )
-            })
+            });
 
         case "REMOVE_NOTE_FROM_REPORT":
             return Update({
@@ -446,7 +442,7 @@ export const defectsReducer = (
                         }
                         : note
                 )
-            })
+            });
 
         case "POST_REPORT":
             // console.log(
@@ -461,21 +457,20 @@ export const defectsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
-                            `http://160.153.254.153/api/project/store`,
-
+                            `${createReport}`,
+                            {
+                                ...action.data,
+                                areas: state.areas,
+                                notes: state.notes.map(
+                                    note => note.isSavedToReport === true
+                                        && note
+                                )
+                            },
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
-                                },
-                                data: {
-                                    ...action.data,
-                                    areas: state.areas,
-                                    notes: state.notes.map(
-                                        note => note.isSavedToReport === true
-                                            && note
-                                    )
                                 }
-                            },
+                            }
                         );
 
                         dispatch({
@@ -489,7 +484,7 @@ export const defectsReducer = (
                         })
                     }
                 }
-            )
+            );
 
         case "REPOST_REPORT":
             return UpdateWithSideEffect({
@@ -500,19 +495,18 @@ export const defectsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
-                            `http://160.153.254.153/api/project/store${action.projectId}`,
-
+                            `${updateReport(action.projectId)}`,
+                            {
+                                ...action.data,
+                                areas: state.areas,
+                                notes: state.notes.map(
+                                    note => note.isSavedToReport === true
+                                        && note
+                                )
+                            },
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
-                                },
-                                data: {
-                                    ...action.data,
-                                    areas: state.areas,
-                                    notes: state.notes.map(
-                                        note => note.isSavedToReport === true
-                                            && note
-                                    )
                                 }
                             },
                         );
@@ -527,20 +521,20 @@ export const defectsReducer = (
                         })
                     }
                 }
-            )
+            );
 
         case "UPDATE_REPORT":
             return Update({
                 ...state,
                 posting: false,
                 activeReport: action.activeReport
-            })
+            });
 
         case "ERROR_POST_REPORT":
             return Update({
                 ...state,
                 posting: false,
                 error: action.error
-            })
+            });
     }
 }

@@ -3,6 +3,7 @@ import { authInitial, authReducer } from "../reducers/authReducer";
 import * as SecureStore from 'expo-secure-store';
 import { createContext } from "react";
 import axios from "axios";
+import { auth } from "../constants/api";
 
 export const AuthContext = createContext();
 
@@ -24,8 +25,7 @@ export default function AuthProvider({ children }) {
 
             try {
                 const response = await axios.post(
-                    // "http://160.153.254.153/api/login",
-                    `http://eitanperetz.com/api/auth`,
+                    `${auth}`,
                     {
                         "email": email,
                         "password": password

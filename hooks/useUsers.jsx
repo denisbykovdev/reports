@@ -17,7 +17,7 @@ export default function useUsers(
     useEffect(() => {
         usersDispatch({
             type: "FETCH_USERS",
-            payload: token
+            token
         })
     }, [])
 

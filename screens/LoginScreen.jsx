@@ -26,52 +26,52 @@ export default function LoginScreen({ navigation }) {
   const secureAdmin = useSecureAdmin()
   const secureToken = useSecureToken()
 
-  // useEffect(() => {
-  //   console.log(
-  //     "---autoLogin", secureToken, secureAdmin
-  //   )
-  //   if(secureToken && secureToken !== null) {
-  //     authDispatch({
-  //       type: "LOAD_TOKEN"
-  //     })
-  //     authDispatch({
-  //       type: "SET_TOKEN",
-  //       token: JSON.parse(secureToken),
-  //       isAdmin: secureAdmin
-  //     });
+  useEffect(() => {
+    console.log(
+      "---autoLogin", secureToken, secureAdmin
+    )
+    if(secureToken && secureToken !== null) {
+      authDispatch({
+        type: "LOAD_TOKEN"
+      })
+      authDispatch({
+        type: "SET_TOKEN",
+        token: JSON.parse(secureToken),
+        isAdmin: secureAdmin
+      });
 
-  //   }
+    }
       
-  // }, [secureToken])
-
-  // useEffect(() => {
-  //   authState.token !== null
-  //     &&
-  //     navigation.navigate(
-  //       "AppStack",
-  //       {
-  //         screen: "Reports",
-  //         params: {
-  //           isAdmin: authState.isAdmin
-  //           // isAdmin: true
-  //         }
-  //       }
-  //     )
-  // }, [authState.token])
+  }, [secureToken])
 
   useEffect(() => {
- 
-       navigation.navigate(
+    authState.token !== null
+      &&
+      navigation.navigate(
         "AppStack",
         {
           screen: "Reports",
           params: {
-            // isAdmin: authState.isAdmin
-            isAdmin: true
+            isAdmin: authState.isAdmin
+            // isAdmin: true
           }
         }
       )
-  }, [])
+  }, [authState.token])
+
+  // useEffect(() => {
+ 
+  //      navigation.navigate(
+  //       "AppStack",
+  //       {
+  //         screen: "Reports",
+  //         params: {
+  //           // isAdmin: authState.isAdmin
+  //           isAdmin: true
+  //         }
+  //       }
+  //     )
+  // }, [])
 
   async function handleOnLogin(values, { resetForm }) {
     const { email, password } = values;

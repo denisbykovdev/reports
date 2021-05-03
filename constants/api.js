@@ -1,28 +1,235 @@
-export const domain = `eitanperetz.com`
-export const api = `eitanperetz.com/api/`
+import { setNestedObjectValues } from "formik"
 
-export const auth = `eitanperetz.com/api/auth`
+export const domain = `http://eitanperetz.com`
+export const api = `${domain}/api`
 
-//users endpoints
-//users store
-export const usersStore = `${api}users/store/`
-//update user info node : POST
-export const updateUser  = (userId) => `${usersStore}${userId}`
+//auth : POST
+export const auth = `${api}/auth/login`
+// request:
+// {
+//     "email": string,
+//     "password": string
+// }
+// {
+//     "Accept": "application/json",
+//     "Content-Type": "application/json"
+// }
+
+// default admin object {
+//     email: 'admin',
+//     password: 'abc123'
+// }
+
+// response: two objectcs:
+// {
+//     token: string
+// },
+// {
+//     is_admin: boolean
+// }
+
+// users endpoints
+// users store
+export const usersStore = `${api}/users/store`
+
+// get all users : GET
+export const usersAll = `${api}/users/all`
+// request:
+// {
+//   headers: {
+//     'Authorization': `Bearer ${token}`
+//   }
+// }
+// response: array of objects called data
+// data: [
+//     {
+//         id: number,
+//         name: string,
+//         last_name: string,
+//         phone: string,
+//         email: string,
+//         password: string
+//     }
+// ]
+
+//update user object's key : POST
+export const updateUser = (userId) => `${usersStore}/${userId}`
+// request:
+// {
+//     key: string
+//     value: string
+// },
+// {
+//   headers: {
+//     'Authorization': `Bearer ${token}`
+//   }
+// }
+// response: array of objects called data
+// data: [
+//     {
+//         id: number,
+//         name: string,
+//         last_name: string,
+//         phone: string,
+//         email: string,
+//         password: string
+//     }
+// ]
+
 //delete user: POST
-export const deleteUser = (userId) => `${usersStore}${userId}/delete`
-//get all users
-export const usersAll = `${api}users/all`
+export const deleteUser = (userId) => `${usersStore}/${userId}/delete`
+// request:
+// {
+//   headers: {
+//     'Authorization': `Bearer ${token}`
+//   }
+// }
+// response: array of objects called data
+// data: [
+//     {
+//         id: number,
+//         name: string,
+//         last_name: string,
+//         phone: string,
+//         email: string,
+//         password: string
+//     }
+// ]
+
+// add new user : POST
+export const addNewUser = usersStore
+// request:
+// {
+//     new_user: action.user
+// },
+// {
+//     headers: {
+//         'Authorization': `Bearer ${action.payload}`
+//     }
+// }
+// response: array of objects called data
+// data: [
+//     {
+//         id: number,
+//         name: string,
+//         last_name: string,
+//         phone: string,
+//         email: string,
+//         password: string
+//     }
+// ]
 
 //reports endpoints
 //store
-export const reportsStore = `eitanperetz.com/api/reports/store/`
+export const reportsStore = `${api}/reports/store/`
+
 //use cases:
-//create report: POST
-export const createReport = reportsStore
+//get all reports: GET
+export const reportsAll = `${api}/reports/all/`
+// request:
+// {
+//   headers: {
+//     'Authorization': `Bearer ${token}`
+//   }
+// }
+// response: array of objects called data
+// data: [
+//     {
+//         id: string,
+//         status: string,
+//         customerNumber: string,
+//         client: string,
+//         address: string,
+//         date: string,
+//         editorsName: string
+//     }
+// ]
+
+//delete report: POST
+export const deleteReport = (reportId) => `${reportsStore}/${reportId}/delete`
+// request:
+// {
+//   headers: {
+//     'Authorization': `Bearer ${token}`
+//   }
+// }
+// response: array of objects called data
+// data: [
+//     {
+//         id: string,
+//         status: string,
+//         customerNumber: string,
+//         client: string,
+//         address: string,
+//         date: string,
+//         editorsName: string
+//     }
+// ]
+
 //update report: POST
 export const updateReport = (reportId) => `${reportsStore}${reportId}`
-//get all reports: GET
-export const getAllReports = `eitanperetz.com/api/reports/all/`
+// request:
+// {
+//     key: string
+//     value: string
+// }
+// or it could be the all report object:
+// {
+//      key: value,
+//      ...,
+//      areas: Array of objects,
+//      notes: Array of objects,
+// },
+
+// {
+//   headers: {
+//     'Authorization': `Bearer ${token}`
+//   }
+// }
+
+// if the object includes one key:
+// response: array of objects called data
+// data: [
+//     {
+//         id: string,
+//         status: string,
+//         customerNumber: string,
+//         client: string,
+//         address: string,
+//         date: string,
+//         editorsName: string
+//     }
+// ]
+
+// if the object includes the all report in response we need to get the same report object but updated on the server side yet
+
+//create report: POST
+export const createReport = reportsStore
+// request:
+// {
+//      key: value,
+//      ...,
+//      areas: Array of objects,
+//      notes: Array of objects,
+// },
+// {
+//   headers: {
+//     'Authorization': `Bearer ${token}`
+//   }
+// }
+// response: array of objects called data
+// data: [
+//     {
+//         id: string,
+//         status: string,
+//         customerNumber: string,
+//         client: string,
+//         address: string,
+//         date: string,
+//         editorsName: string
+//     }
+// ]
+
 
 //areas endpoints
 //store
@@ -75,9 +282,9 @@ export const createNote = notesStore
 export const deleteNote = (noteText) => `${notesStore}${noteText}/delete`
 
 //print modal endpoints
-export const withProfRegion = `withProfRegion`
-export const withProf = `withProf`
-export const withExpenses = `withExpenses`
-export const withFree = `withFree`
-export const withPdf = `withPdf`
-export const withWord = `withWord`
+export const withProfRegion = `withProfRegion/`
+export const withProf = `withProf/`
+export const withExpenses = `withExpenses/`
+export const withFree = `withFree/`
+export const withPdf = `withPdf/`
+export const withWord = `withWord/`
