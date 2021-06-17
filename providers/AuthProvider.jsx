@@ -36,19 +36,27 @@ export default function AuthProvider({ children }) {
                     }
                 )
 
+                console.log(
+                    `--- authProvider/res:`, response
+                )
+
                 authDispatch({
                     type: "SET_TOKEN",
-                    token: response.data.token.token,
-                    isAdmin: response.data.user.is_admin
+                    // token: response.data[0].token,
+                    // isAdmin: response.data[1].is_admin
+                    token: response.data.token,
+                    isAdmin: response.data.role === `admin` ? true : false
                 })
 
                 await SecureStore.setItemAsync(
                     "userToken",
-                    JSON.stringify(response.data.token.token)
+                    // JSON.stringify(response.data[0].token)
+                       JSON.stringify(response.data.token)
                 )
                 await SecureStore.setItemAsync(
                     "userIsAdmin",
-                    JSON.stringify(response.data.user.is_admin)
+                    // JSON.stringify(response.data[1].is_admin)
+                       JSON.stringify(response.data.role)
                 )
 
             } catch (error) {

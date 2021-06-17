@@ -74,7 +74,8 @@ const ResumeDropDown = () => {
                             area={true}
                             style={{
                                 minHeight: responsiveHeight(69),
-                                textAlign: 'right'
+                                textAlign: 'right',
+                                marginVertical: responsiveHeight(20)
                             }}
                             inputStyle={{
                                 marginEnd: 0

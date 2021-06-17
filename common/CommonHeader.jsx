@@ -58,13 +58,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-end"
   },
   modalHeaderClose: {
-    height: responsiveWidth(22),
-    width: responsiveWidth(22),
+    height: responsiveWidth(32),
+    width: responsiveWidth(32),
     // backgroundColor: 'yellow',
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-start',
-    alignSelf: "flex-start"
+    alignItems: 'center',
+    justifyContent: 'center',
+    // alignSelf: "center"
   },
   modalHeaderTitle: {
     color: colors.darkBlueGray,

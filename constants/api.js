@@ -1,10 +1,12 @@
-import { setNestedObjectValues } from "formik"
-
 export const domain = `http://eitanperetz.com`
+// export const domain = `https://immense-beyond-42663.herokuapp.com`
+
 export const api = `${domain}/api`
 
 //auth : POST
+// export const auth = `${api}/auth/register`
 export const auth = `${api}/auth/login`
+
 // request:
 // {
 //     "email": string,
@@ -15,25 +17,26 @@ export const auth = `${api}/auth/login`
 //     "Content-Type": "application/json"
 // }
 
-// default admin object {
+// example default admin object {
 //     email: 'admin',
 //     password: 'abc123'
 // }
 
-// response: two objectcs:
+// response: [
 // {
 //     token: string
 // },
 // {
 //     is_admin: boolean
 // }
+// ]
 
 // users endpoints
 // users store
 export const usersStore = `${api}/users/store`
 
 // get all users : GET
-export const usersAll = `${api}/users/all`
+export const usersAll = `${usersStore}/all`
 // request:
 // {
 //   headers: {
@@ -53,7 +56,7 @@ export const usersAll = `${api}/users/all`
 // ]
 
 //update user object's key : POST
-export const updateUser = (userId) => `${usersStore}/${userId}`
+export const updateUser = (userId) => `${usersStore}/${userId}/update`
 // request:
 // {
 //     key: string
@@ -121,11 +124,11 @@ export const addNewUser = usersStore
 
 //reports endpoints
 //store
-export const reportsStore = `${api}/reports/store/`
+export const reportsStore = `${api}/reports/store`
 
 //use cases:
 //get all reports: GET
-export const reportsAll = `${api}/reports/all/`
+export const reportsAll = `${reportsStore}/all`
 // request:
 // {
 //   headers: {
@@ -167,7 +170,7 @@ export const deleteReport = (reportId) => `${reportsStore}/${reportId}/delete`
 // ]
 
 //update report: POST
-export const updateReport = (reportId) => `${reportsStore}${reportId}`
+export const updateReport = (reportId) => `${reportsStore}/${reportId}/update`
 // request:
 // {
 //     key: string
@@ -233,16 +236,167 @@ export const createReport = reportsStore
 
 //areas endpoints
 //store
-export const areasStore = `eitanperetz.com/api/areas/store/`
+export const areasStore = `${api}/areas/store`
 //use cases:
+
+//get all areas: GET
+export const areasAll = `${api}/areas/all`
+// request:
+// {
+//   headers: {
+//     'Authorization': `Bearer ${token}`
+//   }
+// }
+// response: array of objects called data
+// data: [
+//      {
+//     name: 'testArea1',
+//     id: 1,
+//     problems: [
+//         {
+//             name: 'testProblem1',
+//             id: 1,
+//             profession_name: 'testProfession1',
+//             details_of_eclipse: 'testDetails1',
+//             cost: '1',
+//             image: 'test',
+//             solution: 'testSolution1'
+//         },
+//         {
+//             name: 'testProblem2',
+//             id: 2,
+//             profession_name: 'testProfession2',
+//             details_of_eclipse: 'testDetails2',
+//             cost: '2',
+//             image: 'test',
+//             solution: 'testSolution2'
+//         }
+//     ]
+// },
+// ...
+// ]
+
+//delete area : POST
+export const deleteArea = (areaName) => `${areasStore}/${areaName}/delete`
+// request:
+// {
+//     area_name: string
+// },
+// {
+//     headers: {
+//         'Authorization': `Bearer ${action.token}`
+//     }
+// }
+// response: array of objects called data
+// data: [
+//      {
+//     name: 'testArea1',
+//     id: 1,
+//     problems: [
+//         {
+//             name: 'testProblem1',
+//             id: 1,
+//             profession_name: 'testProfession1',
+//             details_of_eclipse: 'testDetails1',
+//             cost: '1',
+//             image: 'test',
+//             solution: 'testSolution1'
+//         },
+//         {
+//             name: 'testProblem2',
+//             id: 2,
+//             profession_name: 'testProfession2',
+//             details_of_eclipse: 'testDetails2',
+//             cost: '2',
+//             image: 'test',
+//             solution: 'testSolution2'
+//         }
+//     ]
+// },
+// ...
+// ]
+
+//update area(add problems): POST
+export const updateAreaProblems = (areaName) => `${areasStore}/${areaName}/problems`
+// request:
+// {
+//     area_name: string,
+//     problems: array
+// },
+// {
+//     headers: {
+//         'Authorization': `Bearer ${action.token}`
+//     }
+// }
+// response: array of objects called data
+// data: [
+//      {
+//     name: 'testArea1',
+//     id: 1,
+//     problems: [
+//         {
+//             name: 'testProblem1',
+//             id: 1,
+//             profession_name: 'testProfession1',
+//             details_of_eclipse: 'testDetails1',
+//             cost: '1',
+//             image: 'test',
+//             solution: 'testSolution1'
+//         },
+//         {
+//             name: 'testProblem2',
+//             id: 2,
+//             profession_name: 'testProfession2',
+//             details_of_eclipse: 'testDetails2',
+//             cost: '2',
+//             image: 'test',
+//             solution: 'testSolution2'
+//         }
+//     ]
+// },
+// ...
+// ]
+
 //create area: POST
 export const createArea = areasStore
-//update area(add problems): POST
-export const updateArea = (areaId) => `${areasStore}${areaId}/problems/`
-//delete area : POST
-export const deleteArea = (areaId) => `${areasStore}${areaId}/delete`
-//get all areas: GET
-export const getAllAreas = `eitanperetz.com/api/areas/all/`
+// request:
+// {
+//     area_name: string,
+//     problems: array
+// },
+// {
+//     headers: {
+//         'Authorization': `Bearer ${action.token}`
+//     }
+// }
+// response: array of objects called data
+// data: [
+//      {
+//     name: 'testArea1',
+//     id: 1,
+//     problems: [
+//         {
+//             name: 'testProblem1',
+//             id: 1,
+//             profession_name: 'testProfession1',
+//             details_of_eclipse: 'testDetails1',
+//             cost: '1',
+//             image: 'test',
+//             solution: 'testSolution1'
+//         },
+//         {
+//             name: 'testProblem2',
+//             id: 2,
+//             profession_name: 'testProfession2',
+//             details_of_eclipse: 'testDetails2',
+//             cost: '2',
+//             image: 'test',
+//             solution: 'testSolution2'
+//         }
+//     ]
+// },
+// ...
+// ]
 
 //problems endpoints
 //store
