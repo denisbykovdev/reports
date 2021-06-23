@@ -5,6 +5,7 @@ import colors from "../utils/colors"
 import layout, { responsiveHeight, responsiveWidth } from "../utils/layout"
 import { MaterialIcons } from "@expo/vector-icons"
 import useType from "../hooks/useType"
+import InvertibleScrollView from 'react-native-invertible-scroll-view'
 
 const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
     const [active, setActive] = useState(init)
@@ -17,21 +18,24 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
     //     setActive(desc)
     // }, [])
 
-    const {type} = useType()
+    const { type } = useType()
 
     const MenuRender = useCallback(() => {
         return (
             <View style={styles.menu}>
 
-                <ScrollView
+                {/* <ScrollView */}
+                <InvertibleScrollView
+                    inverted
                     style={styles.menuInner}
                     contentContainerStyle={[
                         styles.scrollViewContainerStyle,
                         {
-                            width: type === 2 ? '100%' : 
-                            'auto',
+                            width: type === 2 ? '100%' :
+                                'auto',
                             padding: 0,
-                            margin: 0
+                            margin: 0,
+                            flexDirection: 'row-reverse'
                         }
                     ]}
                     horizontal
@@ -51,11 +55,11 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                                 style={[
                                     styles.scrollViewItemContainer,
                                     {
-                                        width: 
-                                        type === 1 
-                                        ? layout.width - responsiveWidth(63)
-                                        : 
-                                        layout.width / 4,
+                                        width:
+                                            type === 1
+                                                ? layout.width - responsiveWidth(63)
+                                                :
+                                                layout.width / 4,
                                         alignSelf: 'center'
                                     }
                                 ]}
@@ -91,9 +95,9 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                                     }
                                     borderRadius={25}
                                     buttonWidth={
-                                        type !== 2 
-                                        ? ((layout.width - responsiveWidth(63)) / 2) 
-                                        : ((layout.width - responsiveWidth(63)) / 8)
+                                        type !== 2
+                                            ? ((layout.width - responsiveWidth(63)) / 2)
+                                            : ((layout.width - responsiveWidth(63)) / 8)
                                     }
                                     // buttonWidth={responsiveWidth(121)}
                                     // buttonWidth={'50%'}
@@ -117,7 +121,8 @@ const useMenu = (array, init, scrollCatcher, layoutCatcher) => {
                             </View>
                         ))
                     }
-                </ScrollView>
+                    {/* </ScrollView> */}
+                </InvertibleScrollView>
 
                 {/* <View style={[styles.activeLineContainer, {
                     justifyContent: active === init ? "flex-start" : "flex-end"
@@ -135,15 +140,15 @@ const styles = StyleSheet.create({
     menu: {
         borderTopColor: colors.whiteTwo,
         borderTopWidth: responsiveWidth(1),
-
-        width: layout.width - responsiveWidth(63)
+        width: layout.width - responsiveWidth(63),
+        flexDirection: 'row-reverse',
     },
     menuInner: {
         borderBottomColor: colors.whiteTwo,
         borderBottomWidth: responsiveWidth(3),
         // width: responsiveWidth(400),
 
-        // flexDirection: 'row',
+        // flexDirection: 'row-reverse',
         paddingVertical: responsiveWidth(8),
         // paddingHorizontal: responsiveWidth(30)
     },

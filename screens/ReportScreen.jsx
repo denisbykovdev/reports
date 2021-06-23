@@ -53,22 +53,41 @@ const ReportScreen = ({ route }) => {
 
     const [isAdressOpen, setIsAdressOpen] = useState(false)
 
+    // const menuTitles = [
+    //     {
+    //         label: "פרטי הבדיקה",
+    //         desc: "details"
+    //     },
+    //     {
+    //         label: "ליקוים",
+    //         desc: "defects"
+    //     },
+    //     {
+    //         label: "סיכום",
+    //         desc: "resume"
+    //     },
+    //     {
+    //         label: "יומן עדכונים",
+    //         desc: "archive"
+    //     }
+    // ]
+
     const menuTitles = [
         {
-            label: "פרטי הבדיקה",
-            desc: "details"
-        },
-        {
-            label: "ליקוים",
-            desc: "defects"
+            label: "יומן עדכונים",
+            desc: "archive"
         },
         {
             label: "סיכום",
             desc: "resume"
         },
         {
-            label: "יומן עדכונים",
-            desc: "archive"
+            label: "ליקוים",
+            desc: "defects"
+        },
+        {
+            label: "פרטי הבדיקה",
+            desc: "details"
         }
     ]
 
