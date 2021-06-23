@@ -1,6 +1,5 @@
 import React from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { useEffect } from "react/cjs/react.development"
 import Tick from "../icons/Tick"
 import colors from "../utils/colors"
 import fonts from "../utils/fonts"
@@ -8,6 +7,8 @@ import { responsiveWidth } from "../utils/layout"
 import weights from "../utils/weights"
 import { useFormikContext } from "formik"
 import useChecked from "../hooks/useChecked"
+import { useState } from "react"
+import { useEffect } from "react"
 
 const FormRadioSelect = ({ name, array }) => {
 
@@ -19,18 +20,25 @@ const FormRadioSelect = ({ name, array }) => {
         touched,
     } = useFormikContext();
 
-    const {isChecked, setChecked} = useChecked()
+    const { isChecked, setChecked } = useChecked()
 
-    // useEffect(() => {
-    //     setFieldValue(name, array[0])
-    // }, [])
+    const [selected, setSelected] = useState([])
 
-//maybe with callback within array in deps
     const radioSelectHandler = (radioValue) => {
         setFieldTouched(name)
-        setFieldValue(name, radioValue)
+
+        if (selected.includes(radioValue)) {
+            setSelected(selected => [...selected.filter(item => item.toString() !== radioValue.toString())])
+        } else {
+            setSelected(selected => [...selected, radioValue])
+        }
+
         isChecked && setChecked(false)
     }
+
+    useEffect(() => {
+        setFieldValue(name, selected)
+    }, [selected])
 
     return (
         <View>
@@ -54,7 +62,8 @@ const FormRadioSelect = ({ name, array }) => {
                                 }]}
                             >
                                 {
-                                    values[name] === element && <Tick />
+                                    // values[name] === element && <Tick />
+                                    selected.includes(element) && <Tick />
                                 }
                             </TouchableOpacity>
                         </View>
@@ -86,7 +95,6 @@ const styles = StyleSheet.create({
         fontSize: fonts.small,
         fontWeight: weights.regular
     }
-
 })
 
 export default FormRadioSelect;

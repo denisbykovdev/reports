@@ -5,15 +5,15 @@ export const TypeContext = createContext()
 
 export default function TypeProvider({
     children
-}){
+}) {
     const [type, setType] = useState(1)
 
     useEffect(() => {
-        (async function(){
-          const deviceType = await getDeviceTypeAsync()
-          setType(deviceType)
+        (async function () {
+            const deviceType = await getDeviceTypeAsync()
+            setType(deviceType)
         })()
-      }, [])
+    }, [])
 
     return <TypeContext.Provider value={{
         type
