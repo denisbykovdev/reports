@@ -76,9 +76,9 @@ export default function SavedProblemItem({
                     style={styles.problemImageContainer}
                 >
                     {
-                        problem.image.length > 1
+                        problem.image.length > 0 && problem.image[0].length > 1
                             ? <Image
-                                source={{ uri: problem.image }}
+                                source={{ uri: problem.image[0] }}
                                 style={{
                                     height: "100%",
                                     width: "100%"

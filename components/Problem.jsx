@@ -49,8 +49,7 @@ export default function Problem({ problem, areaId, defectsDispatch, flagged = fa
         console.log(
             "___Problem:",
             { ...values, standarts: [...problem.standarts] },
-            values,
-            problem
+            // values
         )
 
         await problemsDispatch({

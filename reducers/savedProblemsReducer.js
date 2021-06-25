@@ -13,9 +13,15 @@ const problemsStatic = [
         profession_name: 'firstProfession1',
         details_of_eclipse: 'firstDetails1',
         cost: '1',
-        image: 'https://reactnative.dev/img/tiny_logo.png',
+        // image: 'https://reactnative.dev/img/tiny_logo.png',
+        image: [
+            'https://reactnative.dev/img/tiny_logo.png',
+
+            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+        ],
         solution: 'firstSolution1',
-        timeStamp: 'Jul 14, 2020 5:34:02 PM'
+        timeStamp: 'Jul 14, 2020 5:34:02 PM',
+        standarts: []
     },
     {
         id: 2,
@@ -23,9 +29,10 @@ const problemsStatic = [
         profession_name: 'secondProfession1',
         details_of_eclipse: 'secondDetails1',
         cost: '1',
-        image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+        image: [],
         solution: 'secondSolution1',
-        timeStamp: 'Jul 14, 2020 5:34:02 PM'
+        timeStamp: 'Jul 14, 2020 5:34:02 PM',
+        standarts: []
     }
 ]
 

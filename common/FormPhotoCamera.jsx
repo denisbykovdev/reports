@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList } from 'react-native';
 import { Camera } from 'expo-camera';
 import AddImage from "../icons/AddImage"
 import { useFormikContext } from 'formik';
@@ -13,9 +13,13 @@ import Signature from 'react-native-signature-canvas';
 import useChecked from '../hooks/useChecked';
 import useType from '../hooks/useType';
 
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+
 export default function FormPhotoCamera({ name, interSepter }) {
   const cameraRef = useRef(null);
   const canvasRef = useRef(null);
+
+  const carouselRef = useRef();
 
   const { type } = useType()
 
@@ -30,6 +34,12 @@ export default function FormPhotoCamera({ name, interSepter }) {
     values
   } = useFormikContext();
 
+  const [images, setImages] = useState(values[name] ? [...values[name]] : [])
+
+  const [selected, setSelected] = useState()
+
+  console.log("--- FormPhoto/values[name]:", values[name])
+
   const { isChecked, setChecked } = useChecked()
 
   useEffect(() => {
@@ -43,17 +53,25 @@ export default function FormPhotoCamera({ name, interSepter }) {
     if (cameraRef.current) {
       const data = await cameraRef.current.takePictureAsync();
       setFieldTouched(name)
-      setFieldValue(name, data.uri)
+      console.log(
+        "--- FormPhoto/takePhoto/val:",
+        values[name],
+        data.uri
+      )
+      setFieldValue(name, [...values[name], data.uri])
+      setImages([...images, data.uri])
       isChecked && setChecked(false)
-      interSepter && interSepter(name, data.uri)
+      interSepter && interSepter(name, [...values[name], data.uri])
       setOpenCam(false)
     }
   }
 
   const deleteSavedPhoto = () => {
     setFieldTouched(name)
-    setFieldValue(name, ' ')
-    interSepter && interSepter(name, ' ')
+    setImages([...images.filter((image, i) => i !== selected)])
+
+    setFieldValue(name, images)
+    interSepter && interSepter(name, images)
   }
 
   // useEffect(() => {
@@ -65,6 +83,11 @@ export default function FormPhotoCamera({ name, interSepter }) {
   // const editPhoto = () => {
   //   setCanvas(!isCanvas)
   // }
+
+  const onTouchThumbnail = (index) => {
+    setSelected(index)
+    carouselRef?.current?.snapToItem(index)
+  }
 
   return (
     <View style={styles.formPhotoCameraContainer}>
@@ -81,14 +104,26 @@ export default function FormPhotoCamera({ name, interSepter }) {
             ?
             <>
               {
-                !values[name] || values[name].length < 1
+                !values[name][0] || values[name][0].length < 1
                   ?
                   <AltImage />
                   :
-                  <Image
-                    source={{ uri: values[name] }}
-                    style={styles.formPhoto}
+
+                  <Carousel
+                    ref={carouselRef}
+                    layout='default'
+                    data={images}
+                    sliderWidth={responsiveWidth(239)}
+                    itemWidth={responsiveWidth(239)}
+                    renderItem={({ item, index }) => (
+                      <Image
+                        key={index}
+                        style={styles.formPhoto}
+                        source={{ uri: item }}
+                      />
+                    )}
                   />
+
               }
             </>
             :
@@ -104,6 +139,35 @@ export default function FormPhotoCamera({ name, interSepter }) {
       </View>
 
       <View style={styles.formPhotoCameraButtonsContainer}>
+
+        <FlatList
+          horizontal={true}
+          data={images}
+          style={{
+            width: '65%'
+          }}
+          showsHorizontalScrollIndicator={false}
+          // contentContainerStyle={{
+          //   paddingHorizontal: SPACING
+          // }}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity
+              key={index}
+              activeOpacity={0.9}
+              onPress={() => onTouchThumbnail(index)}
+            >
+              <Image
+                style={{
+                  width: responsiveWidth(41),
+                  height: responsiveWidth(41),
+                  marginRight: responsiveWidth(12)
+                }}
+                source={{ uri: item }}
+              />
+            </TouchableOpacity>
+          )}
+        />
 
         {
           values[name] &&

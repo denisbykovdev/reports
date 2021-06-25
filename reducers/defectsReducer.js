@@ -97,7 +97,8 @@ export const defectsReducer = (
                             profession_name: null,
                             details_of_eclipse: null,
                             cost: null,
-                            image: null,
+                            // image: null,
+                            image: [],
                             standarts: []
                         }
                     ]
