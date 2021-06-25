@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import CircleArrowDown from "../icons/CircleArrowDown"
 import CircleArrowUp from "../icons/CircleArrowUp"
@@ -24,9 +24,26 @@ export default function Area({ areaId, areaName, areaProblems, dispatch }) {
 
     const [openName, setOpenName] = useState(false)
 
+    const [flagged, setUpdateFlagged] = useState([])
+
     const [problemsChoiceOpen, problemsChoiceCLose, ProblemsChoiceModal] = useModal()
 
-    const {type} = useType()
+    const { type } = useType()
+
+    const flaggedHandler = (name) => {
+
+        if (flagged.find(problem => problem.name === name)) {
+            setUpdateFlagged(flagged => [...flagged.filter(problem => problem.name !== name)])
+        } else {
+            setUpdateFlagged(flagged => [...flagged, areaProblems.find(problem => problem.name === name)])
+        }
+    }
+
+    useEffect(() => {
+        console.log(
+            "--- Area/effect/flagged", flagged
+        )
+    }, [flagged])
 
     const deleteArea = () => {
         dispatch({
@@ -65,42 +82,42 @@ export default function Area({ areaId, areaName, areaProblems, dispatch }) {
                 <View style={styles.areaHeaderActions}>
 
                     <TouchableWithoutFeedback onPress={() => setOpenName(!openName)}>
-                            <View style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                paddingLeft: responsiveWidth(30)
-                            }}>
-                                <TouchableOpacity onPress={() => setOpenName(!openName)}>
-                                    {
-                                        openName
-                                            ? <FormField
-                                                // area={true}
-                                                placeholder={areaName}
-                                                style={{
-                                                    padding: 0,
-                                                    height: responsiveWidth(31),
-                                                    borderColor: colors.darkWhite,
-                                                    borderWidth: responsiveWidth(2),
-                                                    borderRadius: 20,
-                                                    alignSelf: 'flex-end'
-                                                }}
-                                                width="80%"
-                                                name="name"
-                                                interSepter={interSepter}
-                                            />
-                                            : <Text
+                        <View style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            paddingLeft: responsiveWidth(30)
+                        }}>
+                            <TouchableOpacity onPress={() => setOpenName(!openName)}>
+                                {
+                                    openName
+                                        ? <FormField
+                                            // area={true}
+                                            placeholder={areaName}
+                                            style={{
+                                                padding: 0,
+                                                height: responsiveWidth(31),
+                                                borderColor: colors.darkWhite,
+                                                borderWidth: responsiveWidth(2),
+                                                borderRadius: 20,
+                                                alignSelf: 'flex-end'
+                                            }}
+                                            width="80%"
+                                            name="name"
+                                            interSepter={interSepter}
+                                        />
+                                        : <Text
                                             style={styles.areaHeaderTitle}
                                         >{areaName}</Text>
-                                    }
-                                </TouchableOpacity>
+                                }
+                            </TouchableOpacity>
 
 
-                                <Text
-                                    style={styles.areaHeaderId}
-                                > | {areaId}.0</Text>
+                            <Text
+                                style={styles.areaHeaderId}
+                            > | {areaId}.0</Text>
 
-                            </View>
-                        </TouchableWithoutFeedback>
+                        </View>
+                    </TouchableWithoutFeedback>
 
                     <TouchableOpacity
                         onPress={() => setAreaForPrint(!isAreaForPrint)}
@@ -171,44 +188,55 @@ export default function Area({ areaId, areaName, areaProblems, dispatch }) {
             {
                 isAreaOpen
                 && (
+                    <>
+                        <ScrollView
+                            horizontal
+                            style={{
+                                paddingHorizontal: responsiveWidth(28),
+                                paddingVertical: responsiveWidth(18),
+                                height: 'auto',
+                                flexWrap: 'wrap',
+                                flexDirection: 'row'
+                            }}
+                        >
+                            {
+                                areaProblems.map((problem, i) => problem.flagged && (
+                                    <TouchableOpacity
+                                        onPress={() => flaggedHandler(problem.name)}
+                                        key={i}
+                                        style={{
+                                            paddingHorizontal: responsiveWidth(22),
+                                            height: responsiveWidth(40),
+                                            borderColor: colors.darkWhite,
+                                            borderWidth: responsiveWidth(2),
+                                            borderRadius: 8,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: responsiveWidth(18)
+                                        }}
+                                    >
+                                        <Text style={{
+                                            fontSize: 15,
+                                            fontWeight: "300",
+                                        }}>
+                                            {problem.name} +
+                                        </Text>
+                                    </TouchableOpacity>
+                                ))
+                            }
 
-                    <ScrollView
-                        horizontal
-                        style={{
-                            paddingHorizontal: responsiveWidth(28),
-                            paddingVertical: responsiveWidth(18),
-                            height: 'auto',
-                            flexWrap: 'wrap',
-                            flexDirection: 'row'
-                        }}
-                    >
+                        </ScrollView>
+
                         {
-                            areaProblems.map((problem, i) => problem.flagged && (
-                                <View
-                                    key={i}
-                                    style={{
-                                        paddingHorizontal: responsiveWidth(22),
-                                        height: responsiveWidth(40),
-                                        borderColor: colors.darkWhite,
-                                        borderWidth: responsiveWidth(2),
-                                        borderRadius: 8,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        marginRight: responsiveWidth(18)
-                                    }}
-                                >
-                                    <Text style={{
-                                        fontSize: 15,
-                                        fontWeight: "300",
-                                    }}>
-                                        {problem.name} +
-                            </Text>
-                                </View>
-                            ))
+                            areaProblems.map((problem, i) => flagged.find(flag => flag.name === problem.name) && <Problem
+                                key={i}
+                                flagged={true}
+                                problem={problem}
+                                areaId={areaId}
+                                defectsDispatch={dispatch}
+                            />)
                         }
-
-                    </ScrollView>
-
+                    </>
                 )
             }
 

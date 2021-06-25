@@ -23,14 +23,14 @@ export default function ProblemsChoice({
                 maxWidth: layout.width > 600 ? responsiveWidth(360) : "100%"
             }}
         >
-            <CommonHeader 
+            <CommonHeader
                 title="מבנה הדוח"
                 close={problemsChoiceCLose}
                 headerStyles={{
                     paddingHorizontal: responsiveWidth(28)
                 }}
             />
-             <View style={{
+            <View style={{
                 flexDirection: 'row'
             }}>
                 <CommonButton
@@ -69,7 +69,7 @@ export default function ProblemsChoice({
             </View>
 
             <SavedProblemsModal>
-                <SavedProblems 
+                <SavedProblems
                     savedProblemsModalclose={savedProblemsModalclose}
                     areaId={areaId}
                     problemsChoiceCLose={problemsChoiceCLose}

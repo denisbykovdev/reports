@@ -333,7 +333,7 @@ export const defectsReducer = (
                 }
             );
 
-        case "POST_NEW_AREA":
+        // case "POST_NEW_AREA":
             
 
         case "ADD_PROBLEMS_TO_ARIA":

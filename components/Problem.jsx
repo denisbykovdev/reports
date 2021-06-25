@@ -27,7 +27,7 @@ import useType from "../hooks/useType"
 
 const testArray = ['one', 'two', 'three']
 
-export default function Problem({ problem, areaId, defectsDispatch }) {
+export default function Problem({ problem, areaId, defectsDispatch, flagged = false }) {
 
     const [isProblemOpen, setProblemOpen] = useState(false)
 
@@ -46,13 +46,17 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
     const { type } = useType()
 
     const submitProblem = async (values) => {
-        problemsDispatch({
+        console.log(
+            "___Problem:",
+            { ...values, standarts: [...problem.standarts] },
+            values,
+            problem
+        )
+
+        await problemsDispatch({
             type: "POST_PROBLEM",
             problem: { ...values, standarts: [...problem.standarts] }
         })
-        console.log(
-            "___Problem:", { ...values, standarts: [...problem.standarts] }
-        )
     }
 
     const interSepter = (name, text) => {
@@ -76,7 +80,9 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
         })
     }
 
-
+    console.log(
+        "--- Problem/problemProp:", problem
+    )
 
     return (
         <View
@@ -127,7 +133,7 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                             marginBottom: type === 2 ? 0 : responsiveWidth(8)
                         }]}>
                             <TouchableOpacity
-                                onPress={() => setProblemForPrint(!isDefectSaved)}
+                                onPress={() => setProblemForPrint(!isProblemForPrint)}
                                 style={[
                                     styles.tickContainer,
                                     {
@@ -318,10 +324,10 @@ export default function Problem({ problem, areaId, defectsDispatch }) {
                                 buttonWidth={type === 2 ? 'auto' : '100%'}
                             />
 
-                            <StandartsModal 
-                                // modalContentStyle={{
-                                //     width: type === 2 ? responsiveWidth(600) : 'auto'
-                                // }}
+                            <StandartsModal
+                            // modalContentStyle={{
+                            //     width: type === 2 ? responsiveWidth(600) : 'auto'
+                            // }}
                             >
                                 <Standarts
                                     standartsModalClose={standartsModalClose}

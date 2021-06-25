@@ -13,7 +13,7 @@ const problemsStatic = [
         profession_name: 'firstProfession1',
         details_of_eclipse: 'firstDetails1',
         cost: '1',
-        image: '',
+        image: 'https://reactnative.dev/img/tiny_logo.png',
         solution: 'firstSolution1',
         timeStamp: 'Jul 14, 2020 5:34:02 PM'
     },
@@ -23,7 +23,7 @@ const problemsStatic = [
         profession_name: 'secondProfession1',
         details_of_eclipse: 'secondDetails1',
         cost: '1',
-        image: '',
+        image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
         solution: 'secondSolution1',
         timeStamp: 'Jul 14, 2020 5:34:02 PM'
     }

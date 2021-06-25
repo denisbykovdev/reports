@@ -400,13 +400,13 @@ export const createArea = areasStore
 
 //problems endpoints
 //store
-export const problemsStore = `eitanperetz.com/api/problems/store/`
+export const problemsStore = `${api}/problems/store`
 //use cases:
 //create problem: POST
 export const createProblem = problemsStore
 //get all problemss: GET
-export const getAllProblems = `eitanperetz.com/api/problems/all/`
-
+export const getAllProblems = `${problemsStore}/all`
+export const updateProblems = (problemName) => `${problemsStore}/${problemName}/update`
 //professions endpoints
 //store
 export const professionsStore = `eitanperetz.com/api/professions/store/`

@@ -12,7 +12,7 @@ import Area from './Area'
 import useAuth from "../hooks/useAuth";
 
 const Defects = () => {
-    const {defectsState, defectsDispatch} = useDefects()
+    const { defectsState, defectsDispatch } = useDefects()
     const [savedAreasModalOpen, savedAreasModalClose, SavedAreasModalContent] = useModal();
 
     const { authState } = useAuth()

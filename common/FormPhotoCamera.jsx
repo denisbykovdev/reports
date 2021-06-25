@@ -17,7 +17,7 @@ export default function FormPhotoCamera({ name, interSepter }) {
   const cameraRef = useRef(null);
   const canvasRef = useRef(null);
 
-  const {type} = useType()
+  const { type } = useType()
 
   const [hasPermission, setHasPermission] = useState(null);
   // const [type, setType] = useState(Camera.Constants.Type.back);
@@ -30,7 +30,7 @@ export default function FormPhotoCamera({ name, interSepter }) {
     values
   } = useFormikContext();
 
-  const {isChecked, setChecked} = useChecked()
+  const { isChecked, setChecked } = useChecked()
 
   useEffect(() => {
     (async () => {
@@ -56,11 +56,11 @@ export default function FormPhotoCamera({ name, interSepter }) {
     interSepter && interSepter(name, ' ')
   }
 
-  useEffect(() => {
-    console.log(
-      "___FormPhoto/effect:", values[name]
-    )
-  }, [values[name]])
+  // useEffect(() => {
+  //   console.log(
+  //     "___FormPhoto/effect:", values[name]
+  //   )
+  // }, [values[name]])
 
   // const editPhoto = () => {
   //   setCanvas(!isCanvas)
@@ -75,7 +75,7 @@ export default function FormPhotoCamera({ name, interSepter }) {
           height: responsiveWidth(278),
           width: responsiveWidth(239),
         }
-        ]}>
+      ]}>
         {
           !openCam
             ?

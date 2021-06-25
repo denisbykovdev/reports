@@ -64,13 +64,13 @@ export default function SavedProblemItem({
                     onPress={() => standartsModalOpen()}
                 />
 
-                    <StandartsModal>
-                        <Standarts
-                            standartsModalClose={standartsModalClose}
-                            problemName={problem.name}
-                            problemsDispatch={problemsDispatch}
-                        />
-                    </StandartsModal>
+                <StandartsModal>
+                    <Standarts
+                        standartsModalClose={standartsModalClose}
+                        problemName={problem.name}
+                        problemsDispatch={problemsDispatch}
+                    />
+                </StandartsModal>
 
                 <View
                     style={styles.problemImageContainer}
@@ -79,7 +79,10 @@ export default function SavedProblemItem({
                         problem.image.length > 1
                             ? <Image
                                 source={{ uri: problem.image }}
-
+                                style={{
+                                    height: "100%",
+                                    width: "100%"
+                                }}
                             />
                             : <AltImage
                                 height={responsiveWidth(42)}
@@ -101,7 +104,7 @@ export default function SavedProblemItem({
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        
+
                     }}>
                         <TouchableOpacity
                             onPress={() => checkedHandler(problem.name)}
