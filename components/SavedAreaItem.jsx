@@ -5,7 +5,7 @@ import Line from "../common/Line"
 import useModal from "../hooks/useModal"
 import Basket from "../icons/Basket"
 import Tick from "../icons/Tick"
-import SavedProblems from "../modals/SavedProblems"
+import ServerProblems from "../modals/ServerProblems"
 import colors from "../utils/colors"
 import { responsiveWidth } from "../utils/layout"
 
@@ -30,7 +30,7 @@ export default function SavedAreaItem({ savedArea, addCheckedArea, removeChecked
                 <View style={styles.savedAreaDeleteButtonContainer}>
                     <TouchableOpacity
                         onPress={() => deleteSavedArea(savedArea.name)}
-                        
+
                     >
                         <Basket />
                     </TouchableOpacity>
@@ -77,7 +77,7 @@ export default function SavedAreaItem({ savedArea, addCheckedArea, removeChecked
 
             <Line />
             <SavedProblemsModal>
-                <SavedProblems 
+                <ServerProblems
                     savedProblemsModalclose={savedProblemsModalclose}
                     savedAreaName={savedArea.name}
                 />

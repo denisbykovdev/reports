@@ -13,7 +13,7 @@ import fonts from "../utils/fonts"
 import { responsiveHeight, responsiveWidth } from "../utils/layout"
 import weights from "../utils/weights"
 
-export default function SavedProblemItem({
+export default function ServerProblemItem({
     problem,
     addCheckedProblem,
     removeCheckedProblem,

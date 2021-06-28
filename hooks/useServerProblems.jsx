@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import useReducerWithSideEffects from 'use-reducer-with-side-effects';
-import { savedProblemsReducer, savedProblemsInitial } from "../reducers/savedProblemsReducer";
+import { serverProblemsReducer, serverProblemsInitial } from "../reducers/serverProblemsReducer";
 import useAuth from "./useAuth";
 
-export default function useSavedProblems(
+export default function useServerProblems(
 ) {
     const [problemsState, problemsDispatch] = useReducerWithSideEffects(
-        savedProblemsReducer,
-        savedProblemsInitial
+        serverProblemsReducer,
+        serverProblemsInitial
     );
 
     const { authState } = useAuth()
@@ -16,7 +16,7 @@ export default function useSavedProblems(
 
     useEffect(() => {
         problemsDispatch({
-            type: "FETCH_SAVED_PROBLEMS",
+            type: "GET_SERVER_PROBLEMS",
             payload: token
         })
     }, [])

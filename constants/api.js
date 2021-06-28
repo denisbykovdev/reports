@@ -248,33 +248,36 @@ export const areasAll = `${api}/areas/all`
 //   }
 // }
 // response: array of objects called data
-// data: [
-//      {
-//     name: 'testArea1',
-//     id: 1,
-//     problems: [
-//         {
-//             name: 'testProblem1',
-//             id: 1,
-//             profession_name: 'testProfession1',
-//             details_of_eclipse: 'testDetails1',
-//             cost: '1',
-//             image: 'test',
-//             solution: 'testSolution1'
-//         },
-//         {
-//             name: 'testProblem2',
-//             id: 2,
-//             profession_name: 'testProfession2',
-//             details_of_eclipse: 'testDetails2',
-//             cost: '2',
-//             image: 'test',
-//             solution: 'testSolution2'
-//         }
-//     ]
-// },
-// ...
-// ]
+data: [
+    {
+        name: 'testArea1',
+        id: 1,
+        problems: [
+            {
+                name: 'testProblem1',
+                id: 1,
+                profession_name: 'testProfession1',
+                details_of_eclipse: 'testDetails1',
+                cost: '1',
+                image: [],
+                standarts: [],
+                solution: 'testSolution1',
+                timeStamp: 'Jul 14, 2020 5:34:02 PM',
+            },
+            {
+                name: 'testProblem2',
+                id: 2,
+                profession_name: 'testProfession2',
+                details_of_eclipse: 'testDetails2',
+                cost: '2',
+                image: [],
+                standarts: [],
+                solution: 'testSolution2',
+                timeStamp: 'Jul 14, 2020 5:34:02 PM',
+            }
+        ]
+    }
+]
 
 //delete area : POST
 export const deleteArea = (areaName) => `${areasStore}/${areaName}/delete`
@@ -287,34 +290,37 @@ export const deleteArea = (areaName) => `${areasStore}/${areaName}/delete`
 //         'Authorization': `Bearer ${action.token}`
 //     }
 // }
-// response: array of objects called data
-// data: [
-//      {
-//     name: 'testArea1',
-//     id: 1,
-//     problems: [
-//         {
-//             name: 'testProblem1',
-//             id: 1,
-//             profession_name: 'testProfession1',
-//             details_of_eclipse: 'testDetails1',
-//             cost: '1',
-//             image: 'test',
-//             solution: 'testSolution1'
-//         },
-//         {
-//             name: 'testProblem2',
-//             id: 2,
-//             profession_name: 'testProfession2',
-//             details_of_eclipse: 'testDetails2',
-//             cost: '2',
-//             image: 'test',
-//             solution: 'testSolution2'
-//         }
-//     ]
-// },
-// ...
-// ]
+// response:
+data: [
+    {
+        name: 'testArea1',
+        id: 1,
+        problems: [
+            {
+                name: 'testProblem1',
+                id: 1,
+                profession_name: 'testProfession1',
+                details_of_eclipse: 'testDetails1',
+                cost: '1',
+                image: [],
+                standarts: [],
+                solution: 'testSolution1',
+                timeStamp: 'Jul 14, 2020 5:34:02 PM',
+            },
+            {
+                name: 'testProblem2',
+                id: 2,
+                profession_name: 'testProfession2',
+                details_of_eclipse: 'testDetails2',
+                cost: '2',
+                image: [],
+                standarts: [],
+                solution: 'testSolution2',
+                timeStamp: 'Jul 14, 2020 5:34:02 PM',
+            }
+        ]
+    }
+]
 
 //update area(add problems): POST
 export const updateAreaProblems = (areaName) => `${areasStore}/${areaName}/problems`
@@ -328,34 +334,37 @@ export const updateAreaProblems = (areaName) => `${areasStore}/${areaName}/probl
 //         'Authorization': `Bearer ${action.token}`
 //     }
 // }
-// response: array of objects called data
-// data: [
-//      {
-//     name: 'testArea1',
-//     id: 1,
-//     problems: [
-//         {
-//             name: 'testProblem1',
-//             id: 1,
-//             profession_name: 'testProfession1',
-//             details_of_eclipse: 'testDetails1',
-//             cost: '1',
-//             image: 'test',
-//             solution: 'testSolution1'
-//         },
-//         {
-//             name: 'testProblem2',
-//             id: 2,
-//             profession_name: 'testProfession2',
-//             details_of_eclipse: 'testDetails2',
-//             cost: '2',
-//             image: 'test',
-//             solution: 'testSolution2'
-//         }
-//     ]
-// },
-// ...
-// ]
+// response:
+data: [
+    {
+        name: 'testArea1',
+        id: 1,
+        problems: [
+            {
+                name: 'testProblem1',
+                id: 1,
+                profession_name: 'testProfession1',
+                details_of_eclipse: 'testDetails1',
+                cost: '1',
+                image: [],
+                standarts: [],
+                solution: 'testSolution1',
+                timeStamp: 'Jul 14, 2020 5:34:02 PM',
+            },
+            {
+                name: 'testProblem2',
+                id: 2,
+                profession_name: 'testProfession2',
+                details_of_eclipse: 'testDetails2',
+                cost: '2',
+                image: [],
+                standarts: [],
+                solution: 'testSolution2',
+                timeStamp: 'Jul 14, 2020 5:34:02 PM',
+            }
+        ]
+    }
+]
 
 //create area: POST
 export const createArea = areasStore
@@ -369,34 +378,37 @@ export const createArea = areasStore
 //         'Authorization': `Bearer ${action.token}`
 //     }
 // }
-// response: array of objects called data
-// data: [
-//      {
-//     name: 'testArea1',
-//     id: 1,
-//     problems: [
-//         {
-//             name: 'testProblem1',
-//             id: 1,
-//             profession_name: 'testProfession1',
-//             details_of_eclipse: 'testDetails1',
-//             cost: '1',
-//             image: 'test',
-//             solution: 'testSolution1'
-//         },
-//         {
-//             name: 'testProblem2',
-//             id: 2,
-//             profession_name: 'testProfession2',
-//             details_of_eclipse: 'testDetails2',
-//             cost: '2',
-//             image: 'test',
-//             solution: 'testSolution2'
-//         }
-//     ]
-// },
-// ...
-// ]
+// response:
+data: [
+    {
+        name: 'testArea1',
+        id: 1,
+        problems: [
+            {
+                name: 'testProblem1',
+                id: 1,
+                profession_name: 'testProfession1',
+                details_of_eclipse: 'testDetails1',
+                cost: '1',
+                image: [],
+                standarts: [],
+                solution: 'testSolution1',
+                timeStamp: 'Jul 14, 2020 5:34:02 PM',
+            },
+            {
+                name: 'testProblem2',
+                id: 2,
+                profession_name: 'testProfession2',
+                details_of_eclipse: 'testDetails2',
+                cost: '2',
+                image: [],
+                standarts: [],
+                solution: 'testSolution2',
+                timeStamp: 'Jul 14, 2020 5:34:02 PM',
+            }
+        ]
+    }
+]
 
 //problems endpoints
 //store
@@ -407,6 +419,7 @@ export const createProblem = problemsStore
 //get all problemss: GET
 export const getAllProblems = `${problemsStore}/all`
 export const updateProblems = (problemName) => `${problemsStore}/${problemName}/update`
+
 //professions endpoints
 //store
 export const professionsStore = `eitanperetz.com/api/professions/store/`

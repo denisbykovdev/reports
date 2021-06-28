@@ -4,22 +4,22 @@ import CommonButton from "../common/CommonButton"
 import CommonHeader from "../common/CommonHeader"
 import Line from "../common/Line"
 import ShadowView from "../common/ShadowView"
-import SavedProblemItem from "../components/SavedProblemItem"
+import ServerProblemItem from "../components/ServerProblemItem"
 import useDefects from "../hooks/useDefects"
-import useSavedProblems from "../hooks/useSavedProblems"
+import useServerProblems from "../hooks/useServerProblems"
 import useSearch from "../hooks/useSearch"
 import colors from "../utils/colors"
 import { responsiveWidth } from "../utils/layout"
 
-export default function SavedProblems({
+export default function ServerProblems({
     savedProblemsModalclose,
     savedAreaName,
     areaId,
     problemsChoiceCLose
 }) {
-    const [problemsState, problemsDispatch] = useSavedProblems()
+    const [problemsState, problemsDispatch] = useServerProblems()
 
-    const {_, defectsDispatch} = useDefects()
+    const { _, defectsDispatch } = useDefects()
 
     const [checkedProblems, setUpdateCheckedProblems] = useState([])
 
@@ -64,28 +64,28 @@ export default function SavedProblems({
             <RenderSearch />
 
             {
-                searchArray && searchArray.length > 0 
-                ? searchArray.map((problem, i) => (
-                    <SavedProblemItem
-                        key={i}
-                        problem={problem}
-                        addCheckedProblem={addCheckedProblem}
-                        removeCheckedProblem={removeCheckedProblem}
-                        problemsDispatch={problemsDispatch}
-                    />
-                ))
-                : problemsState && problemsState.problems.map((problem, i) => (
-                    <SavedProblemItem
-                        key={i}
-                        problem={problem}
-                        addCheckedProblem={addCheckedProblem}
-                        removeCheckedProblem={removeCheckedProblem}
-                        problemsDispatch={problemsDispatch}
-                    />
-                ))
+                searchArray && searchArray.length > 0
+                    ? searchArray.map((problem, i) => (
+                        <ServerProblemItem
+                            key={i}
+                            problem={problem}
+                            addCheckedProblem={addCheckedProblem}
+                            removeCheckedProblem={removeCheckedProblem}
+                            problemsDispatch={problemsDispatch}
+                        />
+                    ))
+                    : problemsState && problemsState.problems.map((problem, i) => (
+                        <ServerProblemItem
+                            key={i}
+                            problem={problem}
+                            addCheckedProblem={addCheckedProblem}
+                            removeCheckedProblem={removeCheckedProblem}
+                            problemsDispatch={problemsDispatch}
+                        />
+                    ))
             }
 
-            <CommonButton 
+            <CommonButton
                 title="שמירה"
                 borderRadius={20}
                 buttonHeight={responsiveWidth(33)}

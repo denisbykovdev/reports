@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import CommonSubHeader from "../common/CommonSubHeader";
 import Line from "../common/Line";
-import useSavedProblems from "../hooks/useSavedProblems";
+import useServerProblems from "../hooks/useServerProblems";
 import ArchiveIcon from '../icons/ArchiveIcon'
 import colors from "../utils/colors";
 import fonts from "../utils/fonts";
@@ -10,7 +10,7 @@ import { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 
 const Archive = () => {
-    const [problemsState, problemsDispatch] = useSavedProblems()
+    const [problemsState, problemsDispatch] = useServerProblems()
 
     return (
         <View style={styles.archive}>

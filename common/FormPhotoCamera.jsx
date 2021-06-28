@@ -12,12 +12,14 @@ import Edit from '../icons/Edit';
 import Signature from 'react-native-signature-canvas';
 import useChecked from '../hooks/useChecked';
 import useType from '../hooks/useType';
-
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Carousel from 'react-native-snap-carousel';
+import CircleArrowUp from '../icons/CircleArrowUp'
+import weights from '../utils/weights';
+import fonts from '../utils/fonts';
 
 export default function FormPhotoCamera({ name, interSepter }) {
   const cameraRef = useRef(null);
-  const canvasRef = useRef(null);
+  // const canvasRef = useRef(null);
 
   const carouselRef = useRef();
 
@@ -36,9 +38,9 @@ export default function FormPhotoCamera({ name, interSepter }) {
 
   const [images, setImages] = useState(values[name] ? [...values[name]] : [])
 
-  const [selected, setSelected] = useState()
+  const [selected, setSelected] = useState(0)
 
-  console.log("--- FormPhoto/values[name]:", values[name])
+  // console.log("--- FormPhoto/values[name]:", values[name])
 
   const { isChecked, setChecked } = useChecked()
 
@@ -53,11 +55,11 @@ export default function FormPhotoCamera({ name, interSepter }) {
     if (cameraRef.current) {
       const data = await cameraRef.current.takePictureAsync();
       setFieldTouched(name)
-      console.log(
-        "--- FormPhoto/takePhoto/val:",
-        values[name],
-        data.uri
-      )
+      // console.log(
+      //   "--- FormPhoto/takePhoto/val:",
+      //   values[name],
+      //   data.uri
+      // )
       setFieldValue(name, [...values[name], data.uri])
       setImages([...images, data.uri])
       isChecked && setChecked(false)
@@ -68,7 +70,8 @@ export default function FormPhotoCamera({ name, interSepter }) {
 
   const deleteSavedPhoto = () => {
     setFieldTouched(name)
-    setImages([...images.filter((image, i) => i !== selected)])
+    // setImages([...images.filter((image, i) => i !== selected)])
+    setImages([...images.filter((image, i) => i !== carouselRef?.current?.currentIndex)])
 
     setFieldValue(name, images)
     interSepter && interSepter(name, images)
@@ -76,18 +79,24 @@ export default function FormPhotoCamera({ name, interSepter }) {
 
   // useEffect(() => {
   //   console.log(
-  //     "___FormPhoto/effect:", values[name]
+  //     "--- FormPhoto/useEffect/images:", images
   //   )
-  // }, [values[name]])
+  // }, [images])
+
+  // useEffect(() => {
+  //   console.log(
+  //     "--- FormPhoto/useEffect/values:", values[name]
+  //   )
+  // }, [values])
 
   // const editPhoto = () => {
   //   setCanvas(!isCanvas)
   // }
 
-  const onTouchThumbnail = (index) => {
-    setSelected(index)
-    carouselRef?.current?.snapToItem(index)
-  }
+  // const onTouchThumbnail = (index) => {
+  //   setSelected(index)
+  //   carouselRef?.current?.snapToItem(index)
+  // }
 
   return (
     <View style={styles.formPhotoCameraContainer}>
@@ -104,7 +113,9 @@ export default function FormPhotoCamera({ name, interSepter }) {
             ?
             <>
               {
-                !values[name][0] || values[name][0].length < 1
+                // !values[name][0] 
+                // || values[name][0].length < 1 ||
+                images.length === 0
                   ?
                   <AltImage />
                   :
@@ -115,12 +126,26 @@ export default function FormPhotoCamera({ name, interSepter }) {
                     data={images}
                     sliderWidth={responsiveWidth(239)}
                     itemWidth={responsiveWidth(239)}
+                    onSnapToItem={(index) => setSelected(index)}
+                    // slideStyle={{
+                    //   flexDirection: 'column-reverse'
+                    // }}
                     renderItem={({ item, index }) => (
-                      <Image
-                        key={index}
-                        style={styles.formPhoto}
-                        source={{ uri: item }}
-                      />
+                      <View key={index} style={styles.photoContainer}>
+                        <TouchableOpacity
+                          onPress={() => carouselRef.current.snapToPrev()}
+                          style={[styles.photoArrow, styles.photoArrowLeft]}
+                        ><CircleArrowUp /></TouchableOpacity>
+                        <Image
+                          style={styles.formPhoto}
+                          source={{ uri: item }}
+                        />
+                        <TouchableOpacity
+                          onPress={() => carouselRef.current.snapToNext()}
+                          style={[styles.photoArrow, styles.photoArrowRight]}
+                        ><CircleArrowUp /></TouchableOpacity>
+                      </View>
+
                     )}
                   />
 
@@ -138,9 +163,9 @@ export default function FormPhotoCamera({ name, interSepter }) {
         }
       </View>
 
-      <View style={styles.formPhotoCameraButtonsContainer}>
+      <View style={styles.formPhotoCameraFunctionsContainer}>
 
-        <FlatList
+        {/* <FlatList
           horizontal={true}
           data={images}
           style={{
@@ -167,12 +192,19 @@ export default function FormPhotoCamera({ name, interSepter }) {
               />
             </TouchableOpacity>
           )}
-        />
+        /> */}
 
-        {
-          values[name] &&
-          <>
-            {/* <TouchableOpacity
+        <View style={styles.photoCounterContainer}>
+          <Text style={styles.photoCounterText}>
+            {carouselRef?.current?.currentIndex === undefined || 0 || null || images.length === 0 ? 0 : carouselRef.current.currentIndex + 1} / {images.length}
+          </Text>
+        </View>
+
+        <View style={styles.formPhotoCameraButtonsContainer}>
+          {
+            values[name] &&
+            <>
+              {/* <TouchableOpacity
               style={styles.formPhotoCameraButtonContainer}
               onPress={() => {
                 editPhoto()
@@ -180,25 +212,26 @@ export default function FormPhotoCamera({ name, interSepter }) {
               <Edit />
             </TouchableOpacity> */}
 
-            <TouchableOpacity
-              style={styles.formPhotoCameraButtonContainer}
-              onPress={() => {
-                deleteSavedPhoto()
-              }}>
-              <Remove />
-            </TouchableOpacity>
-          </>
-        }
+              <TouchableOpacity
+                style={styles.formPhotoCameraButtonContainer}
+                onPress={() => {
+                  deleteSavedPhoto()
+                }}>
+                <Remove />
+              </TouchableOpacity>
+            </>
+          }
 
 
-        <TouchableOpacity
-          style={styles.formPhotoCameraButtonContainer}
-          onPress={() => {
-            openCam ? takePhoto() : setOpenCam(true)
+          <TouchableOpacity
+            style={styles.formPhotoCameraButtonContainer}
+            onPress={() => {
+              openCam ? takePhoto() : setOpenCam(true)
 
-          }}>
-          <Add />
-        </TouchableOpacity>
+            }}>
+            <Add />
+          </TouchableOpacity>
+        </View>
 
       </View>
     </View>
@@ -211,10 +244,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.paleGrayBg
   },
-  formPhotoCameraButtonsContainer: {
+  formPhotoCameraFunctionsContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    // justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     marginVertical: responsiveWidth(18)
+  },
+  formPhotoCameraButtonsContainer: {
+    flexDirection: 'row'
   },
   formPhotoCameraButtonContainer: {
     marginLeft: responsiveWidth(12)
@@ -227,5 +264,35 @@ const styles = StyleSheet.create({
   formPhoto: {
     width: '100%',
     height: '100%'
+  },
+  photoCounterContainer: {
+    height: responsiveWidth(41),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  photoCounterText: {
+    fontSize: fonts.medium,
+    fontWeight: weights.semiBold,
+    color: colors.battleShipGrey
+  },
+  photoArrow: {
+    position: 'absolute',
+    top: '45%',
+    // marginHorizontal: responsiveWidth(8),
+    height: responsiveWidth(40),
+    width: responsiveWidth(40),
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: 'yellow'
+  },
+  photoArrowLeft: {
+    zIndex: 1,
+    left: 0,
+    transform: [{ rotate: '270deg' }]
+  },
+  photoArrowRight: {
+    right: 0,
+    transform: [{ rotate: '90deg' }]
   }
 })

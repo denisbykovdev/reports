@@ -42,7 +42,7 @@ const Defects = () => {
 
     useEffect(() => {
         console.log(
-            "___Defects/defectsState", defectsState.areas.length, defectsState.areas
+            "--- Defects/useEffect/defectsState.areas", defectsState.areas
         )
     }, [defectsState.areas])
 
@@ -69,6 +69,7 @@ const Defects = () => {
                         areaName={area.name}
                         areaProblems={area.problems}
                         dispatch={defectsDispatch}
+                        server={area.server ? true : false}
                     />
                 ))
             }

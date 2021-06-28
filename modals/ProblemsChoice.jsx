@@ -6,7 +6,7 @@ import ShadowView from "../common/ShadowView"
 import useModal from "../hooks/useModal"
 import colors from "../utils/colors"
 import layout, { responsiveHeight, responsiveWidth } from "../utils/layout"
-import SavedProblems from "./SavedProblems"
+import ServerProblems from "./ServerProblems"
 
 export default function ProblemsChoice({
     problemsChoiceCLose,
@@ -69,7 +69,7 @@ export default function ProblemsChoice({
             </View>
 
             <SavedProblemsModal>
-                <SavedProblems
+                <ServerProblems
                     savedProblemsModalclose={savedProblemsModalclose}
                     areaId={areaId}
                     problemsChoiceCLose={problemsChoiceCLose}

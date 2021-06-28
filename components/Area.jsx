@@ -16,7 +16,7 @@ import ProblemsChoice from "../modals/ProblemsChoice"
 import FormField from "../common/FormField"
 import useType from "../hooks/useType"
 
-export default function Area({ areaId, areaName, areaProblems, dispatch }) {
+export default function Area({ areaId, areaName, areaProblems, dispatch, server }) {
 
     const [isAreaOpen, setAreaOpen] = useState(false)
 
@@ -41,7 +41,7 @@ export default function Area({ areaId, areaName, areaProblems, dispatch }) {
 
     useEffect(() => {
         console.log(
-            "--- Area/effect/flagged", flagged
+            "--- Area/effect/flagged:", flagged
         )
     }, [flagged])
 
@@ -233,7 +233,9 @@ export default function Area({ areaId, areaName, areaProblems, dispatch }) {
                                 flagged={true}
                                 problem={problem}
                                 areaId={areaId}
+                                areaName={areaName}
                                 defectsDispatch={dispatch}
+                                serverArea={server}
                             />)
                         }
                     </>

@@ -13,7 +13,8 @@ const staticSavedAreas = [
                 profession_name: 'testProfession1',
                 details_of_eclipse: 'testDetails1',
                 cost: '1',
-                image: 'test',
+                image: [],
+                standarts: [],
                 solution: 'testSolution1'
             },
             {
@@ -22,7 +23,8 @@ const staticSavedAreas = [
                 profession_name: 'testProfession2',
                 details_of_eclipse: 'testDetails2',
                 cost: '2',
-                image: 'test',
+                image: [],
+                standarts: [],
                 solution: 'testSolution2'
             }
         ]
@@ -37,7 +39,8 @@ const staticSavedAreas = [
                 profession_name: 'testProfession3',
                 details_of_eclipse: 'testDetails3',
                 cost: '3',
-                image: '',
+                image: [],
+                standarts: [],
                 solution: 'testSolution3'
             },
             {
@@ -46,7 +49,8 @@ const staticSavedAreas = [
                 profession_name: 'testProfession4',
                 details_of_eclipse: 'testDetails4',
                 cost: '4',
-                image: '',
+                image: [],
+                standarts: [],
                 solution: 'testSolution4'
             }
         ]
@@ -154,9 +158,9 @@ export const defectsReducer = (
             });
 
         case "CHANGE_PROBLEM_VALUE":
-            console.log(
-                "***defectsReducer/intersepter callback(prevState):", state
-            )
+            // console.log(
+            //     "***defectsReducer/intersepter callback(prevState):", state
+            // )
             return Update({
                 ...state,
                 areas: state.areas.map(area =>
@@ -187,49 +191,49 @@ export const defectsReducer = (
                 error: action.error
             });
 
-        case "FETCH_SAVED_AREAS":
-            return UpdateWithSideEffect(
-                {
-                    ...state,
-                    fetching: true,
-                    token: action.token
-                },
-                async(state, dispatch) => {
-                    try {
-                        const response = await axios.get(
-                            `${areasAll}`,
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${action.token}`
-                                }
-                            }
-
-                        );
-
-                        dispatch({
-                            type: "GET_SAVED_AREA",
-                            savedAreas: response.data.data
-                        })
-                    } catch(error) {
-                        dispatch({
-                            type: "ERROR_SAVED_AREA",
-                            error
-                        })
-                    }
-                }
-            );
-
         // case "FETCH_SAVED_AREAS":
-        //     return Update({
-        //         ...state,
-        //         token: action.token,
-        //         savedAreas: staticSavedAreas
-        //     });
+        //     return UpdateWithSideEffect(
+        //         {
+        //             ...state,
+        //             fetching: true,
+        //             token: action.token
+        //         },
+        //         async(state, dispatch) => {
+        //             try {
+        //                 const response = await axios.get(
+        //                     `${areasAll}`,
+        //                     {
+        //                         headers: {
+        //                             'Authorization': `Bearer ${action.token}`
+        //                         }
+        //                     }
+
+        //                 );
+
+        //                 dispatch({
+        //                     type: "GET_SAVED_AREA",
+        //                     savedAreas: response.data.data
+        //                 })
+        //             } catch(error) {
+        //                 dispatch({
+        //                     type: "ERROR_SAVED_AREA",
+        //                     error
+        //                 })
+        //             }
+        //         }
+        //     );
+
+        case "FETCH_SAVED_AREAS":
+            return Update({
+                ...state,
+                token: action.token,
+                savedAreas: staticSavedAreas
+            });
 
         case "ADD_SAVED_AREAS":
-            console.log(
-                "*** defectsReducer/ADD_SAVED_AREAS", action.saved
-            )
+            // console.log(
+            //     "*** defectsReducer/ADD_SAVED_AREAS", action.saved
+            // )
             return Update({
                 ...state,
                 areas: [
@@ -251,7 +255,8 @@ export const defectsReducer = (
                                         flagged: true
                                     }
                                     : area
-                            )
+                            ),
+                            server: true
                         }
 
                     })

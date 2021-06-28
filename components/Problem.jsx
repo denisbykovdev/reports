@@ -17,23 +17,24 @@ import Copy from "../icons/Copy"
 import FormPhotoCamera from "../common/FormPhotoCamera"
 import FormContainer from "../common/FormContainer"
 import FormButton from "../common/FormButton"
-import useSavedProblems from "../hooks/useSavedProblems"
+import useServerProblems from "../hooks/useServerProblems"
 import useModal from "../hooks/useModal"
 import Standarts from "../modals/Standarts"
 import AltImage from "../icons/AltImage"
 import Professions from "../modals/Professions"
 import useProfs from "../hooks/useProfs"
 import useType from "../hooks/useType"
+import useAuth from "../hooks/useAuth"
 
 const testArray = ['one', 'two', 'three']
 
-export default function Problem({ problem, areaId, defectsDispatch, flagged = false }) {
+export default function Problem({ problem, areaId, areaName, serverArea, defectsDispatch, flagged = false }) {
 
     const [isProblemOpen, setProblemOpen] = useState(false)
 
     const [isProblemForPrint, setProblemForPrint] = useState(true)
 
-    const [problemsState, problemsDispatch] = useSavedProblems()
+    const [problemsState, problemsDispatch] = useServerProblems()
 
     const [standartsModalOpen, standartsModalClose, StandartsModal] = useModal()
 
@@ -41,27 +42,47 @@ export default function Problem({ problem, areaId, defectsDispatch, flagged = fa
 
     const [openName, setOpenName] = useState(false)
 
-    const [profsState, profsReducer] = useProfs()
+    const [profsState, profsDispatch] = useProfs()
 
     const { type } = useType()
 
+    const { authState } = useAuth()
+
+    const { token } = authState;
+
     const submitProblem = async (values) => {
         console.log(
-            "___Problem:",
-            { ...values, standarts: [...problem.standarts] },
-            // values
+            "--- Problem/submitProblem/problem:",
+            { ...values, standarts: [...problem.standarts] }
         )
 
+        if (serverArea) {
+            await problemsDispatch({
+                type: "UPDATE_SERVER_PROBLEM_IN_SERVER_AREA",
+                token,
+                problem: { ...values, standarts: [...problem.standarts] },
+                areaName
+            })
+        }
+
+        if (flagged) {
+            await problemsDispatch({
+                type: "UPDATE_SERVER_PROBLEM",
+                token,
+                problem: { ...values, standarts: [...problem.standarts] }
+            })
+        }
         await problemsDispatch({
-            type: "POST_PROBLEM",
+            type: "POST_SERVER_PROBLEM",
+            token,
             problem: { ...values, standarts: [...problem.standarts] }
         })
     }
 
     const interSepter = (name, text) => {
-        console.log(
-            "_______Problem/intersepter:", text, name, areaId
-        )
+        // console.log(
+        //     "_______Problem/intersepter:", text, name, areaId
+        // )
         defectsDispatch({
             type: "CHANGE_PROBLEM_VALUE",
             areaId,
@@ -80,7 +101,7 @@ export default function Problem({ problem, areaId, defectsDispatch, flagged = fa
     }
 
     console.log(
-        "--- Problem/problemProp:", problem
+        "--- Problem/problem:", problem
     )
 
     return (
