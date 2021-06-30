@@ -25,7 +25,7 @@ const relatedDocumentsArray = ['מפרט', 'תוכניות', 'חוזה']
 
 const TestDetails = () => {
     const { type } = useType()
-    
+
     return (
         <View style={{
             flexWrap: 'wrap',
@@ -285,7 +285,8 @@ const TestDetails = () => {
                     title="מסמכים נלווים"
                 />
                 <FormRadioSelect
-                    name="noNameRadioSelect"
+                    // placeholder={}
+                    name="report_related_documents"
                     array={relatedDocumentsArray}
                 />
 

@@ -22,7 +22,7 @@ const FormRadioSelect = ({ name, array }) => {
 
     const { isChecked, setChecked } = useChecked()
 
-    const [selected, setSelected] = useState([])
+    const [selected, setSelected] = useState(values[name] ? [...values[name]] : [])
 
     const radioSelectHandler = (radioValue) => {
         setFieldTouched(name)
@@ -39,6 +39,12 @@ const FormRadioSelect = ({ name, array }) => {
     useEffect(() => {
         setFieldValue(name, selected)
     }, [selected])
+
+    useEffect(() => {
+        console.log(
+            "--- FormRadioSelect/effect/props/values", values[name], selected
+        )
+    }, [])
 
     return (
         <View>

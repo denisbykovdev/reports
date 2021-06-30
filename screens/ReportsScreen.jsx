@@ -39,24 +39,31 @@ function ReportsScreen({ route, navigation }) {
 
   const openReportHandler = () =>
     navigation.navigate(
-      // "AppStack",
-      // {
-      //   screen: "Report",
-      //   params: {
-      //     reportId: null
-      //   }
-      // }
-      "Report"
+      "AppStack",
+      {
+        screen: "Report",
+        params: {
+          reportId: null
+        }
+      }
+      // "Report"
     )
 
   const reportsTitles = {
-    id: "",
-    status: "", //положение дел
-    customerNumber: "",
-    client: "",
-    address: "",
-    date: "",
-    editorsName: ""
+    // id: "",
+    // status: "", //положение дел
+    // customerNumber: "",
+    // client: "",
+    // address: "",
+    // date: "",
+    // editorsName: "",
+    id: "מזהה בדיקה",
+    status: "סטטוס",
+    customer_name: "מספר לקוח",
+    customer_full_name: "לקוח",
+    report_adress: "כתובת",
+    examination_date: "תאריך",
+    tester_name: "שם העורך"
   }
 
   return (

@@ -4,11 +4,15 @@ import * as SecureStore from 'expo-secure-store';
 export default function useSecureAdmin() {
     const [isAdmin, setIsAdmin] = useState(false);
     useEffect(() => {
-        (async function getToken(){
+        (async function getToken() {
             const admin = await SecureStore.getItemAsync("userIsAdmin");
 
-            console.log("*******SSisadmin:", admin)
-            await setIsAdmin(admin);
+            console.log(
+                "--- useSecureToken/getItemAsync/JSON.parse(admin):",
+                JSON.parse(admin),
+            )
+
+            setIsAdmin(JSON.parse(admin));
         })()
     }, [])
 

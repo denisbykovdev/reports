@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-effects';
-import { deleteReport, reportsAll } from '../constants/api';
+import { deleteReport, reportsAll, updateReport } from '../constants/api';
 
 export const reportsInitial = {
     reports: null,
@@ -10,12 +10,12 @@ export const reportsInitial = {
 const reportsData = [
     {
         id: "1",
-        status: "נבד", //положение дел
-        customerNumber: "1",
-        client: "firstClient",
-        address: "planet Earth",
-        date: "02.03.21",
-        editorsName: "firstEditor"
+        status: "נבד",
+        customer_name: "1", // customer_name
+        customer_full_name: "firstClient",//customer_full_name
+        report_adress: "planet Earth",//report_adress
+        examination_date: "02.03.21",//examination_date
+        tester_name: "firstEditor"//tester_name
     },
     {
         id: "2",
@@ -63,9 +63,9 @@ export const reportsReducer = (
                     token: action.token
                 },
                 async (state, dispatch) => {
-                    console.log(
-                        "***ReportsReducer/FETCH_REPORTS/async/token", typeof action.payload
-                    );
+                    // console.log(
+                    //     "***ReportsReducer/FETCH_REPORTS/async/token", typeof action.payload
+                    // );
                     try {
                         const response = await axios.get(
                             `${reportsAll}`,
@@ -82,7 +82,7 @@ export const reportsReducer = (
                             reports: response.data.data,
                         })
 
-                        console.log("***reportsReducer/GET_REPORTS:", response.data.data);
+                        // console.log("***reportsReducer/GET_REPORTS:", response.data.data);
 
                     } catch (error) {
 
@@ -91,7 +91,7 @@ export const reportsReducer = (
                             error
                         });
 
-                        console.log("***reportsReducer/ERROR_REPORTS:", error);
+                        // console.log("***reportsReducer/ERROR_REPORTS:", error);
                     }
                 }
             );
@@ -110,8 +110,8 @@ export const reportsReducer = (
                     token: action.token,
                     fetching: true
                 },
-                async(state, dispatch) => {
-                    try{
+                async (state, dispatch) => {
+                    try {
                         const response = await axios.post(
                             `${deleteReport(action.itemId)}`,
                             {
@@ -125,7 +125,7 @@ export const reportsReducer = (
                             type: "GET_REPORTS",
                             reports: response.data.data,
                         })
-                    }catch(error){
+                    } catch (error) {
                         dispatch({
                             type: "ERROR_REPORTS",
                             error
@@ -135,10 +135,50 @@ export const reportsReducer = (
             );
 
         case "CHANGE_ITEM_VALUE":
-            // console.log(
-            //     ":::reportsReducer:", action.itemId, action.itemKey, action.itemNewValue
-            // );
-            // return Update({
+            console.log(
+                ":::reportsReducer:", action.itemId, action.itemKey, action.itemNewValue
+            );
+
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    token: action.token,
+                    fetching: true
+                },
+                async (state, dispatch) => {
+                    try {
+                        console.log(
+                            "--- defectsReducer/ping:UPDATE_REPORT", updateReport(action.itemId), action.data
+                        )
+                        const response = await axios.post(
+                            `${updateReport(action.itemId)}`,
+                            {
+                                // [action.itemKey]: action.itemNewValue
+                                ...action.data
+                            },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+                        )
+
+                        dispatch({
+                            type: "GET_REPORTS",
+                            users: response.data.data,
+                        })
+                    } catch (error) {
+                        dispatch({
+                            type: "ERROR_REPORTS",
+                            error
+                        })
+                    }
+                }
+            );
+    }
+}
+
+   // return Update({
             //     ...state,
             //     reports: state.reports.map(report =>
             //         report.id === action.itemId ?
@@ -149,38 +189,3 @@ export const reportsReducer = (
             //             report
             //     )
             // });
-            return UpdateWithSideEffect(
-                {
-                    ...state,
-                    token: action.token,
-                    fetching: true
-                },
-                async(state, dispatch) => {
-                    try{
-                        const response = await axios.post(
-                            `${updateReport(action.itemId)}`,
-                            {
-                                key: action.itemKey,
-                                value: action.itemNewValue
-                            },
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${action.token}`
-                                }
-                            }
-                        )
-
-                        dispatch({
-                            type: "UPDATE_USERS",
-                            users: response.data.data,
-                        })
-                    }catch(error){
-                        dispatch({
-                            type: "ERROR_USERS",
-                            error
-                        })
-                    }
-                }
-            );
-    }
-}

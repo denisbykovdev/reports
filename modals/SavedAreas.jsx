@@ -13,6 +13,10 @@ import AddArea from "../icons/AddArea"
 import SearchArea from "../icons/SearchArea"
 import SavedAreaItem from "../components/SavedAreaItem"
 import useSearch from "../hooks/useSearch"
+import { createArea } from "../constants/api"
+import FormContainer from "../common/FormContainer"
+import FormField from "../common/FormField"
+import FormButton from "../common/FormButton"
 
 export default function SavedAreas({
     savedAreasModalClose,
@@ -44,6 +48,11 @@ export default function SavedAreas({
         await savedAreasModalClose()
     }
 
+    const createArea = async (newAreaName) => await defectsDispatch({
+        type: "POST_NEW_AREA",
+        area_name: newAreaName
+    })
+
     return (
         <ShadowView>
             <CommonHeader
@@ -57,26 +66,31 @@ export default function SavedAreas({
                 <AddArea />
             </CommonSubHeader>
 
-            <TextInput
-                placeholder="הזן את שם האזור"
-                style={styles.savedAreasInput}
-            />
-
-            <CommonButton
-                title="הוספה"
-                borderRadius={20}
-                buttonHeight={responsiveWidth(33)}
-                borderColor={colors.darkSkyBlue}
-                style={{
-                    padding: 0,
-                    paddingHorizontal: responsiveWidth(70),
-                    marginTop: responsiveWidth(18)
-                }}
-                titleStyle={{
-                    marginRight: 0
-                }}
-                titleColor={colors.darkSkyBlue}
-            />
+            <FormContainer
+                initialValues={{ newAreaName: '' }}
+                onSubmit={(values) => createArea(values.newAreaName)}
+            >
+                <FormField
+                    name="newAreaName"
+                    placeholder="הזן את שם האזור"
+                    style={styles.savedAreasInput}
+                />
+                <FormButton
+                    title="הוספה"
+                    borderRadius={20}
+                    buttonHeight={responsiveWidth(33)}
+                    borderColor={colors.darkSkyBlue}
+                    style={{
+                        padding: 0,
+                        paddingHorizontal: responsiveWidth(70),
+                        marginTop: responsiveWidth(18)
+                    }}
+                    titleStyle={{
+                        marginRight: 0
+                    }}
+                    titleColor={colors.darkSkyBlue}
+                />
+            </FormContainer>
 
             <CommonSubHeader
                 title="בחר אזור"
@@ -135,9 +149,7 @@ const styles = StyleSheet.create({
         borderWidth: responsiveWidth(2),
         borderRadius: 20,
         height: responsiveWidth(31),
-        // width: responsiveWidth(239),
-        paddingHorizontal: responsiveWidth(10),
-
+        paddingVertical: 0,
         fontSize: fonts.xsmall,
         fontWeight: weights.thin,
         color: colors.darkBlueGray,

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update } from 'use-reducer-with-side-effects';
+import { getAllProblems } from '../constants/api';
 
 export const serverProblemsInitial = {
     problems: [],
@@ -59,47 +60,46 @@ export const serverProblemsReducer = (
 
             });
 
-        // case "GET_SERVER_PROBLEMS":
-        //     return UpdateWithSideEffect(
-        //         {
-        //             ...state,
-        //             fetching: true,
-        //             token: action.payload,
-        //             problems: problemsStatic
-        //         },
-        //         async (state, dispatch) => {
-        //             try {
-        //                 const response = await axios.get(
-        //                     "http://160.153.254.153/api/problems/all",
-
-        //                     {
-        //                         headers: {
-        //                             'Authorization': `Bearer ${action.payload}`
-        //                         }
-        //                     }
-
-        //                 );
-
-        //                 dispatch({
-        //                     type: "SET_SERVER_PROBLEMS",
-        //                     problems: response.data.data,
-        //                 })
-
-        //             } catch (error) {
-
-        //                 dispatch({
-        //                     type: "ERROR_SERVER_PROBLEMS",
-        //                     error
-        //                 });
-        //             }
-        //         }
-        //     );
         case "GET_SERVER_PROBLEMS":
-            return Update({
-                ...state,
-                token: action.payload,
-                problems: problemsStatic
-            })
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    fetching: true,
+                    token: action.token
+                },
+                async (state, dispatch) => {
+                    try {
+                        const response = await axios.get(
+                            `${getAllProblems}`,
+
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.payload}`
+                                }
+                            }
+
+                        );
+
+                        dispatch({
+                            type: "SET_SERVER_PROBLEMS",
+                            problems: response.data.data,
+                        })
+
+                    } catch (error) {
+
+                        dispatch({
+                            type: "ERROR_SERVER_PROBLEMS",
+                            error
+                        });
+                    }
+                }
+            );
+        // case "GET_SERVER_PROBLEMS":
+        //     return Update({
+        //         ...state,
+        //         token: action.payload,
+        //         problems: problemsStatic
+        //     })
 
         case "POST_SERVER_PROBLEM":
             return UpdateWithSideEffect(

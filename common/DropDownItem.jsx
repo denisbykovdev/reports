@@ -10,20 +10,27 @@ import weights from "../utils/weights";
 import DropDownElement from "./DropDownElement";
 import { useNavigation } from "@react-navigation/native";
 import FormContainer from "./FormContainer";
+import firstLevelTitles from "../constants/firstLevelTitles";
+import FormButton from "./FormButton";
+import useAuth from "../hooks/useAuth";
 
 const DropDownItem = ({ itemData, dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
 
     const navigation = useNavigation()
 
+    const { authState } = useAuth()
+
+    const { token } = authState
+
     const deleteHandler = (itemId) => {
         dispatchMethod({
             type: "DELETE_ITEM",
             itemId
         })
-        console.log(
-            "___DDItem/delete:", itemId
-        )
+        // console.log(
+        //     "___DDItem/delete:", itemId
+        // )
     }
 
     const openReportHandler = (id) =>
@@ -32,11 +39,27 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
             {
                 screen: "Report",
                 params: {
-                    reportId: id
+                    reportId: id,
+                    report: itemData
                 }
             }
         )
 
+    const submitItem = async (values) => {
+        console.log(
+            "--- DDI/submitItem/itemData:", itemData
+        )
+        console.log(
+            "--- DDI/submitItem/values:", values
+        )
+
+        await dispatchMethod({
+            type: "CHANGE_ITEM_VALUE",
+            data: values,
+            token,
+            itemId: itemData.id
+        })
+    }
 
     return (
 
@@ -56,7 +79,7 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                     </TouchableOpacity>
 
                     {
-                        itemData && itemData.status ?
+                        itemData && itemData.status || itemData.report_status ?
                             (
                                 <TouchableOpacity
                                     onPress={
@@ -64,7 +87,7 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                                     }
                                 >
                                     <Text style={styles.itemTitle}>
-                                        {itemData.id}
+                                        {itemData.report_adress} ,{itemData.id}
                                     </Text>
                                 </TouchableOpacity>
                             ) : (
@@ -90,12 +113,19 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                     backgroundColor: isVisible ? colors.paleGrayBg : colors.white
                 }}>
                     <FormContainer
-                        initialValues={{ id : '' }}
+                        initialValues={itemData}
+                        onSubmit={(values) => submitItem(values)}
                     >
                         {
                             Object.entries(itemData).map(
                                 ([key, value], index) => {
-                                    if (key !== "id")
+                                    // if (key !== "id" )
+                                    // console.log(
+                                    //     "--- DDI/Object.entries(itemData).map/key:", 
+                                    //     key, 
+                                    //     firstLevelTitles.hasOwnProperty(key)
+                                    // )
+                                    if (key !== 'id' && firstLevelTitles.hasOwnProperty(key))
                                         return (
                                             <DropDownElement
                                                 key={index}
@@ -109,6 +139,19 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                                 }
                             )
                         }
+                        <FormButton
+                            title={"עדכון"}
+                            titleColor={colors.white}
+                            buttonHeight={responsiveWidth(43)}
+                            buttonColor={colors.darkSkyBlue}
+                            buttonShadow={true}
+                            style={{
+                                width: 'auto',
+                                marginVertical: responsiveWidth(18),
+                                // paddingHorizontal: responsiveWidth(28),
+                                marginHorizontal: responsiveWidth(28),
+                            }}
+                        />
                     </FormContainer>
                 </View>
             }

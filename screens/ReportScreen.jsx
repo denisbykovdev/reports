@@ -53,25 +53,6 @@ const ReportScreen = ({ route }) => {
 
     const [isAdressOpen, setIsAdressOpen] = useState(false)
 
-    // const menuTitles = [
-    //     {
-    //         label: "פרטי הבדיקה",
-    //         desc: "details"
-    //     },
-    //     {
-    //         label: "ליקוים",
-    //         desc: "defects"
-    //     },
-    //     {
-    //         label: "סיכום",
-    //         desc: "resume"
-    //     },
-    //     {
-    //         label: "יומן עדכונים",
-    //         desc: "archive"
-    //     }
-    // ]
-
     const menuTitles = [
         {
             label: "יומן עדכונים",
@@ -98,40 +79,45 @@ const ReportScreen = ({ route }) => {
     const { isChecked, setChecked } = useChecked()
 
     const submitReport = async (values) => {
-        console.log(
-            "___ReportScreen/submitReport/values", values
-        )
+        // console.log(
+        //     "___ReportScreen/submitReport/values", values
+        // )
+        // console.log(
+        //     "___ReportScreen/submitReport/route.params.reportId", route.params.reportId === null ? defectsState.activeReport.id : route.params.reportId.toString()
+        // )
+        // console.log(
+        //     "___ReportScreen/submitReport/defectsState.activeReport", defectsState.activeReport
+        // )
 
-        if (defectsState.activeReport === null) {
-            defectsDispatch({
+        if (defectsState.activeReport === null && route.params.reportId === null) {
+            await defectsDispatch({
                 type: "POST_REPORT",
                 data: values,
                 token
             })
         } else {
-            defectsDispatch({
+            await defectsDispatch({
                 type: "REPOST_REPORT",
                 data: values,
                 token,
-                reportId: defectsState.activeReport.id
+                reportId: route.params.reportId === null ? defectsState.activeReport.id : route.params.reportId.toString()
             })
         }
-
         setChecked(true)
     }
 
     function layoutCatcher({ nativeEvent: { layout: { x, y, width, height }, target } }) {
-        console.log(
-            "___ReportScreen/scroll/layout:", width
-        )
+        // console.log(
+        //     "___ReportScreen/scroll/layout:", width
+        // )
 
         setViewWidth(width)
     }
 
     function scrollCatcher(event) {
-        console.log(
-            "___ReportScreen/scroll:", event.nativeEvent.contentOffset.x
-        )
+        // console.log(
+        //     "___ReportScreen/scroll:", event.nativeEvent.contentOffset.x
+        // )
 
         setOffsetX(event.nativeEvent.contentOffset.x)
     }
@@ -155,12 +141,58 @@ const ReportScreen = ({ route }) => {
         }
     }
 
+    useEffect(() => {
+        console.log(
+            "--- ReportScreen/effect/route", route?.params
+        )
+    }, [])
+
     return (
         <SafeView>
             <AvoidingView>
                 <FormContainer
                     innerRef={formikRef}
-                    initialValues={{ id: "" }}
+                    initialValues={{
+                        id: route.params && route.params.report ? route.params.report.id.toString() : '',
+                        report_related_documents: route.params && route.params.report ? route.params.report.report_related_documents : '',
+                        report_adress: route.params && route.params.report ? route.params.report.report_address : '',
+                        report_name: route.params && route.params.report ? route.params.report.report_name : '',
+                        status: route.params && route.params.report ? route.params.report.status : '',
+                        previous_test_id: route.params && route.params.report ? route.params.report.previous_test_id : '',
+                        examination_date: route.params && route.params.report ? route.params.report.examination_date : '',
+                        test_time: route.params && route.params.report ? route.params.report.test_time : '',
+                        customer_name: route.params && route.params.report ? route.params.report.customer_name : '',
+                        tester_name: route.params && route.params.report ? route.params.report.tester_name : '',
+                        test_relevance: route.params && route.params.report ? route.params.report.test_relevance : '',
+                        test_address_city: route.params && route.params.report ? route.params.report.test_address_city : '',
+                        test_address: route.params && route.params.report ? route.params.report.test_address : '',
+                        report_address_city: route.params && route.params.report ? route.params.report.report_address_city : '',
+                        report_address: route.params && route.params.report ? route.params.report.report_adress : '',
+                        phone_number: route.params && route.params.report ? route.params.report.phone_number : '',
+                        email: route.params && route.params.report ? route.params.report.email : '',
+                        other_email: route.params && route.params.report ? route.params.report.other_email : '',
+                        visit_escort: route.params && route.params.report ? route.params.report.visit_escort : '',
+                        customer_full_name: route.params && route.params.report ? route.params.report.customer_full_name : '',
+                        opposite_side: route.params && route.params.report ? route.params.report.opposite_side : '',
+                        customer_logo: route.params && route.params.report ? route.params.report.customer_logo : '',
+                        vat_in_percent: route.params && route.params.report ? route.params.report.vat_in_percent : '',
+                        form: route.params && route.params.report ? route.params.report.form : '',
+                        floor: route.params && route.params.report ? route.params.report.floor : '',
+                        technical_floor: route.params && route.params.report ? route.params.report.technical_floor : '',
+                        systems: route.params && route.params.report ? route.params.report.systems : '',
+                        number_of_shared_buildings: route.params && route.params.report ? route.params.report.number_of_shared_buildings : '',
+                        parking_levels: route.params && route.params.report ? route.params.report.parking_levels : '',
+                        roof_levels: route.params && route.params.report ? route.params.report.roof_levels : '',
+                        upper_reservoir: route.params && route.params.report ? route.params.report.upper_reservoir : '',
+                        bottom_reservoir: route.params && route.params.report ? route.params.report.bottom_reservoir : '',
+                        shared_systems_with_additional_buildings: route.params && route.params.report ? route.params.report.shared_systems_with_additional_buildings : '',
+                        com_areas_in_test: route.params && route.params.report ? route.params.report.com_areas_in_test : '',
+                        exam_comm_areas: route.params && route.params.report ? route.params.report.exam_comm_areas : '',
+                        resume: route.params && route.params.report ? route.params.report.resume : '',
+                        is_resume_template: route.params && route.params.report ? route.params.report.is_resume_template : '',
+                        areas: route.params && route.params.report ? route.params.report.areas : '',
+                        notes: route.params && route.params.report ? route.params.report.notes : ''
+                    }}
                     onSubmit={
                         (values, { resetForm }) => submitReport(values, { resetForm })
                     }

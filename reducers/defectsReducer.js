@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-effects';
-import { areasAll, createReport, deleteArea, updateAreaProblems, updateReport } from '../constants/api';
+import { areasAll, createReport, deleteArea, createArea, updateAreaProblems, updateReport } from '../constants/api';
 
 const staticSavedAreas = [
     {
@@ -191,44 +191,44 @@ export const defectsReducer = (
                 error: action.error
             });
 
-        // case "FETCH_SAVED_AREAS":
-        //     return UpdateWithSideEffect(
-        //         {
-        //             ...state,
-        //             fetching: true,
-        //             token: action.token
-        //         },
-        //         async(state, dispatch) => {
-        //             try {
-        //                 const response = await axios.get(
-        //                     `${areasAll}`,
-        //                     {
-        //                         headers: {
-        //                             'Authorization': `Bearer ${action.token}`
-        //                         }
-        //                     }
-
-        //                 );
-
-        //                 dispatch({
-        //                     type: "GET_SAVED_AREA",
-        //                     savedAreas: response.data.data
-        //                 })
-        //             } catch(error) {
-        //                 dispatch({
-        //                     type: "ERROR_SAVED_AREA",
-        //                     error
-        //                 })
-        //             }
-        //         }
-        //     );
-
         case "FETCH_SAVED_AREAS":
-            return Update({
-                ...state,
-                token: action.token,
-                savedAreas: staticSavedAreas
-            });
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    fetching: true,
+                    token: action.token
+                },
+                async (state, dispatch) => {
+                    try {
+                        const response = await axios.get(
+                            `${areasAll}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+
+                        );
+
+                        dispatch({
+                            type: "GET_SAVED_AREA",
+                            savedAreas: response.data.data
+                        })
+                    } catch (error) {
+                        dispatch({
+                            type: "ERROR_SAVED_AREA",
+                            error
+                        })
+                    }
+                }
+            );
+
+        // case "FETCH_SAVED_AREAS":
+        //     return Update({
+        //         ...state,
+        //         token: action.token,
+        //         savedAreas: staticSavedAreas
+        //     });
 
         case "ADD_SAVED_AREAS":
             // console.log(
@@ -269,6 +269,39 @@ export const defectsReducer = (
                 posting: false,
                 savedAreas: action.updatedSavedAreas
             });
+
+        case "POST_NEW_AREA":
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    posting: true,
+                    token: action.token
+                },
+                async (state, dispatch) => {
+                    try {
+                        const response = await axios.post(
+                            `${createArea}`,
+                            {
+                                area_name: action.areaName
+                            },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+                        );
+                        dispatch({
+                            type: "UPDATE_SAVED_AREAS",
+                            savedAreas: response.data.data
+                        })
+                    } catch (error) {
+                        dispatch({
+                            type: "ERROR_SAVED_AREA",
+                            error
+                        })
+                    }
+                }
+            );
 
         case "POST_SAVED_AREA_TO_DELETE":
             return UpdateWithSideEffect(
@@ -340,7 +373,7 @@ export const defectsReducer = (
             );
 
         // case "POST_NEW_AREA":
-            
+
 
         case "ADD_PROBLEMS_TO_ARIA":
             return Update({
@@ -501,8 +534,11 @@ export const defectsReducer = (
             },
                 async (state, dispatch) => {
                     try {
+                        console.log(
+                            "--- defectsReducer/ping:UPDATE_REPORT", updateReport(action.reportId)
+                        )
                         const response = await axios.post(
-                            `${updateReport(action.projectId)}`,
+                            `${updateReport(action.reportId)}`,
                             {
                                 ...action.data,
                                 areas: state.areas,

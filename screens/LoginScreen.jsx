@@ -28,23 +28,26 @@ export default function LoginScreen({ navigation }) {
 
   useEffect(() => {
     console.log(
-      "---autoLogin", secureToken, secureAdmin
+      "--- LoginScreen/SecureStore:", secureToken, secureAdmin
     )
-    if(secureToken && secureToken !== null) {
+    if (secureToken && secureToken !== null) {
       authDispatch({
         type: "LOAD_TOKEN"
       })
       authDispatch({
         type: "SET_TOKEN",
         token: JSON.parse(secureToken),
-        isAdmin: secureAdmin
+        isAdmin: JSON.parse(secureAdmin)
       });
 
     }
-      
+
   }, [secureToken])
 
   useEffect(() => {
+    console.log(
+      "--- LoginScreen/authState:", authState.token, authState.isAdmin
+    )
     authState.token !== null
       &&
       navigation.navigate(
@@ -53,14 +56,13 @@ export default function LoginScreen({ navigation }) {
           screen: "Reports",
           params: {
             isAdmin: authState.isAdmin
-            // isAdmin: true
           }
         }
       )
   }, [authState.token])
 
   // useEffect(() => {
- 
+
   //      navigation.navigate(
   //       "AppStack",
   //       {

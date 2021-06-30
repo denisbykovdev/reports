@@ -5,12 +5,17 @@ export default function useSecureToken() {
     const [secureToken, setSecureToken] = useState();
 
     useEffect(() => {
-        (async function getToken(){
+        (async function getToken() {
             const token = await SecureStore.getItemAsync("userToken");
-            console.log("*******SStoken:", token)
+
+            console.log(
+                "--- useSecureToken/getItemAsync/token:",
+                token
+            )
+
             setSecureToken(token);
         })()
-        
+
     }, [])
 
     return secureToken;

@@ -10,6 +10,7 @@ import weights from "../utils/weights";
 import { FastField, Formik } from "formik";
 import FormSelect from "./FormSelect";
 import FormField from "./FormField";
+import useAuth from "../hooks/useAuth";
 
 const INPUT_DELAY = 200;
 
@@ -76,25 +77,28 @@ const OptimisationTextFieldWrapper = ({
 
 const testArray = ['לביצוע', 'נבדק']
 
-const DropDownElement = ({ 
-    elementKey, 
-    elementValue, 
-    elementIndex, 
-    dispatchMethod, 
-    itemId 
+const DropDownElement = ({
+    elementKey,
+    elementValue,
+    elementIndex,
+    dispatchMethod,
+    itemId
 }) => {
+    const { authState } = useAuth()
 
-    const interSepter = (name, text) => {
-        console.log(
-            "_______DDElement/intersepter:", text, name
-        )
-        dispatchMethod({
-            type: "CHANGE_ITEM_VALUE",
-            itemId,
-            itemKey: name,
-            itemNewValue: text
-        })
-    }
+    const { token } = authState;
+
+    // const interSepter = (name, text) => {
+    //     console.log(
+    //         "_______DDElement/intersepter:", text, name
+    //     )
+    //     dispatchMethod({
+    //         type: "CHANGE_ITEM_VALUE",
+    //         itemId,
+    //         itemKey: name,
+    //         itemNewValue: text
+    //     })
+    // }
 
     return (
         <View style={styles.itemMain}>
@@ -110,6 +114,7 @@ const DropDownElement = ({
                         firstLevelTitles[elementKey]
                             ? firstLevelTitles[elementKey]
                             : elementKey
+                        // firstLevelTitles[elementKey]
                     }
                 </Text>
 
@@ -121,8 +126,8 @@ const DropDownElement = ({
 
                 {
                     elementKey === 'status'
-                        ? <FormSelect 
-                            interSepter={interSepter}
+                        ? <FormSelect
+                            // interSepter={interSepter}
                             placeholder="לביצוע"
                             array={testArray}
                             name="status"
@@ -135,7 +140,7 @@ const DropDownElement = ({
                             name={elementKey}
                             // placeholder={elementValue}
                             autoCapitalize="none"
-                            interSepter={interSepter}
+                        // interSepter={interSepter}
                         />
                 }
 

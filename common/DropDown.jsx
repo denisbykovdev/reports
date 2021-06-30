@@ -18,9 +18,9 @@ const DropDown = ({
 
     const [inputText, onChange, onBlur] = useInput();
 
-    console.log(
-        "---DD/prop:", arrayProp
-    )
+    // console.log(
+    //     "---DD/prop:", arrayProp
+    // )
 
     // connect prop to update render
     useEffect(() => {
@@ -67,11 +67,11 @@ const DropDown = ({
             {children}
             <View style={styles.searchContainer}>
 
-               
+
 
                 <View style={[styles.searchHeader, {
-                        marginVertical: searchTitle && responsiveWidth(34)
-                        }]}
+                    marginVertical: searchTitle && responsiveWidth(34)
+                }]}
                 >
                     {/* <View style={styles.searchIcon}>
                         

@@ -6,10 +6,10 @@ export default {
     password: "סיסמא",
 
     id: "מזהה בדיקה",
-    status: "סטטוס", //положение дел
-    customerNumber: "מספר לקוח",
-    client: "לקוח",
-    address: "כתובת",
-    date: "תאריך",
-    editorsName: "שם העורך"
+    status: "סטטוס",
+    customer_name: "מספר לקוח",
+    customer_full_name: "לקוח",
+    report_adress: "כתובת",
+    examination_date: "תאריך",
+    tester_name: "שם העורך"
 };

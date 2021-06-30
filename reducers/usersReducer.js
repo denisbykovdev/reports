@@ -105,8 +105,8 @@ export const usersReducer = (
                     token: action.token,
                     fetching: true
                 },
-                async(state, dispatch) => {
-                    try{
+                async (state, dispatch) => {
+                    try {
                         const response = await axios.post(
                             `${deleteUser(action.itemId)}`,
                             {
@@ -120,7 +120,7 @@ export const usersReducer = (
                             type: "UPDATE_USERS",
                             users: response.data.data,
                         })
-                    }catch(error){
+                    } catch (error) {
                         dispatch({
                             type: "ERROR_USERS",
                             error
@@ -150,13 +150,15 @@ export const usersReducer = (
                     token: action.token,
                     fetching: true
                 },
-                async(state, dispatch) => {
-                    try{
+                async (state, dispatch) => {
+                    try {
                         const response = await axios.post(
                             `${updateUser(action.itemId)}`,
                             {
-                                key: action.itemKey,
-                                value: action.itemNewValue
+                                // key: action.itemKey,
+                                // value: action.itemNewValue
+                                // [action.itemKey]: action.itemNewValue
+                                ...action.data
                             },
                             {
                                 headers: {
@@ -169,7 +171,7 @@ export const usersReducer = (
                             type: "UPDATE_USERS",
                             users: response.data.data,
                         })
-                    }catch(error){
+                    } catch (error) {
                         dispatch({
                             type: "ERROR_USERS",
                             error

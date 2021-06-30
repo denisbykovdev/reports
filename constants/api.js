@@ -236,11 +236,11 @@ export const createReport = reportsStore
 
 //areas endpoints
 //store
-export const areasStore = `${api}/areas/store`
+export const areasStore = `${api}/area/store`
 //use cases:
 
 //get all areas: GET
-export const areasAll = `${api}/areas/all`
+export const areasAll = `${areasStore}/all`
 // request:
 // {
 //   headers: {
@@ -381,11 +381,11 @@ export const createArea = areasStore
 // response:
 data: [
     {
-        name: 'testArea1',
+        name: 'testArea1',//area_name
         id: 1,
         problems: [
             {
-                name: 'testProblem1',
+                name: 'testProblem1',//problem_name
                 id: 1,
                 profession_name: 'testProfession1',
                 details_of_eclipse: 'testDetails1',

@@ -16,9 +16,9 @@ export const authReducer = (
                 loading: true
             };
         case "SET_TOKEN":
-            console.log(
-                "***authReducer/settoken:", action.token
-            )
+            // console.log(
+            //     "***authReducer/SET_TOKEN:", action.token
+            // )
             return {
                 ...state,
                 token: action.token,
