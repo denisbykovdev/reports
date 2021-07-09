@@ -8,7 +8,7 @@ export function* updateReportSaga(action) {
         yield put(updateReportStart());
 
         const { data } = yield call(() => axios.post(
-            `${updateReport(action.payload.report.id)}`,
+            `${updateReport(action.payload.reportId)}`,
             {
                 ...action.payload.report,
                 areas: action.payload.areas,

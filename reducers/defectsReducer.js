@@ -4,7 +4,7 @@ import { areasAll, createReport, deleteArea, createArea, updateAreaProblems, upd
 
 const staticSavedAreas = [
     {
-        name: 'testArea1',
+        area_name: 'testArea1',
         id: 1,
         problems: [
             {
@@ -30,7 +30,7 @@ const staticSavedAreas = [
         ]
     },
     {
-        name: 'testArea2',
+        area_name: 'testArea2',
         id: 2,
         problems: [
             {
@@ -72,6 +72,11 @@ export const defectsReducer = (
 ) => {
 
     switch (action.type) {
+        case "CLEAR_AREAS":
+            return Update({
+                ...state,
+                areas: []
+            })
 
         case "ADD_DEFAULT_AREA":
             return Update({
@@ -81,7 +86,7 @@ export const defectsReducer = (
                     // defaultArea
                     {
                         id: state.areas !== null && state.areas.length > 0 ? state.areas.length + 1 : 1,
-                        name: "אזור",
+                        area_name: "אזור",
                         problems: []
                     }
                 ]
@@ -282,7 +287,8 @@ export const defectsReducer = (
                         const response = await axios.post(
                             `${createArea}`,
                             {
-                                area_name: action.areaName
+                                area_name: action.areaName,
+                                problems: []
                             },
                             {
                                 headers: {
@@ -314,9 +320,9 @@ export const defectsReducer = (
                     try {
                         const response = await axios.post(
                             `${deleteArea(action.areaName)}`,
-                            {
-                                area_name: action.areaName
-                            },
+                            // {
+                            //     area_name: action.areaName
+                            // },
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
@@ -482,102 +488,6 @@ export const defectsReducer = (
                         }
                         : note
                 )
-            });
-
-        case "POST_REPORT":
-            // console.log(
-            //     "***defectsDispatch/ADD_NOTE_TO_SAVENOTES/action:",
-            //     { ...action.data, areas: state.areas, notes: state.saveNotes }
-            // )
-            return UpdateWithSideEffect({
-                ...state,
-                posting: true,
-                token: action.token
-            },
-                async (state, dispatch) => {
-                    try {
-                        const response = await axios.post(
-                            `${createReport}`,
-                            {
-                                ...action.data,
-                                areas: JSON.stringify(state.areas),
-                                notes: JSON.stringify(state.notes.map(
-                                    note => note.isSavedToReport === true
-                                        && note
-                                ))
-                            },
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${action.token}`
-                                }
-                            }
-                        );
-
-                        dispatch({
-                            type: "UPDATE_REPORT",
-                            activeReport: response.data.data
-                        })
-                    } catch (error) {
-                        dispatch({
-                            type: "ERROR_POST_REPORT",
-                            error
-                        })
-                    }
-                }
-            );
-
-        case "REPOST_REPORT":
-            return UpdateWithSideEffect({
-                ...state,
-                posting: true,
-                token: action.token
-            },
-                async (state, dispatch) => {
-                    try {
-                        console.log(
-                            "--- defectsReducer/ping:UPDATE_REPORT", updateReport(action.reportId)
-                        )
-                        const response = await axios.post(
-                            `${updateReport(action.reportId)}`,
-                            {
-                                ...action.data,
-                                areas: state.areas,
-                                notes: state.notes.map(
-                                    note => note.isSavedToReport === true
-                                        && note
-                                )
-                            },
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${action.token}`
-                                }
-                            },
-                        );
-                        dispatch({
-                            type: "UPDATE_REPORT",
-                            activeReport: response.data.data
-                        })
-                    } catch (error) {
-                        dispatch({
-                            type: "ERROR_POST_REPORT",
-                            error
-                        })
-                    }
-                }
-            );
-
-        case "UPDATE_REPORT":
-            return Update({
-                ...state,
-                posting: false,
-                activeReport: action.activeReport
-            });
-
-        case "ERROR_POST_REPORT":
-            return Update({
-                ...state,
-                posting: false,
-                error: action.error
             });
     }
 }

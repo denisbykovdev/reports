@@ -174,7 +174,7 @@ export const deleteReport = (reportId) => `${reportsStore}/${reportId}/delete`
 // ]
 
 //update report: POST
-export const updateReport = (reportId) => `${reportsStore}/${reportId}/update`
+export const updateReport = (reportId) => `${reportsStore}/${reportId.toString()}/update`
 // request:
 // {
 //     key: string

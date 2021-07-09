@@ -31,7 +31,7 @@ export default function SavedAreas({
 
     const addCheckedArea = (name) => {
 
-        const newSavedArea = defectsState && defectsState.savedAreas.find(savedArea => savedArea.name === name)
+        const newSavedArea = defectsState && defectsState.savedAreas.find(savedArea => savedArea.area_name === name)
 
         setUpdateAreasList(oldArray => [...oldArray, newSavedArea])
     }
@@ -50,7 +50,7 @@ export default function SavedAreas({
 
     const createArea = async (newAreaName) => await defectsDispatch({
         type: "POST_NEW_AREA",
-        area_name: newAreaName
+        areaName: newAreaName
     })
 
     return (

@@ -158,7 +158,7 @@ const ReportScreen = ({ route }) => {
             // })
             dispatch(watchUpdateReport(
                 token,
-                // values,
+                route.params.report.id,
                 newValues,
                 defectsState.areas,
                 defectsState.notes,
@@ -187,8 +187,8 @@ const ReportScreen = ({ route }) => {
     function scrollComponent() {
         switch (true) {
             case offsetX === 0: return <Details />;
-            case offsetX === viewWidth: return <Defects areas={route.params && route.params.report ? JSON.parse(route.params.report.areas) : null} />;
-            case offsetX === (viewWidth) * 2: return <Resume notes={route.params && route.params.report ? JSON.parse(route.params.report.notes) : null} />;
+            case offsetX === viewWidth: return <Defects areas={route.params && route.params.report && route.params.report.areas.lenth >= 0 ? route.params.report.areas : null} />;
+            case offsetX === (viewWidth) * 2: return <Resume notes={route.params && route.params.report && route.params.report.notes.lenth >= 0 ? route.params.report.notes : null} />;
             case offsetX >= (viewWidth) * 3: return <Archive />;
         }
     }

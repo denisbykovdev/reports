@@ -42,9 +42,22 @@ const Defects = ({ areas }) => {
 
     useEffect(() => {
         console.log(
-            "--- Defects/useEffect/defectsState.areas", defectsState.areas, areas
+            "--- Defects/useEffect/defectsState.areas", defectsState.areas
         )
-    }, [defectsState.areas])
+
+        if (areas && areas !== null) {
+            defectsDispatch({
+                type: "ADD_SAVED_AREAS",
+                saved: areas
+            })
+        }
+        else {
+            defectsDispatch({
+                type: "CLEAR_AREAS"
+            })
+        }
+
+    }, [])
 
     return (
         <>
@@ -62,27 +75,27 @@ const Defects = ({ areas }) => {
 
 
             {
-                areas === null && defectsState.areas
-                    ? defectsState.areas.map((area, i) => (
-                        <Area
-                            key={i}
-                            areaId={area.id}
-                            areaName={area.name}
-                            areaProblems={area.problems}
-                            dispatch={defectsDispatch}
-                            server={area.server ? true : false}
-                        />
-                    ))
-                    : areas.map((area, i) => (
-                        <Area
-                            key={i}
-                            areaId={area.id}
-                            areaName={area.name}
-                            areaProblems={area.problems}
-                            dispatch={defectsDispatch}
-                            server={area.server ? true : false}
-                        />
-                    ))
+
+                defectsState.areas && defectsState.areas.map((area, i) => (
+                    <Area
+                        key={i}
+                        areaId={area.id}
+                        areaName={area.area_name}
+                        areaProblems={area.problems}
+                        dispatch={defectsDispatch}
+                        server={area.server ? true : false}
+                    />
+                ))
+                // : areas.map((area, i) => (
+                //     <Area
+                //         key={i}
+                //         areaId={area.id}
+                //         areaName={area.name}
+                //         areaProblems={area.problems}
+                //         dispatch={defectsDispatch}
+                //         server={area.server ? true : false}
+                //     />
+                // ))
             }
 
 

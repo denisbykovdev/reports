@@ -112,6 +112,7 @@ export const postReportFailure = (error) => ({
 
 export const watchUpdateReport = (
     token,
+    reportId,
     report,
     areas,
     notes,
@@ -120,6 +121,7 @@ export const watchUpdateReport = (
     type: "WATCH_UPDATE_REPORT",
     payload: {
         token,
+        reportId,
         report,
         areas,
         notes,

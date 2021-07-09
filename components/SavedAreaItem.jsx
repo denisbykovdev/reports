@@ -17,10 +17,10 @@ export default function SavedAreaItem({ savedArea, addCheckedArea, removeChecked
     const checkedHandler = () => {
         if (!checked) {
             setChecked(true)
-            addCheckedArea(savedArea.name)
+            addCheckedArea(savedArea.area.name)
         } else if (checked) {
             setChecked(false)
-            removeCheckedArea(savedArea.name)
+            removeCheckedArea(savedArea.area_name)
         }
     }
 
@@ -29,7 +29,7 @@ export default function SavedAreaItem({ savedArea, addCheckedArea, removeChecked
             <View style={styles.savedAreaContainer}>
                 <View style={styles.savedAreaDeleteButtonContainer}>
                     <TouchableOpacity
-                        onPress={() => deleteSavedArea(savedArea.name)}
+                        onPress={() => deleteSavedArea(savedArea.area_name)}
 
                     >
                         <Basket />
@@ -60,7 +60,7 @@ export default function SavedAreaItem({ savedArea, addCheckedArea, removeChecked
                 </Text>
 
                 <TouchableOpacity
-                    onPress={() => checkedHandler(savedArea.name)}
+                    onPress={() => checkedHandler(savedArea.area_name)}
                     style={[
                         styles.tickContainer,
                         {
@@ -79,7 +79,7 @@ export default function SavedAreaItem({ savedArea, addCheckedArea, removeChecked
             <SavedProblemsModal>
                 <ServerProblems
                     savedProblemsModalclose={savedProblemsModalclose}
-                    savedAreaName={savedArea.name}
+                    savedAreaName={savedArea.area_name}
                 />
             </SavedProblemsModal>
         </View>
