@@ -84,9 +84,6 @@ const DropDownElement = ({
     dispatchMethod,
     itemId
 }) => {
-    const { authState } = useAuth()
-
-    const { token } = authState;
 
     // const interSepter = (name, text) => {
     //     console.log(

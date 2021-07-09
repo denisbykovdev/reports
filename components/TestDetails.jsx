@@ -152,7 +152,7 @@ const TestDetails = () => {
                     }}
                 />
                 <FormField
-                    name="report_address_city"
+                    name="report_post_address_city"
                     inputStyle={styles.input}
                     style={styles.inputContainer}
                 />
@@ -172,7 +172,7 @@ const TestDetails = () => {
                     }}
                 />
                 <FormField
-                    name="report_address"
+                    name="report_post_address"
                     inputStyle={styles.input}
                     style={styles.inputContainer}
                 />

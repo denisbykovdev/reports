@@ -28,7 +28,7 @@ export default function LoginScreen({ navigation }) {
 
   useEffect(() => {
     console.log(
-      "--- LoginScreen/SecureStore:", secureToken, secureAdmin
+      "--- LoginScreen/SecureStore:", typeof secureToken, secureAdmin
     )
     if (secureToken && secureToken !== null) {
       authDispatch({
@@ -46,7 +46,7 @@ export default function LoginScreen({ navigation }) {
 
   useEffect(() => {
     console.log(
-      "--- LoginScreen/authState:", authState.token, authState.isAdmin
+      "--- LoginScreen/authState:", typeof authState.token, authState.isAdmin
     )
     authState.token !== null
       &&

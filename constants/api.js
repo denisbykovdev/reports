@@ -103,7 +103,11 @@ export const deleteUser = (userId) => `${usersStore}/${userId}/delete`
 export const addNewUser = usersStore
 // request:
 // {
-//     new_user: action.user
+//         name: string,
+//         last_name: string,
+//         phone: string,
+//         email: string,
+//         password: string
 // },
 // {
 //     headers: {
@@ -323,7 +327,7 @@ data: [
 ]
 
 //update area(add problems): POST
-export const updateAreaProblems = (areaName) => `${areasStore}/${areaName}/problems`
+export const updateAreaProblems = (areaName) => `${areasStore}/${areaName}/update`
 // request:
 // {
 //     area_name: string,
@@ -422,31 +426,23 @@ export const updateProblems = (problemName) => `${problemsStore}/${problemName}/
 
 //professions endpoints
 //store
-export const professionsStore = `eitanperetz.com/api/professions/store/`
+export const professionsStore = `${api}/profession/store`
 //use cases:
 //create profession: POST
 export const createProfession = professionsStore
 //delete profession: POST
-export const deleteProfession = (professionName) => `${professionsStore}${professionName}`
+export const deleteProfession = (professionName) => `${professionsStore}/${professionName}/delete`
 //get all professions: GET
-export const getAllProfessions = `eitanperetz.com/api/professions/all/`
+export const getAllProfessions = `${professionsStore}/all`
 
 //standarts endpoints
 //store
-export const standartsStore = `eitanperetz.com/api/standarts/store/`
+export const standartsStore = `${api}/standart/store`
 //use cases:
 //create standart: POST
 export const createStandart = standartsStore
 //get all standarts: GET
-export const getAllStandarts = `eitanperetz.com/api/standarts/all/`
-
-//notes endpoints
-//store
-export const notesStore = `${api}notes/store/`
-//create note
-export const createNote = notesStore
-//delete note by text
-export const deleteNote = (noteText) => `${notesStore}${noteText}/delete`
+export const getAllStandarts = `${standartsStore}/all`
 
 //print modal endpoints
 export const withProfRegion = `withProfRegion/`

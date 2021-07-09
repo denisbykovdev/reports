@@ -5,8 +5,6 @@ import useType from "./useType";
 export default function useLocker() {
     const { type } = useType()
 
-    console.log("--- useLocker/type", type)
-
     // useEffect(
     //     // useCallback(() => {
     //     async function locker() {
@@ -23,6 +21,8 @@ export default function useLocker() {
     useEffect(() => {
         async function locker() {
             try {
+                console.log("--- useLocker/type", type)
+
                 if (type === 1) {
                     await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
                 } else if (type === 2) {

@@ -13,14 +13,14 @@ export default function Router() {
   const RouterStack = createStackNavigator();
 
   return (
-    <StateInspector name="app">
-      <NavigationContainer>
-        <RouterStack.Navigator headerMode="none">
-          <RouterStack.Screen name="AuthStack" component={AuthStack} />
-          <RouterStack.Screen name="AppStack" component={AppStack} />
-        </RouterStack.Navigator>
-      </NavigationContainer>
+    // <StateInspector name="app">
+    <NavigationContainer>
+      <RouterStack.Navigator headerMode="none">
+        <RouterStack.Screen name="AuthStack" component={AuthStack} />
+        <RouterStack.Screen name="AppStack" component={AppStack} />
+      </RouterStack.Navigator>
+    </NavigationContainer>
 
-    </StateInspector>
+    // </StateInspector>
   );
 }

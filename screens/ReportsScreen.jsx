@@ -1,5 +1,5 @@
-import React from "react";
-import { ScrollView, View } from "react-native";
+import React, { useRef } from "react";
+import { ScrollView, Text, View } from "react-native";
 import SafeView from "../common/SafeView";
 import HeaderView from "../common/HeaderView";
 import ButtomView from "../common/BottomView";
@@ -20,24 +20,84 @@ import AvoidingView from "../common/AvoidingView";
 import useReports from "../hooks/useReports";
 import Table from "../common/Table";
 import useType from "../hooks/useType";
+import { useEffect } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { setReports, watchDeleteReport, watchGetReports, watchPostReport, watchUpdateReport } from "../actionCreators/sagaReport";
+import useAuth from "../hooks/useAuth";
+// import { useIsConnected } from "react-native-offline";
 
 function ReportsScreen({ route, navigation }) {
 
   useStatusBar("dark-content", colors.paleGrayBg);
 
+  const initialMount = useRef(true);
+
   const { isAdmin } = route.params;
 
   const [userModalOpen, userModalClose, UserModalContent] = useModal();
 
-  const [reportsState, reportsDispatch] = useReports();
+  // const [reportsState, reportsDispatch] = useReports();
 
   const { type } = useType()
 
-  console.log(
-    "---ReportsScreen:", isAdmin, reportsState.reports
-  )
+  const dispatch = useDispatch();
 
-  const openReportHandler = () =>
+  const reportsSelector = useSelector((state) => state.sagaReport.reports, shallowEqual)
+
+  const networkSelector = useSelector((state) => state.network, shallowEqual)
+
+  const { authState } = useAuth()
+
+  const { token } = authState
+
+  // const isConnected = useIsConnected()
+
+  useEffect(() => {
+    console.log(
+      "--- ReportsScreeen/isConnected:",
+      // isConnected,
+      networkSelector.isConnected,
+      reportsSelector
+    )
+    dispatch(watchGetReports(token))
+  }, [])
+
+  useEffect(() => {
+    if (initialMount.current) {
+      initialMount.current = false
+    } else {
+      if (
+        networkSelector.isConnected === true
+        && networkSelector.actionQueue
+        && networkSelector.actionQueue.length >= 0
+      ) {
+        networkSelector.actionQueue.map(action =>
+          action.type === 'WATCH_POST_REPORT'
+            ? dispatch(watchPostReport(
+              action.payload.token,
+              action.payload.report,
+              action.payload.areas,
+              action.payload.notes
+            ))
+            : action.type === 'WATCH_UPDATE_REPORT'
+              ? dispatch(watchUpdateReport(
+                action.payload.token,
+                action.payload.report,
+                action.payload.areas,
+                action.payload.notes
+              ))
+              : action.type === 'WATCH_DELETE_REPORT'
+                ? dispatch(watchDeleteReport(
+                  action.payload.token,
+                  action.payload.report.id
+                ))
+                : action
+        )
+      }
+    }
+  }, [networkSelector.isConnected])
+
+  const openPureReportHandler = () =>
     navigation.navigate(
       "AppStack",
       {
@@ -92,27 +152,32 @@ function ReportsScreen({ route, navigation }) {
                     height={responsiveWidth(46)}
                   />
                 </CommonHeader>
+
                 {
                   type === 2 ?
                     (
                       <Table
                         arrayProp={
-                          reportsState.reports !== null &&
-                          reportsState.reports
+                          // reportsState.reports !== null &&
+                          // reportsState.reports
+                          reportsSelector !== null && reportsSelector
                         }
                         searchTitle={"מזהה בדיקה"}
-                        dispatchMethod={reportsDispatch}
+                        // dispatchMethod={reportsDispatch}
+                        dispatchMethod={dispatch}
                         tableTitles={reportsTitles}
                       >
                       </Table>
                     ) : (
                       <DropDown
                         arrayProp={
-                          reportsState.reports !== null &&
-                          reportsState.reports
+                          // reportsState.reports !== null &&
+                          // reportsState.reports
+                          reportsSelector !== null && reportsSelector
                         }
                         searchTitle={"מזהה בדיקה"}
-                        dispatchMethod={reportsDispatch}
+                        // dispatchMethod={reportsDispatch}
+                        dispatchMethod={dispatch}
                       >
                       </DropDown>
                     )
@@ -136,9 +201,7 @@ function ReportsScreen({ route, navigation }) {
                   marginVertical: responsiveWidth(24),
                   marginRight: type === 2 ? responsiveWidth(10) : 0,
                 }}
-                onPress={
-                  () => openReportHandler()
-                }
+                onPress={() => openPureReportHandler()}
                 titleStyle={{
                   marginEnd: type === 2 ? responsiveWidth(10) : 0
                 }}
@@ -192,7 +255,7 @@ function ReportsScreen({ route, navigation }) {
           </>
         </ScrollView>
       </AvoidingView>
-    </SafeView>
+    </SafeView >
   );
 }
 

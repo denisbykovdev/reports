@@ -39,41 +39,41 @@ export const standartsReducer = (
                 posting: false,
                 error: action.error
             })
-        // case "FETCH_STANDARTS":
-        //     return UpdateWithSideEffect(
-        //         {
-        //             ...state,
-        //             fetching: true,
-        //             token: action.token
-        //         },
-        //         async (state, dispatch) => {
-        //             try {
-        //                 const response = await axios.get(
-        //                     "http://160.153.254.153/api/standarts/all",
-        //                     {
-        //                         headers: {
-        //                             'Authorization': `Bearer ${action.token}`
-        //                         }
-        //                     }
-        //                 )
-        //                 dispatch({
-        //                     type: "UPDATE_STANDARTS",
-        //                     standarts: response.data.data,
-        //                 })
-        //             } catch (error) {
-        //                 dispatch({
-        //                     type: "ERROR_STANDARTS",
-        //                     error
-        //                 });
-        //             }
-        //         }
-        //     )
         case "FETCH_STANDARTS":
-            return Update({
-                ...state,
-                token: action.token,
-                standarts: standartsStatic
-            })
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    fetching: true,
+                    token: action.token
+                },
+                async (state, dispatch) => {
+                    try {
+                        const response = await axios.get(
+                            "http://160.153.254.153/api/standart/store/all",
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+                        )
+                        dispatch({
+                            type: "UPDATE_STANDARTS",
+                            standarts: response.data.data,
+                        })
+                    } catch (error) {
+                        dispatch({
+                            type: "ERROR_STANDARTS",
+                            error
+                        });
+                    }
+                }
+            )
+        // case "FETCH_STANDARTS":
+        //     return Update({
+        //         ...state,
+        //         token: action.token,
+        //         standarts: standartsStatic
+        //     })
         case "POST_NEW_STANDART":
             console.log(
                 "***standartsReducer/POST_NEW_STANDART", action.standart
@@ -87,7 +87,7 @@ export const standartsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
-                            `http://160.153.254.153/api/standarts/store`,
+                            `http://160.153.254.153/api/standart/store`,
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`

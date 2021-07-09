@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
 import FormButton from "../common/FormButton";
 import FormContainer from "../common/FormContainer";
@@ -14,7 +14,7 @@ const TableAddUser = ({ dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
 
     const formData = {
-        id: "",
+        // id: "",
         name: "",
         last_name: "",
         phone: "",
@@ -39,7 +39,7 @@ const TableAddUser = ({ dispatchMethod }) => {
         payload: newUser
     })
 
-    const fieldWidth = ((layout.width - responsiveWidth(60) ) / (Object.keys(formData).length + 1)) - responsiveWidth(18)
+    const fieldWidth = ((layout.width - responsiveWidth(60)) / (Object.keys(formData).length + 1)) - responsiveWidth(18)
 
     // console.log(
     //     "___TABADDUSER:", fieldWidth

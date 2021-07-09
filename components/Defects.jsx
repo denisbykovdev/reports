@@ -11,7 +11,7 @@ import SavedAreas from "../modals/SavedAreas";
 import Area from './Area'
 import useAuth from "../hooks/useAuth";
 
-const Defects = () => {
+const Defects = ({ areas }) => {
     const { defectsState, defectsDispatch } = useDefects()
     const [savedAreasModalOpen, savedAreasModalClose, SavedAreasModalContent] = useModal();
 
@@ -42,7 +42,7 @@ const Defects = () => {
 
     useEffect(() => {
         console.log(
-            "--- Defects/useEffect/defectsState.areas", defectsState.areas
+            "--- Defects/useEffect/defectsState.areas", defectsState.areas, areas
         )
     }, [defectsState.areas])
 
@@ -62,16 +62,27 @@ const Defects = () => {
 
 
             {
-                defectsState.areas && defectsState.areas.map((area, i) => (
-                    <Area
-                        key={i}
-                        areaId={area.id}
-                        areaName={area.name}
-                        areaProblems={area.problems}
-                        dispatch={defectsDispatch}
-                        server={area.server ? true : false}
-                    />
-                ))
+                areas === null && defectsState.areas
+                    ? defectsState.areas.map((area, i) => (
+                        <Area
+                            key={i}
+                            areaId={area.id}
+                            areaName={area.name}
+                            areaProblems={area.problems}
+                            dispatch={defectsDispatch}
+                            server={area.server ? true : false}
+                        />
+                    ))
+                    : areas.map((area, i) => (
+                        <Area
+                            key={i}
+                            areaId={area.id}
+                            areaName={area.name}
+                            areaProblems={area.problems}
+                            dispatch={defectsDispatch}
+                            server={area.server ? true : false}
+                        />
+                    ))
             }
 
 

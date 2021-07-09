@@ -16,7 +16,7 @@ const DropDownAddUser = ({ dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
 
     const formData = {
-        id: "",
+        // id: "",
         name: "",
         last_name: "",
         phone: "",
@@ -49,30 +49,30 @@ const DropDownAddUser = ({ dispatchMethod }) => {
                 backgroundColor: isVisible ? colors.paleGrayBg : colors.white
             }}>
                 {/* <View style={styles.itemButton}> */}
-                    <TouchableOpacity 
-                        onPress={
-                            () => setVisible(!isVisible)
-                        }
-                        style={styles.itemButton}
-                    >   
-                        <View style={styles.itemButtonIcon}>
-                            <UserPlus />
-                        </View>
-                        
-                        <Text style={styles.itemTitle}>
-                            {/* Add user */}
-                            הוסף משתמש
-                        </Text>
-                        {
-                            isVisible ? <CircleArrowUp /> : <CircleArrowDown />
-                        }
-                    </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={
+                        () => setVisible(!isVisible)
+                    }
+                    style={styles.itemButton}
+                >
+                    <View style={styles.itemButtonIcon}>
+                        <UserPlus />
+                    </View>
+
+                    <Text style={styles.itemTitle}>
+                        {/* Add user */}
+                        הוסף משתמש
+                    </Text>
+                    {
+                        isVisible ? <CircleArrowUp /> : <CircleArrowDown />
+                    }
+                </TouchableOpacity>
                 {/* </View> */}
             </View>
             {
                 isVisible &&
                 <FormContainer
-                    initialValues={{ id: '' }}
+                    initialValues={formData}
 
                     onSubmit={
                         (values, { resetForm }) => addUserHandler(values, { resetForm })

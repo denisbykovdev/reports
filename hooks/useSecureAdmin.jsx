@@ -8,7 +8,7 @@ export default function useSecureAdmin() {
             const admin = await SecureStore.getItemAsync("userIsAdmin");
 
             console.log(
-                "--- useSecureToken/getItemAsync/JSON.parse(admin):",
+                "--- useSecureAdmin/getItemAsync/JSON.parse(admin):",
                 JSON.parse(admin),
             )
 

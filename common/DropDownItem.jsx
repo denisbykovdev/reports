@@ -13,6 +13,9 @@ import FormContainer from "./FormContainer";
 import firstLevelTitles from "../constants/firstLevelTitles";
 import FormButton from "./FormButton";
 import useAuth from "../hooks/useAuth";
+import stringSlicer from "../helpers/stringSlicer";
+import { watchDeleteReport, watchUpdateReport } from "../actionCreators/sagaReport";
+import { watchDeleteReportSaga } from "../sagas/watchDeleteReportSaga";
 
 const DropDownItem = ({ itemData, dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
@@ -24,13 +27,18 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
     const { token } = authState
 
     const deleteHandler = (itemId) => {
-        dispatchMethod({
-            type: "DELETE_ITEM",
-            itemId
-        })
-        // console.log(
-        //     "___DDItem/delete:", itemId
-        // )
+        if (itemData.hasOwnProperty('status')) {
+            dispatchMethod(watchDeleteReport(
+                token,
+                itemId
+            ))
+
+        } else {
+            dispatchMethod({
+                type: "DELETE_ITEM",
+                itemId
+            })
+        }
     }
 
     const openReportHandler = (id) =>
@@ -47,25 +55,31 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
 
     const submitItem = async (values) => {
         console.log(
-            "--- DDI/submitItem/itemData:", itemData
+            "--- DDI/submitItem/itemData/report:", itemData.hasOwnProperty('status')
         )
-        console.log(
-            "--- DDI/submitItem/values:", values
-        )
+        // console.log(
+        //     "--- DDI/submitItem/values:", values
+        // )
 
-        await dispatchMethod({
-            type: "CHANGE_ITEM_VALUE",
-            data: values,
-            token,
-            itemId: itemData.id
-        })
+        if (itemData.hasOwnProperty('status')) {
+            await dispatchMethod(watchUpdateReport(
+                token,
+                values,
+                itemData.areas,
+                itemData.notes
+            ))
+        } else {
+            await dispatchMethod({
+                type: "CHANGE_ITEM_VALUE",
+                data: values,
+                token,
+                itemId: itemData.id
+            })
+        }
     }
 
     return (
-
         <View style={styles.itemContainer}>
-
-
             <View style={{
                 backgroundColor: isVisible ? colors.paleGrayBg : colors.white
             }}>
@@ -79,7 +93,29 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                     </TouchableOpacity>
 
                     {
-                        itemData && itemData.status || itemData.report_status ?
+                        itemData.pending
+                        &&
+                        <View
+                            style={{
+                                // backgroundColor: 'yellow',
+                                position: 'absolute',
+                                left: 25
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontSize: fonts.xsmall,
+                                    // fontWeight: weights.thin,
+                                    color: colors.darkBlueGray
+                                }}
+                            >
+                                pending
+                            </Text>
+                        </View>
+                    }
+
+                    {
+                        itemData && itemData.status === null || itemData.status ?
                             (
                                 <TouchableOpacity
                                     onPress={
@@ -87,7 +123,8 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                                     }
                                 >
                                     <Text style={styles.itemTitle}>
-                                        {itemData.report_adress} ,{itemData.id}
+
+                                        {itemData.report_adress !== null && stringSlicer(itemData.report_adress)} ,{itemData.id}
                                     </Text>
                                 </TouchableOpacity>
                             ) : (

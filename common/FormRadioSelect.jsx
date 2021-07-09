@@ -37,7 +37,7 @@ const FormRadioSelect = ({ name, array }) => {
     }
 
     useEffect(() => {
-        setFieldValue(name, selected)
+        if (selected.length > 0) setFieldValue(name, selected)
     }, [selected])
 
     useEffect(() => {

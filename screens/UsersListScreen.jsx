@@ -15,10 +15,10 @@ const UsersListScreen = ({ closeModal }) => {
 
   const [usersState, usersDispatch] = useUsers()
 
-  const {type} = useType()
+  const { type } = useType()
 
   const usersTitles = {
-    id: "",
+    // id: "",
     name: "",
     last_name: "",
     phone: "",

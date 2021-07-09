@@ -32,23 +32,23 @@ const DropDown = ({
     useEffect(() => {
 
         if (inputText && inputText.length > 1) {
-            // console.log(
-            //     "___DD/useEffect/search:", inputText, array
-            // )
+            console.log(
+                "___DD/useEffect/search:", inputText, array
+            )
 
-            const filtered = arrayProp.filter(report => Object.values(report).some(reportValue => reportValue.toString().toLowerCase().includes(inputText.toLowerCase())))
+            const filtered = arrayProp.filter(report => Object.values(report).some(reportValue => reportValue !== null && reportValue.toString().toLowerCase().includes(inputText.toLowerCase())))
 
-            // console.log(
-            //     "___DD/useEffect/search result:",
-            //     filtered
-            // );
+            console.log(
+                "___DD/useEffect/search result:",
+                filtered
+            );
 
             setArray(filtered)
 
-            // console.log(
-            //     "___DD/useEffect/search result array:",
-            //     array
-            // );
+            console.log(
+                "___DD/useEffect/search result array:",
+                array
+            );
         }
 
         // console.log(

@@ -198,7 +198,7 @@ export const usersReducer = (
                         const response = await axios.post(
                             `${addNewUser}`,
                             {
-                                new_user: action.user
+                                ...action.user
                             },
                             {
                                 headers: {

@@ -500,11 +500,11 @@ export const defectsReducer = (
                             `${createReport}`,
                             {
                                 ...action.data,
-                                areas: state.areas,
-                                notes: state.notes.map(
+                                areas: JSON.stringify(state.areas),
+                                notes: JSON.stringify(state.notes.map(
                                     note => note.isSavedToReport === true
                                         && note
-                                )
+                                ))
                             },
                             {
                                 headers: {

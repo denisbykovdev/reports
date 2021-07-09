@@ -7,7 +7,7 @@ import AvoidingView from "../common/AvoidingView";
 import useType from "../hooks/useType"
 
 const useModal = () => {
-  const {type} = useType()
+  const { type } = useType()
 
   const [isVisible, setVisible] = useState(false);
 
@@ -33,7 +33,7 @@ const useModal = () => {
       // swipeDirection={"down"}
       supportedOrientations={["portrait", "landscape"]}
       style={[
-        styles.modalContainer, 
+        styles.modalContainer,
         {
           alignItems: layout.width > 600 ? "center" : 'stretch'
         },

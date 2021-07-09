@@ -15,7 +15,7 @@ export default function useReports() {
     const { token } = authState;
 
     // console.log(
-    //     "***useReports/init/token:", typeof token, token
+    //     "*** useReports/init/token:", typeof token
     // )
 
     useEffect(() =>
@@ -24,6 +24,17 @@ export default function useReports() {
             token
         })
         , [])
+
+    // useEffect(() => {
+    //     // console.log(
+    //     //     "*** useReports/effectUpdate:", reportsState.reports
+    //     // )
+    // }
+    //     // reportsDispatch({
+    //     //     type: "FETCH_REPORTS",
+    //     //     token
+    //     // })
+    //     , [reportsState.reports])
 
     return [
         reportsState, reportsDispatch

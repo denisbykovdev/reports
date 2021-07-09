@@ -17,7 +17,7 @@ import Clipboard from 'expo-clipboard';
 import { useFormikContext } from "formik";
 import AvoidingView from "../common/AvoidingView";
 
-const Resume = () => {
+const Resume = ({ notes }) => {
     const { defectsState, defectsDispatch } = useDefects()
 
     const { type } = useType()
@@ -61,24 +61,36 @@ const Resume = () => {
                 }}
                 titleStyle={{
                     marginRight: 0,
-                    
+
                 }}
                 titleColor={colors.white}
                 buttonWidth={type === 2 ? '30%' : '100%'}
             />
             <Line />
             {
-                defectsState && defectsState.notes.map(
-                    note =>
-                        <NoteItem
-                            key={note.id}
-                            note={note}
-                            deleteNote={deleteNote}
-                            saveNoteToReport={saveNoteToReport}
-                            removeNoteFromReport={removeNoteFromReport}
-                            defectsDispatch={defectsDispatch}
-                        />
-                )
+                notes === null && defectsState
+                    ? defectsState.notes.map(
+                        note =>
+                            <NoteItem
+                                key={note.id}
+                                note={note}
+                                deleteNote={deleteNote}
+                                saveNoteToReport={saveNoteToReport}
+                                removeNoteFromReport={removeNoteFromReport}
+                                defectsDispatch={defectsDispatch}
+                            />
+                    )
+                    : notes.map(
+                        note =>
+                            <NoteItem
+                                key={note.id}
+                                note={note}
+                                deleteNote={deleteNote}
+                                saveNoteToReport={saveNoteToReport}
+                                removeNoteFromReport={removeNoteFromReport}
+                                defectsDispatch={defectsDispatch}
+                            />
+                    )
             }
         </View>
 

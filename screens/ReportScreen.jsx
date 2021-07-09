@@ -28,6 +28,12 @@ import FormField from "../common/FormField"
 import weights from "../utils/weights"
 import useChecked from "../hooks/useChecked"
 import { useFormikContext } from "formik"
+import { string } from "yup"
+import stringSlicer from "../helpers/stringSlicer"
+import { shallowEqual, useDispatch, useSelector } from "react-redux"
+import { watchPostReport, watchUpdateReport } from "../actionCreators/sagaReport"
+import { useNavigation } from "@react-navigation/native"
+import NetWork from "../modals/NetWork"
 
 const ReportScreen = ({ route }) => {
 
@@ -52,6 +58,8 @@ const ReportScreen = ({ route }) => {
     const [isNameOpen, setIsNameOpen] = useState(false)
 
     const [isAdressOpen, setIsAdressOpen] = useState(false)
+
+    const navigation = useNavigation()
 
     const menuTitles = [
         {
@@ -78,30 +86,84 @@ const ReportScreen = ({ route }) => {
 
     const { isChecked, setChecked } = useChecked()
 
+    const dispatch = useDispatch()
+
+    // const [netWorkModalOpen, netWorkModalClose, NetWorkModalContent] = useModal()
+
+    const netWorkSelector = useSelector((state) => state.network, shallowEqual)
+
     const submitReport = async (values) => {
+
+        // for (const [key, value] of Object.entries(values)) {
+        //     console.log(`${key}: ${value}`, typeof value);
+        //     return key === 'id' && Number(key[value])
+        // }
+
+        // Object.keys(values).forEach(element => element)
+        // values.id = Number(values.id)
+
+        let newValues = { ...values, id: Number(values.id) }
+
         // console.log(
-        //     "___ReportScreen/submitReport/values", values
+        //     "___ReportScreen/submitReport/values",
+        //     values,
+        //     newValues
+        // )
+        // const newValues = { ...Number(id), ...values }
+        // console.log(
+        //     "--- ReportScreen/submitReport/route.params.reportId", route.params.reportId,
+        //     // newValues
         // )
         // console.log(
-        //     "___ReportScreen/submitReport/route.params.reportId", route.params.reportId === null ? defectsState.activeReport.id : route.params.reportId.toString()
-        // )
-        // console.log(
-        //     "___ReportScreen/submitReport/defectsState.activeReport", defectsState.activeReport
+        //     "--- ReportScreen/submitReport/defectsState.activeReport", defectsState.activeReport
         // )
 
-        if (defectsState.activeReport === null && route.params.reportId === null) {
-            await defectsDispatch({
-                type: "POST_REPORT",
-                data: values,
-                token
-            })
-        } else {
-            await defectsDispatch({
-                type: "REPOST_REPORT",
-                data: values,
+        if (
+            // defectsState.activeReport === null
+            // && 
+            route.params.reportId === null
+        ) {
+            // await defectsDispatch({
+            //     type: "POST_REPORT",
+            //     data: values,
+            //     token
+            // })
+            // dispatch({
+            //     type: 'WATCH_POST_REPORT',
+            //     token,
+            //     report: values,
+            //     areas: defectsState.areas,
+            //     notes: defectsState.notes
+            // })
+            dispatch(watchPostReport(
                 token,
-                reportId: route.params.reportId === null ? defectsState.activeReport.id : route.params.reportId.toString()
-            })
+                values,
+                defectsState.areas,
+                defectsState.notes,
+                // netWorkSelector.isConnected
+            ))
+
+            // if (netWorkSelector.isConnected) {
+            //     navigation.goBack()
+            // } else {
+            //     netWorkModalOpen()
+            // }
+            // navigation.goBack()
+        } else {
+            // await defectsDispatch({
+            //     type: "REPOST_REPORT",
+            //     data: values,
+            //     token,
+            //     reportId: route.params.reportId === null ? defectsState.activeReport.id : route.params.reportId.toString()
+            // })
+            dispatch(watchUpdateReport(
+                token,
+                // values,
+                newValues,
+                defectsState.areas,
+                defectsState.notes,
+                netWorkSelector.isConnected
+            ))
         }
         setChecked(true)
     }
@@ -125,8 +187,8 @@ const ReportScreen = ({ route }) => {
     function scrollComponent() {
         switch (true) {
             case offsetX === 0: return <Details />;
-            case offsetX === viewWidth: return <Defects />;
-            case offsetX === (viewWidth) * 2: return <Resume />;
+            case offsetX === viewWidth: return <Defects areas={route.params && route.params.report ? JSON.parse(route.params.report.areas) : null} />;
+            case offsetX === (viewWidth) * 2: return <Resume notes={route.params && route.params.report ? JSON.parse(route.params.report.notes) : null} />;
             case offsetX >= (viewWidth) * 3: return <Archive />;
         }
     }
@@ -134,18 +196,12 @@ const ReportScreen = ({ route }) => {
     const switchComponent = () => {
         switch (active) {
             case "details": return <Details />;
-            case "defects": return <Defects />;
-            case "resume": return <Resume />;
+            case "defects": return <Defects areas={route.params && route.params.report ? JSON.parse(route.params.report.areas) : null} />;
+            case "resume": return <Resume notes={route.params && route.params.report ? JSON.parse(route.params.report.notes) : null} />;
             case "archive": return <Archive />;
             default: return <Details />;
         }
     }
-
-    useEffect(() => {
-        console.log(
-            "--- ReportScreen/effect/route", route?.params
-        )
-    }, [])
 
     return (
         <SafeView>
@@ -153,45 +209,45 @@ const ReportScreen = ({ route }) => {
                 <FormContainer
                     innerRef={formikRef}
                     initialValues={{
-                        id: route.params && route.params.report ? route.params.report.id.toString() : '',
-                        report_related_documents: route.params && route.params.report ? route.params.report.report_related_documents : '',
-                        report_adress: route.params && route.params.report ? route.params.report.report_address : '',
-                        report_name: route.params && route.params.report ? route.params.report.report_name : '',
-                        status: route.params && route.params.report ? route.params.report.status : '',
-                        previous_test_id: route.params && route.params.report ? route.params.report.previous_test_id : '',
-                        examination_date: route.params && route.params.report ? route.params.report.examination_date : '',
-                        test_time: route.params && route.params.report ? route.params.report.test_time : '',
-                        customer_name: route.params && route.params.report ? route.params.report.customer_name : '',
-                        tester_name: route.params && route.params.report ? route.params.report.tester_name : '',
-                        test_relevance: route.params && route.params.report ? route.params.report.test_relevance : '',
-                        test_address_city: route.params && route.params.report ? route.params.report.test_address_city : '',
-                        test_address: route.params && route.params.report ? route.params.report.test_address : '',
-                        report_address_city: route.params && route.params.report ? route.params.report.report_address_city : '',
-                        report_address: route.params && route.params.report ? route.params.report.report_adress : '',
-                        phone_number: route.params && route.params.report ? route.params.report.phone_number : '',
-                        email: route.params && route.params.report ? route.params.report.email : '',
-                        other_email: route.params && route.params.report ? route.params.report.other_email : '',
-                        visit_escort: route.params && route.params.report ? route.params.report.visit_escort : '',
-                        customer_full_name: route.params && route.params.report ? route.params.report.customer_full_name : '',
-                        opposite_side: route.params && route.params.report ? route.params.report.opposite_side : '',
-                        customer_logo: route.params && route.params.report ? route.params.report.customer_logo : '',
-                        vat_in_percent: route.params && route.params.report ? route.params.report.vat_in_percent : '',
-                        form: route.params && route.params.report ? route.params.report.form : '',
-                        floor: route.params && route.params.report ? route.params.report.floor : '',
-                        technical_floor: route.params && route.params.report ? route.params.report.technical_floor : '',
-                        systems: route.params && route.params.report ? route.params.report.systems : '',
-                        number_of_shared_buildings: route.params && route.params.report ? route.params.report.number_of_shared_buildings : '',
-                        parking_levels: route.params && route.params.report ? route.params.report.parking_levels : '',
-                        roof_levels: route.params && route.params.report ? route.params.report.roof_levels : '',
-                        upper_reservoir: route.params && route.params.report ? route.params.report.upper_reservoir : '',
-                        bottom_reservoir: route.params && route.params.report ? route.params.report.bottom_reservoir : '',
-                        shared_systems_with_additional_buildings: route.params && route.params.report ? route.params.report.shared_systems_with_additional_buildings : '',
-                        com_areas_in_test: route.params && route.params.report ? route.params.report.com_areas_in_test : '',
-                        exam_comm_areas: route.params && route.params.report ? route.params.report.exam_comm_areas : '',
-                        resume: route.params && route.params.report ? route.params.report.resume : '',
-                        is_resume_template: route.params && route.params.report ? route.params.report.is_resume_template : '',
-                        areas: route.params && route.params.report ? route.params.report.areas : '',
-                        notes: route.params && route.params.report ? route.params.report.notes : ''
+                        id: route.params && route.params.report && route.params.report.id !== null ? route.params.report.id.toString() : null,
+                        report_related_documents: route.params && route.params.report ? route.params.report.report_related_documents : null,
+                        report_adress: route.params && route.params.report ? route.params.report.report_adress : null,
+                        report_name: route.params && route.params.report ? route.params.report.report_name : null,
+                        status: route.params && route.params.report ? route.params.report.status : null,
+                        previous_test_id: route.params && route.params.report ? route.params.report.previous_test_id : null,
+                        examination_date: route.params && route.params.report ? route.params.report.examination_date : null,
+                        test_time: route.params && route.params.report ? route.params.report.test_time : null,
+                        customer_name: route.params && route.params.report ? route.params.report.customer_name : null,
+                        tester_name: route.params && route.params.report ? route.params.report.tester_name : null,
+                        test_relevance: route.params && route.params.report ? route.params.report.test_relevance : null,
+                        test_address_city: route.params && route.params.report ? route.params.report.test_address_city : null,
+                        test_address: route.params && route.params.report ? route.params.report.test_address : null,
+                        report_post_address_city: route.params && route.params.report ? route.params.report.report_post_address_city : null,
+                        report_post_address: route.params && route.params.report ? route.params.report.report_post_address : null,
+                        phone_number: route.params && route.params.report ? route.params.report.phone_number : null,
+                        email: route.params && route.params.report ? route.params.report.email : null,
+                        other_email: route.params && route.params.report ? route.params.report.other_email : null,
+                        visit_escort: route.params && route.params.report ? route.params.report.visit_escort : null,
+                        customer_full_name: route.params && route.params.report ? route.params.report.customer_full_name : null,
+                        opposite_side: route.params && route.params.report ? route.params.report.opposite_side : null,
+                        customer_logo: route.params && route.params.report ? route.params.report.customer_logo : null,
+                        vat_in_percent: route.params && route.params.report ? route.params.report.vat_in_percent : null,
+                        form: route.params && route.params.report ? route.params.report.form : null,
+                        floor: route.params && route.params.report ? route.params.report.floor : null,
+                        technical_floor: route.params && route.params.report ? route.params.report.technical_floor : null,
+                        systems: route.params && route.params.report ? route.params.report.systems : null,
+                        number_of_shared_buildings: route.params && route.params.report ? route.params.report.number_of_shared_buildings : null,
+                        parking_levels: route.params && route.params.report ? route.params.report.parking_levels : null,
+                        roof_levels: route.params && route.params.report ? route.params.report.roof_levels : null,
+                        upper_reservoir: route.params && route.params.report ? route.params.report.upper_reservoir : null,
+                        bottom_reservoir: route.params && route.params.report ? route.params.report.bottom_reservoir : null,
+                        shared_systems_with_additional_buildings: route.params && route.params.report ? route.params.report.shared_systems_with_additional_buildings : null,
+                        com_areas_in_test: route.params && route.params.report ? route.params.report.com_areas_in_test : null,
+                        exam_comm_areas: route.params && route.params.report ? route.params.report.exam_comm_areas : null,
+                        resume: route.params && route.params.report ? route.params.report.resume : null,
+                        is_resume_template: route.params && route.params.report ? route.params.report.is_resume_template : null,
+                        // areas: route.params && route.params.report ? route.params.report.areas : '',
+                        // notes: route.params && route.params.report ? route.params.report.notes : ''
                     }}
                     onSubmit={
                         (values, { resetForm }) => submitReport(values, { resetForm })
@@ -218,7 +274,6 @@ const ReportScreen = ({ route }) => {
                                     paddingBottom: 0
                                 }}
                             >
-
                                 <View
                                     style={{
                                         justifyContent: "flex-end",
@@ -235,6 +290,7 @@ const ReportScreen = ({ route }) => {
                                             alignItems: "flex-end"
                                         }}
                                     >
+                                        {/* <Text>{JSON.stringify(netWorkSelector.isConnected)}</Text> */}
 
                                         <TouchableWithoutFeedback
                                             onPress={() => setIsAdressOpen(!isAdressOpen)}
@@ -269,7 +325,7 @@ const ReportScreen = ({ route }) => {
                                                         >
                                                             {
                                                                 formikRef.current.values && formikRef.current.values.report_adress
-                                                                    ? formikRef.current.values.report_adress
+                                                                    ? stringSlicer(formikRef.current.values.report_adress)
                                                                     :
                                                                     "כתובת הבדיקה"
                                                             }
@@ -311,7 +367,7 @@ const ReportScreen = ({ route }) => {
                                                         >
                                                             {
                                                                 formikRef.current.values && formikRef.current.values.report_name
-                                                                    ? formikRef.current.values.report_name
+                                                                    ? stringSlicer(formikRef.current.values.report_name)
                                                                     : "שם הבדיקה "
                                                             }
                                                         </Text>
@@ -367,6 +423,14 @@ const ReportScreen = ({ route }) => {
                                 </View>
 
                             </FormButton>
+
+                            {/* <NetWorkModalContent>
+                                <NetWork
+                                    netWorkModalClose={netWorkModalClose}
+                                    content={JSON.stringify(netWorkSelector.actionQueue.map(action => action.type))}
+                                />
+                            </NetWorkModalContent> */}
+
                             <CommonButton
                                 onPress={() => printModalOpen()}
                                 title={"יצוא קובץ"}
