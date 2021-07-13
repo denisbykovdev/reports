@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { memo, useEffect, useState } from "react"
 import { TextInput, StyleSheet } from "react-native"
 import CommonHeader from "../common/CommonHeader"
 import Line from "../common/Line"
@@ -17,21 +17,33 @@ import { createArea } from "../constants/api"
 import FormContainer from "../common/FormContainer"
 import FormField from "../common/FormField"
 import FormButton from "../common/FormButton"
+import { useCallback } from "react"
+import useDefects from "../hooks/useDefects"
+import useAuth from "../hooks/useAuth"
+import useServerAreas from "../hooks/useServerAreas"
 
-export default function SavedAreas({
+function SavedAreas({
     savedAreasModalClose,
-    defectsDispatch,
-    defectsState,
-    deleteSavedArea
+    // defectsDispatch,
+    // defectsState,
+    // deleteSavedArea,
+    // createArea
 }) {
+    // const { defectsState, defectsDispatch } = useDefects()
+
+    const [serverAreasState, serverAreasDispatch] = useServerAreas()
 
     const [checkedAreasList, setUpdateAreasList] = useState([])
 
-    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: defectsState.savedAreas })
+    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: serverAreasState })
+
+    const { authState } = useAuth()
+
+    const { token } = authState;
 
     const addCheckedArea = (name) => {
 
-        const newSavedArea = defectsState && defectsState.savedAreas.find(savedArea => savedArea.area_name === name)
+        const newSavedArea = serverAreasState && serverAreasState.find(savedArea => savedArea.area_name === name)
 
         setUpdateAreasList(oldArray => [...oldArray, newSavedArea])
     }
@@ -41,17 +53,25 @@ export default function SavedAreas({
     }
 
     const addSavedAreasList = async () => {
-        await defectsDispatch({
+        await serverAreasDispatch({
             type: "ADD_SAVED_AREAS",
             saved: checkedAreasList
         })
         await savedAreasModalClose()
     }
 
-    const createArea = async (newAreaName) => await defectsDispatch({
+    const createArea = useCallback(async (newAreaName) => await serverAreasDispatch({
         type: "POST_NEW_AREA",
         areaName: newAreaName
-    })
+    }), [])
+
+    const deleteSavedArea = useCallback((areaName) => {
+        serverAreasDispatch({
+            type: "POST_SAVED_AREA_TO_DELETE",
+            token,
+            areaName
+        })
+    }, [])
 
     return (
         <ShadowView>
@@ -111,7 +131,7 @@ export default function SavedAreas({
                             deleteSavedArea={deleteSavedArea}
                         />
                     ))
-                    : defectsState.savedAreas && defectsState.savedAreas.map((savedArea, i) => (
+                    : serverAreasState && serverAreasState.map((savedArea, i) => (
                         <SavedAreaItem
                             key={i}
                             addCheckedArea={addCheckedArea}
@@ -156,3 +176,5 @@ const styles = StyleSheet.create({
         textAlign: 'right'
     }
 })
+
+export default memo(SavedAreas)

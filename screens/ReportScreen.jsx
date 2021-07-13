@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import { ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import AvoidingView from "../common/AvoidingView"
 import HeaderView from "../common/HeaderView"
@@ -6,7 +6,7 @@ import SafeView from "../common/SafeView"
 import ShadowView from "../common/ShadowView"
 import BottomView from "../common/BottomView"
 import Reports from "../icons/Reports"
-import layout, { responsiveWidth } from "../utils/layout"
+import { responsiveWidth } from "../utils/layout"
 import Details from "../components/Details"
 import Defects from "../components/Defects"
 import Resume from "../components/Resume"
@@ -27,25 +27,34 @@ import useAuth from "../hooks/useAuth"
 import FormField from "../common/FormField"
 import weights from "../utils/weights"
 import useChecked from "../hooks/useChecked"
-import { useFormikContext } from "formik"
-import { string } from "yup"
 import stringSlicer from "../helpers/stringSlicer"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { watchPostReport, watchUpdateReport } from "../actionCreators/sagaReport"
-import { useNavigation } from "@react-navigation/native"
-import NetWork from "../modals/NetWork"
+
+const menuTitles = [
+    {
+        label: "יומן עדכונים",
+        desc: "archive"
+    },
+    {
+        label: "סיכום",
+        desc: "resume"
+    },
+    {
+        label: "ליקוים",
+        desc: "defects"
+    },
+    {
+        label: "פרטי הבדיקה",
+        desc: "details"
+    }
+]
 
 const ReportScreen = ({ route }) => {
 
-    // const { reportId } = route.params
-
-    const formikRef = useRef({});
-
     useStatusBar("dark-content", colors.paleGrayBg);
 
-    const [offsetX, setOffsetX] = useState(0)
-
-    const [viewWidth, setViewWidth] = useState(0)
+    const formikRef = useRef({});
 
     const [printModalOpen, printModalClose, PrintModalContent] = useModal()
 
@@ -53,32 +62,9 @@ const ReportScreen = ({ route }) => {
 
     const { authState } = useAuth()
 
-    const { token } = authState
+    const [offsetX, setOffsetX] = useState(0)
 
-    const [isNameOpen, setIsNameOpen] = useState(false)
-
-    const [isAdressOpen, setIsAdressOpen] = useState(false)
-
-    const navigation = useNavigation()
-
-    const menuTitles = [
-        {
-            label: "יומן עדכונים",
-            desc: "archive"
-        },
-        {
-            label: "סיכום",
-            desc: "resume"
-        },
-        {
-            label: "ליקוים",
-            desc: "defects"
-        },
-        {
-            label: "פרטי הבדיקה",
-            desc: "details"
-        }
-    ]
+    const [viewWidth, setViewWidth] = useState(0)
 
     const [active, Menu] = useMenu(menuTitles, "details", scrollCatcher, layoutCatcher)
 
@@ -88,81 +74,30 @@ const ReportScreen = ({ route }) => {
 
     const dispatch = useDispatch()
 
-    // const [netWorkModalOpen, netWorkModalClose, NetWorkModalContent] = useModal()
+    const [isNameOpen, setIsNameOpen] = useState(false)
 
-    const netWorkSelector = useSelector((state) => state.network, shallowEqual)
+    const [isAdressOpen, setIsAdressOpen] = useState(false)
+
+    const { token } = authState
 
     const submitReport = async (values) => {
 
-        // for (const [key, value] of Object.entries(values)) {
-        //     console.log(`${key}: ${value}`, typeof value);
-        //     return key === 'id' && Number(key[value])
-        // }
-
-        // Object.keys(values).forEach(element => element)
-        // values.id = Number(values.id)
-
         let newValues = { ...values, id: Number(values.id) }
 
-        // console.log(
-        //     "___ReportScreen/submitReport/values",
-        //     values,
-        //     newValues
-        // )
-        // const newValues = { ...Number(id), ...values }
-        // console.log(
-        //     "--- ReportScreen/submitReport/route.params.reportId", route.params.reportId,
-        //     // newValues
-        // )
-        // console.log(
-        //     "--- ReportScreen/submitReport/defectsState.activeReport", defectsState.activeReport
-        // )
-
-        if (
-            // defectsState.activeReport === null
-            // && 
-            route.params.reportId === null
-        ) {
-            // await defectsDispatch({
-            //     type: "POST_REPORT",
-            //     data: values,
-            //     token
-            // })
-            // dispatch({
-            //     type: 'WATCH_POST_REPORT',
-            //     token,
-            //     report: values,
-            //     areas: defectsState.areas,
-            //     notes: defectsState.notes
-            // })
-            dispatch(watchPostReport(
+        if (route.params.reportId === null) {
+            await dispatch(watchPostReport(
                 token,
                 values,
                 defectsState.areas,
-                defectsState.notes,
-                // netWorkSelector.isConnected
+                defectsState.notes
             ))
-
-            // if (netWorkSelector.isConnected) {
-            //     navigation.goBack()
-            // } else {
-            //     netWorkModalOpen()
-            // }
-            // navigation.goBack()
         } else {
-            // await defectsDispatch({
-            //     type: "REPOST_REPORT",
-            //     data: values,
-            //     token,
-            //     reportId: route.params.reportId === null ? defectsState.activeReport.id : route.params.reportId.toString()
-            // })
-            dispatch(watchUpdateReport(
+            await dispatch(watchUpdateReport(
                 token,
-                route.params.report.id,
+                route.params.reportId,
                 newValues,
                 defectsState.areas,
-                defectsState.notes,
-                netWorkSelector.isConnected
+                defectsState.notes
             ))
         }
         setChecked(true)
@@ -187,8 +122,8 @@ const ReportScreen = ({ route }) => {
     function scrollComponent() {
         switch (true) {
             case offsetX === 0: return <Details />;
-            case offsetX === viewWidth: return <Defects areas={route.params && route.params.report && route.params.report.areas.lenth >= 0 ? route.params.report.areas : null} />;
-            case offsetX === (viewWidth) * 2: return <Resume notes={route.params && route.params.report && route.params.report.notes.lenth >= 0 ? route.params.report.notes : null} />;
+            case offsetX === viewWidth: return <Defects areas={route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null} />;
+            case offsetX === (viewWidth) * 2: return <Resume notes={route.params && route.params.report && route.params.report.notes.length >= 0 ? route.params.report.notes : null} />;
             case offsetX >= (viewWidth) * 3: return <Archive />;
         }
     }
@@ -196,12 +131,16 @@ const ReportScreen = ({ route }) => {
     const switchComponent = () => {
         switch (active) {
             case "details": return <Details />;
-            case "defects": return <Defects areas={route.params && route.params.report ? JSON.parse(route.params.report.areas) : null} />;
-            case "resume": return <Resume notes={route.params && route.params.report ? JSON.parse(route.params.report.notes) : null} />;
+            case "defects": return <Defects areas={route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null} />;
+            case "resume": return <Resume notes={route.params && route.params.report && route.params.report.notes.length >= 0 ? route.params.report.notes : null} />;
             case "archive": return <Archive />;
             default: return <Details />;
         }
     }
+
+    // useEffect(() => console.log(
+    //     `--- ReportScreen/props:`, route.params && route.params.report && route.params.report.areas.lenth >= 0 ? route.params.report.areas : null, route.params.report.areas.length
+    // ), [])
 
     return (
         <SafeView>
@@ -250,7 +189,7 @@ const ReportScreen = ({ route }) => {
                         // notes: route.params && route.params.report ? route.params.report.notes : ''
                     }}
                     onSubmit={
-                        (values, { resetForm }) => submitReport(values, { resetForm })
+                        (values) => submitReport(values)
                     }
                 >
                     <ScrollView
@@ -325,7 +264,7 @@ const ReportScreen = ({ route }) => {
                                                         >
                                                             {
                                                                 formikRef.current.values && formikRef.current.values.report_adress
-                                                                    ? stringSlicer(formikRef.current.values.report_adress)
+                                                                    ? stringSlicer(formikRef.current.values.report_adress, 13)
                                                                     :
                                                                     "כתובת הבדיקה"
                                                             }

@@ -36,7 +36,7 @@ const TableAddUser = ({ dispatchMethod }) => {
 
     const addUser = (newUser) => dispatchMethod({
         type: "ADD_USER",
-        payload: newUser
+        user: newUser
     })
 
     const fieldWidth = ((layout.width - responsiveWidth(60)) / (Object.keys(formData).length + 1)) - responsiveWidth(18)

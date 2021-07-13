@@ -1,7 +1,9 @@
 import React, { useState } from "react"
+import { memo } from "react"
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native"
 import CommonButton from "../common/CommonButton"
 import Line from "../common/Line"
+import stringSlicer from "../helpers/stringSlicer"
 import useModal from "../hooks/useModal"
 import Basket from "../icons/Basket"
 import Tick from "../icons/Tick"
@@ -9,7 +11,7 @@ import ServerProblems from "../modals/ServerProblems"
 import colors from "../utils/colors"
 import { responsiveWidth } from "../utils/layout"
 
-export default function SavedAreaItem({ savedArea, addCheckedArea, removeCheckedArea, deleteSavedArea }) {
+function SavedAreaItem({ savedArea, addCheckedArea, removeCheckedArea, deleteSavedArea }) {
     const [checked, setChecked] = useState(false)
 
     const [savedProblemsModalopen, savedProblemsModalclose, SavedProblemsModal] = useModal()
@@ -17,12 +19,16 @@ export default function SavedAreaItem({ savedArea, addCheckedArea, removeChecked
     const checkedHandler = () => {
         if (!checked) {
             setChecked(true)
-            addCheckedArea(savedArea.area.name)
+            addCheckedArea(savedArea.area_name)
         } else if (checked) {
             setChecked(false)
             removeCheckedArea(savedArea.area_name)
         }
     }
+
+    console.log(
+        `--- SavedAreaItem/prop/savedArea:`, savedArea
+    )
 
     return (
         <View>
@@ -56,7 +62,7 @@ export default function SavedAreaItem({ savedArea, addCheckedArea, removeChecked
 
 
                 <Text>
-                    {savedArea.name}
+                    {stringSlicer(savedArea.area_name, 10)}
                 </Text>
 
                 <TouchableOpacity
@@ -110,3 +116,5 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 })
+
+export default SavedAreaItem

@@ -7,11 +7,11 @@ import { watchDeleteReportSaga } from './watchDeleteReportSaga';
 
 export default function* rootSaga() {
     yield all([
-        // fork(networkSaga),
+        fork(networkSaga),
         fork(watchPostReportSaga),
         fork(watchUpdateReportSaga),
         fork(watchGetReportsSaga),
         fork(watchDeleteReportSaga),
-        fork(networkSaga)
+        // fork(networkSaga)
     ]);
 };

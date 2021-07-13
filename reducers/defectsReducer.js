@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-effects';
-import { areasAll, createReport, deleteArea, createArea, updateAreaProblems, updateReport } from '../constants/api';
+import { areasAll, createReport, deleteArea, createArea, updateAreaProblems, updateReport, updateAreaProblem } from '../constants/api';
 
 const staticSavedAreas = [
     {
@@ -236,9 +236,9 @@ export const defectsReducer = (
         //     });
 
         case "ADD_SAVED_AREAS":
-            // console.log(
-            //     "*** defectsReducer/ADD_SAVED_AREAS", action.saved
-            // )
+            console.log(
+                "*** defectsReducer/ADD_SAVED_AREAS", action.saved
+            )
             return Update({
                 ...state,
                 areas: [
@@ -246,7 +246,7 @@ export const defectsReducer = (
 
                     ...action.saved.map((area, i) => {
                         console.log(
-                            "*** defectsReducer/test",
+                            "*** defectsReducer/ADD_SAVED_AREAS/saved.map:",
                             area
                         )
 
@@ -320,9 +320,9 @@ export const defectsReducer = (
                     try {
                         const response = await axios.post(
                             `${deleteArea(action.areaName)}`,
-                            // {
-                            //     area_name: action.areaName
-                            // },
+                            {
+                                area_name: action.areaName
+                            },
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
@@ -355,7 +355,7 @@ export const defectsReducer = (
                             `${updateAreaProblems(action.areaName)}`,
 
                             {
-                                area_name: action.areaName,
+                                // area_name: action.areaName,
                                 problems: action.areaProblems
                             },
                             {
@@ -378,7 +378,41 @@ export const defectsReducer = (
                 }
             );
 
-        // case "POST_NEW_AREA":
+        case "UPDATE_PROBLEM_IN_SAVED_AREA":
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    posting: true,
+                    token: action.token
+                },
+                async (state, dispatch) => {
+                    try {
+                        const response = await axios.post(
+                            `${updateAreaProblem(action.areaName, action.problemName)}`,
+
+                            {
+                                // area_name: action.areaName,
+                                area_problem: action.areaProblem
+                            },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+                        );
+
+                        dispatch({
+                            type: "UPDATE_SAVED_AREAS",
+                            savedAreas: response.data.data
+                        })
+                    } catch (error) {
+                        dispatch({
+                            type: "ERROR_SAVED_AREA",
+                            error
+                        })
+                    }
+                }
+            );
 
 
         case "ADD_PROBLEMS_TO_ARIA":

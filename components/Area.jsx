@@ -89,7 +89,7 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server 
                         }}>
                             <TouchableOpacity onPress={() => setOpenName(!openName)}>
                                 {
-                                    openName
+                                    openName && !server
                                         ? <FormField
                                             // area={true}
                                             placeholder={areaName}
@@ -102,7 +102,7 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server 
                                                 alignSelf: 'flex-end'
                                             }}
                                             width="80%"
-                                            name="name"
+                                            name="area_name"
                                             interSepter={interSepter}
                                         />
                                         : <Text

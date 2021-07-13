@@ -26,30 +26,30 @@ export default function useSearch({
             )
         }
         if (searchText.length > 0 && arrayOfObjects !== undefined) {
-            const filteredArrayOfObjects = arrayOfObjects && arrayOfObjects.filter(item => Object.values(item).some(itemValue => itemValue.toString().toLowerCase().includes(searchText.toLowerCase())))
+            const filteredArrayOfObjects = arrayOfObjects && arrayOfObjects.filter(item => Object.values(item).some(itemValue => itemValue !== null && itemValue.toString().toLowerCase().includes(searchText.toLowerCase())))
 
             setUpdateSearchArray(filteredArrayOfObjects)
 
-            console.log(
-                "___useSearch/filtered:",
-                filteredArrayOfObjects
-            )
+            // console.log(
+            //     "___useSearch/filtered:",
+            //     filteredArrayOfObjects
+            // )
         }
         if (searchText.length === 0) {
             setUpdateSearchArray(
                 array !== undefined && array || arrayOfObjects !== undefined && arrayOfObjects
             )
-            console.log(
-                "___useSearch/0:", array || arrayOfObjects
-            )
+            // console.log(
+            //     "___useSearch/0:", array || arrayOfObjects
+            // )
         }
     }, [searchText])
 
     const onChangeSearchInput = (text) => {
-        console.log(
-            "___useSearch/onChangeSearchInput:",
-            text
-        )
+        // console.log(
+        //     "___useSearch/onChangeSearchInput:",
+        //     text
+        // )
         setSearchText(text)
     }
 

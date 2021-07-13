@@ -24,6 +24,8 @@ import { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { setReports, watchDeleteReport, watchGetReports, watchPostReport, watchUpdateReport } from "../actionCreators/sagaReport";
 import useAuth from "../hooks/useAuth";
+import { useState } from "react";
+import Line from "../common/Line";
 // import { useIsConnected } from "react-native-offline";
 
 function ReportsScreen({ route, navigation }) {
@@ -35,8 +37,6 @@ function ReportsScreen({ route, navigation }) {
   const { isAdmin } = route.params;
 
   const [userModalOpen, userModalClose, UserModalContent] = useModal();
-
-  // const [reportsState, reportsDispatch] = useReports();
 
   const { type } = useType()
 
@@ -50,50 +50,55 @@ function ReportsScreen({ route, navigation }) {
 
   const { token } = authState
 
-  // const isConnected = useIsConnected()
+  // const [queues, setQueues] = useState([])
 
   useEffect(() => {
-    console.log(
-      "--- ReportsScreeen/isConnected:",
-      // isConnected,
-      networkSelector.isConnected,
-      reportsSelector
-    )
     dispatch(watchGetReports(token))
   }, [])
 
   useEffect(() => {
+    // console.log(
+    //   `--- Reports didMount`, networkSelector.actionQueue
+    // && networkSelector.actionQueue.length
+    // )
     if (initialMount.current) {
+      // dispatch(watchGetReports(token))
       initialMount.current = false
-    } else {
-      if (
-        networkSelector.isConnected === true
-        && networkSelector.actionQueue
-        && networkSelector.actionQueue.length >= 0
-      ) {
-        networkSelector.actionQueue.map(action =>
-          action.type === 'WATCH_POST_REPORT'
-            ? dispatch(watchPostReport(
-              action.payload.token,
-              action.payload.report,
-              action.payload.areas,
-              action.payload.notes
-            ))
-            : action.type === 'WATCH_UPDATE_REPORT'
-              ? dispatch(watchUpdateReport(
-                action.payload.token,
-                action.payload.report,
-                action.payload.areas,
-                action.payload.notes
-              ))
-              : action.type === 'WATCH_DELETE_REPORT'
-                ? dispatch(watchDeleteReport(
-                  action.payload.token,
-                  action.payload.report.id
-                ))
-                : action
-        )
+    } else if (
+      initialMount.current === false
+      && networkSelector.isConnected === true
+      && networkSelector.actionQueue
+      && networkSelector.actionQueue.length >= 0
+    ) {
+
+      // setQueues([...networkSelector.actionQueue])
+
+      networkSelector.actionQueue.forEach(action => {
+        if (action.type === 'WATCH_POST_REPORT') {
+          dispatch(watchPostReport(
+            action.payload.token,
+            action.payload.report,
+            action.payload.areas,
+            action.payload.notes
+          ))
+        } else if (action.type === 'WATCH_UPDATE_REPORT') {
+          dispatch(watchUpdateReport(
+            action.payload.token,
+            action.payload.reportId,
+            action.payload.report,
+            action.payload.areas,
+            action.payload.notes
+          ))
+        } else if (action.type === 'WATCH_DELETE_REPORT') {
+          dispatch(watchDeleteReport(
+            action.payload.token,
+            action.payload.reportId
+          ))
+        }
       }
+
+      )
+
     }
   }, [networkSelector.isConnected])
 
@@ -117,13 +122,14 @@ function ReportsScreen({ route, navigation }) {
     // address: "",
     // date: "",
     // editorsName: "",
-    id: "מזהה בדיקה",
-    status: "סטטוס",
-    customer_name: "מספר לקוח",
-    customer_full_name: "לקוח",
-    report_adress: "כתובת",
+
+    tester_name: "שם העורך",
     examination_date: "תאריך",
-    tester_name: "שם העורך"
+    report_adress: "כתובת",
+    customer_full_name: "לקוח",
+    customer_name: "מספר לקוח",
+    status: "סטטוס",
+    id: "מזהה בדיקה"
   }
 
   return (
@@ -134,12 +140,15 @@ function ReportsScreen({ route, navigation }) {
           showsVerticalScrollIndicator={false}
         >
           <>
+
+
             <HeaderView>
               <ShadowView
                 shadowStyle={{
                   paddingHorizontal: 0
                 }}
               >
+
                 <CommonHeader
                   closeButton={false}
                   title={"מערכת דוחות"}
@@ -152,6 +161,45 @@ function ReportsScreen({ route, navigation }) {
                     height={responsiveWidth(46)}
                   />
                 </CommonHeader>
+
+                <View style={{
+                  width: '100%',
+                  backgroundColor: 'red',
+                  height: 'auto'
+                }}>
+                  {
+                    networkSelector.actionQueue && networkSelector.actionQueue.length >= 0
+                      ? networkSelector.actionQueue.map((queue, i) =>
+                        <View key={i}>
+                          <Text>
+                            {JSON.stringify(queue?.payload?.report?.report_adress)}
+                          </Text>
+                          <Text>
+                            {JSON.stringify(queue.type)}
+                          </Text>
+                          <Text>
+                            {JSON.stringify(queue.payload.reportId)}
+                          </Text>
+                          <Line />
+                        </View>
+                      )
+                      : <Text>no queues</Text>
+                  }
+                </View>
+
+                {/* <View style={{
+                  width: '100%',
+                  backgroundColor: 'yellow',
+                  height: 'auto'
+                }}>
+                  {
+                    networkSelector.actionQueue && networkSelector.actionQueue.length >= 0
+                      ? queues && queues.map(queue => <Text>
+                        {JSON.stringify(queue.payload.report)}
+                      </Text>)
+                      : <Text>no queues</Text>
+                  }
+                </View> */}
 
                 {
                   type === 2 ?

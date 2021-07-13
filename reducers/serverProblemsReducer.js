@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update } from 'use-reducer-with-side-effects';
-import { getAllProblems } from '../constants/api';
+import { createProblem, getAllProblems, updateAreaProblems, updateProblems } from '../constants/api';
 
 export const serverProblemsInitial = {
     problems: [],
@@ -110,18 +110,21 @@ export const serverProblemsReducer = (
                 },
 
                 async (state, dispatch) => {
+                    console.log(
+                        `--- serverProblemsReducer/POST_SERVER_PROBLEM/action`, action.problem
+                    )
                     try {
                         const response = await axios.post(
-                            `http://160.153.254.153/api/problems/store`,
+                            `${createProblem}`,
 
+                            {
+                                ...action.problem
+                            },
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 }
                             },
-                            {
-                                problem: action.problem
-                            }
                         );
 
                         dispatch({
@@ -147,7 +150,7 @@ export const serverProblemsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
-                            `http://160.153.254.153/api/problems/store`,
+                            `${updateProblem(action.problemName)}`,
 
                             {
                                 headers: {
@@ -155,7 +158,7 @@ export const serverProblemsReducer = (
                                 }
                             },
                             {
-                                problem_name: action.problem.problemName,
+                                // problem_name: action.problem.problemName,
                                 problem: action.problem
                             }
                         );
@@ -172,43 +175,43 @@ export const serverProblemsReducer = (
                     }
                 }
             )
-        case "UPDATE_SERVER_PROBLEM_IN_SERVER_AREA":
-            return UpdateWithSideEffect(
-                {
-                    ...state,
-                    posting: true,
-                    token: action.token
-                },
+        // case "UPDATE_SERVER_PROBLEM_IN_SERVER_AREA":
+        //     return UpdateWithSideEffect(
+        //         {
+        //             ...state,
+        //             posting: true,
+        //             token: action.token
+        //         },
 
-                async (state, dispatch) => {
-                    try {
-                        const response = await axios.post(
-                            `http://160.153.254.153/api/problems/store`,
+        //         async (state, dispatch) => {
+        //             try {
+        //                 const response = await axios.post(
+        //                     `${updateAreaProblems(action.areaName)}`,
 
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${action.token}`
-                                }
-                            },
-                            {
-                                area_name: action.areaName,
-                                problem_name: action.problem.problemName,
-                                problem: action.problem
-                            }
-                        );
+        //                     {
+        //                         headers: {
+        //                             'Authorization': `Bearer ${action.token}`
+        //                         }
+        //                     },
+        //                     {
+        //                         area_name: action.areaName,
+        //                         // problem_name: action.problem.problemName,
+        //                         problems: action.problem
+        //                     }
+        //                 );
 
-                        dispatch({
-                            type: "SET_SERVER_PROBLEMS",
-                            problems: response.data.data
-                        })
-                    } catch (error) {
-                        dispatch({
-                            type: "ERROR_SERVER_PROBLEMS",
-                            error
-                        })
-                    }
-                }
-            )
+        //                 dispatch({
+        //                     type: "SET_SERVER_PROBLEMS",
+        //                     problems: response.data.data
+        //                 })
+        //             } catch (error) {
+        //                 dispatch({
+        //                     type: "ERROR_SERVER_PROBLEMS",
+        //                     error
+        //                 })
+        //             }
+        //         }
+        //     )
 
         case "POST_STANDARTS_TO_SAVED_PROBLEM":
             return UpdateWithSideEffect({

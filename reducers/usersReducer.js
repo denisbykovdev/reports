@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-effects';
-import { addNewUser, deleteUser, updateUser, usersAll } from '../constants/api';
+import { addNewUser, deleteUser, passChange, updateUser, usersAll } from '../constants/api';
 
 export const usersInitial = {
     users: null,
-    error: null
+    error: null,
+    confirm: false
 }
 
 const userData = [
@@ -71,13 +72,10 @@ export const usersReducer = (
                             }
 
                         );
-
                         dispatch({
                             type: "UPDATE_USERS",
                             users: response.data.data,
                         })
-
-                        console.log("***usersReducer/UPDATE_USERS:", response.data.data)
 
                     } catch (error) {
 
@@ -85,20 +83,11 @@ export const usersReducer = (
                             type: "ERROR_USERS",
                             error
                         })
-
-                        console.log("***useUsers/ERROR_USERS:", error)
                     }
                 }
             );
 
         case "DELETE_ITEM":
-            // console.log(
-            //     ":::usersReducer:", action.itemId
-            // );
-            // return Update({
-            //     ...state,
-            //     users: state.users.filter(user => user.id !== action.itemId)
-            // })
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -130,20 +119,7 @@ export const usersReducer = (
             );
 
         case "CHANGE_ITEM_VALUE":
-            // console.log(
-            //     ":::usersReducer:", action.itemId, action.itemKey, action.itemNewValue
-            // );
-            // return Update({
-            //     ...state,
-            //     users: state.users.map(user =>
-            //         user.id === action.itemId ?
-            //             {
-            //                 ...user,
-            //                 [action.itemKey]: action.itemNewValue
-            //             } :
-            //             user
-            //     )
-            // })
+
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -180,17 +156,11 @@ export const usersReducer = (
                 }
             );
 
-        // case "ADD_USER":
-        //     return Update({
-        //         ...state,
-        //         users: [...state.users, action.user]
-        //     });
-
         case "ADD_USER":
             return UpdateWithSideEffect(
                 {
                     ...state,
-                    token: action.token,
+                    // token: action.token,
                     fetching: true
                 },
                 async (state, dispatch) => {
@@ -200,17 +170,60 @@ export const usersReducer = (
                             {
                                 ...action.user
                             },
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${action.token}`
-                                }
-                            }
+                            // {
+                            //     headers: {
+                            //         'Authorization': `Bearer ${action.token}`
+                            //     }
+                            // }
                         )
 
                         dispatch({
                             type: "UPDATE_USERS",
                             users: response.data.data
                         })
+                    } catch (error) {
+
+                        dispatch({
+                            type: "ERROR_USERS",
+                            error
+                        })
+                    }
+                }
+            );
+
+        case "CONFIRM":
+            return Update({
+                ...state,
+                confirm: action.confirm,
+                fetching: false
+            });
+        case "PASS_CHANGE":
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    fetching: true,
+                    token: action.token
+                },
+                async (state, dispatch) => {
+                    try {
+                        const response = await axios.post(
+                            `${passChange}`,
+                            {
+                                id: action.userId,
+                                password: action.password,
+                                password_confirmation: action.password_confirmation
+                            },
+                            // {
+                            //     headers: {
+                            //         'Authorization': `Bearer ${action.token}`
+                            //     }
+                            // }
+                        );
+                        dispatch({
+                            type: "CONFIRM",
+                            confirm: response.password_update,
+                        })
+
                     } catch (error) {
 
                         dispatch({

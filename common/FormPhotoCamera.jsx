@@ -40,13 +40,14 @@ export default function FormPhotoCamera({ name, interSepter }) {
 
   const [selected, setSelected] = useState(0)
 
-  // console.log("--- FormPhoto/values[name]:", values[name])
 
   const { isChecked, setChecked } = useChecked()
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
+      if (status === 'denied') await Camera.requestCameraPermissionAsync()
+      // console.log("--- FormPhoto/status:", status)
       setHasPermission(status === "granted");
     })();
   }, []);

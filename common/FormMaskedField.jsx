@@ -1,6 +1,8 @@
+import { useNavigation } from "@react-navigation/native"
 import { useFormikContext } from "formik"
-import React, { memo, useCallback, useState } from "react"
+import React, { useState } from "react"
 import { Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
+import stringSlicer from "../helpers/stringSlicer"
 import colors from "../utils/colors"
 import fonts from "../utils/fonts"
 import { responsiveWidth } from "../utils/layout"
@@ -13,25 +15,26 @@ const testArray = ['לביצוע', 'נבדק']
 function FormMaskedField({
     fieldName,
     placeholder,
-    dispatchMethod,
+    itemData,
     itemId,
     itemWidth
 }) {
     const [openField, setOpenFieled] = useState(false)
 
-    const interSepter = useCallback((name, text) => {
-        console.log(
-            "_______FormMaskedField/intersepter:", text, name
-        )
-        dispatchMethod({
-            type: "CHANGE_ITEM_VALUE",
-            itemId,
-            itemKey: name,
-            itemNewValue: text
-        })
-    }, [])
+    const navigation = useNavigation()
 
-    const {values} = useFormikContext()
+    const openReportHandler = (itemId) => navigation.navigate(
+        "AppStack",
+        {
+            screen: "Report",
+            params: {
+                reportId: itemId.toString(),
+                report: itemData
+            }
+        }
+    )
+
+    const { values } = useFormikContext()
 
     return (
         <View style={{
@@ -41,7 +44,11 @@ function FormMaskedField({
             justifyContent: 'center'
         }}>
             <TouchableWithoutFeedback
-                onPress={() => setOpenFieled(!openField)}
+                onPress={
+                    fieldName === 'id'
+                        ? () => openReportHandler(itemId)
+                        : () => setOpenFieled(!openField)
+                }
             >
                 <View
                     style={[
@@ -53,7 +60,7 @@ function FormMaskedField({
                     ]}
                 >
                     <TouchableOpacity
-                        onPress={() => setOpenFieled(true)}
+                        onPress={fieldName !== 'id' ? () => setOpenFieled(true) : () => openReportHandler(itemId)}
                     >
                         {
                             openField
@@ -64,7 +71,7 @@ function FormMaskedField({
                                             ? <FormSelect
                                                 placeholder="לביצוע"
                                                 name="status"
-                                                interSepter={interSepter}
+                                                // interSepter={interSepter}
                                                 style={{
                                                     marginBottom: 0
                                                 }}
@@ -80,7 +87,7 @@ function FormMaskedField({
                                                     borderRadius: 20
                                                 }}
                                                 name={fieldName}
-                                                interSepter={interSepter}
+                                            // interSepter={interSepter}
                                             />
                                     }
                                 </View>
@@ -99,9 +106,9 @@ function FormMaskedField({
                                         }}
                                     >
                                         {
-                                            values && values[fieldName]
-                                            ? values[fieldName]
-                                            : placeholder
+                                            stringSlicer(values && values[fieldName]
+                                                ? values[fieldName]
+                                                : placeholder, 10)
                                         }
                                     </Text>
                                 </View>
@@ -109,7 +116,7 @@ function FormMaskedField({
                     </TouchableOpacity>
                 </View>
             </TouchableWithoutFeedback>
-        </View>
+        </View >
     )
 }
 

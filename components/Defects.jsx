@@ -10,6 +10,7 @@ import useDefects from "../hooks/useDefects";
 import SavedAreas from "../modals/SavedAreas";
 import Area from './Area'
 import useAuth from "../hooks/useAuth";
+import { useCallback } from "react";
 
 const Defects = ({ areas }) => {
     const { defectsState, defectsDispatch } = useDefects()
@@ -25,25 +26,43 @@ const Defects = ({ areas }) => {
         })
     }
 
-    const deleteSavedArea = (areaName) => {
-        defectsDispatch({
-            type: "POST_SAVED_AREA_TO_DELETE",
-            token,
-            areaName
-        })
-    }
+    // const deleteSavedArea = useCallback((areaName) => {
+    //     defectsDispatch({
+    //         type: "POST_SAVED_AREA_TO_DELETE",
+    //         token,
+    //         areaName
+    //     })
+    // }, [])
+
+    // const createArea = useCallback(async (newAreaName) => await defectsDispatch({
+    //     type: "POST_NEW_AREA",
+    //     areaName: newAreaName
+    // }), [])
+
+    // useEffect(() => {
+    //     async function fetch() {
+    //         await defectsDispatch({
+    //             type: "FETCH_SAVED_AREAS",
+    //             token
+    //         })
+    //     }
+
+    //     () => fetch()
+    // }, [])
 
     useEffect(() => {
+        console.log(
+            "--- Defects/useEffect/areas prop:", areas
+        )
+        console.log(
+            "--- Defects/useEffect/defectsState.areas", defectsState.areas
+        )
+
         defectsDispatch({
             type: "FETCH_SAVED_AREAS",
             token
         })
-    }, [])
 
-    useEffect(() => {
-        console.log(
-            "--- Defects/useEffect/defectsState.areas", defectsState.areas
-        )
 
         if (areas && areas !== null) {
             defectsDispatch({
@@ -143,7 +162,8 @@ const Defects = ({ areas }) => {
                     savedAreasModalClose={savedAreasModalClose}
                     defectsDispatch={defectsDispatch}
                     defectsState={defectsState}
-                    deleteSavedArea={deleteSavedArea}
+                // deleteSavedArea={deleteSavedArea}
+                // createArea={createArea}
                 />
             </SavedAreasModalContent>
 

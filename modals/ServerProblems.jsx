@@ -53,6 +53,12 @@ export default function ServerProblems({
         }
     }
 
+    useEffect(() => {
+        console.log(
+            `--- ServerProblems/effect/prop/problemsState:`, problemsState.problems
+        )
+    }, [])
+
     return (
         <ShadowView>
             <CommonHeader
@@ -64,7 +70,7 @@ export default function ServerProblems({
             <RenderSearch />
 
             {
-                searchArray && searchArray.length > 0
+                searchArray && searchArray.length >= 0
                     ? searchArray.map((problem, i) => (
                         <ServerProblemItem
                             key={i}

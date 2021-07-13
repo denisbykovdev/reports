@@ -40,11 +40,11 @@ const FormRadioSelect = ({ name, array }) => {
         if (selected.length > 0) setFieldValue(name, selected)
     }, [selected])
 
-    useEffect(() => {
-        console.log(
-            "--- FormRadioSelect/effect/props/values", values[name], selected
-        )
-    }, [])
+    // useEffect(() => {
+    //     console.log(
+    //         "--- FormRadioSelect/effect/props/values", values[name], selected
+    //     )
+    // }, [])
 
     return (
         <View>

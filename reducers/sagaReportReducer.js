@@ -17,12 +17,12 @@ export const sagaReportReducer = (state = sagaReportInitial,
         case "UPDATE_REPORT_OFFLINE":
             return {
                 ...state,
-                reports: state.reports.map(report => report.id.toString() === action.payload.report.id.toString() ? action.payload.report : report)
+                reports: state.reports.map(report => report.id !== null && report.id.toString() === action.payload.reportId.toString() ? action.payload.report : report)
             }
         case "DELETE_REPORT_OFFLINE":
             return {
                 ...state,
-                reports: state.reports.filter(report => report.id === action.payload.reportId)
+                reports: state.reports.filter(report => report.id !== action.payload.reportId)
             }
         case "ADD_REPORTS_OFFLINE":
             return {

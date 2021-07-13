@@ -55,28 +55,28 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
             "--- Problem/submitProblem/problem:",
             { ...values, standarts: [...problem.standarts] }
         )
-
         if (serverArea) {
-            await problemsDispatch({
-                type: "UPDATE_SERVER_PROBLEM_IN_SERVER_AREA",
+            await defectsDispatch({
+                type: "UPDATE_PROBLEM_IN_SAVED_AREA",
                 token,
-                problem: { ...values, standarts: [...problem.standarts] },
+                areaProblem: { ...values, standarts: [...problem.standarts] },
+                problemName: problem.name,
                 areaName
             })
-        }
-
-        if (flagged) {
+        } else if (flagged) {
             await problemsDispatch({
                 type: "UPDATE_SERVER_PROBLEM",
+                token,
+                problem: { ...values, standarts: [...problem.standarts] },
+                problemName: problem.name
+            })
+        } else {
+            await problemsDispatch({
+                type: "POST_SERVER_PROBLEM",
                 token,
                 problem: { ...values, standarts: [...problem.standarts] }
             })
         }
-        await problemsDispatch({
-            type: "POST_SERVER_PROBLEM",
-            token,
-            problem: { ...values, standarts: [...problem.standarts] }
-        })
     }
 
     const interSepter = (name, text) => {
@@ -100,9 +100,9 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
         })
     }
 
-    console.log(
-        "--- Problem/problem:", problem
-    )
+    // console.log(
+    //     "--- Problem/problem:", problem
+    // )
 
     return (
         <View
@@ -184,7 +184,7 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
 
                                 <TouchableOpacity onPress={() => setOpenName(!openName)}>
                                     {
-                                        openName
+                                        openName && flagged === false
                                             ? <FormField
                                                 // area={true}
                                                 placeholder={problem.name}

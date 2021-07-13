@@ -3,6 +3,7 @@ import { Text, TouchableOpacity, View, StyleSheet, Image } from "react-native"
 import CommonButton from "../common/CommonButton"
 import Line from "../common/Line"
 import useModal from "../hooks/useModal"
+import useType from "../hooks/useType"
 import AltImage from "../icons/AltImage"
 import CircleArrowDown from "../icons/CircleArrowDown"
 import CircleArrowUp from "../icons/CircleArrowUp"
@@ -12,6 +13,7 @@ import colors from "../utils/colors"
 import fonts from "../utils/fonts"
 import { responsiveHeight, responsiveWidth } from "../utils/layout"
 import weights from "../utils/weights"
+import stringSlicer from "../helpers/stringSlicer"
 
 export default function ServerProblemItem({
     problem,
@@ -25,6 +27,8 @@ export default function ServerProblemItem({
     const [isOpen, setOpen] = useState(false)
 
     const [standartsModalOpen, standartsModalClose, StandartsModal] = useModal()
+
+    const { type } = useType()
 
     const checkedHandler = () => {
         if (!checked) {
@@ -72,26 +76,29 @@ export default function ServerProblemItem({
                     />
                 </StandartsModal>
 
-                <View
-                    style={styles.problemImageContainer}
-                >
-                    {
-                        problem.image.length > 0 && problem.image[0].length > 1
-                            ? <Image
-                                source={{ uri: problem.image[0] }}
-                                style={{
-                                    height: "100%",
-                                    width: "100%"
-                                }}
-                            />
-                            : <AltImage
-                                height={responsiveWidth(42)}
-                                width={responsiveWidth(38)}
-                            />
+                {
+                    type !== 1 && <View
+                        style={styles.problemImageContainer}
+                    >
+                        {
+                            problem.image.length > 0 && problem.image[0].length > 1
+                                ? <Image
+                                    source={{ uri: problem.image[0] }}
+                                    style={{
+                                        height: "100%",
+                                        width: "100%"
+                                    }}
+                                />
+                                : <AltImage
+                                    height={responsiveWidth(42)}
+                                    width={responsiveWidth(38)}
+                                />
 
-                    }
+                        }
 
-                </View>
+                    </View>
+                }
+
 
 
                 <View style={{
@@ -99,7 +106,7 @@ export default function ServerProblemItem({
                     alignItems: 'flex-end'
                 }}>
                     <Text>
-                        {problem.name}
+                        {stringSlicer(problem.name)}
                     </Text>
                     <View style={{
                         flexDirection: 'row',

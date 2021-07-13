@@ -16,11 +16,17 @@ import useAuth from "../hooks/useAuth";
 import stringSlicer from "../helpers/stringSlicer";
 import { watchDeleteReport, watchUpdateReport } from "../actionCreators/sagaReport";
 import { watchDeleteReportSaga } from "../sagas/watchDeleteReportSaga";
+import PassChangeButton from "./PassChangeButton";
+import useModal from "../hooks/useModal";
+import PassChange from "../modals/PassChange";
+import { Fragment } from "react";
 
 const DropDownItem = ({ itemData, dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
 
     const navigation = useNavigation()
+
+    const [passModalOpen, passModalCLose, PassModalRender] = useModal()
 
     const { authState } = useAuth()
 
@@ -91,7 +97,6 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                     >
                         <Basket />
                     </TouchableOpacity>
-
                     {
                         itemData.pending
                         &&
@@ -113,7 +118,6 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                             </Text>
                         </View>
                     }
-
                     {
                         itemData && itemData.status === null || itemData.status ?
                             (
@@ -133,8 +137,6 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                                 </Text>
                             )
                     }
-
-
                     <TouchableOpacity onPress={() => setVisible(!isVisible)}>
                         {
                             isVisible ? <CircleArrowUp /> : <CircleArrowDown />
@@ -142,8 +144,6 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-
-
             {
                 isVisible &&
                 <View style={{
@@ -156,13 +156,7 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                         {
                             Object.entries(itemData).map(
                                 ([key, value], index) => {
-                                    // if (key !== "id" )
-                                    // console.log(
-                                    //     "--- DDI/Object.entries(itemData).map/key:", 
-                                    //     key, 
-                                    //     firstLevelTitles.hasOwnProperty(key)
-                                    // )
-                                    if (key !== 'id' && firstLevelTitles.hasOwnProperty(key))
+                                    if (key !== 'id' && key !== 'password' && firstLevelTitles.hasOwnProperty(key)) {
                                         return (
                                             <DropDownElement
                                                 key={index}
@@ -173,6 +167,25 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                                                 dispatchMethod={dispatchMethod}
                                             />
                                         )
+                                    }
+                                    else if (key === 'password' && firstLevelTitles.hasOwnProperty(key)) {
+                                        return (
+                                            <Fragment key={index}>
+                                                <PassChangeButton
+                                                    key={index}
+                                                    onPress={() => passModalOpen()}
+                                                />
+                                                <PassModalRender>
+                                                    <PassChange
+                                                        close={passModalCLose}
+                                                        id={itemData.id}
+                                                        token={token}
+                                                        dispatchMethod={dispatchMethod}
+                                                    />
+                                                </PassModalRender>
+                                            </Fragment>
+                                        )
+                                    }
                                 }
                             )
                         }
@@ -185,7 +198,6 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                             style={{
                                 width: 'auto',
                                 marginVertical: responsiveWidth(18),
-                                // paddingHorizontal: responsiveWidth(28),
                                 marginHorizontal: responsiveWidth(28),
                             }}
                         />

@@ -27,7 +27,7 @@ export function* deleteReportSaga(action) {
                 action.payload.reportId
             ))
 
-            yield put(offlineActionCreators.fetchOfflineMode(action));
+            yield put(offlineActionCreators.fetchOfflineMode(action))
         }
     }
 }

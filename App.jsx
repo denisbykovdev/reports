@@ -10,6 +10,7 @@ import CheckedProvider from "./providers/CheckedProvider";
 
 import { Provider } from 'react-redux';
 import store from "./store";
+import useLocker from "./hooks/useLocker";
 // import { NetworkProvider } from 'react-native-offline';
 
 I18nManager.allowRTL(false);
@@ -17,12 +18,13 @@ I18nManager.forceRTL(false);
 
 export default function App() {
   SplashScreen.hideAsync();
+  // useLocker()
 
   return (
+    <TypeProvider>
+      <Provider store={store}>
+        <AuthProvider>
 
-    <Provider store={store}>
-      <AuthProvider>
-        <TypeProvider>
           <CheckedProvider>
             <DefectsProvider>
 
@@ -30,9 +32,9 @@ export default function App() {
 
             </DefectsProvider>
           </CheckedProvider>
-        </TypeProvider>
-      </AuthProvider>
-    </Provider >
 
+        </AuthProvider>
+      </Provider >
+    </TypeProvider>
   )
 }

@@ -31,10 +31,14 @@ export default function Proffessions({
     const [searchArray, RenderSearch] = useSearch({ array: profsState.profs })
 
     const submitNewProf = async (values) => {
+        console.log(
+            `--- Prof/submitNewProf:`,
+            values
+        )
         await profsDispatch({
             type: "POST_NEW_PROF",
             token,
-            newProf: values.name
+            newProf: values.profName
         })
     }
 
@@ -55,13 +59,13 @@ export default function Proffessions({
             <Line />
 
             <FormContainer
-                initialValues={{ name: '' }}
+                initialValues={{ profName: '' }}
                 onSubmit={
                     (values) => submitNewProf(values)
                 }
             >
                 <FormField
-                    name="name"
+                    name="profName"
                     placeholder="רשום שם מקצוע חדש"
                     style={styles.inputContainer}
                 />

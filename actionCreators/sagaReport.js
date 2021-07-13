@@ -4,10 +4,11 @@ export const addReportOffline = (report) => ({
         report
     }
 })
-export const updateReportOffline = (report) => ({
+export const updateReportOffline = (report, reportId) => ({
     type: "UPDATE_REPORT_OFFLINE",
     payload: {
-        report
+        report,
+        reportId
     }
 })
 export const deleteReportOffline = (reportId) => ({
@@ -116,7 +117,7 @@ export const watchUpdateReport = (
     report,
     areas,
     notes,
-    isConnected
+
 ) => ({
     type: "WATCH_UPDATE_REPORT",
     payload: {
@@ -124,8 +125,7 @@ export const watchUpdateReport = (
         reportId,
         report,
         areas,
-        notes,
-        isConnected
+        notes
     },
     meta: {
         retry: true,

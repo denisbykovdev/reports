@@ -1,12 +1,13 @@
 import axios from "axios";
+import { offlineActionCreators } from "react-native-offline";
 import { call, put } from "redux-saga/effects";
 import { updateReportFailure, updateReportOffline, updateReportStart, updateReportSuccess } from "../actionCreators/sagaReport";
 import { updateReport } from "../constants/api";
 
 export function* updateReportSaga(action) {
-    try {
-        yield put(updateReportStart());
+    yield put(updateReportStart());
 
+    try {
         const { data } = yield call(() => axios.post(
             `${updateReport(action.payload.reportId)}`,
             {
@@ -25,6 +26,20 @@ export function* updateReportSaga(action) {
             data.data
         ))
 
+        // yield put(offlineActionCreators.connectionChange(false))
+
+        // yield put(updateReportOffline(
+        //     {
+        //         ...action.payload.report,
+        //         areas: action.payload.areas,
+        //         notes: action.payload.notes.map(note => note.isSavedToReport === true && note),
+        //         pending: true,
+        //     },
+        //     action.payload.reportId
+        // ))
+
+        // yield put(offlineActionCreators.fetchOfflineMode(action));
+
     } catch (error) {
         yield put(updateReportFailure(error))
 
@@ -34,8 +49,9 @@ export function* updateReportSaga(action) {
                     ...action.payload.report,
                     areas: action.payload.areas,
                     notes: action.payload.notes.map(note => note.isSavedToReport === true && note),
-                    pending: true
-                }
+                    pending: true,
+                },
+                action.payload.reportId
             ))
 
             yield put(offlineActionCreators.fetchOfflineMode(action));

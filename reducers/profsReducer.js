@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-effects';
+import { createProfession, deleteProfession, getAllProfessions } from '../constants/api';
 
 export const profsInitial = {
     profs: [],
@@ -33,41 +34,41 @@ export const profsReducer = (
                 posting: false,
                 error: action.error
             })
-        // case "FETCH_PROFS":
-        //     return UpdateWithSideEffect(
-        //         {
-        //             ...state,
-        //             fetching: true,
-        //             token: action.token
-        //         },
-        //         async (state, dispatch) => {
-        //             try {
-        //                 const response = await axios.get(
-        //                     "http://160.153.254.153/api/proffessions/all",
-        //                     {
-        //                         headers: {
-        //                             'Authorization': `Bearer ${action.token}`
-        //                         }
-        //                     }
-        //                 )
-        //                 dispatch({
-        //                     type: "UPDATE_PROFS",
-        //                     profs: response.data.data,
-        //                 })
-        //             } catch (error) {
-        //                 dispatch({
-        //                     type: "ERROR_PROFS",
-        //                     error
-        //                 });
-        //             }
-        //         }
-        //     )
         case "FETCH_PROFS":
-            return Update({
-                ...state,
-                token: action.token,
-                profs: profsStatic
-            })
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    fetching: true,
+                    token: action.token
+                },
+                async (state, dispatch) => {
+                    try {
+                        const response = await axios.get(
+                            `${getAllProfessions}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+                        )
+                        dispatch({
+                            type: "UPDATE_PROFS",
+                            profs: response.data.data,
+                        })
+                    } catch (error) {
+                        dispatch({
+                            type: "ERROR_PROFS",
+                            error
+                        });
+                    }
+                }
+            )
+        // case "FETCH_PROFS":
+        //     return Update({
+        //         ...state,
+        //         token: action.token,
+        //         profs: profsStatic
+        //     })
         case "POST_NEW_PROF":
             console.log(
                 "***profsReducer/POST_NEW_PROF", action.newProf
@@ -81,14 +82,14 @@ export const profsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
-                            `http://160.153.254.153/api/profession/store`,
+                            `${createProfession}`,
+                            {
+                                name: action.newProf
+                            },
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 }
-                            },
-                            {
-                                name: action.newProf
                             }
                         )
                         dispatch({
@@ -105,9 +106,40 @@ export const profsReducer = (
             )
 
         case "DELETE_PROF":
-            return Update({
-                ...state,
-                profs: state.profs.filter(prof => prof === action.profName)
-            })
+            // return Update({
+            //     ...state,
+            //     profs: state.profs.filter(prof => prof === action.profName)
+            // })
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    posting: true,
+                    token: action.token
+                },
+                async (state, dispatch) => {
+                    try {
+                        const response = await axios.post(
+                            `${deleteProfession}`,
+                            {
+                                name: action.profName
+                            },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+                        )
+                        dispatch({
+                            type: "UPDATE_PROFS",
+                            profs: response.data.data
+                        })
+                    } catch (error) {
+                        dispatch({
+                            type: "ERROR_PROFS",
+                            error
+                        })
+                    }
+                }
+            )
     }
 }

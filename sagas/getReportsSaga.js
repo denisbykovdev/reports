@@ -10,7 +10,7 @@ export function* getReportsSaga(action) {
 
         const isConnected = yield select(state => state.network.isConnected)
 
-        yield call(() => console.log(`--- * ggetReportsSaga/action.payload.isConnected:`, isConnected))
+        // yield call(() => console.log(`--- * ggetReportsSaga/action.payload.isConnected:`, isConnected))
 
         if (isConnected !== true) {
             // try {

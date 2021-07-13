@@ -1,4 +1,4 @@
-export default function stringSlicer(string) {
-    let slicer = string.length > 15 ? `...${string.slice(1, 15)}` : string
+export default function stringSlicer(string, stringLength = 15) {
+    let slicer = string !== null && string.length > stringLength ? `...${string.slice(1, stringLength)}` : string
     return slicer
 }

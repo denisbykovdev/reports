@@ -125,6 +125,7 @@ export const addNewUser = usersStore
 //         password: string
 //     }
 // ]
+export const passChange = `${usersStore}/password/reset`
 
 //reports endpoints
 //store
@@ -330,8 +331,50 @@ data: [
 export const updateAreaProblems = (areaName) => `${areasStore}/${areaName}/update`
 // request:
 // {
-//     area_name: string,
-//     problems: array
+//     problems: Array
+// },
+// {
+//     headers: {
+//         'Authorization': `Bearer ${action.token}`
+//     }
+// }
+// response:
+data: [
+    {
+        name: 'testArea1',
+        id: 1,
+        problems: [
+            {
+                name: 'testProblem1',
+                id: 1,
+                profession_name: 'testProfession1',
+                details_of_eclipse: 'testDetails1',
+                cost: '1',
+                image: [],
+                standarts: [],
+                solution: 'testSolution1',
+                timeStamp: 'Jul 14, 2020 5:34:02 PM',
+            },
+            {
+                name: 'testProblem2',
+                id: 2,
+                profession_name: 'testProfession2',
+                details_of_eclipse: 'testDetails2',
+                cost: '2',
+                image: [],
+                standarts: [],
+                solution: 'testSolution2',
+                timeStamp: 'Jul 14, 2020 5:34:02 PM',
+            }
+        ]
+    }
+]
+
+//update area(add problems): POST
+export const updateAreaProblem = (areaName, problemName) => `${areasStore}/${areaName}/${problemName}/updateAreaProblem`
+// request:
+// {
+//     area_problem: object
 // },
 // {
 //     headers: {
@@ -422,7 +465,7 @@ export const problemsStore = `${api}/problems/store`
 export const createProblem = problemsStore
 //get all problemss: GET
 export const getAllProblems = `${problemsStore}/all`
-export const updateProblems = (problemName) => `${problemsStore}/${problemName}/update`
+export const updateProblem = (problemName) => `${problemsStore}/${problemName}/update`
 
 //professions endpoints
 //store
