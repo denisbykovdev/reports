@@ -40,11 +40,11 @@ export default function ServerProblemItem({
         }
     }
 
-    useEffect(() => {
-        console.log(
-            "___SavedProblems/effect", problem
-        )
-    }, [])
+    // useEffect(() => {
+    //     console.log(
+    //         "___SavedProblems/effect", problem
+    //     )
+    // }, [])
 
     return (
         <View>

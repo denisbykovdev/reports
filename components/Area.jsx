@@ -45,6 +45,12 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server 
         )
     }, [flagged])
 
+    useEffect(() => {
+        console.log(
+            "--- Area/effect/areaProblems:", areaProblems
+        )
+    }, [])
+
     const deleteArea = () => {
         dispatch({
             type: "DELETE_AREA",

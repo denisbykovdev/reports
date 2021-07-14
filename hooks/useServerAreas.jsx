@@ -10,17 +10,13 @@ export default function useServerAreas() {
     const { token } = authState;
 
     useEffect(() => {
-        async function fetchServerAreas() {
-            await defectsDispatch({
-                type: "FETCH_SAVED_AREAS",
-                token
-            })
-        }
-
-        () => fetchServerAreas()
+        () => defectsDispatch({
+            type: "FETCH_SAVED_AREAS",
+            token
+        })
     }, [])
 
     return [
-        defectsState.savedAreas, defectsDispatch
+        defectsState, defectsDispatch
     ]
 }

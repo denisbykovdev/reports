@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from "react-native";
 import CommonButton from "../common/CommonButton";
 import colors from "../utils/colors";
@@ -14,6 +14,7 @@ import { useCallback } from "react";
 
 const Defects = ({ areas }) => {
     const { defectsState, defectsDispatch } = useDefects()
+
     const [savedAreasModalOpen, savedAreasModalClose, SavedAreasModalContent] = useModal();
 
     const { authState } = useAuth()
@@ -26,36 +27,9 @@ const Defects = ({ areas }) => {
         })
     }
 
-    // const deleteSavedArea = useCallback((areaName) => {
-    //     defectsDispatch({
-    //         type: "POST_SAVED_AREA_TO_DELETE",
-    //         token,
-    //         areaName
-    //     })
-    // }, [])
-
-    // const createArea = useCallback(async (newAreaName) => await defectsDispatch({
-    //     type: "POST_NEW_AREA",
-    //     areaName: newAreaName
-    // }), [])
-
-    // useEffect(() => {
-    //     async function fetch() {
-    //         await defectsDispatch({
-    //             type: "FETCH_SAVED_AREAS",
-    //             token
-    //         })
-    //     }
-
-    //     () => fetch()
-    // }, [])
-
     useEffect(() => {
         console.log(
             "--- Defects/useEffect/areas prop:", areas
-        )
-        console.log(
-            "--- Defects/useEffect/defectsState.areas", defectsState.areas
         )
 
         defectsDispatch({
@@ -64,7 +38,7 @@ const Defects = ({ areas }) => {
         })
 
 
-        if (areas && areas !== null) {
+        if (areas && areas !== null && areas > 0) {
             defectsDispatch({
                 type: "ADD_SAVED_AREAS",
                 saved: areas
@@ -76,25 +50,18 @@ const Defects = ({ areas }) => {
             })
         }
 
-    }, [])
+    }, [areas])
+
+    useEffect(() => {
+        console.log(
+            "--- Defects/useEffect/defectsState.areas", defectsState.areas
+        )
+    }, [defectsState.areas])
+
 
     return (
         <>
-            {/* {
-                defectsState.areas.length > 1 && (
-                    <View style={styles.defectsAreasSearch}>
-                        <TextInput
-                            placeholder="... חיפוש לפי בדיקות"
-                            style={styles.searchInput}
-                        />
-                    </View>
-                )
-            } */}
-
-
-
             {
-
                 defectsState.areas && defectsState.areas.map((area, i) => (
                     <Area
                         key={i}
@@ -105,20 +72,7 @@ const Defects = ({ areas }) => {
                         server={area.server ? true : false}
                     />
                 ))
-                // : areas.map((area, i) => (
-                //     <Area
-                //         key={i}
-                //         areaId={area.id}
-                //         areaName={area.name}
-                //         areaProblems={area.problems}
-                //         dispatch={defectsDispatch}
-                //         server={area.server ? true : false}
-                //     />
-                // ))
             }
-
-
-
             <View style={{
                 flexDirection: 'row'
             }}>
@@ -160,10 +114,8 @@ const Defects = ({ areas }) => {
             <SavedAreasModalContent>
                 <SavedAreas
                     savedAreasModalClose={savedAreasModalClose}
-                    defectsDispatch={defectsDispatch}
-                    defectsState={defectsState}
-                // deleteSavedArea={deleteSavedArea}
-                // createArea={createArea}
+                // defectsState={defectsState}
+                // defectsDispatch={defectsDispatch}
                 />
             </SavedAreasModalContent>
 
@@ -191,4 +143,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Defects;
+export default Defects

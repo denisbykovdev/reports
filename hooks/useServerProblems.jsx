@@ -14,12 +14,12 @@ export default function useServerProblems(
 
     const { token } = authState;
 
-    useEffect(() => {
-        problemsDispatch({
-            type: "GET_SERVER_PROBLEMS",
-            payload: token
-        })
-    }, [])
+    // useEffect(() => {
+    //     problemsDispatch({
+    //         type: "GET_SERVER_PROBLEMS",
+    //         payload: token
+    //     })
+    // }, [])
 
     return [
         problemsState, problemsDispatch

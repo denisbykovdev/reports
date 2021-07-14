@@ -4,7 +4,7 @@ import fonts from "../utils/fonts";
 import { responsiveHeight, responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 
-const CommonSubHeader = ({title, children, subHeaderStyle, subHeaderTitleStyle}) => (
+const CommonSubHeader = ({ title, children, subHeaderStyle, subHeaderTitleStyle }) => (
     <View style={[styles.subHeader, subHeaderStyle]}>
         <Text style={[styles.subHeaderTitle, subHeaderTitleStyle]}>
             {title}
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: 'flex-end',
         alignItems: "center",
-        marginVertical: responsiveHeight(20),
+        marginVertical: responsiveHeight(28),
         // marginHorizontal: responsiveWidth(30)
     },
     subHeaderTitle: {

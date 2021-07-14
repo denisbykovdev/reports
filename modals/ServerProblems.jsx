@@ -10,6 +10,11 @@ import useServerProblems from "../hooks/useServerProblems"
 import useSearch from "../hooks/useSearch"
 import colors from "../utils/colors"
 import { responsiveWidth } from "../utils/layout"
+import Spinner from "../common/Spinner"
+import useAuth from "../hooks/useAuth"
+
+import useReducerWithSideEffects from 'use-reducer-with-side-effects';
+import { serverProblemsInitial, serverProblemsReducer } from "../reducers/serverProblemsReducer"
 
 export default function ServerProblems({
     savedProblemsModalclose,
@@ -17,13 +22,22 @@ export default function ServerProblems({
     areaId,
     problemsChoiceCLose
 }) {
-    const [problemsState, problemsDispatch] = useServerProblems()
+    // const [problemsState, problemsDispatch] = useServerProblems()
+
+    const [problemsState, problemsDispatch] = useReducerWithSideEffects(
+        serverProblemsReducer,
+        serverProblemsInitial
+    );
 
     const { _, defectsDispatch } = useDefects()
 
     const [checkedProblems, setUpdateCheckedProblems] = useState([])
 
     const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: problemsState.problems })
+
+    const { authState } = useAuth()
+
+    const { token } = authState;
 
     const addCheckedProblem = (checkedName) => {
         const newCheckedProblem = problemsState.problems.find(savedProblem => savedProblem.name === checkedName)
@@ -39,6 +53,7 @@ export default function ServerProblems({
         if (savedAreaName) {
             defectsDispatch({
                 type: "POST_PROBLEMS_TO_SAVED_AREA",
+                token,
                 areaName: savedAreaName,
                 problems: checkedProblems
             })
@@ -54,8 +69,13 @@ export default function ServerProblems({
     }
 
     useEffect(() => {
+        problemsDispatch({
+            type: "GET_SERVER_PROBLEMS",
+            payload: token
+        })
+
         console.log(
-            `--- ServerProblems/effect/prop/problemsState:`, problemsState.problems
+            `--- ServerProblems/searchArray`, searchArray
         )
     }, [])
 
@@ -70,7 +90,8 @@ export default function ServerProblems({
             <RenderSearch />
 
             {
-                searchArray && searchArray.length >= 0
+
+                searchArray && searchArray.length > 0
                     ? searchArray.map((problem, i) => (
                         <ServerProblemItem
                             key={i}
@@ -80,14 +101,17 @@ export default function ServerProblems({
                             problemsDispatch={problemsDispatch}
                         />
                     ))
-                    : problemsState && problemsState.problems.map((problem, i) => (
-                        <ServerProblemItem
-                            key={i}
-                            problem={problem}
-                            addCheckedProblem={addCheckedProblem}
-                            removeCheckedProblem={removeCheckedProblem}
-                            problemsDispatch={problemsDispatch}
-                        />
+                    : problemsState.problems.map((problem, i) => (
+                        problemsState.fetching
+                            ? <Spinner />
+                            :
+                            <ServerProblemItem
+                                key={i}
+                                problem={problem}
+                                addCheckedProblem={addCheckedProblem}
+                                removeCheckedProblem={removeCheckedProblem}
+                                problemsDispatch={problemsDispatch}
+                            />
                     ))
             }
 

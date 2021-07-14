@@ -21,56 +21,61 @@ import { useCallback } from "react"
 import useDefects from "../hooks/useDefects"
 import useAuth from "../hooks/useAuth"
 import useServerAreas from "../hooks/useServerAreas"
+import Spinner from "../common/Spinner"
 
 function SavedAreas({
     savedAreasModalClose,
-    // defectsDispatch,
     // defectsState,
-    // deleteSavedArea,
-    // createArea
+    // defectsDispatch
 }) {
-    // const { defectsState, defectsDispatch } = useDefects()
+    // const [defectsState, defectsDispatch] = useServerAreas()
 
-    const [serverAreasState, serverAreasDispatch] = useServerAreas()
+    const { defectsState, defectsDispatch } = useDefects()
 
     const [checkedAreasList, setUpdateAreasList] = useState([])
 
-    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: serverAreasState })
+    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: defectsState.savedAreas })
 
     const { authState } = useAuth()
 
     const { token } = authState;
 
-    const addCheckedArea = (name) => {
+    const addCheckedArea = useCallback((name) => {
 
-        const newSavedArea = serverAreasState && serverAreasState.find(savedArea => savedArea.area_name === name)
+        const newSavedArea = defectsState && defectsState.savedAreas.find(savedArea => savedArea.area_name === name)
 
         setUpdateAreasList(oldArray => [...oldArray, newSavedArea])
-    }
+    }, [])
 
-    const removeCheckedArea = (name) => {
+    const removeCheckedArea = useCallback((name) => {
         setUpdateAreasList(checkedAreasList.filter(item => item.name !== name))
-    }
+    }, [])
 
     const addSavedAreasList = async () => {
-        await serverAreasDispatch({
+        await defectsDispatch({
             type: "ADD_SAVED_AREAS",
             saved: checkedAreasList
         })
         await savedAreasModalClose()
     }
 
-    const createArea = useCallback(async (newAreaName) => await serverAreasDispatch({
+    const createArea = (newAreaName) => defectsDispatch({
         type: "POST_NEW_AREA",
         areaName: newAreaName
-    }), [])
+    })
 
-    const deleteSavedArea = useCallback((areaName) => {
-        serverAreasDispatch({
+    const deleteSavedArea = (areaName) => {
+        defectsDispatch({
             type: "POST_SAVED_AREA_TO_DELETE",
             token,
             areaName
         })
+    }
+
+    useEffect(() => {
+        console.log(
+            `--- SavedAreas render:`
+        )
     }, [])
 
     return (
@@ -121,25 +126,28 @@ function SavedAreas({
             <RenderSearch />
 
             {
-                searchArray && searchArray.length > 0
-                    ? searchArray.map((savedArea, i) => (
-                        <SavedAreaItem
-                            key={i}
-                            addCheckedArea={addCheckedArea}
-                            removeCheckedArea={removeCheckedArea}
-                            savedArea={savedArea}
-                            deleteSavedArea={deleteSavedArea}
-                        />
-                    ))
-                    : serverAreasState && serverAreasState.map((savedArea, i) => (
-                        <SavedAreaItem
-                            key={i}
-                            addCheckedArea={addCheckedArea}
-                            removeCheckedArea={removeCheckedArea}
-                            savedArea={savedArea}
-                            deleteSavedArea={deleteSavedArea}
-                        />
-                    ))
+                defectsState && defectsState.fetching || defectsState.posting
+                    ? <Spinner />
+
+                    : searchArray && searchArray.length > 0
+                        ? searchArray.map((savedArea, i) => (
+                            <SavedAreaItem
+                                key={i}
+                                addCheckedArea={addCheckedArea}
+                                removeCheckedArea={removeCheckedArea}
+                                savedArea={savedArea}
+                                deleteSavedArea={deleteSavedArea}
+                            />
+                        ))
+                        : defectsState && defectsState !== null && defectsState.savedAreas.map((savedArea, i) => (
+                            <SavedAreaItem
+                                key={i}
+                                addCheckedArea={addCheckedArea}
+                                removeCheckedArea={removeCheckedArea}
+                                savedArea={savedArea}
+                                deleteSavedArea={deleteSavedArea}
+                            />
+                        ))
             }
 
             <CommonButton
@@ -177,4 +185,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default memo(SavedAreas)
+export default SavedAreas

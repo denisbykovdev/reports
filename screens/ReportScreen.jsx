@@ -85,14 +85,14 @@ const ReportScreen = ({ route }) => {
         let newValues = { ...values, id: Number(values.id) }
 
         if (route.params.reportId === null) {
-            await dispatch(watchPostReport(
+            dispatch(watchPostReport(
                 token,
                 values,
                 defectsState.areas,
                 defectsState.notes
             ))
         } else {
-            await dispatch(watchUpdateReport(
+            dispatch(watchUpdateReport(
                 token,
                 route.params.reportId,
                 newValues,
@@ -101,6 +101,9 @@ const ReportScreen = ({ route }) => {
             ))
         }
         setChecked(true)
+        // defectsDispatch({
+        //     type: "CLEAR_AREAS"
+        // })
     }
 
     function layoutCatcher({ nativeEvent: { layout: { x, y, width, height }, target } }) {

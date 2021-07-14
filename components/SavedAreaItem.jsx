@@ -12,6 +12,8 @@ import colors from "../utils/colors"
 import { responsiveWidth } from "../utils/layout"
 
 function SavedAreaItem({ savedArea, addCheckedArea, removeCheckedArea, deleteSavedArea }) {
+    // const [problemsState, problemsDispatch] = useServerProblems()
+
     const [checked, setChecked] = useState(false)
 
     const [savedProblemsModalopen, savedProblemsModalclose, SavedProblemsModal] = useModal()
@@ -26,9 +28,9 @@ function SavedAreaItem({ savedArea, addCheckedArea, removeCheckedArea, deleteSav
         }
     }
 
-    console.log(
-        `--- SavedAreaItem/prop/savedArea:`, savedArea
-    )
+    // console.log(
+    //     `--- SavedAreaItem/prop/savedArea:`, savedArea
+    // )
 
     return (
         <View>
@@ -62,7 +64,7 @@ function SavedAreaItem({ savedArea, addCheckedArea, removeCheckedArea, deleteSav
 
 
                 <Text>
-                    {stringSlicer(savedArea.area_name, 10)}
+                    {stringSlicer(savedArea.area_name, 9)}
                 </Text>
 
                 <TouchableOpacity

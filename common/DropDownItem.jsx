@@ -63,14 +63,14 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
         console.log(
             "--- DDI/submitItem/itemData/report:", itemData.hasOwnProperty('status')
         )
-        // console.log(
-        //     "--- DDI/submitItem/values:", values
-        // )
+
+        let newValues = { ...values, id: Number(values.id) }
 
         if (itemData.hasOwnProperty('status')) {
             await dispatchMethod(watchUpdateReport(
                 token,
-                values,
+                newValues.id,
+                newValues,
                 itemData.areas,
                 itemData.notes
             ))

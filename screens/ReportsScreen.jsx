@@ -26,7 +26,17 @@ import { setReports, watchDeleteReport, watchGetReports, watchPostReport, watchU
 import useAuth from "../hooks/useAuth";
 import { useState } from "react";
 import Line from "../common/Line";
-// import { useIsConnected } from "react-native-offline";
+import * as SecureStore from 'expo-secure-store';
+
+const reportsTitles = {
+  tester_name: "שם העורך",
+  examination_date: "תאריך",
+  report_adress: "כתובת",
+  customer_full_name: "לקוח",
+  customer_name: "מספר לקוח",
+  status: "סטטוס",
+  id: "מזהה בדיקה"
+}
 
 function ReportsScreen({ route, navigation }) {
 
@@ -73,7 +83,8 @@ function ReportsScreen({ route, navigation }) {
 
       // setQueues([...networkSelector.actionQueue])
 
-      networkSelector.actionQueue.forEach(action => {
+
+      networkSelector.actionQueue.map(action => {
         if (action.type === 'WATCH_POST_REPORT') {
           dispatch(watchPostReport(
             action.payload.token,
@@ -96,8 +107,16 @@ function ReportsScreen({ route, navigation }) {
           ))
         }
       }
+      );
 
-      )
+      // if (!reportsSelector.find(report => report.pending)) {
+      //   SecureStore.setItemAsync(
+      //     'userReports',
+      //     JSON.stringify(
+      //       dreportsSelector
+      //     )
+      //   )
+      // }
 
     }
   }, [networkSelector.isConnected])
@@ -113,24 +132,6 @@ function ReportsScreen({ route, navigation }) {
       }
       // "Report"
     )
-
-  const reportsTitles = {
-    // id: "",
-    // status: "", //положение дел
-    // customerNumber: "",
-    // client: "",
-    // address: "",
-    // date: "",
-    // editorsName: "",
-
-    tester_name: "שם העורך",
-    examination_date: "תאריך",
-    report_adress: "כתובת",
-    customer_full_name: "לקוח",
-    customer_name: "מספר לקוח",
-    status: "סטטוס",
-    id: "מזהה בדיקה"
-  }
 
   return (
     <SafeView>

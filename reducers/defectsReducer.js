@@ -245,22 +245,29 @@ export const defectsReducer = (
                     ...state.areas,
 
                     ...action.saved.map((area, i) => {
-                        console.log(
-                            "*** defectsReducer/ADD_SAVED_AREAS/saved.map:",
-                            area
-                        )
+                        // console.log(
+                        //     "*** defectsReducer/ADD_SAVED_AREAS/saved.map:",
+                        //     area
+                        // )
 
                         return {
                             ...area,
                             id: state.areas.length === 0 ? 1 + i : state.areas.length + 1 + i,
-                            problems: area.problems && area.problems.map(problem =>
-                                !problem.flagged
-                                    ? {
+                            problems: area.problems.length > 0
+                                ? area.problems.map((problem, i) => {
+                                    // !problem.flagged
+                                    //     ? {
+                                    //         ...problem,
+                                    //         flagged: true
+                                    //     }
+                                    //     : problem
+                                    return {
                                         ...problem,
+                                        id: area.problems.length === 0 ? 1 + i : area.problems.length + 1 + i,
                                         flagged: true
                                     }
-                                    : area
-                            ),
+                                })
+                                : [],
                             server: true
                         }
 
@@ -272,7 +279,7 @@ export const defectsReducer = (
             return Update({
                 ...state,
                 posting: false,
-                savedAreas: action.updatedSavedAreas
+                savedAreas: action.savedAreas
             });
 
         case "POST_NEW_AREA":
@@ -350,13 +357,16 @@ export const defectsReducer = (
                     token: action.token
                 },
                 async (state, dispatch) => {
+                    console.log(
+                        `--- defectsReducer/POST_PROBLEMS_TO_SAVED_AREA/action`,
+                        action
+                    )
                     try {
                         const response = await axios.post(
                             `${updateAreaProblems(action.areaName)}`,
 
                             {
-                                // area_name: action.areaName,
-                                problems: action.areaProblems
+                                problems: action.problems
                             },
                             {
                                 headers: {
@@ -424,10 +434,10 @@ export const defectsReducer = (
                         ...area.problems,
 
                         ...action.problems.map((problem, i) => {
-                            console.log(
-                                "*** defectsReducer/test",
-                                problem
-                            )
+                            // console.log(
+                            //     "*** defectsReducer/test",
+                            //     problem
+                            // )
 
                             return {
                                 ...problem,

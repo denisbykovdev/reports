@@ -5,13 +5,14 @@ import { StyleSheet, ScrollView, View } from "react-native";
 import Modal from "react-native-modal";
 import AvoidingView from "../common/AvoidingView";
 import useType from "../hooks/useType"
+import { useCallback } from "react";
 
 const useModal = () => {
   const { type } = useType()
 
   const [isVisible, setVisible] = useState(false);
 
-  const modalClose = () => setVisible(false);
+  const modalClose = useCallback(() => setVisible(false), []);
 
   const modalOpen = () => setVisible(true);
 
@@ -41,6 +42,7 @@ const useModal = () => {
       ]}
       propagateSwipe={true}
       scrollVertical={true}
+    // useNativeDriver={true}
     >
       <AvoidingView>
         <ScrollView

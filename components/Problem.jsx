@@ -55,6 +55,10 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
             "--- Problem/submitProblem/problem:",
             { ...values, standarts: [...problem.standarts] }
         )
+        console.log(
+            "--- Problem/submitProblem/problem/flagged:",
+            flagged
+        )
         if (serverArea) {
             await defectsDispatch({
                 type: "UPDATE_PROBLEM_IN_SAVED_AREA",

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update } from 'use-reducer-with-side-effects';
-import { createProblem, getAllProblems, updateAreaProblems, updateProblems } from '../constants/api';
+import { createProblem, getAllProblems, updateProblem } from '../constants/api';
 
 export const serverProblemsInitial = {
     problems: [],
@@ -79,6 +79,9 @@ export const serverProblemsReducer = (
                             }
 
                         );
+                        console.log(
+                            `--- serverProblemsReducer/GET_SERVER_PROBLEMS/response:`, response.data.data
+                        )
 
                         dispatch({
                             type: "SET_SERVER_PROBLEMS",
@@ -148,18 +151,19 @@ export const serverProblemsReducer = (
                 },
 
                 async (state, dispatch) => {
+                    console.log(
+                        `--- serverProblemsReducer/UPDATE_SERVER_PROBLEM/action:`, action
+                    )
                     try {
                         const response = await axios.post(
                             `${updateProblem(action.problemName)}`,
-
+                            {
+                                problem: action.problem
+                            },
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 }
-                            },
-                            {
-                                // problem_name: action.problem.problemName,
-                                problem: action.problem
                             }
                         );
 

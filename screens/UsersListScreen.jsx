@@ -11,20 +11,20 @@ import TableAddUser from "../components/TableAddUser";
 import useUsers from "../hooks/useUsers";
 import useType from "../hooks/useType";
 
+const usersTitles = {
+  password: "",
+  email: "",
+  phone: "",
+  last_name: "",
+  name: ""
+}
+
 const UsersListScreen = ({ closeModal }) => {
 
   const [usersState, usersDispatch] = useUsers()
 
   const { type } = useType()
 
-  const usersTitles = {
-    // id: "",
-    name: "",
-    last_name: "",
-    phone: "",
-    email: "",
-    password: ""
-  }
   return (
     <AvoidingView>
       <ShadowView shadowStyle={{
