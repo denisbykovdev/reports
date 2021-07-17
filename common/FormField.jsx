@@ -29,7 +29,7 @@ export default function FormField({
     touched,
   } = useFormikContext();
 
-  const {isChecked, setChecked} = useChecked()
+  const { isChecked, setChecked } = useChecked()
 
   return (
     <View style={[styles.formFieldContainer]}>
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   input: {
     height: "100%",
     width: "100%",
-    textAlign : "right",
+    textAlign: "right",
     // writingDirection: 'rtl',
     marginRight: responsiveWidth(10),
     fontSize: fonts.xsmall,

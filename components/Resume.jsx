@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import CommonButton from "../common/CommonButton";
 import FormContainer from "../common/FormContainer";
@@ -16,30 +16,53 @@ import Delete from "../modals/Delete";
 import Clipboard from 'expo-clipboard';
 import { useFormikContext } from "formik";
 import AvoidingView from "../common/AvoidingView";
+import useChecked from "../hooks/useChecked";
 
 const Resume = ({ notes }) => {
     const { defectsState, defectsDispatch } = useDefects()
 
+    const { isChecked, setChecked } = useChecked()
+
     const { type } = useType()
 
-    const addNewNote = () => defectsDispatch({
-        type: "ADD_NEW_NOTE"
-    })
+    const addNewNote = () =>
+        defectsDispatch({
+            type: "ADD_NEW_NOTE"
+        })
+
 
     const deleteNote = (noteId) => defectsDispatch({
         type: "DELETE_NOTE",
         noteId
     })
 
-    const saveNoteToReport = (noteId) => defectsDispatch({
-        type: "SAVE_NOTE_TO_REPORT",
-        noteId
-    })
+    const saveNoteToReport = (noteId) => {
+        setChecked(false)
+        defectsDispatch({
+            type: "SAVE_NOTE_TO_REPORT",
+            noteId
+        })
+    }
 
-    const removeNoteFromReport = (noteId) => defectsDispatch({
-        type: "REMOVE_NOTE_FROM_REPORT",
-        noteId
-    })
+    const removeNoteFromReport = (noteId) => {
+        setChecked(false)
+        defectsDispatch({
+            type: "REMOVE_NOTE_FROM_REPORT",
+            noteId
+        })
+    }
+
+    useEffect(() => {
+        if (notes && notes !== null && notes.length > 0) {
+            defectsDispatch({
+                type: "ADD_SERVER_NOTES",
+                notes
+            })
+        }
+        console.log(
+            `--- notes/effect/props:`, notes, defectsState.notes
+        )
+    }, [])
 
     return (
         <View style={styles.notesContainer}>
@@ -68,29 +91,30 @@ const Resume = ({ notes }) => {
             />
             <Line />
             {
-                notes === null && defectsState
-                    ? defectsState.notes.map(
-                        note =>
-                            <NoteItem
-                                key={note.id}
-                                note={note}
-                                deleteNote={deleteNote}
-                                saveNoteToReport={saveNoteToReport}
-                                removeNoteFromReport={removeNoteFromReport}
-                                defectsDispatch={defectsDispatch}
-                            />
-                    )
-                    : notes.map(
-                        note =>
-                            <NoteItem
-                                key={note.id}
-                                note={note}
-                                deleteNote={deleteNote}
-                                saveNoteToReport={saveNoteToReport}
-                                removeNoteFromReport={removeNoteFromReport}
-                                defectsDispatch={defectsDispatch}
-                            />
-                    )
+                // notes === null || notes.length === 0
+                //     ? 
+                defectsState.notes.map(
+                    note =>
+                        <NoteItem
+                            key={note.id}
+                            note={note}
+                            deleteNote={deleteNote}
+                            saveNoteToReport={saveNoteToReport}
+                            removeNoteFromReport={removeNoteFromReport}
+                            defectsDispatch={defectsDispatch}
+                        />
+                )
+                // : notes.map(
+                //     note =>
+                //         <NoteItem
+                //             key={note.id}
+                //             note={note}
+                //             deleteNote={deleteNote}
+                //             saveNoteToReport={saveNoteToReport}
+                //             removeNoteFromReport={removeNoteFromReport}
+                //             defectsDispatch={defectsDispatch}
+                //         />
+                // )
             }
         </View>
 
@@ -128,9 +152,9 @@ const NoteItem = ({
     // }
 
     const interSepter = (name, text) => {
-        console.log(
-            "___Resume(notes)/intersepter:", name, text
-        )
+        // console.log(
+        //     "___Resume(notes)/intersepter:", name, text
+        // )
         defectsDispatch({
             type: "CHANGE_NOTE_VALUE",
             noteId: note.id,
@@ -139,57 +163,114 @@ const NoteItem = ({
     }
 
     return (
-        <FormContainer
-            initialValues={{ note: '' }}
-            // onSubmit={submitNote}
-            style={styles.noteContainer}
-        >
-            <View style={[styles.noteActions]}>
-                <View style={[styles.noteActionsGroup, {
-                    flexDirection: type === 2 ? 'column' : 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                }]}>
-                    <TouchableOpacity
-                        style={styles.noteAtionsBasket}
-                        onPress={
-                            // () => deleteNote(note.id)
-                            () => openDeleteModal()
-                        }
-                    >
-                        <Basket />
-                    </TouchableOpacity>
+        <View style={{
+            // backgroundColor: 'yellow'
+        }}>
+            <FormContainer
+                initialValues={{ note: '' }}
+                // onSubmit={submitNote}
+                style={styles.noteContainer}
+            >
+                <View style={[styles.noteActions]}>
+                    <View style={[styles.noteActionsGroup, {
+                        flexDirection: type === 2 ? 'column' : 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                    }]}>
+                        <TouchableOpacity
+                            style={styles.noteAtionsBasket}
+                            onPress={
+                                // () => deleteNote(note.id)
+                                () => openDeleteModal()
+                            }
+                        >
+                            <Basket />
+                        </TouchableOpacity>
 
-                    <DeleteModal
-                        modalContainerStyle={{
-                            paddingHorizontal: 0,
-                            // marginVertical: '40%'
-                        }}
-                        modalContentStyle={{
-                            // paddingTop: 0
-                        }}
-                    >
-                        <Delete
-                            closeDeleteModal={closeDeleteModal}
-                            deleteNote={deleteNote}
-                            id={note.id}
-                        />
-                    </DeleteModal>
+                        <DeleteModal
+                            modalContainerStyle={{
+                                paddingHorizontal: 0,
+                                // marginVertical: '40%'
+                            }}
+                            modalContentStyle={{
+                                // paddingTop: 0
+                            }}
+                        >
+                            <Delete
+                                closeDeleteModal={closeDeleteModal}
+                                deleteNote={deleteNote}
+                                id={note.id}
+                            />
+                        </DeleteModal>
 
-                    <TouchableOpacity onPress={() => copyToClipboard()}>
-                        <Copy />
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={() => copyToClipboard()}>
+                            <Copy />
+                        </TouchableOpacity>
+                    </View>
+                    {
+                        type === 2
+                        && (
+                            <FormField
+                                area={true}
+                                style={{
+                                    height: responsiveHeight(103),
+                                    textAlign: 'right',
+                                    width: '90%',
+                                    // paddingBottom: responsiveWidth(24)
+                                }}
+                                inputStyle={{
+                                    marginEnd: 0,
+                                    padding: 0
+                                    // height: responsiveHeight(103),
+                                    // textAlign: 'right',
+                                    // width: '90%'
+                                }}
+                                name="note"
+                                interSepter={interSepter}
+                                placeholder={note.note}
+                            />
+                        )
+                    }
+
+                    <View style={[styles.noteActionsGroup, {
+                        // flexDirection: type === 2 ? 'column' : 'row',
+                        // justifyContent: 'space-between',
+                        // alignItems: 'center'
+                    }]}>
+                        <Text>
+                            {note.id}
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() => noteToReport(note.id)}
+                            // onPress={handleSubmit}
+                            style={[styles.tickContainer, {
+                                backgroundColor: note.isSavedToReport ? colors.paleGrayBg : colors.white
+                            }]}
+                        >
+                            {
+                                note.isSavedToReport && <Tick />
+                            }
+                        </TouchableOpacity>
+                    </View>
+
                 </View>
                 {
-                    type === 2
+                    type === 1
                     && (
+                        // <View
+                        //     style={{
+                        //         height: responsiveHeight(103)
+                        //     }}
+                        // >
                         <FormField
-                            area
+                            area={true}
                             style={{
                                 height: responsiveHeight(103),
                                 textAlign: 'right',
-                                width: '90%'
+                                width: '90%',
+                                marginBottom: responsiveWidth(22)
                             }}
+                            // height={responsiveHeight(103)}
                             inputStyle={{
                                 marginEnd: 0
                             }}
@@ -197,51 +278,12 @@ const NoteItem = ({
                             interSepter={interSepter}
                             placeholder={note.note}
                         />
+                        // </View>
+
                     )
                 }
-
-                <View style={[styles.noteActionsGroup, {
-                    // flexDirection: type === 2 ? 'column' : 'row',
-                    // justifyContent: 'space-between',
-                    // alignItems: 'center'
-                }]}>
-                    <Text>
-                        {note.id}
-                    </Text>
-                    <TouchableOpacity
-                        onPress={() => noteToReport(note.id)}
-                        // onPress={handleSubmit}
-                        style={[styles.tickContainer, {
-                            backgroundColor: note.isSavedToReport ? colors.paleGrayBg : colors.white
-                        }]}
-                    >
-                        {
-                            note.isSavedToReport && <Tick />
-                        }
-                    </TouchableOpacity>
-                </View>
-
-            </View>
-            {
-                type !== 2
-                && (
-                    <FormField
-                        area
-                        style={{
-                            height: responsiveHeight(103),
-                            textAlign: 'right',
-                            width: '90%'
-                        }}
-                        inputStyle={{
-                            marginEnd: 0
-                        }}
-                        name="note"
-                        interSepter={interSepter}
-                        placeholder={note.note}
-                    />
-                )
-            }
-        </FormContainer>
+            </FormContainer>
+        </View>
     )
 }
 

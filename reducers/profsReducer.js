@@ -119,10 +119,7 @@ export const profsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
-                            `${deleteProfession}`,
-                            {
-                                name: action.profName
-                            },
+                            `${deleteProfession(action.profName)}`,
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`

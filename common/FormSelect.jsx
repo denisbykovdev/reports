@@ -7,6 +7,7 @@ import fonts from "../utils/fonts";
 import weights from "../utils/weights";
 import ArrowDown from "../icons/ArrowDown"
 import useChecked from "../hooks/useChecked";
+import useProfs from "../hooks/useProfs";
 
 export default function FormSelect({
     name,
@@ -27,7 +28,7 @@ export default function FormSelect({
         touched,
     } = useFormikContext();
 
-    const {isChecked, setChecked} = useChecked()
+    const { isChecked, setChecked } = useChecked()
 
     const animatedIconRotation = useRef(new Animated.Value(0)).current;
 
@@ -76,7 +77,7 @@ export default function FormSelect({
         <View style={[
             styles.selectContainer,
             style
-            ]}>
+        ]}>
             <TouchableOpacity
                 style={styles.selectButton}
                 onPress={() => openSelectHandler()}

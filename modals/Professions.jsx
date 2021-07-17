@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from "react"
+import { useRef } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import CommonButton from "../common/CommonButton"
 import CommonHeader from "../common/CommonHeader"
@@ -22,19 +23,17 @@ import weights from "../utils/weights"
 export default function Proffessions({
     profModalClose
 }) {
-    const [profsState, profsDispatch] = useProfs()
+    // const initialRender = useRef(true)
+
+    const { profsState, profsDispatch } = useProfs()
 
     const { authState } = useAuth()
 
     const { token } = authState
 
-    const [searchArray, RenderSearch] = useSearch({ array: profsState.profs })
+    const [searchArray, RenderSearch] = useSearch({ array: profsState && profsState.profs })
 
     const submitNewProf = async (values) => {
-        console.log(
-            `--- Prof/submitNewProf:`,
-            values
-        )
         await profsDispatch({
             type: "POST_NEW_PROF",
             token,

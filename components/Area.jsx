@@ -15,6 +15,8 @@ import useModal from "../hooks/useModal"
 import ProblemsChoice from "../modals/ProblemsChoice"
 import FormField from "../common/FormField"
 import useType from "../hooks/useType"
+import ProfsProvider from "../providers/ProfsProvider"
+import FormContainer from "../common/FormContainer"
 
 export default function Area({ areaId, areaName, areaProblems, dispatch, server }) {
 
@@ -78,7 +80,7 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server 
     }
 
     return (
-        <>
+        <ProfsProvider>
             <View style={[styles.areaHeader, {
                 backgroundColor: isAreaOpen ? colors.paleGrayBg : colors.white,
                 flexDirection: type === 2 ? 'row-reverse' : 'column',
@@ -96,21 +98,27 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server 
                             <TouchableOpacity onPress={() => setOpenName(!openName)}>
                                 {
                                     openName && !server
-                                        ? <FormField
-                                            // area={true}
-                                            placeholder={areaName}
-                                            style={{
-                                                padding: 0,
-                                                height: responsiveWidth(31),
-                                                borderColor: colors.darkWhite,
-                                                borderWidth: responsiveWidth(2),
-                                                borderRadius: 20,
-                                                alignSelf: 'flex-end'
-                                            }}
-                                            width="80%"
-                                            name="area_name"
-                                            interSepter={interSepter}
-                                        />
+                                        ?
+                                        <FormContainer
+                                            initialValues={{ area_name: '' }}
+                                        >
+                                            <FormField
+                                                // area={true}
+                                                placeholder={areaName}
+                                                style={{
+                                                    padding: 0,
+                                                    height: responsiveWidth(31),
+                                                    borderColor: colors.darkWhite,
+                                                    borderWidth: responsiveWidth(2),
+                                                    borderRadius: 20,
+                                                    alignSelf: 'flex-end'
+                                                }}
+                                                width="80%"
+                                                name="area_name"
+                                                interSepter={interSepter}
+                                            />
+                                        </FormContainer>
+
                                         : <Text
                                             style={styles.areaHeaderTitle}
                                         >{areaName}</Text>
@@ -260,7 +268,7 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server 
                 ))
             }
             <Line />
-        </>
+        </ProfsProvider>
     )
 }
 

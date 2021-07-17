@@ -17,7 +17,7 @@ export default function useStandarts(
     useEffect(() => {
         standartsDispatch({
             type: "FETCH_STANDARTS",
-            payload: token
+            token
         })
     }, [])
 

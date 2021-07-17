@@ -17,6 +17,7 @@ import useModal from "../hooks/useModal"
 import NewStandart from "./NewStandart"
 import useType from "../hooks/useType"
 import useSearch from "../hooks/useSearch"
+import Spinner from "../common/Spinner"
 
 export default function Standarts({
     standartsModalClose,
@@ -33,7 +34,7 @@ export default function Standarts({
 
     const [newStandartModalOpen, newStandartModalClose, NewStandartModal] = useModal()
 
-    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: standartsState.standarts })
+    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: standartsState.standarts !== null && standartsState.standarts })
 
     const addCheckedStandart = (checkedId) => {
         const newCheckedStandart = standartsState.standarts.find(standart => standart.id === checkedId)
@@ -72,7 +73,7 @@ export default function Standarts({
             />
             <Line />
 
-            <RenderSearch 
+            <RenderSearch
                 searchInputWidth={'100%'}
             />
 
@@ -86,13 +87,15 @@ export default function Standarts({
                             removeCheckedStandart={removeCheckedStandart}
                         />
                     )
-                    : standartsState && standartsState.standarts.map((standart, i) =>
-                        <StandartItem
-                            key={i}
-                            standart={standart}
-                            addCheckedStandart={addCheckedStandart}
-                            removeCheckedStandart={removeCheckedStandart}
-                        />
+                    : standartsState && standartsState.standarts !== null && standartsState.standarts.map((standart, i) =>
+                        standartsState.fetching || standartsState.posting
+                            ? <Spinner />
+                            : <StandartItem
+                                key={i}
+                                standart={standart}
+                                addCheckedStandart={addCheckedStandart}
+                                removeCheckedStandart={removeCheckedStandart}
+                            />
                     )
             }
 
@@ -194,19 +197,19 @@ const StandartItem = ({
                 }}
             >
                 {/* {type !== 2 && */}
-                    <TouchableOpacity
-                        onPress={() => setOpen(!isOpen)}
-                        style={{
-                            // marginStart: responsiveWidth(14),
+                <TouchableOpacity
+                    onPress={() => setOpen(!isOpen)}
+                    style={{
+                        // marginStart: responsiveWidth(14),
 
-                        }}
-                    >
-                        {
-                            isOpen
-                                ? <CircleArrowUp />
-                                : <CircleArrowDown />
-                        }
-                    </TouchableOpacity>
+                    }}
+                >
+                    {
+                        isOpen
+                            ? <CircleArrowUp />
+                            : <CircleArrowDown />
+                    }
+                </TouchableOpacity>
                 {/* } */}
 
                 <View style={{
@@ -217,7 +220,7 @@ const StandartItem = ({
                     backgroundColor: colors.paleGrayBg
                 }}>
                     {
-                        standart.image.length > 1
+                        standart.image !== null && standart.image.length > 1
                             ? <Image
                                 source={{ uri: standart.image }}
                             />
@@ -242,7 +245,7 @@ const StandartItem = ({
                         checked && <Tick />
                     }
                 </TouchableOpacity>
-              
+
             </View>
             {
                 isOpen

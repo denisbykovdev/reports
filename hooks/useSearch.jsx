@@ -76,7 +76,7 @@ export default function useSearch({
                         width: searchInputWidth || responsiveWidth(239),
                         writingDirection: 'rtl',
                     }]}
-                    placeholder=" חיפוש לפי בדיקות ..."
+                    placeholder=" חיפוש ..."
                 />
                 <Search />
             </View>

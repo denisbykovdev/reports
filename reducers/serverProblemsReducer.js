@@ -158,7 +158,7 @@ export const serverProblemsReducer = (
                         const response = await axios.post(
                             `${updateProblem(action.problemName)}`,
                             {
-                                problem: action.problem
+                                ...action.problem
                             },
                             {
                                 headers: {

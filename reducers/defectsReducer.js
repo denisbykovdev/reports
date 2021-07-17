@@ -237,7 +237,7 @@ export const defectsReducer = (
 
         case "ADD_SAVED_AREAS":
             console.log(
-                "*** defectsReducer/ADD_SAVED_AREAS", action.saved
+                "*** defectsReducer/ADD_SAVED_AREAS/action.saved:", action.saved
             )
             return Update({
                 ...state,
@@ -245,15 +245,15 @@ export const defectsReducer = (
                     ...state.areas,
 
                     ...action.saved.map((area, i) => {
-                        // console.log(
-                        //     "*** defectsReducer/ADD_SAVED_AREAS/saved.map:",
-                        //     area
-                        // )
+                        console.log(
+                            "*** defectsReducer/ADD_SAVED_AREAS/saved.map:",
+                            area
+                        )
 
                         return {
                             ...area,
                             id: state.areas.length === 0 ? 1 + i : state.areas.length + 1 + i,
-                            problems: area.problems.length > 0
+                            problems: area.problems && area.problems.length > 0
                                 ? area.problems.map((problem, i) => {
                                     // !problem.flagged
                                     //     ? {
@@ -366,7 +366,7 @@ export const defectsReducer = (
                             `${updateAreaProblems(action.areaName)}`,
 
                             {
-                                problems: action.problems
+                                problems: [...action.problems]
                             },
                             {
                                 headers: {
@@ -402,7 +402,7 @@ export const defectsReducer = (
 
                             {
                                 // area_name: action.areaName,
-                                area_problem: action.areaProblem
+                                area_problem: [...action.areaProblem]
                             },
                             {
                                 headers: {
@@ -488,6 +488,12 @@ export const defectsReducer = (
                     }
                 ]
             });
+
+        case "ADD_SERVER_NOTES":
+            return Update({
+                ...state,
+                notes: [...action.notes]
+            })
 
         case "DELETE_NOTE":
             return Update({

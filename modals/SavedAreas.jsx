@@ -13,7 +13,7 @@ import AddArea from "../icons/AddArea"
 import SearchArea from "../icons/SearchArea"
 import SavedAreaItem from "../components/SavedAreaItem"
 import useSearch from "../hooks/useSearch"
-import { createArea } from "../constants/api"
+import { areasAll, createArea } from "../constants/api"
 import FormContainer from "../common/FormContainer"
 import FormField from "../common/FormField"
 import FormButton from "../common/FormButton"
@@ -23,35 +23,120 @@ import useAuth from "../hooks/useAuth"
 import useServerAreas from "../hooks/useServerAreas"
 import Spinner from "../common/Spinner"
 
+import { UpdateWithSideEffect, Update } from 'use-reducer-with-side-effects';
+import useReducerWithSideEffects from 'use-reducer-with-side-effects';
+import axios from "axios"
+
+const serverAreasInitial = {
+    serverAreas: [],
+    error: null
+}
+
+const serverAreasReducer = (
+    state = serverAreasInitial,
+    action
+) => {
+    switch (action.type) {
+        case "SET_SERVER_AREAS":
+            return Update({
+                ...state,
+                loading: false,
+                serverAreas: action.serverAreas
+            });
+
+        case "ERROR_SERVER_AREAS":
+            return Update({
+                ...state,
+                loading: false,
+                error: action.error
+            });
+        case "GET_SERVER_AREAS":
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    loading: true,
+                    token: action.token
+                },
+                async (state, dispatch) => {
+                    // console.log(
+                    //     `--- serverAreasReducer/GET_SERVER_AREAS/action:`,
+                    //     action
+                    // )
+                    try {
+                        const response = await axios.get(
+                            `${areasAll}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+
+                        );
+                        console.log(
+                            `--- serverAreasReducer/GET_SERVER_AREAS/response:`,
+                            response.data.data
+                        )
+                        dispatch({
+                            type: "SET_SERVER_AREAS",
+                            serverAreas: response.data.data
+                        })
+                    } catch (error) {
+                        dispatch({
+                            type: "ERROR_SERVER_AREAS",
+                            error
+                        })
+                    }
+                }
+            );
+    }
+}
+
+
 function SavedAreas({
     savedAreasModalClose,
-    // defectsState,
-    // defectsDispatch
+    defectsDispatch
 }) {
-    // const [defectsState, defectsDispatch] = useServerAreas()
+    const [serverAreasState, serverAreasDispatch] = useReducerWithSideEffects(
+        serverAreasReducer,
+        serverAreasInitial
+    );
 
-    const { defectsState, defectsDispatch } = useDefects()
+    // const { defectsState, defectsDispatch } = useDefects()
 
     const [checkedAreasList, setUpdateAreasList] = useState([])
 
-    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: defectsState.savedAreas })
+    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: serverAreasState.serverdAreas })
 
     const { authState } = useAuth()
 
     const { token } = authState;
 
-    const addCheckedArea = useCallback((name) => {
+    const addCheckedArea = (name) => {
 
-        const newSavedArea = defectsState && defectsState.savedAreas.find(savedArea => savedArea.area_name === name)
+        console.log(
+            `--- SavedAreas/addCheckedArea/name:`,
+            name,
+            serverAreasState
+        )
+
+        const newSavedArea = serverAreasState.serverAreas.find(savedArea => savedArea.area_name === name)
+
+        console.log(
+            `--- SavedAreas/addCheckedArea/newSavedArea:`, newSavedArea
+        )
 
         setUpdateAreasList(oldArray => [...oldArray, newSavedArea])
-    }, [])
+    }
 
-    const removeCheckedArea = useCallback((name) => {
+    const removeCheckedArea = (name) => {
         setUpdateAreasList(checkedAreasList.filter(item => item.name !== name))
-    }, [])
+    }
 
     const addSavedAreasList = async () => {
+        console.log(
+            `--- SavedAreas/addSavedAreasList/before ADD_SAVED_AREAS/checkedAreasList`,
+            checkedAreasList
+        )
         await defectsDispatch({
             type: "ADD_SAVED_AREAS",
             saved: checkedAreasList
@@ -73,9 +158,12 @@ function SavedAreas({
     }
 
     useEffect(() => {
-        console.log(
-            `--- SavedAreas render:`
-        )
+        (function getAreas() {
+            serverAreasDispatch({
+                type: "GET_SERVER_AREAS",
+                token
+            })
+        })()
     }, [])
 
     return (
@@ -126,11 +214,21 @@ function SavedAreas({
             <RenderSearch />
 
             {
-                defectsState && defectsState.fetching || defectsState.posting
-                    ? <Spinner />
+                searchArray && searchArray.length > 0
+                    ? searchArray.map((savedArea, i) => (
+                        <SavedAreaItem
+                            key={i}
+                            addCheckedArea={addCheckedArea}
+                            removeCheckedArea={removeCheckedArea}
+                            savedArea={savedArea}
+                            deleteSavedArea={deleteSavedArea}
+                        />
+                    ))
+                    : serverAreasState.serverAreas.map((savedArea, i) => (
+                        serverAreasState.loading
+                            ? <Spinner key={i} />
 
-                    : searchArray && searchArray.length > 0
-                        ? searchArray.map((savedArea, i) => (
+                            :
                             <SavedAreaItem
                                 key={i}
                                 addCheckedArea={addCheckedArea}
@@ -138,16 +236,7 @@ function SavedAreas({
                                 savedArea={savedArea}
                                 deleteSavedArea={deleteSavedArea}
                             />
-                        ))
-                        : defectsState && defectsState !== null && defectsState.savedAreas.map((savedArea, i) => (
-                            <SavedAreaItem
-                                key={i}
-                                addCheckedArea={addCheckedArea}
-                                removeCheckedArea={removeCheckedArea}
-                                savedArea={savedArea}
-                                deleteSavedArea={deleteSavedArea}
-                            />
-                        ))
+                    ))
             }
 
             <CommonButton

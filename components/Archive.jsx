@@ -12,6 +12,10 @@ import weights from "../utils/weights";
 const Archive = () => {
     const [problemsState, problemsDispatch] = useServerProblems()
 
+    console.log(
+        `--- Archive/problemsState`, problemsState
+    )
+
     return (
         <View style={styles.archive}>
             <CommonSubHeader

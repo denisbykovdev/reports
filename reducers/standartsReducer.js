@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-effects';
+import { createStandart, getAllStandarts } from '../constants/api';
 
 export const standartsInitial = {
     standarts: [],
@@ -49,7 +50,7 @@ export const standartsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.get(
-                            "http://160.153.254.153/api/standart/store/all",
+                            `${getAllStandarts}`,
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
@@ -87,14 +88,14 @@ export const standartsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
-                            `http://160.153.254.153/api/standart/store`,
+                            `${createStandart}`,
+                            {
+                                ...action.standart
+                            },
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 }
-                            },
-                            {
-                                standart: action.standart
                             }
                         )
                         dispatch({

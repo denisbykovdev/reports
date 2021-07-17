@@ -29,16 +29,20 @@ const Defects = ({ areas }) => {
 
     useEffect(() => {
         console.log(
-            "--- Defects/useEffect/areas prop:", areas
+            "--- Defects/useEffect/before ADD_SAVED_AREAS/areas prop:", areas
         )
 
-        defectsDispatch({
-            type: "FETCH_SAVED_AREAS",
-            token
-        })
+        console.log(
+            "--- Defects/useEffect/defectsState.areas", defectsState.areas
+        )
+
+        // defectsDispatch({
+        //     type: "FETCH_SAVED_AREAS",
+        //     token
+        // })
 
 
-        if (areas && areas !== null && areas > 0) {
+        if (areas && areas !== null && areas.length > 0) {
             defectsDispatch({
                 type: "ADD_SAVED_AREAS",
                 saved: areas
@@ -50,13 +54,13 @@ const Defects = ({ areas }) => {
             })
         }
 
-    }, [areas])
+    }, [])
 
-    useEffect(() => {
-        console.log(
-            "--- Defects/useEffect/defectsState.areas", defectsState.areas
-        )
-    }, [defectsState.areas])
+    // useEffect(() => {
+    //     console.log(
+    //         "--- Defects/useEffect/defectsState.areas", defectsState.areas
+    //     )
+    // }, [])
 
 
     return (
@@ -114,8 +118,8 @@ const Defects = ({ areas }) => {
             <SavedAreasModalContent>
                 <SavedAreas
                     savedAreasModalClose={savedAreasModalClose}
-                // defectsState={defectsState}
-                // defectsDispatch={defectsDispatch}
+                    // defectsState={defectsState}
+                    defectsDispatch={defectsDispatch}
                 />
             </SavedAreasModalContent>
 

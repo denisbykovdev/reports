@@ -25,6 +25,9 @@ import Professions from "../modals/Professions"
 import useProfs from "../hooks/useProfs"
 import useType from "../hooks/useType"
 import useAuth from "../hooks/useAuth"
+import { useEffect } from "react"
+import { useCallback } from "react"
+import ProfsProvider from "../providers/ProfsProvider"
 
 const testArray = ['one', 'two', 'three']
 
@@ -42,7 +45,7 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
 
     const [openName, setOpenName] = useState(false)
 
-    const [profsState, profsDispatch] = useProfs()
+    const { profsState, profsDispatch } = useProfs()
 
     const { type } = useType()
 
@@ -84,9 +87,6 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
     }
 
     const interSepter = (name, text) => {
-        // console.log(
-        //     "_______Problem/intersepter:", text, name, areaId
-        // )
         defectsDispatch({
             type: "CHANGE_PROBLEM_VALUE",
             areaId,
@@ -104,11 +104,8 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
         })
     }
 
-    // console.log(
-    //     "--- Problem/problem:", problem
-    // )
-
     return (
+        // <ProfsProvider>
         <View
             style={styles.problemContainer}
         >
@@ -239,12 +236,13 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
                                     title="מקצוע" />
                                 <FormSelect
                                     placeholder="בחר מקצוע"
-                                    array={profsState.profs}
+                                    array={profsState.profs && profsState.profs}
                                     name="profession_name"
                                     interSepter={interSepter}
                                 />
                                 <CommonButton
-                                    title="תקנים"
+                                    //professions
+                                    title="מקצועות"
                                     borderRadius={20}
                                     buttonHeight={responsiveWidth(33)}
                                     borderColor={colors.darkSkyBlue}
@@ -272,7 +270,8 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
                                     title="פרטי הליקוי" />
                                 <FormField
                                     area={true}
-                                    placeholder="בחר מקצוע"
+                                    //problem details
+                                    placeholder="פרטי הבעיה"
                                     style={styles.inputContainerArea}
                                     inputStyle={{
                                         marginEnd: 0
@@ -458,6 +457,7 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
                 }
             </FormContainer>
         </View>
+        // </ProfsProvider>
     )
 }
 

@@ -486,6 +486,7 @@ export const standartsStore = `${api}/standart/store`
 export const createStandart = standartsStore
 //get all standarts: GET
 export const getAllStandarts = `${standartsStore}/all`
+export const deleteStandart = (standartId) => `${standartsStore}/${standartId}/delete`
 
 //print modal endpoints
 export const withProfRegion = `withProfRegion/`

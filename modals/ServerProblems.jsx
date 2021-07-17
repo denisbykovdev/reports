@@ -22,12 +22,12 @@ export default function ServerProblems({
     areaId,
     problemsChoiceCLose
 }) {
-    // const [problemsState, problemsDispatch] = useServerProblems()
+    const [problemsState, problemsDispatch] = useServerProblems()
 
-    const [problemsState, problemsDispatch] = useReducerWithSideEffects(
-        serverProblemsReducer,
-        serverProblemsInitial
-    );
+    // const [problemsState, problemsDispatch] = useReducerWithSideEffects(
+    //     serverProblemsReducer,
+    //     serverProblemsInitial
+    // );
 
     const { _, defectsDispatch } = useDefects()
 
@@ -68,16 +68,16 @@ export default function ServerProblems({
         }
     }
 
-    useEffect(() => {
-        problemsDispatch({
-            type: "GET_SERVER_PROBLEMS",
-            payload: token
-        })
+    // useEffect(() => {
+    //     problemsDispatch({
+    //         type: "GET_SERVER_PROBLEMS",
+    //         payload: token
+    //     })
 
-        console.log(
-            `--- ServerProblems/searchArray`, searchArray
-        )
-    }, [])
+    //     console.log(
+    //         `--- ServerProblems/searchArray`, searchArray
+    //     )
+    // }, [])
 
     return (
         <ShadowView>
