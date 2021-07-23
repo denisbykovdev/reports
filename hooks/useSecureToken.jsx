@@ -10,7 +10,7 @@ export default function useSecureToken() {
 
             console.log(
                 "--- useSecureToken/getItemAsync/token:",
-                token
+                typeof token
             )
 
             setSecureToken(token);

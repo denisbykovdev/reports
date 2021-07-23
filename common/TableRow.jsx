@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo, useState } from "react"
+import React, { Fragment } from "react"
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native"
 import firstLevelTitles from "../constants/firstLevelTitles"
 import stringSlicer from "../helpers/stringSlicer"
@@ -14,6 +14,7 @@ import FormContainer from "./FormContainer"
 import FormMaskedField from "./FormMaskedField"
 import PassChangeButton from "./PassChangeButton"
 import FormButton from "./FormButton"
+import { watchDeleteReport, watchUpdateReport } from "../actionCreators/sagaReport"
 
 const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
     const { authState } = useAuth()
@@ -21,16 +22,31 @@ const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
     const { token } = authState
 
     const [passModalOpen, passModalCLose, PassModalRender] = useModal()
+    // const deleteHandler = (itemId) => {
+    //     dispatchMethod({
+    //         type: "DELETE_ITEM",
+    //         itemId
+    //     })
+    //     console.log(
+    //         "___DDItem/delete:", itemId
+    //     )
+    // }
+    const deleteHandler = async (itemId) => {
+        if (itemData.hasOwnProperty('status')) {
+            await dispatchMethod(watchDeleteReport(
+                token,
+                itemId
+            ))
 
-    const deleteHandler = (itemId) => {
-        dispatchMethod({
-            type: "DELETE_ITEM",
-            itemId
-        })
-        console.log(
-            "___DDItem/delete:", itemId
-        )
+        } else {
+            await dispatchMethod({
+                type: "DELETE_ITEM",
+                itemId
+            })
+        }
     }
+
+    const closeHelper = () => false
 
     const submitItem = async (values) => {
         console.log(
@@ -55,6 +71,8 @@ const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
                 itemId: itemData.id
             })
         }
+
+        closeHelper()
     }
 
     return (
@@ -83,6 +101,52 @@ const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
                         }}
                     />
                 </View>
+
+                {
+                    itemData.pending
+                    &&
+                    <View
+                        style={{
+                            // position: 'absolute',
+                            // left: 25,
+                            alignItems: 'center',
+                            alignSelf: 'center'
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontSize: fonts.xsmall,
+                                // fontWeight: weights.thin,
+                                color: colors.darkBlueGray
+                            }}
+                        >
+                            pending
+                        </Text>
+                    </View>
+                }
+                {
+                    itemData.deleted
+                    &&
+                    <View
+                        style={{
+                            // position: 'absolute',
+                            // left: 25,
+                            alignItems: 'center',
+                            alignSelf: 'center'
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontSize: fonts.xsmall,
+                                // fontWeight: weights.thin,
+                                color: colors.darkBlueGray
+                            }}
+                        >
+                            deleted
+                        </Text>
+                    </View>
+                }
+
                 <View style={{
                     flexDirection: 'row-reverse'
                 }}>
@@ -101,10 +165,11 @@ const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
                                     itemData={itemData}
                                     itemId={itemData.id}
                                     itemWidth={itemWidth}
+                                    closeHelper={closeHelper}
                                 />
                             }
                             else if (key === 'password') {
-                                return <>
+                                return <Fragment key={index}>
                                     <PassChangeButton
                                         itemWidth={itemWidth}
                                         onPress={() => passModalOpen()}
@@ -117,7 +182,7 @@ const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
                                             dispatchMethod={dispatchMethod}
                                         />
                                     </PassModalRender>
-                                </>
+                                </Fragment>
                             }
                         })
                     }

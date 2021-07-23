@@ -1,12 +1,13 @@
 import axios from "axios";
+import { offlineActionCreators } from "react-native-offline";
 import { call, put } from "redux-saga/effects";
-import { deleteReportFailure, deleteReportOffline, deleteReportStart, deleteReportSuccess } from "../actionCreators/sagaReport";
+import { deleteReportFailure, deleteReportStart, deleteReportSuccess, deleteReportOffline } from "../actionCreators/sagaReport";
 import { deleteReport } from "../constants/api";
 
 export function* deleteReportSaga(action) {
-    try {
-        yield put(deleteReportStart());
+    yield put(deleteReportStart());
 
+    try {
         const { data } = yield call(() => axios.post(
             `${deleteReport(action.payload.reportId)}`,
             {
@@ -19,15 +20,24 @@ export function* deleteReportSaga(action) {
         yield put(deleteReportSuccess(
             data.data
         ))
+
+        // yield put(offlineActionCreators.connectionChange(false));
+
+        // yield put(deleteReportOffline(
+        //     action.payload.reportId
+        // ));
+
+        // yield put(offlineActionCreators.fetchOfflineMode(action));
+
     } catch (error) {
-        yield put(deleteReportFailure(error))
+        yield put(deleteReportFailure(error));
 
         if (error.message == 'Network Error') {
             yield put(deleteReportOffline(
                 action.payload.reportId
-            ))
+            ));
 
-            yield put(offlineActionCreators.fetchOfflineMode(action))
+            yield put(offlineActionCreators.fetchOfflineMode(action));
         }
-    }
-}
+    };
+};

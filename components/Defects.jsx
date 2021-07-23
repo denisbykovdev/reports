@@ -36,32 +36,17 @@ const Defects = ({ areas }) => {
             "--- Defects/useEffect/defectsState.areas", defectsState.areas
         )
 
-        // defectsDispatch({
-        //     type: "FETCH_SAVED_AREAS",
-        //     token
-        // })
-
-
         if (areas && areas !== null && areas.length > 0) {
             defectsDispatch({
-                type: "ADD_SAVED_AREAS",
+                type: "ADD_REPORTAREAS_IN_AREAS",
                 saved: areas
             })
-        }
-        else {
+        } else {
             defectsDispatch({
                 type: "CLEAR_AREAS"
             })
         }
-
     }, [])
-
-    // useEffect(() => {
-    //     console.log(
-    //         "--- Defects/useEffect/defectsState.areas", defectsState.areas
-    //     )
-    // }, [])
-
 
     return (
         <>

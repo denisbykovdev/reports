@@ -79,6 +79,7 @@ function ReportsScreen({ route, navigation }) {
       && networkSelector.isConnected === true
       && networkSelector.actionQueue
       && networkSelector.actionQueue.length >= 0
+      // && networkSelector.actionQueue.length >= 5
     ) {
 
       // setQueues([...networkSelector.actionQueue])
@@ -109,17 +110,8 @@ function ReportsScreen({ route, navigation }) {
       }
       );
 
-      // if (!reportsSelector.find(report => report.pending)) {
-      //   SecureStore.setItemAsync(
-      //     'userReports',
-      //     JSON.stringify(
-      //       dreportsSelector
-      //     )
-      //   )
-      // }
-
     }
-  }, [networkSelector.isConnected])
+  }, [networkSelector.isConnected, reportsSelector])
 
   const openPureReportHandler = () =>
     navigation.navigate(
@@ -163,7 +155,7 @@ function ReportsScreen({ route, navigation }) {
                   />
                 </CommonHeader>
 
-                <View style={{
+                {/* <View style={{
                   width: '100%',
                   backgroundColor: 'red',
                   height: 'auto'
@@ -186,7 +178,7 @@ function ReportsScreen({ route, navigation }) {
                       )
                       : <Text>no queues</Text>
                   }
-                </View>
+                </View> */}
 
                 {/* <View style={{
                   width: '100%',

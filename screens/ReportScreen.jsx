@@ -30,6 +30,7 @@ import useChecked from "../hooks/useChecked"
 import stringSlicer from "../helpers/stringSlicer"
 import { useDispatch } from "react-redux"
 import { watchPostReport, watchUpdateReport } from "../actionCreators/sagaReport"
+import { ReportSchema } from "../constants/validationSchema"
 
 const menuTitles = [
     {
@@ -101,9 +102,6 @@ const ReportScreen = ({ route }) => {
             ))
         }
         setChecked(true)
-        // defectsDispatch({
-        //     type: "CLEAR_AREAS"
-        // })
     }
 
     function layoutCatcher({ nativeEvent: { layout: { x, y, width, height }, target } }) {
@@ -141,17 +139,14 @@ const ReportScreen = ({ route }) => {
         }
     }
 
-    // useEffect(() => console.log(
-    //     `--- ReportScreen/props:`, route.params && route.params.report && route.params.report.areas.lenth >= 0 ? route.params.report.areas : null, route.params.report.areas.length
-    // ), [])
-
     return (
         <SafeView>
             <AvoidingView>
                 <FormContainer
                     innerRef={formikRef}
+                    validationSchema={ReportSchema}
                     initialValues={{
-                        id: route.params && route.params.report && route.params.report.id !== null ? route.params.report.id.toString() : null,
+                        id: route.params && route.params.report && route.params.report.id !== null ? route.params.report.id.toString() : '',
                         report_related_documents: route.params && route.params.report ? route.params.report.report_related_documents : null,
                         report_adress: route.params && route.params.report ? route.params.report.report_adress : null,
                         report_name: route.params && route.params.report ? route.params.report.report_name : null,
@@ -202,6 +197,7 @@ const ReportScreen = ({ route }) => {
                             flexGrow: 1,
                             justifyContent: 'space-between'
                         }}
+                    // scrollEnabled={}
                     >
                         {/* <View style={{
                             flexGrow: 1,

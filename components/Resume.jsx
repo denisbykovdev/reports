@@ -91,12 +91,10 @@ const Resume = ({ notes }) => {
             />
             <Line />
             {
-                // notes === null || notes.length === 0
-                //     ? 
                 defectsState.notes.map(
-                    note =>
+                    (note, i) =>
                         <NoteItem
-                            key={note.id}
+                            key={i}
                             note={note}
                             deleteNote={deleteNote}
                             saveNoteToReport={saveNoteToReport}
@@ -104,17 +102,6 @@ const Resume = ({ notes }) => {
                             defectsDispatch={defectsDispatch}
                         />
                 )
-                // : notes.map(
-                //     note =>
-                //         <NoteItem
-                //             key={note.id}
-                //             note={note}
-                //             deleteNote={deleteNote}
-                //             saveNoteToReport={saveNoteToReport}
-                //             removeNoteFromReport={removeNoteFromReport}
-                //             defectsDispatch={defectsDispatch}
-                //         />
-                // )
             }
         </View>
 
@@ -133,6 +120,12 @@ const NoteItem = ({
     const [openDeleteModal, closeDeleteModal, DeleteModal] = useModal()
 
     // const [copiedText, setCopiedText] = useState('')
+
+    useEffect(() => {
+        console.log(
+            '--- NoteItem/type:', type
+        )
+    }, [])
 
     const noteToReport = (noteId) => {
         if (note.isSavedToReport) {
@@ -173,7 +166,7 @@ const NoteItem = ({
             >
                 <View style={[styles.noteActions]}>
                     <View style={[styles.noteActionsGroup, {
-                        flexDirection: type === 2 ? 'column' : 'row',
+                        flexDirection: type !== 1 ? 'column' : 'row',
                         justifyContent: 'space-between',
                         alignItems: 'center'
                     }]}>

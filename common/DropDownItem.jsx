@@ -32,15 +32,15 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
 
     const { token } = authState
 
-    const deleteHandler = (itemId) => {
+    const deleteHandler = async (itemId) => {
         if (itemData.hasOwnProperty('status')) {
-            dispatchMethod(watchDeleteReport(
+            await dispatchMethod(watchDeleteReport(
                 token,
                 itemId
             ))
 
         } else {
-            dispatchMethod({
+            await dispatchMethod({
                 type: "DELETE_ITEM",
                 itemId
             })
@@ -97,12 +97,12 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                     >
                         <Basket />
                     </TouchableOpacity>
+
                     {
                         itemData.pending
                         &&
                         <View
                             style={{
-                                // backgroundColor: 'yellow',
                                 position: 'absolute',
                                 left: 25
                             }}
@@ -114,12 +114,36 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                                     color: colors.darkBlueGray
                                 }}
                             >
-                                pending
+                                בהמתנה
                             </Text>
                         </View>
                     }
                     {
-                        itemData && itemData.status === null || itemData.status ?
+                        itemData.deleted
+                        &&
+                        <View
+                            style={{
+                                position: 'absolute',
+                                left: 25
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontSize: fonts.xsmall,
+                                    // fontWeight: weights.thin,
+                                    color: colors.darkBlueGray
+                                }}
+                            >
+                                נמחק
+                            </Text>
+                        </View>
+                    }
+
+                    {
+                        itemData && itemData.status === null
+                            || itemData.status
+                            || !itemData.hasOwnProperty('deleted')
+                            ?
                             (
                                 <TouchableOpacity
                                     onPress={
@@ -131,7 +155,8 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                                         {itemData.report_adress !== null && stringSlicer(itemData.report_adress)} ,{itemData.id}
                                     </Text>
                                 </TouchableOpacity>
-                            ) : (
+                            )
+                            : (
                                 <Text style={styles.itemTitle}>
                                     {itemData.name}
                                 </Text>
@@ -267,4 +292,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default DropDownItem;
+export default DropDownItem

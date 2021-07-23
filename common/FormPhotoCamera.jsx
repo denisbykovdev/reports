@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList, ImageBackground } from 'react-native';
 import { Camera } from 'expo-camera';
 import AddImage from "../icons/AddImage"
 import { useFormikContext } from 'formik';
@@ -17,18 +17,20 @@ import CircleArrowUp from '../icons/CircleArrowUp'
 import weights from '../utils/weights';
 import fonts from '../utils/fonts';
 
-export default function FormPhotoCamera({ name, interSepter }) {
-  const cameraRef = useRef(null);
-  // const canvasRef = useRef(null);
+import { PIXI, Sketch } from 'expo-pixi';
+// import ExpoPixi from 'expo-pixi';
+import * as ExpoPixi from 'expo-pixi';
+import { FileSystem } from 'expo';
 
+// import { Asset, useAssets } from 'expo-asset';
+
+export default function FormPhotoCamera({ name, interSepter }) {
+
+  const cameraRef = useRef(null);
+  const canvasRef = useRef();
   const carouselRef = useRef();
 
   const { type } = useType()
-
-  const [hasPermission, setHasPermission] = useState(null);
-  // const [type, setType] = useState(Camera.Constants.Type.back);
-  const [openCam, setOpenCam] = useState(false)
-  // const [isCanvas, setCanvas] = useState(false)
 
   const {
     setFieldValue,
@@ -36,12 +38,21 @@ export default function FormPhotoCamera({ name, interSepter }) {
     values
   } = useFormikContext();
 
+  const { isChecked, setChecked } = useChecked()
+
+  const [hasPermission, setHasPermission] = useState(null);
+  // const [type, setType] = useState(Camera.Constants.Type.back);
+  const [openCam, setOpenCam] = useState(false)
+
+  const [isCanvas, setCanvas] = useState(false)
+
   const [images, setImages] = useState(values[name] ? [...values[name]] : [])
 
   const [selected, setSelected] = useState(0)
 
+  const [canvasUri, setCanvasUri] = useState()
 
-  const { isChecked, setChecked } = useChecked()
+  // const [assets, error] = useAssets()
 
   useEffect(() => {
     (async () => {
@@ -65,6 +76,12 @@ export default function FormPhotoCamera({ name, interSepter }) {
       setImages([...images, data.uri])
       isChecked && setChecked(false)
       interSepter && interSepter(name, [...values[name], data.uri])
+
+
+      // if (data.uri) {
+      //   FileSystem.copyAsync()
+      // }
+
       setOpenCam(false)
     }
   }
@@ -78,26 +95,49 @@ export default function FormPhotoCamera({ name, interSepter }) {
     interSepter && interSepter(name, images)
   }
 
-  // useEffect(() => {
-  //   console.log(
-  //     "--- FormPhoto/useEffect/images:", images
-  //   )
-  // }, [images])
+  const editPhoto = () => {
+    setCanvas(!isCanvas)
 
-  // useEffect(() => {
-  //   console.log(
-  //     "--- FormPhoto/useEffect/values:", values[name]
-  //   )
-  // }, [values])
+    console.log(
+      `--- FPC/editPhoto/prev:`,
+      images
+    )
 
-  // const editPhoto = () => {
-  //   setCanvas(!isCanvas)
-  // }
+    // isCanvas === true && setImages(
+    //   [
+    //     ...images.map(
+    //       image => image === images[selected]
+    //         ? canvasUri
+    //         : image
+    //     )
+    //   ]
+    // )
+
+    // console.log(
+    //   `--- FPC/editPhoto/post:`,
+    //   images
+    // )
+  }
 
   // const onTouchThumbnail = (index) => {
   //   setSelected(index)
   //   carouselRef?.current?.snapToItem(index)
   // }
+
+  const onChangeAsync = async (item) => {
+    const { uri } = await canvasRef.current.takeSnapshotAsync();
+
+    console.log(
+      `--- FPC/onChangeAsync:`,
+      // uri,
+      // item,
+      Object.keys(canvasRef.current.stage)
+      // Renderer,
+      // PIXI.Renderer
+    )
+
+    setCanvasUri(uri)
+  };
 
   return (
     <View style={styles.formPhotoCameraContainer}>
@@ -114,13 +154,10 @@ export default function FormPhotoCamera({ name, interSepter }) {
             ?
             <>
               {
-                // !values[name][0] 
-                // || values[name][0].length < 1 ||
                 images.length === 0
                   ?
                   <AltImage />
                   :
-
                   <Carousel
                     ref={carouselRef}
                     layout='default'
@@ -131,25 +168,83 @@ export default function FormPhotoCamera({ name, interSepter }) {
                     // slideStyle={{
                     //   flexDirection: 'column-reverse'
                     // }}
+                    scrollEnabled={!isCanvas}
                     renderItem={({ item, index }) => (
                       <View key={index} style={styles.photoContainer}>
-                        <TouchableOpacity
-                          onPress={() => carouselRef.current.snapToPrev()}
-                          style={[styles.photoArrow, styles.photoArrowLeft]}
-                        ><CircleArrowUp /></TouchableOpacity>
-                        <Image
-                          style={styles.formPhoto}
-                          source={{ uri: item }}
-                        />
-                        <TouchableOpacity
-                          onPress={() => carouselRef.current.snapToNext()}
-                          style={[styles.photoArrow, styles.photoArrowRight]}
-                        ><CircleArrowUp /></TouchableOpacity>
-                      </View>
+                        {
+                          !isCanvas
+                            ?
+                            <>
 
+                              <TouchableOpacity
+                                onPress={() => carouselRef.current.snapToPrev()}
+                                style={[styles.photoArrow, styles.photoArrowLeft]}
+                              ><CircleArrowUp /></TouchableOpacity>
+
+                              <Image
+                                style={styles.formPhoto}
+                                source={{ uri: item }}
+                              />
+
+                              <TouchableOpacity
+                                onPress={() => carouselRef.current.snapToNext()}
+                                style={[styles.photoArrow, styles.photoArrowRight]}
+                              ><CircleArrowUp /></TouchableOpacity>
+
+                            </>
+                            :
+                            <ImageBackground
+                              style={styles.formPhoto}
+                              source={{ uri: item }}
+                              resizeMode="cover"
+                            >
+                              <ExpoPixi.Sketch
+                                style={styles.formPhoto}
+                                ref={canvasRef}
+                                strokeColor="black"
+                                strokeWidth={10}
+                                strokeAlpha={1}
+                                // transparent={true}
+                                onChange={() => onChangeAsync(item)}
+
+                                onReady={async WebGLRenderingContext => {
+                                  console.log(
+                                    `--- FPC/ WebGLRenderingContext`,
+                                    // typeof await WebGLRenderingContext,
+                                    // Object.keys(canvasRef.current.stage),
+                                    // canvasRef.current.stage.children.length,
+                                    `file:${item.substr(item.indexOf('/') + 1)}`,
+                                    // item
+                                  )
+                                  let uri = item
+
+                                  let renderer = canvasRef.current.renderer
+
+                                  let stage = canvasRef.current.stage
+
+                                  if (stage.children.length > 0) {
+                                    stage.removeChildren()
+                                    renderer._update()
+                                  }
+
+                                  let backGround = await PIXI.Sprite.fromExpoAsync(
+                                    JSON.stringify(item)
+                                  )
+
+                                  background.rotation = 1.5708
+                                  background.width = renderer.height
+                                  background.height = renderer.width
+                                  background.position.set(renderer.width, 0)
+
+                                  stage.addChild(background);
+                                  renderer._update();
+                                }}
+                              />
+                            </ImageBackground>
+                        }
+                      </View>
                     )}
                   />
-
               }
             </>
             :
@@ -158,42 +253,11 @@ export default function FormPhotoCamera({ name, interSepter }) {
               style={styles.formCameraContainer}
               type={Camera.Constants.Type.back}
               autoFocus="on"
-            >
-
-            </Camera>
+            />
         }
       </View>
 
       <View style={styles.formPhotoCameraFunctionsContainer}>
-
-        {/* <FlatList
-          horizontal={true}
-          data={images}
-          style={{
-            width: '65%'
-          }}
-          showsHorizontalScrollIndicator={false}
-          // contentContainerStyle={{
-          //   paddingHorizontal: SPACING
-          // }}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity
-              key={index}
-              activeOpacity={0.9}
-              onPress={() => onTouchThumbnail(index)}
-            >
-              <Image
-                style={{
-                  width: responsiveWidth(41),
-                  height: responsiveWidth(41),
-                  marginRight: responsiveWidth(12)
-                }}
-                source={{ uri: item }}
-              />
-            </TouchableOpacity>
-          )}
-        /> */}
 
         <View style={styles.photoCounterContainer}>
           <Text style={styles.photoCounterText}>
@@ -205,13 +269,13 @@ export default function FormPhotoCamera({ name, interSepter }) {
           {
             values[name] &&
             <>
-              {/* <TouchableOpacity
-              style={styles.formPhotoCameraButtonContainer}
-              onPress={() => {
-                editPhoto()
-              }}>
-              <Edit />
-            </TouchableOpacity> */}
+              <TouchableOpacity
+                style={styles.formPhotoCameraButtonContainer}
+                onPress={() => {
+                  editPhoto()
+                }}>
+                <Edit />
+              </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.formPhotoCameraButtonContainer}

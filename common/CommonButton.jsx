@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Button, StyleSheet, Text, TouchableOpacity } from "react-native";
 import colors from "../utils/colors";
 import fonts from "../utils/fonts";
 import { responsiveWidth } from "../utils/layout";
@@ -13,48 +13,50 @@ export default function CommonButton({
     titleColor,
     onPress,
     children,
-    buttonShadow=false,
+    buttonShadow = false,
     buttonShadowColor,
     borderRadius = 5,
     borderColor = buttonColor,
     titleFontSize = fonts.small,
     style,
-    titleStyle
+    titleStyle,
+    disabled
 }) {
-    return(
+    return (
         <TouchableOpacity
-        style={[
-            styles.button,
-            { 
-                backgroundColor: buttonColor,
-                height: buttonHeight,
-                width: buttonWidth,
-                shadowColor: buttonShadowColor,
-                borderColor,
-                borderRadius,
-            },
-            buttonShadow ? styles.buttonShadow : "",
-            style
-            ]}
-        onPress={onPress}
-    >
-        <Text
+            onPress={onPress}
+            disabled={disabled}
             style={[
-                styles.buttonTitle,
+                styles.button,
                 {
-                    color: titleColor,
-                    fontSize: titleFontSize
+                    backgroundColor: disabled !== true ? buttonColor : colors.battleShipGrey,
+                    height: buttonHeight,
+                    width: buttonWidth,
+                    shadowColor: buttonShadowColor,
+                    borderColor,
+                    borderRadius
                 },
-                titleStyle
+                buttonShadow ? styles.buttonShadow : "",
+                style
             ]}
         >
-            {title}
-        </Text>
+            <Text
+                style={[
+                    styles.buttonTitle,
+                    {
+                        color: titleColor,
+                        fontSize: titleFontSize
+                    },
+                    titleStyle
+                ]}
+            >
+                {title}
+            </Text>
 
-        {children}
-    </TouchableOpacity>
+            {children}
+        </TouchableOpacity>
     )
-   
+
 }
 
 const styles = StyleSheet.create({
@@ -77,8 +79,8 @@ const styles = StyleSheet.create({
     },
     buttonShadow: {
         shadowOffset: {
-          width: 0,
-          height: 0
+            width: 0,
+            height: 0
         },
         shadowRadius: 3.5,
         shadowOpacity: 1,

@@ -7,6 +7,8 @@ import {
     createNetworkMiddleware
 } from 'react-native-offline';
 
+import { persistStore } from 'redux-persist';
+
 const sagaMiddleware = createSagaMiddleware();
 
 const networkMiddleware = createNetworkMiddleware({
@@ -24,7 +26,7 @@ const middlewares = [
     networkMiddleware
 ];
 
-const store = createStore(
+export const store = createStore(
     combainReducers,
     {},
     composeWithDevTools(applyMiddleware(...middlewares))
@@ -32,5 +34,4 @@ const store = createStore(
 
 sagaMiddleware.run(rootSaga);
 
-export default store;
-
+export const persistor = persistStore(store);

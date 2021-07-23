@@ -14,6 +14,10 @@ export default function TypeProvider({
             const deviceType = await getDeviceTypeAsync()
             setType(deviceType)
 
+            console.log(
+                `--- TypeProvider/type:`, deviceType
+            )
+
             if (deviceType === 1) {
                 await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
             } else if (deviceType === 2) {

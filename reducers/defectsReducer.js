@@ -234,6 +234,45 @@ export const defectsReducer = (
         //         token: action.token,
         //         savedAreas: staticSavedAreas
         //     });
+        case "ADD_REPORTAREAS_IN_AREAS":
+            console.log(
+                "*** defectsReducer/ADD_SAVED_AREAS/action.saved:", action.saved
+            )
+            return Update({
+                ...state,
+                areas: [
+                    // ...state.areas,
+
+                    ...action.saved.map((area, i) => {
+                        console.log(
+                            "*** defectsReducer/ADD_SAVED_AREAS/saved.map:",
+                            area
+                        )
+
+                        return {
+                            ...area,
+                            id: state.areas.length === 0 ? 1 + i : state.areas.length + 1 + i,
+                            problems: area.problems && area.problems.length > 0
+                                ? area.problems.map((problem, i) => {
+                                    // !problem.flagged
+                                    //     ? {
+                                    //         ...problem,
+                                    //         flagged: true
+                                    //     }
+                                    //     : problem
+                                    return {
+                                        ...problem,
+                                        id: area.problems.length === 0 ? 1 + i : area.problems.length + 1 + i,
+                                        flagged: true
+                                    }
+                                })
+                                : [],
+                            server: true
+                        }
+
+                    })
+                ]
+            });
 
         case "ADD_SAVED_AREAS":
             console.log(
@@ -276,6 +315,9 @@ export const defectsReducer = (
             });
 
         case "UPDATE_SAVED_AREAS":
+            console.log(
+                `--- UPDATE_SAVED_AREAS/action`, action
+            )
             return Update({
                 ...state,
                 posting: false,

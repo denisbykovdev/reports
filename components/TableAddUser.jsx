@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
 import FormButton from "../common/FormButton";
 import FormContainer from "../common/FormContainer";
@@ -9,6 +9,8 @@ import layout, { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 import UserPlus from "../icons/UserPlus"
 import firstLevelTitles from "../constants/firstLevelTitles";
+import FormErrorMessage from "../common/FormErrorMessage";
+import { AddUserSchema } from "../constants/validationSchema";
 
 const TableAddUser = ({ dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
@@ -41,13 +43,8 @@ const TableAddUser = ({ dispatchMethod }) => {
 
     const fieldWidth = ((layout.width - responsiveWidth(60)) / (Object.keys(formData).length + 1)) - responsiveWidth(18)
 
-    // console.log(
-    //     "___TABADDUSER:", fieldWidth
-    // )
-
     return (
         <View style={styles.addUserContainer}>
-
             <TouchableOpacity
                 onPress={
                     () => setVisible(!isVisible)
@@ -63,12 +60,11 @@ const TableAddUser = ({ dispatchMethod }) => {
                     הוסף משתמש
                 </Text>
             </TouchableOpacity>
-
-
             {
                 isVisible &&
                 <FormContainer
                     initialValues={formData}
+                    validationSchema={AddUserSchema}
                     onSubmit={
                         (values, { resetForm }) => addUserHandler(values, { resetForm })
                     }
@@ -88,18 +84,17 @@ const TableAddUser = ({ dispatchMethod }) => {
                         {
                             Object.entries(formData).map(([key, value], index) =>
                             (
-
-                                <FormField
-                                    key={index}
-                                    name={key}
-                                    placeholder={firstLevelTitles[key]}
-                                    autoCapitalize="none"
-                                    width={fieldWidth}
-                                    style={styles.inputContainer}
-                                    inputStyle={styles.input}
-                                />
+                                <Fragment key={index}>
+                                    <FormField
+                                        name={key}
+                                        placeholder={firstLevelTitles[key]}
+                                        autoCapitalize="none"
+                                        width={fieldWidth}
+                                        style={styles.inputContainer}
+                                        inputStyle={styles.input}
+                                    />
+                                </Fragment>
                             )
-
                             )
                         }
                     </View>

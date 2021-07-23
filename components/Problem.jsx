@@ -271,7 +271,7 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
                                 <FormField
                                     area={true}
                                     //problem details
-                                    placeholder="פרטי הבעיה"
+                                    placeholder="בחר ליקוי"
                                     style={styles.inputContainerArea}
                                     inputStyle={{
                                         marginEnd: 0

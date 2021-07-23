@@ -9,7 +9,8 @@ import DefectsProvider from "./providers/DefectsProvider";
 import CheckedProvider from "./providers/CheckedProvider";
 
 import { Provider } from 'react-redux';
-import store from "./store";
+import { store, persistor } from './store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 I18nManager.allowRTL(false);
 I18nManager.forceRTL(false);
@@ -20,17 +21,15 @@ export default function App() {
   return (
     <TypeProvider>
       <Provider store={store}>
-        <AuthProvider>
-
-          <CheckedProvider>
-            <DefectsProvider>
-
-              <Router />
-
-            </DefectsProvider>
-          </CheckedProvider>
-
-        </AuthProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <AuthProvider>
+            <CheckedProvider>
+              <DefectsProvider>
+                <Router />
+              </DefectsProvider>
+            </CheckedProvider>
+          </AuthProvider>
+        </PersistGate>
       </Provider >
     </TypeProvider>
   )

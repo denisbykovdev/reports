@@ -1,4 +1,3 @@
-import { yupToFormErrors } from "formik";
 import * as Yup from "yup";
 
 export const loginSchema = Yup.object().shape({
@@ -15,19 +14,24 @@ export const loginSchema = Yup.object().shape({
 export const passChangeSchema = Yup.object().shape({
   password: Yup.string()
     .required(' יש טעות באחד השדות')
-    .min(6, "not less than 6 symbols"),
-  // .label("Password"),
+    .min(6, "לא פחות מ -6 תווים"),
   password_confirmation: Yup.string()
     .required(' יש טעות באחד השדות')
-    // .min(6, "not less than 6 symbols")
-    // .label("Password")
-    // .when('password', {
-    //   is: password => (password && password.length > 0 ? true : false),
-    //   then: Yup.string().oneOf([Yup.ref('password'), "password doesn't match"])
-    // })
     .test(
       'passwords-match',
       'ססמאות חייבות להתאים',
       function (value) { return this.parent.password === value }
     )
-})
+});
+
+export const AddUserSchema = Yup.object().shape({
+  password: Yup.string().required('יש טעות באחד השדות').min(6, "לא פחות מ -6 תווים"),
+  email: Yup.string().required('יש טעות באחד השדות'),
+  phone: Yup.string().required('יש טעות באחד השדות'),
+  last_name: Yup.string().required('יש טעות באחד השדות'),
+  name: Yup.string().required('יש טעות באחד השדות')
+});
+
+export const ReportSchema = Yup.object().shape({
+  id: Yup.string().required('יש טעות באחד השדות')
+});

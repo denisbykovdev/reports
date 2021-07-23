@@ -1,13 +1,20 @@
 import React from "react";
 import { useFormikContext } from "formik";
 import CommonButton from "./CommonButton";
+import { useEffect } from "react";
 
 export default function FormButton({ ...props }) {
-  const { handleSubmit } = useFormikContext();
+  const
+    {
+      submitForm,
+      isValid
+    }
+      = useFormikContext();
 
   return (
     <CommonButton
-      onPress={handleSubmit}
+      onPress={submitForm}
+      disabled={!isValid}
       {...props}
     />
   );

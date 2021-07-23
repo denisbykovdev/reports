@@ -11,6 +11,8 @@ import fonts from "../utils/fonts";
 import layout, { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 import UserPlus from "../icons/UserPlus"
+import FormErrorMessage from "../common/FormErrorMessage";
+import { AddUserSchema } from "../constants/validationSchema";
 
 const DropDownAddUser = ({ dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
@@ -73,7 +75,7 @@ const DropDownAddUser = ({ dispatchMethod }) => {
                 isVisible &&
                 <FormContainer
                     initialValues={formData}
-
+                    validationSchema={AddUserSchema}
                     onSubmit={
                         (values, { resetForm }) => addUserHandler(values, { resetForm })
                     }
@@ -139,6 +141,8 @@ const AddUserElement = ({ elementIndex, elementKey, elementValue }) => (
                 inputStyle={styles.input}
                 style={styles.inputContainer}
             />
+
+            {/* {<FormErrorMessage visible={true} />} */}
 
             {/* <Text style={styles.blueText}>
                 {elementValue}

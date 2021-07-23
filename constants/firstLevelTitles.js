@@ -1,9 +1,9 @@
 export default {
-    name: "שם",
-    last_name: "שם משפחה",
-    phone: "טלפון",
-    email: "מייל",
     password: "סיסמא",
+    email: "מייל",
+    phone: "טלפון",
+    last_name: "שם משפחה",
+    name: "שם",
 
     id: "מזהה בדיקה",
     status: "סטטוס",

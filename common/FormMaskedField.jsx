@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { useFormikContext } from "formik"
 import React, { useState } from "react"
+import { useEffect } from "react"
 import { Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import stringSlicer from "../helpers/stringSlicer"
 import colors from "../utils/colors"
@@ -17,7 +18,8 @@ function FormMaskedField({
     placeholder,
     itemData,
     itemId,
-    itemWidth
+    itemWidth,
+    closeHelper
 }) {
     const [openField, setOpenFieled] = useState(false)
 
@@ -33,6 +35,10 @@ function FormMaskedField({
             }
         }
     )
+
+    useEffect(() => {
+        setOpenFieled(false)
+    }, [closeHelper])
 
     const { values } = useFormikContext()
 

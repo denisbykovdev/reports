@@ -10,8 +10,7 @@ export default function* rootSaga() {
         fork(networkSaga),
         fork(watchPostReportSaga),
         fork(watchUpdateReportSaga),
-        fork(watchGetReportsSaga),
         fork(watchDeleteReportSaga),
-        // fork(networkSaga)
+        fork(watchGetReportsSaga)
     ]);
 };
