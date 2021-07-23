@@ -15,6 +15,8 @@ import FormMaskedField from "./FormMaskedField"
 import PassChangeButton from "./PassChangeButton"
 import FormButton from "./FormButton"
 import { watchDeleteReport, watchUpdateReport } from "../actionCreators/sagaReport"
+import { useState } from "react"
+import Delete from "../modals/Delete"
 
 const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
     const { authState } = useAuth()
@@ -22,15 +24,11 @@ const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
     const { token } = authState
 
     const [passModalOpen, passModalCLose, PassModalRender] = useModal()
-    // const deleteHandler = (itemId) => {
-    //     dispatchMethod({
-    //         type: "DELETE_ITEM",
-    //         itemId
-    //     })
-    //     console.log(
-    //         "___DDItem/delete:", itemId
-    //     )
-    // }
+
+    const [openDeleteModal, closeDeleteModal, DeleteModal] = useModal()
+
+    const [close, setClose] = useState(false)
+
     const deleteHandler = async (itemId) => {
         if (itemData.hasOwnProperty('status')) {
             await dispatchMethod(watchDeleteReport(
@@ -46,7 +44,7 @@ const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
         }
     }
 
-    const closeHelper = () => false
+    const closeHelper = () => setClose(true)
 
     const submitItem = async (values) => {
         console.log(
@@ -82,9 +80,25 @@ const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
                 onSubmit={(values) => submitItem(values)}
             >
                 <View style={styles.rowIconsContainer}>
-                    <TouchableOpacity onPress={() => deleteHandler(itemData.id)}>
+                    <TouchableOpacity
+                        // onPress={() => deleteHandler(itemData.id)}
+                        onPress={() => openDeleteModal()}
+                    >
                         <Basket />
                     </TouchableOpacity>
+
+                    <DeleteModal
+                        modalContainerStyle={{
+                            paddingHorizontal: 0
+                        }}
+                    >
+                        <Delete
+                            closeDeleteModal={closeDeleteModal}
+                            deleteNote={deleteHandler}
+                            id={itemData.id}
+                        />
+                    </DeleteModal>
+
                     <FormButton
                         title={"עדכון"}
                         titleColor={colors.white}
@@ -165,7 +179,7 @@ const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
                                     itemData={itemData}
                                     itemId={itemData.id}
                                     itemWidth={itemWidth}
-                                    closeHelper={closeHelper}
+                                    close={close}
                                 />
                             }
                             else if (key === 'password') {

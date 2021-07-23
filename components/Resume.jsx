@@ -182,11 +182,7 @@ const NoteItem = ({
 
                         <DeleteModal
                             modalContainerStyle={{
-                                paddingHorizontal: 0,
-                                // marginVertical: '40%'
-                            }}
-                            modalContentStyle={{
-                                // paddingTop: 0
+                                paddingHorizontal: 0
                             }}
                         >
                             <Delete

@@ -31,6 +31,7 @@ import stringSlicer from "../helpers/stringSlicer"
 import { useDispatch } from "react-redux"
 import { watchPostReport, watchUpdateReport } from "../actionCreators/sagaReport"
 import { ReportSchema } from "../constants/validationSchema"
+import Tick from "../icons/Tick"
 
 const menuTitles = [
     {
@@ -228,91 +229,137 @@ const ReportScreen = ({ route }) => {
                                             alignItems: "flex-end"
                                         }}
                                     >
-                                        {/* <Text>{JSON.stringify(netWorkSelector.isConnected)}</Text> */}
-
-                                        <TouchableWithoutFeedback
-                                            onPress={() => setIsAdressOpen(!isAdressOpen)}
-                                        >
-                                            <TouchableOpacity
+                                        <View style={{
+                                            flexDirection: 'row'
+                                        }}>
+                                            <TouchableWithoutFeedback
                                                 onPress={() => setIsAdressOpen(!isAdressOpen)}
                                             >
-                                                {
-                                                    isAdressOpen
-                                                        ? <FormField
-                                                            // area={true}
-                                                            placeholder={"כתובת הבדיקה"}
-                                                            style={{
-                                                                padding: 0,
-                                                                height: responsiveWidth(31),
-                                                                borderColor: colors.darkWhite,
-                                                                borderWidth: responsiveWidth(2),
-                                                                borderRadius: 20,
-                                                                alignSelf: 'flex-end'
-                                                            }}
-                                                            width="80%"
-                                                            name="report_adress"
+                                                <TouchableOpacity
+                                                    onPress={() => setIsAdressOpen(!isAdressOpen)}
+                                                >
+                                                    {
+                                                        isAdressOpen
+                                                            ? <FormField
+                                                                // area={true}
+                                                                placeholder={"כתובת הבדיקה"}
+                                                                style={{
+                                                                    padding: 0,
+                                                                    height: responsiveWidth(31),
+                                                                    borderColor: colors.darkWhite,
+                                                                    borderWidth: responsiveWidth(2),
+                                                                    borderRadius: 20,
+                                                                    alignSelf: 'flex-end'
+                                                                }}
+                                                                width="80%"
+                                                                name="report_adress"
 
-                                                        />
-                                                        : <Text
-                                                            style={{
-                                                                color: colors.darkBlueGray,
-                                                                fontSize: fonts.xlarge,
-                                                                fontWeight: weights.semiBold,
-                                                                textAlign: "right"
-                                                            }}
-                                                        >
-                                                            {
-                                                                formikRef.current.values && formikRef.current.values.report_adress
-                                                                    ? stringSlicer(formikRef.current.values.report_adress, 13)
-                                                                    :
-                                                                    "כתובת הבדיקה"
-                                                            }
-                                                        </Text>
-                                                }
-                                            </TouchableOpacity>
-                                        </TouchableWithoutFeedback>
+                                                            />
+                                                            : <Text
+                                                                style={{
+                                                                    color: colors.darkBlueGray,
+                                                                    fontSize: fonts.xlarge,
+                                                                    fontWeight: weights.semiBold,
+                                                                    textAlign: "right"
+                                                                }}
+                                                            >
+                                                                {
+                                                                    formikRef.current.values && formikRef.current.values.report_adress
+                                                                        ? stringSlicer(formikRef.current.values.report_adress, 13)
+                                                                        :
+                                                                        "כתובת הבדיקה"
+                                                                }
+                                                            </Text>
+                                                    }
+                                                </TouchableOpacity>
+                                            </TouchableWithoutFeedback>
 
-                                        <TouchableWithoutFeedback
-                                            onPress={() => setIsNameOpen(!isNameOpen)}
-                                        >
-                                            <TouchableOpacity
+                                            {
+                                                type === 2 && <TouchableOpacity
+                                                    onPress={() => setIsAdressOpen(!isAdressOpen)}
+                                                    style={{
+                                                        height: responsiveWidth(26),
+                                                        width: responsiveWidth(26),
+                                                        borderWidth: responsiveWidth(2),
+                                                        borderColor: colors.whiteTwo,
+                                                        borderRadius: 4,
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        marginStart: responsiveWidth(12),
+                                                        backgroundColor: !isAdressOpen ? colors.paleGrayBg : colors.white
+                                                    }}
+                                                >
+                                                    {
+                                                        !isAdressOpen && <Tick />
+                                                    }
+                                                </TouchableOpacity>
+                                            }
+                                        </View>
+                                        <View style={{
+                                            flexDirection: 'row'
+                                        }}>
+                                            <TouchableWithoutFeedback
                                                 onPress={() => setIsNameOpen(!isNameOpen)}
                                             >
-                                                {
-                                                    isNameOpen
-                                                        ? <FormField
-                                                            // area={true}
-                                                            placeholder={"שם הבדיקה "}
-                                                            style={{
-                                                                padding: 0,
-                                                                height: responsiveWidth(31),
-                                                                borderColor: colors.darkWhite,
-                                                                borderWidth: responsiveWidth(2),
-                                                                borderRadius: 20,
-                                                                alignSelf: 'flex-end'
-                                                            }}
-                                                            width="80%"
-                                                            name="report_name"
+                                                <TouchableOpacity
+                                                    onPress={() => setIsNameOpen(!isNameOpen)}
+                                                >
+                                                    {
+                                                        isNameOpen
+                                                            ? <FormField
+                                                                // area={true}
+                                                                placeholder={"שם הבדיקה "}
+                                                                style={{
+                                                                    padding: 0,
+                                                                    height: responsiveWidth(31),
+                                                                    borderColor: colors.darkWhite,
+                                                                    borderWidth: responsiveWidth(2),
+                                                                    borderRadius: 20,
+                                                                    alignSelf: 'flex-end'
+                                                                }}
+                                                                width="80%"
+                                                                name="report_name"
 
-                                                        />
-                                                        : <Text
-                                                            style={{
-                                                                color: colors.blueGray,
-                                                                fontSize: fonts.medium,
-                                                                fontWeight: weights.regular,
-                                                                textAlign: "right"
-                                                            }}
-                                                        >
-                                                            {
-                                                                formikRef.current.values && formikRef.current.values.report_name
-                                                                    ? stringSlicer(formikRef.current.values.report_name)
-                                                                    : "שם הבדיקה "
-                                                            }
-                                                        </Text>
-                                                }
-                                            </TouchableOpacity>
-                                        </TouchableWithoutFeedback>
+                                                            />
+                                                            : <Text
+                                                                style={{
+                                                                    color: colors.blueGray,
+                                                                    fontSize: fonts.medium,
+                                                                    fontWeight: weights.regular,
+                                                                    textAlign: "right"
+                                                                }}
+                                                            >
+                                                                {
+                                                                    formikRef.current.values && formikRef.current.values.report_name
+                                                                        ? stringSlicer(formikRef.current.values.report_name)
+                                                                        : "שם הבדיקה "
+                                                                }
+                                                            </Text>
+                                                    }
+                                                </TouchableOpacity>
+                                            </TouchableWithoutFeedback>
 
+                                            {
+                                                type === 2 && <TouchableOpacity
+                                                    onPress={() => setIsNameOpen(!isNameOpen)}
+                                                    style={{
+                                                        height: responsiveWidth(26),
+                                                        width: responsiveWidth(26),
+                                                        borderWidth: responsiveWidth(2),
+                                                        borderColor: colors.whiteTwo,
+                                                        borderRadius: 4,
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        marginStart: responsiveWidth(12),
+                                                        backgroundColor: !isNameOpen ? colors.paleGrayBg : colors.white
+                                                    }}
+                                                >
+                                                    {
+                                                        !isNameOpen && <Tick />
+                                                    }
+                                                </TouchableOpacity>
+                                            }
+                                        </View>
                                     </View>
 
                                     <View style={{

@@ -23,6 +23,10 @@ const testArray = ['one', 'two', 'three']
 
 const relatedDocumentsArray = ['מפרט', 'תוכניות', 'חוזה']
 
+const testRelevanceArray = ['גבוהה', 'בינונית', 'נמוכה']
+
+const statusArray = ['נדרש להשלים פרטים', 'נבדק ע"י מהנדס', 'סגור', 'בתהליך']
+
 const TestDetails = () => {
     const { type } = useType()
 
@@ -50,7 +54,7 @@ const TestDetails = () => {
                 />
                 <FormSelect
                     name="status"
-                    array={testArray}
+                    array={statusArray}
                     placeholder="בחר סטטוס"
                 />
 
@@ -108,7 +112,7 @@ const TestDetails = () => {
                 <FormSelect
                     name="test_relevance"
                     placeholder="בחירת דחיפות"
-                    array={testArray}
+                    array={testRelevanceArray}
                 />
 
                 <ItemTitle

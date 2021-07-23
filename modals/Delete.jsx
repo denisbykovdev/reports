@@ -20,22 +20,22 @@ export default function Delete({
             // justifyContent: 'center',
             padding: responsiveWidth(48)
         }}>
-                <Text
-                  style={{
+            <Text
+                style={{
                     fontSize: fonts.large,
                     fontWeight: weights.semiBold,
-                    marginBottom : responsiveWidth(28)
-                  }}  
-                >
-                    ?האם אתה בטוח רוצה למחוק
-                </Text>
+                    marginBottom: responsiveWidth(28)
+                }}
+            >
+                ?האם אתה בטוח רוצה למחוק
+            </Text>
 
             <View
                 style={{
                     flexDirection: 'row'
                 }}
             >
-                <CommonButton 
+                <CommonButton
                     title={"לא"}
                     titleColor={colors.darkSkyBlue}
                     titleFontSize={fonts.large}
@@ -51,7 +51,7 @@ export default function Delete({
                     }}
                     onPress={() => closeDeleteModal()}
                 />
-                <CommonButton 
+                <CommonButton
                     buttonShadow={true}
                     buttonColor={colors.azul}
                     buttonHeight={responsiveWidth(51)}
@@ -63,7 +63,7 @@ export default function Delete({
                     titleColor={colors.white}
                     titleFontSize={fonts.large}
                     borderRadius={10}
-                    onPress={() => deleteNote(id)}
+                    onPress={() => deleteNote(id) && closeDeleteModal()}
                 />
             </View>
 

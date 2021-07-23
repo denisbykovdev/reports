@@ -16,6 +16,7 @@ export default function FormSelect({
     interSepter,
     style,
     selectStyle,
+    multi = false,
     ...otherProps
 }) {
     const [isOpen, setOpen] = useState(false);
@@ -32,6 +33,8 @@ export default function FormSelect({
 
     const animatedIconRotation = useRef(new Animated.Value(0)).current;
 
+    const [multiSelected, setToMultiSelected] = useState(values[name] ? [...values[name]] : [])
+
     const interIcon = animatedIconRotation.interpolate({
         inputRange: [0, 1],
         outputRange: ['0deg', '180deg']
@@ -41,11 +44,25 @@ export default function FormSelect({
         console.log(
             "___FormSelect:", values, e
         );
-        setFieldValue(name, e);
-        interSepter && interSepter(name, e)
+        setFieldTouched(name)
+        if (multi) {
+            if (multiSelected.includes(e)) {
+                setToMultiSelected(multiSelected => [...multiSelected.filter(item => item.toString() !== e.toString())])
+            } else {
+                setToMultiSelected(multiSelected => [...multiSelected, e])
+            }
+        } else {
+            setFieldValue(name, e);
+            interSepter && interSepter(name, e)
+            setOpen(false)
+        }
+
         isChecked && setChecked(false)
-        setOpen(false)
     }
+
+    useEffect(() => {
+        if (multi && multiSelected.length > 0) setFieldValue(name, multiSelected)
+    }, [multiSelected])
 
     const openSelectHandler = () => {
         setOpen(!isOpen)
@@ -87,7 +104,7 @@ export default function FormSelect({
                 </Animated.View>
 
                 <Text style={styles.selectText}>
-                    {values[name] ? values[name] : placeholder}
+                    {values[name] && multi === false ? values[name] : placeholder}
                 </Text>
 
             </TouchableOpacity>
@@ -102,7 +119,7 @@ export default function FormSelect({
                                         () => onChangeHandler(e)
                                     }
                                     style={[styles.selectItem, {
-                                        backgroundColor: values[name] !== e ? colors.white : colors.azul,
+                                        backgroundColor: values[name] === e || multi && multiSelected.includes(e) ? colors.azul : colors.white,
 
                                         borderTopStartRadius: i === 0 ? 9 : 0,
                                         borderTopEndRadius: i === 0 ? 9 : 0,

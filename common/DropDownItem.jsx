@@ -20,6 +20,7 @@ import PassChangeButton from "./PassChangeButton";
 import useModal from "../hooks/useModal";
 import PassChange from "../modals/PassChange";
 import { Fragment } from "react";
+import Delete from "../modals/Delete";
 
 const DropDownItem = ({ itemData, dispatchMethod }) => {
     const [isVisible, setVisible] = useState(false);
@@ -27,6 +28,8 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
     const navigation = useNavigation()
 
     const [passModalOpen, passModalCLose, PassModalRender] = useModal()
+
+    const [openDeleteModal, closeDeleteModal, DeleteModal] = useModal()
 
     const { authState } = useAuth()
 
@@ -93,10 +96,23 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
 
                     <TouchableOpacity
                         style={styles.basketIcon}
-                        onPress={() => deleteHandler(itemData.id)}
+                        // onPress={() => deleteHandler(itemData.id)}
+                        onPress={() => openDeleteModal()}
                     >
                         <Basket />
                     </TouchableOpacity>
+
+                    <DeleteModal
+                        modalContainerStyle={{
+                            paddingHorizontal: 0
+                        }}
+                    >
+                        <Delete
+                            closeDeleteModal={closeDeleteModal}
+                            deleteNote={deleteHandler}
+                            id={itemData.id}
+                        />
+                    </DeleteModal>
 
                     {
                         itemData.pending

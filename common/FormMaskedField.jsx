@@ -19,7 +19,7 @@ function FormMaskedField({
     itemData,
     itemId,
     itemWidth,
-    closeHelper
+    close
 }) {
     const [openField, setOpenFieled] = useState(false)
 
@@ -37,8 +37,11 @@ function FormMaskedField({
     )
 
     useEffect(() => {
-        setOpenFieled(false)
-    }, [closeHelper])
+        // console.log(
+        //     `--- FormMasked/effect[close]`, close
+        // )
+        close === true && setOpenFieled(false)
+    }, [close])
 
     const { values } = useFormikContext()
 
