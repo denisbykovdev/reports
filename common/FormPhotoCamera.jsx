@@ -18,13 +18,14 @@ import weights from '../utils/weights';
 import fonts from '../utils/fonts';
 
 import { PIXI, Sketch } from 'expo-pixi';
-// import ExpoPixi from 'expo-pixi';
+import { GLView } from 'expo-gl';
 import * as ExpoPixi from 'expo-pixi';
-import { FileSystem } from 'expo';
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
 
 // import { Asset, useAssets } from 'expo-asset';
 
-export default function FormPhotoCamera({ name, interSepter }) {
+export default function FormPhotoCamera({ name, interSepter, setEdit }) {
 
   const cameraRef = useRef(null);
   const canvasRef = useRef();
@@ -56,30 +57,69 @@ export default function FormPhotoCamera({ name, interSepter }) {
 
   useEffect(() => {
     (async () => {
+      // console.log("--- FormPhoto/status:", cameraRef.current)
+
       const { status } = await Camera.requestPermissionsAsync();
+
       if (status === 'denied') await Camera.requestCameraPermissionAsync()
-      // console.log("--- FormPhoto/status:", status)
-      setHasPermission(status === "granted");
+
+      // const { status } = await Camera.requestCameraPermissionsAsync();
+
+      console.log("--- FormPhoto/status:", status)
+
+      setHasPermission(status);
     })();
   }, []);
+
+  // const userPhotoDir = FileSystem.documentDirectory + 'userPhotoes/'
+
+  // useEffect(() => {
+  //   (
+  //     async () => {
+
+  //       const dir = await FileSystem.getInfoAsync(userPhotoDir)
+  //       console.log(
+  //         `--- FPC/effect/dir`, dir
+  //       )
+  //       if (!dir.exists) {
+  //         await FileSystem.makeDirectoryAsync(userPhotoDir)
+  //       }
+  //     }
+  //   )()
+  // }, [])
 
   const takePhoto = async () => {
     if (cameraRef.current) {
       const data = await cameraRef.current.takePictureAsync();
+      // const asset = await MediaLibrary.createAssetAsync(data.uri);
       setFieldTouched(name)
-      // console.log(
-      //   "--- FormPhoto/takePhoto/val:",
-      //   values[name],
-      //   data.uri
-      // )
+      console.log(
+        "--- FormPhoto/takePhoto/val:",
+        values[name],
+        "--- FormPhoto/takePhoto/data:",
+        data.uri,
+        // "--- FormPhoto/takePhoto/asset:",
+        // asset.uri
+      )
       setFieldValue(name, [...values[name], data.uri])
       setImages([...images, data.uri])
       isChecked && setChecked(false)
       interSepter && interSepter(name, [...values[name], data.uri])
-
+      // setFieldValue(name, [...values[name], asset.uri])
+      // setImages([...images, asset.uri])
+      // isChecked && setChecked(false)
+      // interSepter && interSepter(name, [...values[name], asset.uri])
 
       // if (data.uri) {
-      //   FileSystem.copyAsync()
+      //   await FileSystem.copyAsync({
+      //     from: data.uri,
+      //     to: `${userPhotoDir}copy.jpg`,
+      //   });
+
+      //   const dirFilled = await FileSystem.getInfoAsync(userPhotoDir)
+      //   console.log(
+      //     `--- FPC/takePhoto/dirFilled`, dirFilled
+      //   )
       // }
 
       setOpenCam(false)
@@ -93,6 +133,7 @@ export default function FormPhotoCamera({ name, interSepter }) {
 
     setFieldValue(name, images)
     interSepter && interSepter(name, images)
+    carouselRef?.current?.snapToPrev()
   }
 
   const editPhoto = () => {
@@ -103,20 +144,7 @@ export default function FormPhotoCamera({ name, interSepter }) {
       images
     )
 
-    // isCanvas === true && setImages(
-    //   [
-    //     ...images.map(
-    //       image => image === images[selected]
-    //         ? canvasUri
-    //         : image
-    //     )
-    //   ]
-    // )
-
-    // console.log(
-    //   `--- FPC/editPhoto/post:`,
-    //   images
-    // )
+    setEdit(isCanvas)
   }
 
   // const onTouchThumbnail = (index) => {
@@ -129,14 +157,16 @@ export default function FormPhotoCamera({ name, interSepter }) {
 
     console.log(
       `--- FPC/onChangeAsync:`,
-      // uri,
-      // item,
-      Object.keys(canvasRef.current.stage)
+      uri,
+      item,
+      // Object.keys(canvasRef.current.stage)
       // Renderer,
       // PIXI.Renderer
     )
 
     setCanvasUri(uri)
+    // setFieldValue(name, [...values[name], ])
+    // setImages([...images, ])
   };
 
   return (
@@ -164,7 +194,16 @@ export default function FormPhotoCamera({ name, interSepter }) {
                     data={images}
                     sliderWidth={responsiveWidth(239)}
                     itemWidth={responsiveWidth(239)}
-                    onSnapToItem={(index) => setSelected(index)}
+                    firstItem={images.length - 1}
+                    onSnapToItem={(index) => {
+                      console.log(
+                        `--- FPC/onSnapToItem`,
+                        index,
+                        carouselRef?.current?.currentIndex
+                      )
+                      setSelected(index)
+                    }}
+
                     // slideStyle={{
                     //   flexDirection: 'column-reverse'
                     // }}
@@ -198,6 +237,21 @@ export default function FormPhotoCamera({ name, interSepter }) {
                               source={{ uri: item }}
                               resizeMode="cover"
                             >
+                              {/* <GLView
+                                ref={canvasRef}
+                                style={{ flex: 1 }}
+                                onContextCreate={async context => {
+                                  const app = new PIXI.Application({ context });
+                                  const sprite = await PIXI.Sprite.from(
+                                    "assets-library://asset/asset.JPG?id=58462242-2F45-455E-80C4-269DD1A931AC&ext=JPG"
+                                  );
+                                  // const sprite1 = await PIXI.Sprite.from(
+                                  //   item
+                                  // );
+                                  app.stage.addChild(sprite);
+                                  // app.stage.addChild(sprite1);
+                                }}
+                              /> */}
                               <ExpoPixi.Sketch
                                 style={styles.formPhoto}
                                 ref={canvasRef}
@@ -207,38 +261,38 @@ export default function FormPhotoCamera({ name, interSepter }) {
                                 // transparent={true}
                                 onChange={() => onChangeAsync(item)}
 
-                                onReady={async WebGLRenderingContext => {
-                                  console.log(
-                                    `--- FPC/ WebGLRenderingContext`,
-                                    // typeof await WebGLRenderingContext,
-                                    // Object.keys(canvasRef.current.stage),
-                                    // canvasRef.current.stage.children.length,
-                                    `file:${item.substr(item.indexOf('/') + 1)}`,
-                                    // item
-                                  )
-                                  let uri = item
+                              // onReady={async WebGLRenderingContext => {
+                              //   console.log(
+                              //     `--- FPC/ WebGLRenderingContext`,
+                              //     // typeof await WebGLRenderingContext,
+                              //     // Object.keys(canvasRef.current.stage),
+                              //     // canvasRef.current.stage.children.length,
+                              //     `file:${item.substr(item.indexOf('/') + 1)}`,
+                              //     item
+                              //   )
+                              //   let uri = item
 
-                                  let renderer = canvasRef.current.renderer
+                              //   let renderer = canvasRef.current.renderer
 
-                                  let stage = canvasRef.current.stage
+                              //   let stage = canvasRef.current.stage
 
-                                  if (stage.children.length > 0) {
-                                    stage.removeChildren()
-                                    renderer._update()
-                                  }
+                              //   if (stage.children.length > 0) {
+                              //     stage.removeChildren()
+                              //     renderer._update()
+                              //   }
 
-                                  let backGround = await PIXI.Sprite.fromExpoAsync(
-                                    JSON.stringify(item)
-                                  )
+                              //   let backGround = await PIXI.Sprite.fromExpoAsync(
+                              //     'http://i.imgur.com/uwrbErh.png'
+                              //   )
 
-                                  background.rotation = 1.5708
-                                  background.width = renderer.height
-                                  background.height = renderer.width
-                                  background.position.set(renderer.width, 0)
+                              //   background.rotation = 1.5708
+                              //   background.width = renderer.height
+                              //   background.height = renderer.width
+                              //   background.position.set(renderer.width, 0)
 
-                                  stage.addChild(background);
-                                  renderer._update();
-                                }}
+                              //   stage.addChild(background);
+                              //   renderer._update();
+                              // }}
                               />
                             </ImageBackground>
                         }

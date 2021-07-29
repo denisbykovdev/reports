@@ -18,11 +18,11 @@ import useType from "../hooks/useType"
 import ProfsProvider from "../providers/ProfsProvider"
 import FormContainer from "../common/FormContainer"
 
-export default function Area({ areaId, areaName, areaProblems, dispatch, server }) {
+export default function Area({ areaId, areaName, areaProblems, dispatch, server, isSavedToReport, setEdit }) {
 
     const [isAreaOpen, setAreaOpen] = useState(false)
 
-    const [isAreaForPrint, setAreaForPrint] = useState(true)
+    const [isAreaForPrint, setAreaForPrint] = useState(isSavedToReport)
 
     const [openName, setOpenName] = useState(false)
 
@@ -77,6 +77,21 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server 
             areaKey: name,
             areaNewValue: text
         })
+    }
+
+    const setAreaForPrintHandler = () => {
+        setAreaForPrint(!isAreaForPrint)
+        if (isSavedToReport) {
+            dispatch({
+                type: "PUSH_AREA_FROM_PRINT",
+                areaId
+            })
+        } else {
+            dispatch({
+                type: "PUSH_AREA_FOR_PRINT",
+                areaId
+            })
+        }
     }
 
     return (
@@ -134,16 +149,16 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server 
                     </TouchableWithoutFeedback>
 
                     <TouchableOpacity
-                        onPress={() => setAreaForPrint(!isAreaForPrint)}
+                        onPress={() => setAreaForPrintHandler()}
                         style={[
                             styles.tickContainer,
                             {
-                                backgroundColor: isAreaForPrint ? colors.paleGrayBg : colors.white
+                                backgroundColor: isSavedToReport ? colors.paleGrayBg : colors.white
                             }
                         ]}
                     >
                         {
-                            isAreaForPrint && <Tick />
+                            isSavedToReport && <Tick />
                         }
                     </TouchableOpacity>
 
@@ -250,6 +265,7 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server 
                                 areaName={areaName}
                                 defectsDispatch={dispatch}
                                 serverArea={server}
+                                setEdit={setEdit}
                             />)
                         }
                     </>
@@ -264,6 +280,7 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server 
                         problem={problem}
                         areaId={areaId}
                         defectsDispatch={dispatch}
+                        setEdit={setEdit}
                     />
                 ))
             }

@@ -14,12 +14,12 @@ import useAuth from "../hooks/useAuth"
 export default function NewStandart({
     standartsDispatch,
     newStandartModalClose
-}){
-    const {authState} = useAuth()
+}) {
+    const { authState } = useAuth()
 
-    const {token} = authState
+    const { token } = authState
 
-    const submitNewStandart = async(values) => {
+    const submitNewStandart = async (values) => {
         console.log(
             "___NewStandart/submit/values:", values
         )
@@ -34,7 +34,7 @@ export default function NewStandart({
 
     return (
         <ShadowView>
-            <CommonHeader 
+            <CommonHeader
                 title="הוספת תקן"
                 close={newStandartModalClose}
             />
@@ -50,27 +50,72 @@ export default function NewStandart({
                 }
             >
                 <FormImagePicker
-                    name="image" 
+                    name="image"
                     style={{
-                        marginTop: responsiveHeight(22)
+                        marginTop: responsiveWidth(22)
                     }}
                 />
-                <FormField 
-                    name="text"
-                    area={true}
+                <FormField
+                    name="profession"
+                    placeholder="מקצוע"
+                    // area={true}
                     style={{
-                        height: responsiveHeight(140),
+                        borderRadius: 20,
+                        height: responsiveWidth(31),
+                        marginBottom: responsiveWidth(22),
+                        padding: 0,
+                        paddingEnd: responsiveWidth(10)
+                    }}
+                    inputStyle={{
+                        marginEnd: 0,
+                        // padding: 0
+                    }}
+                />
+                <FormField
+                    name="falut"
+                    area={true}
+                    placeholder="תקלה"
+                    style={{
+                        height: responsiveWidth(140),
                         textAlign: 'right',
-                        marginBottom: responsiveHeight(22)
+                        marginBottom: responsiveWidth(22),
+                        borderRadius: 10,
                     }}
                     inputStyle={{
                         marginEnd: 0
                     }}
-                 
+                />
+                <FormField
+                    name="whatToDo"
+                    area={true}
+                    placeholder="מה לעשות"
+                    style={{
+                        height: responsiveWidth(140),
+                        textAlign: 'right',
+                        marginBottom: responsiveWidth(22),
+                        borderRadius: 10,
+                    }}
+                    inputStyle={{
+                        marginEnd: 0
+                    }}
+                />
+                <FormField
+                    name="text"
+                    area={true}
+                    placeholder="תקן"
+                    style={{
+                        height: responsiveWidth(140),
+                        textAlign: 'right',
+                        marginBottom: responsiveWidth(22),
+                        borderRadius: 10,
+                    }}
+                    inputStyle={{
+                        marginEnd: 0
+                    }}
                 />
 
                 <Line />
-                <FormButton 
+                <FormButton
                     title="שמירה"
                     borderRadius={20}
                     buttonHeight={responsiveWidth(33)}

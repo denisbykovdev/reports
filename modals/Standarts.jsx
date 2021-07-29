@@ -18,6 +18,8 @@ import NewStandart from "./NewStandart"
 import useType from "../hooks/useType"
 import useSearch from "../hooks/useSearch"
 import Spinner from "../common/Spinner"
+import fonts from "../utils/fonts"
+import weights from "../utils/weights"
 
 export default function Standarts({
     standartsModalClose,
@@ -145,19 +147,6 @@ export default function Standarts({
     )
 }
 
-const styles = StyleSheet.create({
-    tickContainer: {
-        height: responsiveWidth(24),
-        width: responsiveWidth(24),
-        borderWidth: responsiveWidth(2),
-        borderColor: colors.whiteTwo,
-        borderRadius: 4,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginStart: responsiveWidth(14)
-    },
-})
-
 const StandartItem = ({
     standart,
     addCheckedStandart,
@@ -222,7 +211,7 @@ const StandartItem = ({
                     {
                         standart.image !== null && standart.image.length > 1
                             ? <Image
-                                source={{ uri: standart.image }}
+                                source={{ uri: `data:image/png;base64,${standart.image}` }}
                             />
                             : <AltImage
                                 height={responsiveWidth(42)}
@@ -247,7 +236,7 @@ const StandartItem = ({
                 </TouchableOpacity>
 
             </View>
-            {
+            {/* {
                 isOpen
                 &&
                 <Text
@@ -255,6 +244,50 @@ const StandartItem = ({
                 >
                     {standart.text}
                 </Text>
+            } */}
+            {
+                isOpen && (
+                    <>
+                        <Line />
+
+                        <View style={styles.standartDescs}>
+                            <View style={styles.standartRow}>
+                                <Text style={styles.standartDetails}>
+                                    {standart.profession}
+                                </Text>
+                                <Text style={styles.standartTitles}>
+                                    {"מקצוע"}
+                                </Text>
+                            </View>
+
+                            <View style={styles.standartRow}>
+                                <Text style={styles.standartDetails}>
+                                    {standart.fault}
+                                </Text>
+                                <Text style={styles.standartTitles}>
+                                    {"תקלה"}
+                                </Text>
+                            </View>
+                            <View style={styles.standartRow}>
+                                <Text style={styles.standartDetails}>
+                                    {standart.whatToDo}
+                                </Text>
+                                <Text style={styles.standartTitles}>
+                                    {"מה לעשות"}
+                                </Text>
+                            </View>
+                            <View style={styles.standartRow}>
+                                <Text style={styles.standartDetails}>
+                                    {standart.text}
+                                </Text>
+                                <Text style={styles.standartTitles}>
+                                    {"תקן"}
+                                </Text>
+                            </View>
+                        </View>
+
+                    </>
+                )
             }
 
             {/* {
@@ -272,3 +305,37 @@ const StandartItem = ({
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    tickContainer: {
+        height: responsiveWidth(24),
+        width: responsiveWidth(24),
+        borderWidth: responsiveWidth(2),
+        borderColor: colors.whiteTwo,
+        borderRadius: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginStart: responsiveWidth(14)
+    },
+    standartRow: {
+        flexDirection: "row",
+        alignItems: 'baseline',
+        width: '100%',
+        marginVertical: responsiveWidth(18),
+        justifyContent: 'flex-end'
+    },
+    standartDetails: {
+        alignSelf: 'baseline',
+        position: "absolute",
+        left: 0,
+
+        fontSize: fonts.small,
+        fontWeight: weights.thin,
+        color: colors.slateGrey
+    },
+    standartTitles: {
+        fontSize: fonts.regular,
+        fontWeight: weights.semiBold,
+        color: colors.darkBlueGray
+    },
+})

@@ -17,7 +17,7 @@ const systemsArray = [
     'אוורור ושחרור עשן',
     'מיזוג אוויר',
     'מערכת יניקה ופינוי גזים C/O מחניונים',
-    'CO/2 אוויר צח',
+    'אוויר צח CO/2',
     'ביוב ניקוז',
     'אינסטלציה',
     'שוט אשפה',
@@ -124,7 +124,8 @@ const StructureDescription = () => {
                 />
 
                 <ItemTitle
-                    title="כמות בניינים משותפים על אותו החניות"
+                    // title="כמות בניינים משותפים על אותו החניות"
+                    title="כמות בניינים על אותו חניון"
                 />
                 {/* <FormSelect
                     name="number_of_shared_buildings"
@@ -146,7 +147,8 @@ const StructureDescription = () => {
             >
 
                 <ItemTitle
-                    title="מספר מפלסי חניון תת קרקעי"
+                    // title="מספר מפלסי חניון תת קרקעי"
+                    title="מספר מפלסי חניון"
                 />
                 {/* <FormSelect
                     name="parking_levels"
@@ -160,7 +162,8 @@ const StructureDescription = () => {
                 />
 
                 <ItemTitle
-                    title="מפלסי גג"
+                    // title="מפלסי גג"
+                    title="מספר מפלסי גג"
                 />
                 {/* <FormSelect
                     name="roof_levels"

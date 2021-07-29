@@ -13,8 +13,8 @@ import { responsiveWidth } from "../utils/layout"
 import Spinner from "../common/Spinner"
 import useAuth from "../hooks/useAuth"
 
-import useReducerWithSideEffects from 'use-reducer-with-side-effects';
-import { serverProblemsInitial, serverProblemsReducer } from "../reducers/serverProblemsReducer"
+// import useReducerWithSideEffects from 'use-reducer-with-side-effects';
+// import { serverProblemsInitial, serverProblemsReducer } from "../reducers/serverProblemsReducer"
 
 export default function ServerProblems({
     savedProblemsModalclose,

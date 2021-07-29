@@ -31,7 +31,15 @@ import ProfsProvider from "../providers/ProfsProvider"
 
 const testArray = ['one', 'two', 'three']
 
-export default function Problem({ problem, areaId, areaName, serverArea, defectsDispatch, flagged = false }) {
+export default function Problem({
+    problem,
+    areaId,
+    areaName,
+    serverArea,
+    defectsDispatch,
+    flagged = false,
+    setEdit
+}) {
 
     const [isProblemOpen, setProblemOpen] = useState(false)
 
@@ -70,14 +78,16 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
                 problemName: problem.name,
                 areaName
             })
-        } else if (flagged) {
+        }
+        else if (flagged) {
             await problemsDispatch({
                 type: "UPDATE_SERVER_PROBLEM",
                 token,
                 problem: { ...values, standarts: [...problem.standarts] },
                 problemName: problem.name
             })
-        } else {
+        }
+        else {
             await problemsDispatch({
                 type: "POST_SERVER_PROBLEM",
                 token,
@@ -305,6 +315,7 @@ export default function Problem({ problem, areaId, areaName, serverArea, defects
                                 <FormPhotoCamera
                                     name="image"
                                     interSepter={interSepter}
+                                    setEdit={setEdit}
                                 />
                             </View>
 

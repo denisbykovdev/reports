@@ -10,17 +10,22 @@ import Line from "../common/Line"
 import ShadowView from "../common/ShadowView"
 import FormErrorMessage from "../common/FormErrorMessage";
 
-const PrintModal = ({ close }) => {
+const PrintModal = ({ close, reportId }) => {
     const [activeProf, RenderRadioPairProf] = useRadioPair(profDetails, withProfRegion)
     const [activeExp, RenderRadioPairExp] = useRadioPair(expDetails, withExpenses)
-    const [activePrint, RenderRadioPairPrint] = useRadioPair(printDetails, withPdf)
+    // const [activePrint, RenderRadioPairPrint] = useRadioPair(printDetails, withPdf)
 
     console.log(
-        "---PrintModal/printHandler:", activeProf, activeExp, activePrint
+        "---PrintModal/printHandler:",
+        activeProf,
+        activeExp,
+        // activePrint
     )
 
     const printHandler = () => {
-        const urlConcat = `${activeProf}${activeExp}${activePrint}`
+        const urlConcat = `${activeProf}${activeExp}`
+
+        // ${ activePrint }
 
         console.log(
             "---PrintModal/printHandler/urlConcat:", urlConcat
@@ -46,42 +51,42 @@ const PrintModal = ({ close }) => {
                 subTitle={"יש לבחור את המבניות ליצירת הדוח"}
                 headerStyles={{
                     paddingHorizontal: responsiveWidth(28)
-                  }}
+                }}
             />
-            <Line 
+            <Line
                 lineStyle={{
                     marginHorizontal: responsiveWidth(28)
                 }}
             />
-            <RenderRadioPairProf 
+            <RenderRadioPairProf
                 radioPairContainerStyle={{
                     paddingHorizontal: responsiveWidth(28),
                     paddingVertical: responsiveWidth(18)
-                }}    
+                }}
             />
-            <RenderRadioPairExp 
+            <RenderRadioPairExp
                 radioPairContainerStyle={{
                     paddingHorizontal: responsiveWidth(28),
                     backgroundColor: colors.paleGrayThree,
                     paddingVertical: responsiveWidth(18)
-                }}    
+                }}
             />
-            <RenderRadioPairPrint 
+            {/* <RenderRadioPairPrint 
                 radioPairContainerStyle={{
                     paddingHorizontal: responsiveWidth(28),
                     paddingVertical: responsiveWidth(18)
                 }}    
-            />
-            <Line 
+            /> */}
+            <Line
                 lineStyle={{
                     marginHorizontal: responsiveWidth(28)
                 }}
             />
-            <FormErrorMessage 
-                error={ `${activeProf}, ${activeExp}, ${activePrint}`}
+            {/* <FormErrorMessage
+                error={`${activeProf}, ${activeExp}, ${activePrint}`}
                 visible={true}
-            />
-            <CommonButton 
+            /> */}
+            <CommonButton
                 title={"יצוא"}
                 borderColor={colors.azul}
                 titleColor={colors.azul}

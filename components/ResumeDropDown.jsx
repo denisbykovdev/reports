@@ -6,7 +6,7 @@ import ResumeTitle from "../icons/ResumeTitle"
 import Tick from "../icons/Tick"
 import colors from "../utils/colors"
 import fonts from "../utils/fonts"
-import { responsiveHeight, responsiveWidth } from "../utils/layout"
+import { responsiveWidth } from "../utils/layout"
 import weights from "../utils/weights"
 import CommonSubHeader from "../common/CommonSubHeader"
 import FormField from "../common/FormField"
@@ -20,7 +20,7 @@ const ResumeDropDown = () => {
 
     const [isSaved, setSaved] = useState(false)
 
-    const [resumesState, resumesDispatch] = useResumes()
+    // const [resumesState, resumesDispatch] = useResumes()
 
     const {
         setFieldValue,
@@ -28,18 +28,18 @@ const ResumeDropDown = () => {
         values
     } = useFormikContext();
 
-    const {authState} = useAuth()
+    const { authState } = useAuth()
 
-    const {token} = authState
+    const { token } = authState
 
     const saveHandler = () => {
         setSaved(!isSaved)
-        isSaved === true &&
-        resumesDispatch({
-            type: "POST_NEW_RESUME",
-            token,
-            newResume: values.resume
-        })
+        // isSaved === true &&
+        //     resumesDispatch({
+        //         type: "POST_NEW_RESUME",
+        //         token,
+        //         newResume: values.resume
+        //     })
         setFieldTouched("is_resume_template")
         setFieldValue(
             "is_resume_template", !isSaved ? 1 : 0
@@ -73,9 +73,9 @@ const ResumeDropDown = () => {
                             name="resume"
                             area={true}
                             style={{
-                                minHeight: responsiveHeight(69),
+                                minHeight: responsiveWidth(69),
                                 textAlign: 'right',
-                                marginVertical: responsiveHeight(20)
+                                marginVertical: responsiveWidth(20)
                             }}
                             inputStyle={{
                                 marginEnd: 0

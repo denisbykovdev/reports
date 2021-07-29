@@ -2,7 +2,8 @@ import { withExpenses, withFree, withPdf, withProf, withProfRegion, withWord } f
 
 export const profDetails = [
     {
-        label: 'דוח מקצוע לפי אזורים',
+        // label: 'דוח מקצוע לפי אזורים',
+        label: 'דוח לפי אזור',
         desc: withProfRegion,
         accessibilityLabel: 'prof'
         //Отчет подготовлен по профессии по региону

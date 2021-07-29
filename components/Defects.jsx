@@ -12,7 +12,7 @@ import Area from './Area'
 import useAuth from "../hooks/useAuth";
 import { useCallback } from "react";
 
-const Defects = ({ areas }) => {
+const Defects = ({ areas, setEdit }) => {
     const { defectsState, defectsDispatch } = useDefects()
 
     const [savedAreasModalOpen, savedAreasModalClose, SavedAreasModalContent] = useModal();
@@ -38,6 +38,10 @@ const Defects = ({ areas }) => {
 
         if (areas && areas !== null && areas.length > 0) {
             defectsDispatch({
+                type: "CLEAR_AREAS"
+            })
+
+            defectsDispatch({
                 type: "ADD_REPORTAREAS_IN_AREAS",
                 saved: areas
             })
@@ -59,6 +63,8 @@ const Defects = ({ areas }) => {
                         areaProblems={area.problems}
                         dispatch={defectsDispatch}
                         server={area.server ? true : false}
+                        isSavedToReport={area.isSavedToReport}
+                        setEdit={setEdit}
                     />
                 ))
             }
@@ -71,7 +77,8 @@ const Defects = ({ areas }) => {
                     buttonWidth={'50%'}
                     buttonColor={colors.white}
                     titleColor={colors.azul}
-                    title="חיפוש והוספת איזור"
+                    // title="חיפוש והוספת איזור"
+                    title="הוספת לחצן מהיר"
                     titleStyle={{
                         marginRight: 0
                     }}

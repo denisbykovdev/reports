@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useRef } from "react"
 import { ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import AvoidingView from "../common/AvoidingView"
 import HeaderView from "../common/HeaderView"
@@ -32,6 +32,9 @@ import { useDispatch } from "react-redux"
 import { watchPostReport, watchUpdateReport } from "../actionCreators/sagaReport"
 import { ReportSchema } from "../constants/validationSchema"
 import Tick from "../icons/Tick"
+import { useEffect } from "react"
+import useInterval from "../hooks/useInterval"
+import { useState } from "reinspect"
 
 const menuTitles = [
     {
@@ -80,20 +83,43 @@ const ReportScreen = ({ route }) => {
 
     const [isAdressOpen, setIsAdressOpen] = useState(false)
 
+    const [toPrint, setToPrint] = useState(true)
+
+    const [autoMod, setAutoMod] = useState(false)
+
+    const [autoId, setAutoId] = useState(null, 'autoIdState')
+
+    const [noEdit, setEdit] = useState(true)
+
     const { token } = authState
 
     const submitReport = async (values) => {
+        console.log(
+            `--- ReportScreen/submit:`,
+            autoId,
+            route.params.reportId === null && autoId === null,
+            route.params.reportId === null && autoId !== null
+        )
 
         let newValues = { ...values, id: Number(values.id) }
 
-        if (route.params.reportId === null) {
+        if (route.params.reportId === null && autoId === null) {
             dispatch(watchPostReport(
                 token,
                 values,
                 defectsState.areas,
                 defectsState.notes
             ))
-        } else {
+            autoMod === true && setAutoId(Number(values.id))
+        } else if (route.params.reportId === null && autoId !== null) {
+            dispatch(watchUpdateReport(
+                token,
+                autoId,
+                newValues,
+                defectsState.areas,
+                defectsState.notes
+            ))
+        } else if (route.params.reportId !== null) {
             dispatch(watchUpdateReport(
                 token,
                 route.params.reportId,
@@ -124,7 +150,7 @@ const ReportScreen = ({ route }) => {
     function scrollComponent() {
         switch (true) {
             case offsetX === 0: return <Details />;
-            case offsetX === viewWidth: return <Defects areas={route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null} />;
+            case offsetX === viewWidth: return <Defects setEdit={setEdit} areas={route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null} />;
             case offsetX === (viewWidth) * 2: return <Resume notes={route.params && route.params.report && route.params.report.notes.length >= 0 ? route.params.report.notes : null} />;
             case offsetX >= (viewWidth) * 3: return <Archive />;
         }
@@ -133,12 +159,38 @@ const ReportScreen = ({ route }) => {
     const switchComponent = () => {
         switch (active) {
             case "details": return <Details />;
-            case "defects": return <Defects areas={route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null} />;
+            case "defects": return <Defects setEdit={setEdit} areas={route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null} />;
             case "resume": return <Resume notes={route.params && route.params.report && route.params.report.notes.length >= 0 ? route.params.report.notes : null} />;
             case "archive": return <Archive />;
             default: return <Details />;
         }
     }
+
+    const pushPrintHandler = () => {
+        setToPrint(!toPrint)
+
+        if (toPrint) {
+            defectsDispatch({
+                type: "PUSH_FROM_PRINT"
+            })
+        } else {
+            defectsDispatch({
+                type: "PUSH_TO_PRINT"
+            })
+        }
+    }
+
+    // useEffect(() => {
+    //     console.log(
+    //         `--- ReportScreen/defectsstate.areas:`, defectsState.areas
+    //     )
+    // }, [defectsState.areas])
+
+    useInterval(() => {
+        if (!isChecked) {
+            formikRef.current.submitForm() && setAutoMod(true)
+        }
+    }, 60000);
 
     return (
         <SafeView>
@@ -198,13 +250,8 @@ const ReportScreen = ({ route }) => {
                             flexGrow: 1,
                             justifyContent: 'space-between'
                         }}
-                    // scrollEnabled={}
+                        scrollEnabled={noEdit}
                     >
-                        {/* <View style={{
-                            flexGrow: 1,
-
-                            justifyContent: 'space-between'
-                        }}> */}
 
                         <HeaderView>
                             <ShadowView
@@ -429,7 +476,45 @@ const ReportScreen = ({ route }) => {
                                 borderColor={colors.darkSkyBlue}
                                 borderRadius={10}
                                 titleStyle={{ marginEnd: 0 }}
+                                style={{
+                                    marginBottom: type === 1 ? responsiveWidth(24) : 0,
+                                    marginRight: type === 2 ? responsiveWidth(10) : 0,
+                                }}
                             />
+
+                            {
+                                type === 1 && offsetX === viewWidth && <CommonButton
+                                    onPress={() => pushPrintHandler()}
+                                    title={"נקה הכל"}
+                                    titleColor={colors.white}
+                                    titleFontSize={fonts.large}
+                                    buttonColor={colors.azul}
+                                    buttonHeight={responsiveWidth(52)}
+                                    // buttonWidth={responsiveWidth(300)}
+                                    buttonWidth={type !== 2 ? "100%" : "17%"}
+                                    buttonShadow={false}
+                                    borderColor={colors.darkSkyBlue}
+                                    borderRadius={10}
+                                    titleStyle={{ marginEnd: 0 }}
+                                />
+                            }
+                            {
+                                type === 2 && active === "defects" && <CommonButton
+                                    onPress={() => pushPrintHandler()}
+                                    title={"נקה הכל"}
+                                    titleColor={colors.white}
+                                    titleFontSize={fonts.large}
+                                    buttonColor={colors.azul}
+                                    buttonHeight={responsiveWidth(52)}
+                                    // buttonWidth={responsiveWidth(300)}
+                                    buttonWidth={type !== 2 ? "100%" : "17%"}
+                                    buttonShadow={false}
+                                    borderColor={colors.darkSkyBlue}
+                                    borderRadius={10}
+                                    titleStyle={{ marginEnd: 0 }}
+                                />
+                            }
+
                         </BottomView>
                         {/* </View> */}
 
@@ -437,6 +522,7 @@ const ReportScreen = ({ route }) => {
 
                             <PrintModal
                                 close={printModalClose}
+                                reportId={route.params.reportId}
                             />
 
                         </PrintModalContent>

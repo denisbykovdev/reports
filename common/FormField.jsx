@@ -52,9 +52,13 @@ export default function FormField({
             isChecked && setChecked(false)
           }}
           onBlur={() => setFieldTouched(name)}
-          style={[styles.input, inputStyle]}
+          style={[
+            styles.input,
+            inputStyle
+          ]}
           placeholder={placeholder}
           multiline={area}
+          // numberOfLines={10}
           {...otherProps}
         />
 
@@ -93,6 +97,10 @@ const styles = StyleSheet.create({
     // writingDirection: 'rtl',
     marginRight: responsiveWidth(10),
     fontSize: fonts.xsmall,
-    fontWeight: weights.regular
-  },
+    fontWeight: weights.regular,
+
+    textAlignVertical: 'top',
+    paddingTop: 0,
+    paddingBottom: 0
+  }
 });

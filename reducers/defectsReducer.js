@@ -85,9 +85,13 @@ export const defectsReducer = (
                     ...state.areas,
                     // defaultArea
                     {
-                        id: state.areas !== null && state.areas.length > 0 ? state.areas.length + 1 : 1,
+                        // id: state.areas !== null && state.areas.length > 0 ? state.areas.length + 1 : 1,
+                        id: state.areas !== null && state.areas.length > 0 && state.areas.filter(area => area.isSavedToReport === true).length > 0
+                            ? state.areas.filter(area => area.isSavedToReport == true).length + 1
+                            : 1,
                         area_name: "אזור",
-                        problems: []
+                        problems: [],
+                        isSavedToReport: true
                     }
                 ]
             });
@@ -108,7 +112,8 @@ export const defectsReducer = (
                             cost: null,
                             // image: null,
                             image: [],
-                            standarts: []
+                            standarts: [],
+                            isSavedToReport: true
                         }
                     ]
                 } : area
@@ -150,17 +155,97 @@ export const defectsReducer = (
             });
 
         case "CHANGE_AREA_VALUE":
+            console.log(
+                `--- CHANGE_AREA_VALUE/action:`, action
+            )
             return Update({
                 ...state,
-                areas: state.areas.map(area =>
-                    area.id === action.areaId ?
-                        {
-                            ...area,
-                            [action.areaKey]: action.areaNewValue
-                        } :
-                        area
-                )
+                areas:
+
+                    state.areas.map(area =>
+                        area.id === action.areaId ?
+                            {
+                                ...area,
+                                [action.areaKey]: action.areaNewValue
+
+                            } :
+                            area
+                    )
             });
+
+        case "PUSH_AREA_FROM_PRINT":
+            console.log(
+                `--- PUSH_AREA_FROM_PRINT/action:`,
+                action,
+                state.areas.length,
+                `::: false:`,
+                state.areas.filter(area => area.isSavedToReport === false).length,
+                `::: true:`,
+                state.areas.filter(area => area.isSavedToReport === true).length
+            )
+            return Update({
+                ...state,
+                areas: state.areas.map(
+                    (area, index) =>
+                        area.id !== action.areaId && area.isSavedToReport === true
+                            ?
+                            {
+                                ...area,
+                                id: area.id >= action.areaId
+                                    ? area.id - 1
+                                    : area.id
+                            }
+                            : area.id !== action.areaId && area.isSavedToReport === false
+                                ? area
+                                :
+                                {
+                                    ...area,
+                                    isSavedToReport: false,
+                                    id: state.areas.filter(area => area.isSavedToReport === false).length > 0
+                                        ? Number(`0.${state.areas.filter(area => area.isSavedToReport === false).length + 1}`)
+                                        : 0.1
+                                }
+
+
+                )
+            })
+
+        case "PUSH_AREA_FOR_PRINT":
+            console.log(
+                `--- PUSH_AREA_FROM_PRINT/action:`,
+                action,
+                state.areas.length,
+                `::: false:`,
+                state.areas.filter(area => area.isSavedToReport === false).length,
+                `::: true:`,
+                state.areas.filter(area => area.isSavedToReport === true).length
+            )
+            return Update({
+                ...state,
+                areas: state.areas.map(
+                    (area, index) =>
+                        area.id !== action.areaId && area.isSavedToReport === true
+                            ? area
+                            : area.id !== action.areaId && area.isSavedToReport === false
+                                ?
+                                {
+                                    ...area,
+                                    id: area.id >= action.areaId
+                                        ? Number((area.id - 0.1).toFixed(1))
+                                        : area.id
+                                }
+                                :
+                                {
+                                    ...area,
+                                    isSavedToReport: true,
+                                    id: state.areas.filter(area => area.isSavedToReport === true).length > 0
+                                        ? state.areas.filter(area => area.isSavedToReport === true).length + 1
+                                        : 1
+                                }
+
+
+                )
+            })
 
         case "CHANGE_PROBLEM_VALUE":
             // console.log(
@@ -180,6 +265,40 @@ export const defectsReducer = (
                         area
                 )
             });
+
+        case "PUSH_FROM_PRINT":
+            // console.log(
+            //     `-- - PUSH_FROM_PRINT / action: `, action
+            // )
+            return Update({
+                ...state,
+                areas: state.areas.map(
+                    (area, index) => {
+                        return {
+                            ...area,
+                            isSavedToReport: false,
+                            id: Number(`0.${index + 1}`)
+                        }
+                    }
+                )
+            })
+
+        case "PUSH_TO_PRINT":
+            // console.log(
+            //     `-- - PUSH_TO_PRINT / action: `, action
+            // )
+            return Update({
+                ...state,
+                areas: state.areas.map(
+                    (area, index) => {
+                        return {
+                            ...area,
+                            isSavedToReport: true,
+                            id: index + 1
+                        }
+                    }
+                )
+            })
 
         case "GET_SAVED_AREA":
             return Update({
@@ -316,7 +435,7 @@ export const defectsReducer = (
 
         case "UPDATE_SAVED_AREAS":
             console.log(
-                `--- UPDATE_SAVED_AREAS/action`, action
+                `-- - UPDATE_SAVED_AREAS / action`, action
             )
             return Update({
                 ...state,
@@ -368,7 +487,8 @@ export const defectsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
-                            `${deleteArea(action.areaName)}`,
+                            `${deleteArea(action.areaName)
+                            }`,
                             {
                                 area_name: action.areaName
                             },
@@ -400,19 +520,20 @@ export const defectsReducer = (
                 },
                 async (state, dispatch) => {
                     console.log(
-                        `--- defectsReducer/POST_PROBLEMS_TO_SAVED_AREA/action`,
+                        `-- - defectsReducer / POST_PROBLEMS_TO_SAVED_AREA / action`,
                         action
                     )
                     try {
                         const response = await axios.post(
-                            `${updateAreaProblems(action.areaName)}`,
+                            `${updateAreaProblems(action.areaName)
+                            }`,
 
                             {
                                 problems: [...action.problems]
                             },
                             {
                                 headers: {
-                                    'Authorization': `Bearer ${action.token}`
+                                    'Authorization': `Bearer ${action.token} `
                                 }
                             }
                         );
@@ -440,7 +561,7 @@ export const defectsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
-                            `${updateAreaProblem(action.areaName, action.problemName)}`,
+                            `${updateAreaProblem(action.areaName, action.problemName)} `,
 
                             {
                                 // area_name: action.areaName,
@@ -448,7 +569,7 @@ export const defectsReducer = (
                             },
                             {
                                 headers: {
-                                    'Authorization': `Bearer ${action.token}`
+                                    'Authorization': `Bearer ${action.token} `
                                 }
                             }
                         );
