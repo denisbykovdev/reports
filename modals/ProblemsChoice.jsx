@@ -39,7 +39,9 @@ export default function ProblemsChoice({
                     buttonWidth={'50%'}
                     buttonColor={colors.white}
                     titleColor={colors.azul}
-                    title="חיפוש והוספת ליקוי"
+                    // title="חיפוש והוספת ליקוי"
+                    title="הוספת לחצן מהיר"
+
                     titleStyle={{
                         marginRight: 0
                     }}

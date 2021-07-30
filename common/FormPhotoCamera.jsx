@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList, ImageBackground, LogBox, YellowBox } from 'react-native';
 import { Camera } from 'expo-camera';
 import AddImage from "../icons/AddImage"
 import { useFormikContext } from 'formik';
@@ -24,8 +24,14 @@ import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 
 // import { Asset, useAssets } from 'expo-asset';
+LogBox.ignoreAllLogs()
 
-export default function FormPhotoCamera({ name, interSepter, setEdit }) {
+export default function FormPhotoCamera({
+  name,
+  interSepter,
+  setEdit
+}) {
+  LogBox.ignoreAllLogs()
 
   const cameraRef = useRef(null);
   const canvasRef = useRef();
@@ -92,6 +98,7 @@ export default function FormPhotoCamera({ name, interSepter, setEdit }) {
     if (cameraRef.current) {
       const data = await cameraRef.current.takePictureAsync();
       // const asset = await MediaLibrary.createAssetAsync(data.uri);
+
       setFieldTouched(name)
       console.log(
         "--- FormPhoto/takePhoto/val:",
@@ -105,6 +112,36 @@ export default function FormPhotoCamera({ name, interSepter, setEdit }) {
       setImages([...images, data.uri])
       isChecked && setChecked(false)
       interSepter && interSepter(name, [...values[name], data.uri])
+
+      // setFieldValue(
+      //   name, 
+      //   [
+      //     ...values[name], 
+      //     {
+      //       image: data.uri,
+      //       layer: ''
+      //     }
+      //   ]
+      // )
+      // setImages([
+      //   ...images, 
+      //   {
+      //     image: data.uri,
+      //     layer: ''
+      //   }
+      // ])
+      // isChecked && setChecked(false)
+      // interSepter && interSepter(
+      //   name, 
+      //   [
+      //     ...values[name], 
+      //     {
+      //       image: data.uri,
+      //       layer: ''
+      //     }
+      //   ]
+      // )
+
       // setFieldValue(name, [...values[name], asset.uri])
       // setImages([...images, asset.uri])
       // isChecked && setChecked(false)
@@ -164,9 +201,11 @@ export default function FormPhotoCamera({ name, interSepter, setEdit }) {
       // PIXI.Renderer
     )
 
+    // images.map(image === item ? item=uri : image)
+
     setCanvasUri(uri)
     // setFieldValue(name, [...values[name], ])
-    // setImages([...images, ])
+    setImages([...images, uri])
   };
 
   return (
@@ -238,18 +277,24 @@ export default function FormPhotoCamera({ name, interSepter, setEdit }) {
                               resizeMode="cover"
                             >
                               {/* <GLView
+                                onChange={() => onChangeAsync(item)}
                                 ref={canvasRef}
                                 style={{ flex: 1 }}
+                                // transparent={true}
                                 onContextCreate={async context => {
                                   const app = new PIXI.Application({ context });
-                                  const sprite = await PIXI.Sprite.from(
-                                    "assets-library://asset/asset.JPG?id=58462242-2F45-455E-80C4-269DD1A931AC&ext=JPG"
-                                  );
-                                  // const sprite1 = await PIXI.Sprite.from(
-                                  //   item
-                                  // );
+                                  // console.log(
+                                  //   context
+                                  // )
+                                  if (item) {
+                                    const sprite = await PIXI.Sprite.fromExpoAsync(
+                                      'http://eitanperetz.com/uploads/1GhJshNiH0.png'
+                                      // require('../assets/favicon.png')
+                                    );
+                                  }
+
                                   app.stage.addChild(sprite);
-                                  // app.stage.addChild(sprite1);
+
                                 }}
                               /> */}
                               <ExpoPixi.Sketch
@@ -259,17 +304,17 @@ export default function FormPhotoCamera({ name, interSepter, setEdit }) {
                                 strokeWidth={10}
                                 strokeAlpha={1}
                                 // transparent={true}
-                                onChange={() => onChangeAsync(item)}
+                                onChange={() => onChangeAsync()}
 
                               // onReady={async WebGLRenderingContext => {
-                              //   console.log(
-                              //     `--- FPC/ WebGLRenderingContext`,
-                              //     // typeof await WebGLRenderingContext,
-                              //     // Object.keys(canvasRef.current.stage),
-                              //     // canvasRef.current.stage.children.length,
-                              //     `file:${item.substr(item.indexOf('/') + 1)}`,
-                              //     item
-                              //   )
+                              //   // console.log(
+                              //   //   `--- FPC/ WebGLRenderingContext`,
+                              //   //   // typeof await WebGLRenderingContext,
+                              //   //   // Object.keys(canvasRef.current.stage),
+                              //   //   // canvasRef.current.stage.children.length,
+                              //   //   `file:${item.substr(item.indexOf('/') + 1)}`,
+                              //   //   item
+                              //   // )
                               //   let uri = item
 
                               //   let renderer = canvasRef.current.renderer
@@ -281,8 +326,9 @@ export default function FormPhotoCamera({ name, interSepter, setEdit }) {
                               //     renderer._update()
                               //   }
 
-                              //   let backGround = await PIXI.Sprite.fromExpoAsync(
-                              //     'http://i.imgur.com/uwrbErh.png'
+                              //   const background = await PIXI.Sprite.fromExpoAsync(
+                              //     // require('../assets/favicon.png')
+                              //     "http://eitanperetz.com/uploads/1GhJshNiH0.png"
                               //   )
 
                               //   background.rotation = 1.5708

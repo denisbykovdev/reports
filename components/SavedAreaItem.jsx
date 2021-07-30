@@ -28,9 +28,9 @@ function SavedAreaItem({ savedArea, addCheckedArea, removeCheckedArea, deleteSav
         }
     }
 
-    console.log(
-        `--- SavedAreaItem/prop/savedArea:`, savedArea
-    )
+    // console.log(
+    //     `--- SavedAreaItem/prop/savedArea:`, savedArea
+    // )
 
     return (
         <View>

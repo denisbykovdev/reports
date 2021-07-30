@@ -105,7 +105,7 @@ function SavedAreas({
 
     const [checkedAreasList, setUpdateAreasList] = useState([])
 
-    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: serverAreasState.serverdAreas })
+    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: serverAreasState.serverAreas })
 
     const { authState } = useAuth()
 
@@ -139,9 +139,9 @@ function SavedAreas({
         )
         await defectsDispatch({
             type: "ADD_SAVED_AREAS",
-            saved: checkedAreasList
+            serverAreas: checkedAreasList
         })
-        await savedAreasModalClose()
+        savedAreasModalClose()
     }
 
     const createArea = (newAreaName) => defectsDispatch({

@@ -79,9 +79,9 @@ export const serverProblemsReducer = (
                             }
 
                         );
-                        console.log(
-                            `--- serverProblemsReducer/GET_SERVER_PROBLEMS/response:`, response.data.data
-                        )
+                        // console.log(
+                        //     `--- serverProblemsReducer/GET_SERVER_PROBLEMS/response:`, response.data.data
+                        // )
 
                         dispatch({
                             type: "SET_SERVER_PROBLEMS",

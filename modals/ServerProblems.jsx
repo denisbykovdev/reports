@@ -13,9 +13,6 @@ import { responsiveWidth } from "../utils/layout"
 import Spinner from "../common/Spinner"
 import useAuth from "../hooks/useAuth"
 
-// import useReducerWithSideEffects from 'use-reducer-with-side-effects';
-// import { serverProblemsInitial, serverProblemsReducer } from "../reducers/serverProblemsReducer"
-
 export default function ServerProblems({
     savedProblemsModalclose,
     savedAreaName,
@@ -23,11 +20,6 @@ export default function ServerProblems({
     problemsChoiceCLose
 }) {
     const [problemsState, problemsDispatch] = useServerProblems()
-
-    // const [problemsState, problemsDispatch] = useReducerWithSideEffects(
-    //     serverProblemsReducer,
-    //     serverProblemsInitial
-    // );
 
     const { _, defectsDispatch } = useDefects()
 
@@ -52,14 +44,14 @@ export default function ServerProblems({
     const addSavedProblems = () => {
         if (savedAreaName) {
             defectsDispatch({
-                type: "POST_PROBLEMS_TO_SAVED_AREA",
+                type: "POST_SERVER_PROBLEMS_TO_SERVER_AREA",
                 token,
                 areaName: savedAreaName,
                 problems: checkedProblems
             })
         } else if (areaId) {
             defectsDispatch({
-                type: "ADD_PROBLEMS_TO_ARIA",
+                type: "ADD_SERVER_PROBLEMS_TO_DEFAULT_ARIA",
                 areaId,
                 problems: checkedProblems
             })
@@ -68,22 +60,12 @@ export default function ServerProblems({
         }
     }
 
-    // useEffect(() => {
-    //     problemsDispatch({
-    //         type: "GET_SERVER_PROBLEMS",
-    //         payload: token
-    //     })
-
-    //     console.log(
-    //         `--- ServerProblems/searchArray`, searchArray
-    //     )
-    // }, [])
-
     return (
         <ShadowView>
             <CommonHeader
                 close={savedProblemsModalclose}
-                title="בחירת ליקוי"
+                // title="בחירת ליקוי"
+                title="בחירת בעיה שמורה"
             />
             <Line />
 

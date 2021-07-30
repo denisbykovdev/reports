@@ -52,7 +52,7 @@ export default function ServerProblemItem({
             <View style={styles.problemHeader}>
 
                 <CommonButton
-                    title="הוספת תקן"
+                    title="הוספת"
                     borderRadius={20}
                     buttonHeight={responsiveWidth(33)}
                     borderColor={colors.darkSkyBlue}
@@ -102,7 +102,8 @@ export default function ServerProblemItem({
 
 
                 <View style={{
-                    flexDirection: 'column-reverse',
+                    // flexDirection: 'column-reverse',
+                    flexDirection: type === 1 ? 'row' : 'column-reverse',
                     alignItems: 'flex-end'
                 }}>
                     <Text>

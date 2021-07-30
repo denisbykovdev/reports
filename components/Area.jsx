@@ -18,7 +18,16 @@ import useType from "../hooks/useType"
 import ProfsProvider from "../providers/ProfsProvider"
 import FormContainer from "../common/FormContainer"
 
-export default function Area({ areaId, areaName, areaProblems, dispatch, server, isSavedToReport, setEdit }) {
+export default function Area({
+    areaId,
+    areaName,
+    areaProblems,
+    dispatch,
+    // server,
+    isSavedToReport,
+    setEdit,
+    areaSamples
+}) {
 
     const [isAreaOpen, setAreaOpen] = useState(false)
 
@@ -26,32 +35,45 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server,
 
     const [openName, setOpenName] = useState(false)
 
-    const [flagged, setUpdateFlagged] = useState([])
+    // const [flagged, setUpdateFlagged] = useState([])
+
+    const [editSample, setEditSample] = useState(null)
+
+    const [openSample, setOpenSample] = useState(false)
 
     const [problemsChoiceOpen, problemsChoiceCLose, ProblemsChoiceModal] = useModal()
 
     const { type } = useType()
 
-    const flaggedHandler = (name) => {
+    const transformServerProblemHandler = (problem) => {
+        dispatch({
+            type: "ADD_SERVER_PROBLEM_AS_DEFAULT_PROBLEM_TO_DEFAULT_ARIA",
+            areaId,
+            serverProblem: problem
+        })
+        // if (flagged.find(problem => problem.name === name)) {
+        //     setUpdateFlagged(flagged => [...flagged.filter(problem => problem.name !== name)])
+        // } else {
+        //     setUpdateFlagged(flagged => [...flagged, areaProblems.find(problem => problem.name === name)])
+        // }
+    }
 
-        if (flagged.find(problem => problem.name === name)) {
-            setUpdateFlagged(flagged => [...flagged.filter(problem => problem.name !== name)])
-        } else {
-            setUpdateFlagged(flagged => [...flagged, areaProblems.find(problem => problem.name === name)])
-        }
+    const editServerProblemHandler = (sample) => {
+        // setUpdateFlagged(flagged => [...flagged, areaProblems.find(problem => problem.name === name)])
+        setOpenSample(!openSample)
+        setEditSample(sample)
     }
 
     useEffect(() => {
         console.log(
-            "--- Area/effect/flagged:", flagged
+            "--- Area/effect/areaProblems:",
+            areaProblems,
+            areaSamples
         )
-    }, [flagged])
-
-    useEffect(() => {
-        console.log(
-            "--- Area/effect/areaProblems:", areaProblems
-        )
-    }, [])
+    }, [
+        areaProblems,
+        areaSamples
+    ])
 
     const deleteArea = () => {
         dispatch({
@@ -112,7 +134,7 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server,
                         }}>
                             <TouchableOpacity onPress={() => setOpenName(!openName)}>
                                 {
-                                    openName && !server
+                                    openName
                                         ?
                                         <FormContainer
                                             initialValues={{ area_name: '' }}
@@ -229,9 +251,10 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server,
                             }}
                         >
                             {
-                                areaProblems.map((problem, i) => problem.flagged && (
+                                areaSamples && areaSamples.map((sample, i) => (
                                     <TouchableOpacity
-                                        onPress={() => flaggedHandler(problem.name)}
+                                        onPress={() => transformServerProblemHandler(sample)}
+                                        onLongPress={() => editServerProblemHandler(sample)}
                                         key={i}
                                         style={{
                                             paddingHorizontal: responsiveWidth(22),
@@ -248,33 +271,29 @@ export default function Area({ areaId, areaName, areaProblems, dispatch, server,
                                             fontSize: 15,
                                             fontWeight: "300",
                                         }}>
-                                            {problem.name} +
+                                            {sample.name} +
                                         </Text>
                                     </TouchableOpacity>
                                 ))
                             }
-
                         </ScrollView>
-
                         {
-                            areaProblems.map((problem, i) => flagged.find(flag => flag.name === problem.name) && <Problem
-                                key={i}
-                                flagged={true}
-                                problem={problem}
+                            editSample !== null && openSample
+                            && <Problem
+                                isSample={true}
+                                problem={editSample}
                                 areaId={areaId}
                                 areaName={areaName}
                                 defectsDispatch={dispatch}
-                                serverArea={server}
+                                // serverArea={server}
                                 setEdit={setEdit}
-                            />)
+                            />
                         }
                     </>
                 )
             }
-
-
             {
-                isAreaOpen && areaProblems.map((problem, i) => !problem.flagged && (
+                isAreaOpen && areaProblems.map((problem, i) => (
                     <Problem
                         key={i}
                         problem={problem}

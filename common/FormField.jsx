@@ -54,7 +54,11 @@ export default function FormField({
           onBlur={() => setFieldTouched(name)}
           style={[
             styles.input,
-            inputStyle
+            inputStyle,
+            {
+
+              textAlignVertical: area ? 'top' : 'auto',
+            }
           ]}
           placeholder={placeholder}
           multiline={area}
@@ -98,8 +102,6 @@ const styles = StyleSheet.create({
     marginRight: responsiveWidth(10),
     fontSize: fonts.xsmall,
     fontWeight: weights.regular,
-
-    textAlignVertical: 'top',
     paddingTop: 0,
     paddingBottom: 0
   }

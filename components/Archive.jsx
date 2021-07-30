@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { shallowEqual, useSelector } from "react-redux";
 import CommonSubHeader from "../common/CommonSubHeader";
 import Line from "../common/Line";
 import useServerProblems from "../hooks/useServerProblems";
@@ -10,10 +11,12 @@ import { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 
 const Archive = () => {
-    const [problemsState, problemsDispatch] = useServerProblems()
+    // const [problemsState, problemsDispatch] = useServerProblems()
+
+    const reportsSelector = useSelector((state) => state.sagaReport.reports, shallowEqual)
 
     console.log(
-        `--- Archive/problemsState`, problemsState
+        `--- Archive/reportsSelector`, reportsSelector
     )
 
     return (
@@ -24,13 +27,13 @@ const Archive = () => {
 
             <View style={styles.archiveList}>
                 {
-                    problemsState.problems && problemsState.problems.map((problem, i) => (
+                    reportsSelector !== null && reportsSelector.map((problem, i) => (
                         <View key={i}>
                             <ArchiveItem
                                 timeStamp={problem.timeStamp}
                             />
                             {
-                                problemsState.problems.length - 1 !== i && <Line />
+                                reportsSelector.length - 1 !== i && <Line />
                             }
                         </View>
                     ))

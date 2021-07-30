@@ -17,9 +17,9 @@ const Defects = ({ areas, setEdit }) => {
 
     const [savedAreasModalOpen, savedAreasModalClose, SavedAreasModalContent] = useModal();
 
-    const { authState } = useAuth()
+    // const { authState } = useAuth()
 
-    const { token } = authState;
+    // const { token } = authState;
 
     const addArea = () => {
         defectsDispatch({
@@ -28,22 +28,10 @@ const Defects = ({ areas, setEdit }) => {
     }
 
     useEffect(() => {
-        console.log(
-            "--- Defects/useEffect/before ADD_SAVED_AREAS/areas prop:", areas
-        )
-
-        console.log(
-            "--- Defects/useEffect/defectsState.areas", defectsState.areas
-        )
-
         if (areas && areas !== null && areas.length > 0) {
             defectsDispatch({
-                type: "CLEAR_AREAS"
-            })
-
-            defectsDispatch({
-                type: "ADD_REPORTAREAS_IN_AREAS",
-                saved: areas
+                type: "ADD_REPORT_AREAS",
+                reportAreas: areas
             })
         } else {
             defectsDispatch({
@@ -55,16 +43,32 @@ const Defects = ({ areas, setEdit }) => {
     return (
         <>
             {
-                defectsState.areas && defectsState.areas.map((area, i) => (
+                defectsState.areas && defectsState.areas.filter((area, i) => area.isSavedToReport === true).map((area, i) => (
                     <Area
-                        key={i}
+                        key={area.id}
                         areaId={area.id}
                         areaName={area.area_name}
                         areaProblems={area.problems}
                         dispatch={defectsDispatch}
-                        server={area.server ? true : false}
+                        // server={area.server ? true : false}
                         isSavedToReport={area.isSavedToReport}
                         setEdit={setEdit}
+                        areaSamples={area.samples}
+                    />
+                ))
+            }
+            {
+                defectsState.areas && defectsState.areas.filter((area, i) => area.isSavedToReport === false).map((area, i) => (
+                    <Area
+                        key={area.id}
+                        areaId={area.id}
+                        areaName={area.area_name}
+                        areaProblems={area.problems}
+                        dispatch={defectsDispatch}
+                        // server={area.server ? true : false}
+                        isSavedToReport={area.isSavedToReport}
+                        setEdit={setEdit}
+                        areaSamples={area.samples}
                     />
                 ))
             }
@@ -77,8 +81,8 @@ const Defects = ({ areas, setEdit }) => {
                     buttonWidth={'50%'}
                     buttonColor={colors.white}
                     titleColor={colors.azul}
-                    // title="חיפוש והוספת איזור"
-                    title="הוספת לחצן מהיר"
+                    title="חיפוש והוספת איזור"
+                    // title="הוספת לחצן מהיר"
                     titleStyle={{
                         marginRight: 0
                     }}

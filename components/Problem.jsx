@@ -35,15 +35,15 @@ export default function Problem({
     problem,
     areaId,
     areaName,
-    serverArea,
+    // serverArea,
     defectsDispatch,
-    flagged = false,
+    isSample = false,
     setEdit
 }) {
 
     const [isProblemOpen, setProblemOpen] = useState(false)
 
-    const [isProblemForPrint, setProblemForPrint] = useState(true)
+    const [isProblemForPrint, setProblemForPrint] = useState(problem.isSavedToReport)
 
     const [problemsState, problemsDispatch] = useServerProblems()
 
@@ -67,10 +67,10 @@ export default function Problem({
             { ...values, standarts: [...problem.standarts] }
         )
         console.log(
-            "--- Problem/submitProblem/problem/flagged:",
-            flagged
+            "--- Problem/submitProblem/problem/isSample:",
+            isSample
         )
-        if (serverArea) {
+        if (isSample) {
             await defectsDispatch({
                 type: "UPDATE_PROBLEM_IN_SAVED_AREA",
                 token,
@@ -78,15 +78,22 @@ export default function Problem({
                 problemName: problem.name,
                 areaName
             })
+                &&
+                await problemsDispatch({
+                    type: "UPDATE_SERVER_PROBLEM",
+                    token,
+                    problem: { ...values, standarts: [...problem.standarts] },
+                    problemName: problem.name
+                })
         }
-        else if (flagged) {
-            await problemsDispatch({
-                type: "UPDATE_SERVER_PROBLEM",
-                token,
-                problem: { ...values, standarts: [...problem.standarts] },
-                problemName: problem.name
-            })
-        }
+        // else if (isSample) {
+        //     await problemsDispatch({
+        //         type: "UPDATE_SERVER_PROBLEM",
+        //         token,
+        //         problem: { ...values, standarts: [...problem.standarts] },
+        //         problemName: problem.name
+        //     })
+        // }
         else {
             await problemsDispatch({
                 type: "POST_SERVER_PROBLEM",
@@ -112,6 +119,28 @@ export default function Problem({
             areaId,
             problemId: problem.id
         })
+    }
+
+    const setProblemForPrintHandler = () => {
+        setProblemForPrint(!isProblemForPrint)
+
+        if (problem.isSavedToReport) {
+            defectsDispatch({
+                type: "CHANGE_PROBLEM_VALUE",
+                areaId,
+                problemId: problem.id,
+                problemKey: 'isSavedToReport',
+                problemNewValue: false
+            })
+        } else {
+            defectsDispatch({
+                type: "CHANGE_PROBLEM_VALUE",
+                areaId,
+                problemId: problem.id,
+                problemKey: 'isSavedToReport',
+                problemNewValue: true
+            })
+        }
     }
 
     return (
@@ -149,11 +178,12 @@ export default function Problem({
                     <View style={[styles.problemHeaderOptionals, {
                         justifyContent: type === 2 ? 'center' : 'flex-start'
                     }]}>
-                        <TouchableOpacity
+                        {isSample === false && <TouchableOpacity
                             onPress={() => deleteProblem()}
                         >
                             <Basket />
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
+
                     </View>
 
                     <View style={[styles.problemHeaderActions, {
@@ -163,19 +193,20 @@ export default function Problem({
                         <View style={[styles.problemHeaderActionsButtons, {
                             marginBottom: type === 2 ? 0 : responsiveWidth(8)
                         }]}>
-                            <TouchableOpacity
-                                onPress={() => setProblemForPrint(!isProblemForPrint)}
+                            {isSample === false && <TouchableOpacity
+                                onPress={() => setProblemForPrintHandler()}
                                 style={[
                                     styles.tickContainer,
                                     {
-                                        backgroundColor: isProblemForPrint ? colors.paleGrayBg : colors.white
+                                        backgroundColor: problem.isSavedToReport ? colors.paleGrayBg : colors.white
                                     }
                                 ]}
                             >
                                 {
-                                    isProblemForPrint && <Tick />
+                                    problem.isSavedToReport && <Tick />
                                 }
                             </TouchableOpacity>
+                            }
                             <TouchableOpacity
                                 onPress={() => setProblemOpen(!isProblemOpen)}
                                 style={{
@@ -195,7 +226,7 @@ export default function Problem({
 
                                 <TouchableOpacity onPress={() => setOpenName(!openName)}>
                                     {
-                                        openName && flagged === false
+                                        openName && isSample === false
                                             ? <FormField
                                                 // area={true}
                                                 placeholder={problem.name}
@@ -216,12 +247,16 @@ export default function Problem({
                                             >{problem.name}</Text>
                                     }
                                 </TouchableOpacity>
-
-
-                                <Text
-                                    style={styles.problemHeaderActionsId}
-                                > | {areaId}.{problem.id}</Text>
-
+                                {
+                                    isSample === false
+                                        ? <Text
+                                            style={styles.problemHeaderActionsId}
+                                        > | {areaId}.{problem.id}
+                                        </Text>
+                                        : <Text
+                                            style={styles.problemHeaderActionsId}
+                                        > + </Text>
+                                }
                             </View>
                         </TouchableWithoutFeedback>
 
