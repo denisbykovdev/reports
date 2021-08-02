@@ -138,7 +138,7 @@ function SavedAreas({
             checkedAreasList
         )
         await defectsDispatch({
-            type: "ADD_SAVED_AREAS",
+            type: "ADD_SERVER_AREAS",
             serverAreas: checkedAreasList
         })
         savedAreasModalClose()
@@ -149,8 +149,8 @@ function SavedAreas({
         areaName: newAreaName
     })
 
-    const deleteSavedArea = (areaName) => {
-        defectsDispatch({
+    const deleteSavedArea = async (areaName) => {
+        await defectsDispatch({
             type: "POST_SAVED_AREA_TO_DELETE",
             token,
             areaName

@@ -90,14 +90,15 @@ export default function Standarts({
                         />
                     )
                     : standartsState && standartsState.standarts !== null && standartsState.standarts.map((standart, i) =>
-                        standartsState.fetching || standartsState.posting
-                            ? <Spinner />
-                            : <StandartItem
-                                key={i}
-                                standart={standart}
-                                addCheckedStandart={addCheckedStandart}
-                                removeCheckedStandart={removeCheckedStandart}
-                            />
+                        // standartsState.fetching || standartsState.posting
+                        //     ? <Spinner />
+                        //     : 
+                        <StandartItem
+                            key={i}
+                            standart={standart}
+                            addCheckedStandart={addCheckedStandart}
+                            removeCheckedStandart={removeCheckedStandart}
+                        />
                     )
             }
 
@@ -211,6 +212,10 @@ const StandartItem = ({
                     {
                         standart.image !== null && standart.image.length > 1
                             ? <Image
+                                style={{
+                                    height: responsiveWidth(73),
+                                    width: responsiveWidth(68),
+                                }}
                                 source={{ uri: `data:image/png;base64,${standart.image}` }}
                             />
                             : <AltImage

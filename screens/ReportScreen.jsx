@@ -110,7 +110,8 @@ const ReportScreen = ({ route }) => {
                 defectsState.areas,
                 defectsState.notes
             ))
-            autoMod === true && setAutoId(Number(values.id))
+            // autoMod === true && 
+            setAutoId(Number(values.id))
         } else if (route.params.reportId === null && autoId !== null) {
             dispatch(watchUpdateReport(
                 token,
@@ -152,7 +153,7 @@ const ReportScreen = ({ route }) => {
             case offsetX === 0: return <Details />;
             case offsetX === viewWidth: return <Defects setEdit={setEdit} areas={route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null} />;
             case offsetX === (viewWidth) * 2: return <Resume notes={route.params && route.params.report && route.params.report.notes.length >= 0 ? route.params.report.notes : null} />;
-            case offsetX >= (viewWidth) * 3: return <Archive />;
+            case offsetX >= (viewWidth) * 3: return <Archive reportId={route.params && route.params.report && route.params.report.id !== null && route.params.report.id} />;
         }
     }
 
@@ -161,7 +162,7 @@ const ReportScreen = ({ route }) => {
             case "details": return <Details />;
             case "defects": return <Defects setEdit={setEdit} areas={route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null} />;
             case "resume": return <Resume notes={route.params && route.params.report && route.params.report.notes.length >= 0 ? route.params.report.notes : null} />;
-            case "archive": return <Archive />;
+            case "archive": return <Archive reportId={route.params && route.params.report && route.params.report.id !== null && route.params.report.id} />;
             default: return <Details />;
         }
     }
@@ -190,7 +191,7 @@ const ReportScreen = ({ route }) => {
         if (!isChecked) {
             formikRef.current.submitForm() && setAutoMod(true)
         }
-    }, 60000);
+    }, 120000);
 
     return (
         <SafeView>

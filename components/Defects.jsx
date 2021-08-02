@@ -30,6 +30,10 @@ const Defects = ({ areas, setEdit }) => {
     useEffect(() => {
         if (areas && areas !== null && areas.length > 0) {
             defectsDispatch({
+                type: "CLEAR_AREAS"
+            })
+
+            defectsDispatch({
                 type: "ADD_REPORT_AREAS",
                 reportAreas: areas
             })

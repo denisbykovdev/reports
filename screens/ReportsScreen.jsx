@@ -84,7 +84,6 @@ function ReportsScreen({ route, navigation }) {
 
       // setQueues([...networkSelector.actionQueue])
 
-
       networkSelector.actionQueue.map(action => {
         if (action.type === 'WATCH_POST_REPORT') {
           dispatch(watchPostReport(
@@ -109,7 +108,6 @@ function ReportsScreen({ route, navigation }) {
         }
       }
       );
-
     }
   }, [networkSelector.isConnected, reportsSelector])
 

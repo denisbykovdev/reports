@@ -4,6 +4,7 @@ import { watchPostReportSaga } from './watchPostReportSaga';
 import { watchUpdateReportSaga } from './watchUpdateReportSaga';
 import { networkSaga } from 'react-native-offline';
 import { watchDeleteReportSaga } from './watchDeleteReportSaga';
+import { watchPrintReportSaga } from './watchPrintReportSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -11,6 +12,7 @@ export default function* rootSaga() {
         fork(watchPostReportSaga),
         fork(watchUpdateReportSaga),
         fork(watchDeleteReportSaga),
-        fork(watchGetReportsSaga)
+        fork(watchGetReportsSaga),
+        fork(watchPrintReportSaga)
     ]);
 };

@@ -9,18 +9,20 @@ import CommonHeader from "../common/CommonHeader"
 import Line from "../common/Line"
 import ShadowView from "../common/ShadowView"
 import FormErrorMessage from "../common/FormErrorMessage";
+import { useDispatch } from 'react-redux'
+import useAuth from "../hooks/useAuth"
+import { watchPrintReport } from '../actionCreators/sagaReport'
 
 const PrintModal = ({ close, reportId }) => {
     const [activeProf, RenderRadioPairProf] = useRadioPair(profDetails, withProfRegion)
     const [activeExp, RenderRadioPairExp] = useRadioPair(expDetails, withExpenses)
     // const [activePrint, RenderRadioPairPrint] = useRadioPair(printDetails, withPdf)
 
-    console.log(
-        "---PrintModal/printHandler:",
-        activeProf,
-        activeExp,
-        // activePrint
-    )
+    const dispatch = useDispatch()
+
+    const { authState } = useAuth()
+
+    const { token } = authState
 
     const printHandler = () => {
         const urlConcat = `${activeProf}${activeExp}`
@@ -31,10 +33,12 @@ const PrintModal = ({ close, reportId }) => {
             "---PrintModal/printHandler/urlConcat:", urlConcat
         )
 
-        // await printDispatch({
-        //     type: "PRINT",
-        //     printUrl: urlConcat
-        // })
+        dispatch(watchPrintReport(
+            token,
+            reportId,
+            urlConcat
+        ))
+
         close()
     }
 

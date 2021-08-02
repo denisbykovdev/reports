@@ -488,6 +488,8 @@ export const createStandart = standartsStore
 export const getAllStandarts = `${standartsStore}/all`
 export const deleteStandart = (standartId) => `${standartsStore}/${standartId}/delete`
 
+export const printEndpoint = (reportId, endpoint) => `${api}/${reportId}/${endpoint}word`
+
 //print modal endpoints
 export const withProfRegion = `withProfRegion/`
 export const withProf = `withProf/`
@@ -496,3 +498,5 @@ export const withFree = `withFree/`
 
 // export const withPdf = `withPdf/`
 // export const withWord = `withWord/`
+
+export const editPhoto = `${api}/editPhoto`

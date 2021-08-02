@@ -17,7 +17,7 @@ const FormImagePicker = ({ name, style }) => {
         values
     } = useFormikContext();
 
-    const {isChecked, setChecked} = useChecked()
+    const { isChecked, setChecked } = useChecked()
 
     const pickImage = async () => {
         if (Platform.OS !== 'web') {
@@ -31,9 +31,9 @@ const FormImagePicker = ({ name, style }) => {
                     quality: 1,
                     base64: true
                 });
-        
-                console.log(result.base64);
-        
+
+                // console.log(result.base64);
+
                 if (result) {
                     setImage(result.base64);
                     setFieldTouched(name)
@@ -44,7 +44,7 @@ const FormImagePicker = ({ name, style }) => {
 
             // alert('Sorry, we need camera roll permissions to make this work!');
         }
-       
+
     };
 
     return (

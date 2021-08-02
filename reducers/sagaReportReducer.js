@@ -101,6 +101,24 @@ export const sagaReportReducer = (state = sagaReportInitial,
                 posting: false,
                 error: action.payload.error
             }
+
+        case "PRINT_REPORT_START":
+            return {
+                ...state,
+                posting: true
+            }
+        case "PRINT_REPORT_SUCCESS":
+            return {
+                ...state,
+                posting: false,
+                reports: action.payload.reports
+            }
+        case "PRINT_REPORT_FAILURE":
+            return {
+                ...state,
+                posting: false,
+                error: action.payload.error
+            }
         default:
             return state;
     }

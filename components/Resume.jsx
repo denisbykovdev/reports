@@ -10,7 +10,7 @@ import Basket from "../icons/Basket";
 import Copy from "../icons/Copy";
 import Tick from "../icons/Tick";
 import colors from "../utils/colors";
-import { responsiveHeight, responsiveWidth } from "../utils/layout";
+import { responsiveWidth } from "../utils/layout";
 import useModal from "../hooks/useModal"
 import Delete from "../modals/Delete";
 import Clipboard from 'expo-clipboard';
@@ -202,7 +202,7 @@ const NoteItem = ({
                             <FormField
                                 area={true}
                                 style={{
-                                    height: responsiveHeight(103),
+                                    height: responsiveWidth(103),
                                     textAlign: 'right',
                                     width: '90%',
                                     // paddingBottom: responsiveWidth(24)
@@ -210,7 +210,7 @@ const NoteItem = ({
                                 inputStyle={{
                                     marginEnd: 0,
                                     padding: 0
-                                    // height: responsiveHeight(103),
+                                    // height: responsiveWidth(103),
                                     // textAlign: 'right',
                                     // width: '90%'
                                 }}
@@ -248,18 +248,18 @@ const NoteItem = ({
                     && (
                         // <View
                         //     style={{
-                        //         height: responsiveHeight(103)
+                        //         height: responsiveWidth(103)
                         //     }}
                         // >
                         <FormField
                             area={true}
                             style={{
-                                height: responsiveHeight(103),
+                                height: responsiveWidth(103),
                                 textAlign: 'right',
                                 width: '90%',
                                 marginBottom: responsiveWidth(22)
                             }}
-                            // height={responsiveHeight(103)}
+                            // height={responsiveWidth(103)}
                             inputStyle={{
                                 marginEnd: 0
                             }}
@@ -279,7 +279,7 @@ const NoteItem = ({
 const styles = StyleSheet.create({
     notesContainer: {
         paddingHorizontal: responsiveWidth(30),
-        paddingBottom: responsiveHeight(22)
+        paddingBottom: responsiveWidth(22)
     },
     tickContainer: {
         height: responsiveWidth(24),

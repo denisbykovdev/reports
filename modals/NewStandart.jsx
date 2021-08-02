@@ -43,7 +43,10 @@ export default function NewStandart({
             <FormContainer
                 initialValues={{
                     text: '',
-                    image: ''
+                    image: '',
+                    profession: '',
+                    fault: '',
+                    whatToDo: ''
                 }}
                 onSubmit={
                     (values) => submitNewStandart(values)
@@ -72,7 +75,7 @@ export default function NewStandart({
                     }}
                 />
                 <FormField
-                    name="falut"
+                    name="fault"
                     area={true}
                     placeholder="תקלה"
                     style={{

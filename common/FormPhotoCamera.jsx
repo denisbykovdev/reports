@@ -1,15 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList, ImageBackground, LogBox, YellowBox } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+  LogBox
+} from 'react-native';
 import { Camera } from 'expo-camera';
-import AddImage from "../icons/AddImage"
 import { useFormikContext } from 'formik';
 import AltImage from '../icons/AltImage';
-import { responsiveHeight, responsiveWidth } from '../utils/layout';
+import { responsiveWidth } from '../utils/layout';
 import colors from '../utils/colors';
 import Remove from '../icons/Remove';
 import Add from '../icons/Add';
 import Edit from '../icons/Edit';
-import Signature from 'react-native-signature-canvas';
 import useChecked from '../hooks/useChecked';
 import useType from '../hooks/useType';
 import Carousel from 'react-native-snap-carousel';
@@ -22,6 +28,9 @@ import { GLView } from 'expo-gl';
 import * as ExpoPixi from 'expo-pixi';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
+
+import { captureRef, releaseCapture } from "react-native-view-shot";
+import Spinner from './Spinner';
 
 // import { Asset, useAssets } from 'expo-asset';
 LogBox.ignoreAllLogs()
@@ -36,8 +45,9 @@ export default function FormPhotoCamera({
   const cameraRef = useRef(null);
   const canvasRef = useRef();
   const carouselRef = useRef();
+  const snapShotRef = useRef();
 
-  const { type } = useType()
+  // const { type } = useType()
 
   const {
     setFieldValue,
@@ -48,7 +58,9 @@ export default function FormPhotoCamera({
   const { isChecked, setChecked } = useChecked()
 
   const [hasPermission, setHasPermission] = useState(null);
+
   // const [type, setType] = useState(Camera.Constants.Type.back);
+
   const [openCam, setOpenCam] = useState(false)
 
   const [isCanvas, setCanvas] = useState(false)
@@ -57,19 +69,13 @@ export default function FormPhotoCamera({
 
   const [selected, setSelected] = useState(0)
 
-  const [canvasUri, setCanvasUri] = useState()
-
-  // const [assets, error] = useAssets()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     (async () => {
-      // console.log("--- FormPhoto/status:", cameraRef.current)
-
       const { status } = await Camera.requestPermissionsAsync();
 
       if (status === 'denied') await Camera.requestCameraPermissionAsync()
-
-      // const { status } = await Camera.requestCameraPermissionsAsync();
 
       console.log("--- FormPhoto/status:", status)
 
@@ -77,87 +83,25 @@ export default function FormPhotoCamera({
     })();
   }, []);
 
-  // const userPhotoDir = FileSystem.documentDirectory + 'userPhotoes/'
-
-  // useEffect(() => {
-  //   (
-  //     async () => {
-
-  //       const dir = await FileSystem.getInfoAsync(userPhotoDir)
-  //       console.log(
-  //         `--- FPC/effect/dir`, dir
-  //       )
-  //       if (!dir.exists) {
-  //         await FileSystem.makeDirectoryAsync(userPhotoDir)
-  //       }
-  //     }
-  //   )()
-  // }, [])
-
   const takePhoto = async () => {
     if (cameraRef.current) {
-      const data = await cameraRef.current.takePictureAsync();
-      // const asset = await MediaLibrary.createAssetAsync(data.uri);
+      setLoading(true)
+      const data = await cameraRef.current.takePictureAsync({
+        base64: true,
+        skipProcessing: true
+      });
 
       setFieldTouched(name)
-      console.log(
-        "--- FormPhoto/takePhoto/val:",
-        values[name],
-        "--- FormPhoto/takePhoto/data:",
-        data.uri,
-        // "--- FormPhoto/takePhoto/asset:",
-        // asset.uri
-      )
-      setFieldValue(name, [...values[name], data.uri])
-      setImages([...images, data.uri])
+
+      setImages([...images, data['base64']])
+
+      setFieldValue(name, [...values[name], data['base64']])
+
       isChecked && setChecked(false)
-      interSepter && interSepter(name, [...values[name], data.uri])
 
-      // setFieldValue(
-      //   name, 
-      //   [
-      //     ...values[name], 
-      //     {
-      //       image: data.uri,
-      //       layer: ''
-      //     }
-      //   ]
-      // )
-      // setImages([
-      //   ...images, 
-      //   {
-      //     image: data.uri,
-      //     layer: ''
-      //   }
-      // ])
-      // isChecked && setChecked(false)
-      // interSepter && interSepter(
-      //   name, 
-      //   [
-      //     ...values[name], 
-      //     {
-      //       image: data.uri,
-      //       layer: ''
-      //     }
-      //   ]
-      // )
+      interSepter && interSepter(name, [...values[name], data['base64']])
 
-      // setFieldValue(name, [...values[name], asset.uri])
-      // setImages([...images, asset.uri])
-      // isChecked && setChecked(false)
-      // interSepter && interSepter(name, [...values[name], asset.uri])
-
-      // if (data.uri) {
-      //   await FileSystem.copyAsync({
-      //     from: data.uri,
-      //     to: `${userPhotoDir}copy.jpg`,
-      //   });
-
-      //   const dirFilled = await FileSystem.getInfoAsync(userPhotoDir)
-      //   console.log(
-      //     `--- FPC/takePhoto/dirFilled`, dirFilled
-      //   )
-      // }
+      setLoading(false)
 
       setOpenCam(false)
     }
@@ -176,41 +120,30 @@ export default function FormPhotoCamera({
   const editPhoto = () => {
     setCanvas(!isCanvas)
 
-    console.log(
-      `--- FPC/editPhoto/prev:`,
-      images
-    )
-
     setEdit(isCanvas)
   }
 
-  // const onTouchThumbnail = (index) => {
-  //   setSelected(index)
-  //   carouselRef?.current?.snapToItem(index)
-  // }
-
-  const onChangeAsync = async (item) => {
-    const { uri } = await canvasRef.current.takeSnapshotAsync();
+  const onChangeAsync = async () => {
+    const result = await captureRef(snapShotRef, {
+      result: 'base64',
+      // height: pixels,
+      // width: pixels,
+      quality: 1,
+      format: 'png',
+    });
 
     console.log(
       `--- FPC/onChangeAsync:`,
-      uri,
-      item,
-      // Object.keys(canvasRef.current.stage)
-      // Renderer,
-      // PIXI.Renderer
+      result
     )
 
-    // images.map(image === item ? item=uri : image)
+    setImages([...images.map((image, i) => i === carouselRef?.current?.currentIndex ? result : image)])
 
-    setCanvasUri(uri)
-    // setFieldValue(name, [...values[name], ])
-    setImages([...images, uri])
+    setFieldValue(name, images)
   };
 
   return (
     <View style={styles.formPhotoCameraContainer}>
-
       <View style={[
         styles.formPhotoContainer,
         {
@@ -235,17 +168,8 @@ export default function FormPhotoCamera({
                     itemWidth={responsiveWidth(239)}
                     firstItem={images.length - 1}
                     onSnapToItem={(index) => {
-                      console.log(
-                        `--- FPC/onSnapToItem`,
-                        index,
-                        carouselRef?.current?.currentIndex
-                      )
                       setSelected(index)
                     }}
-
-                    // slideStyle={{
-                    //   flexDirection: 'column-reverse'
-                    // }}
                     scrollEnabled={!isCanvas}
                     renderItem={({ item, index }) => (
                       <View key={index} style={styles.photoContainer}>
@@ -253,7 +177,6 @@ export default function FormPhotoCamera({
                           !isCanvas
                             ?
                             <>
-
                               <TouchableOpacity
                                 onPress={() => carouselRef.current.snapToPrev()}
                                 style={[styles.photoArrow, styles.photoArrowLeft]}
@@ -261,9 +184,9 @@ export default function FormPhotoCamera({
 
                               <Image
                                 style={styles.formPhoto}
-                                source={{ uri: item }}
+                                // source={{ uri: item }}
+                                source={{ uri: `data:image/png;base64,${item}` }}
                               />
-
                               <TouchableOpacity
                                 onPress={() => carouselRef.current.snapToNext()}
                                 style={[styles.photoArrow, styles.photoArrowRight]}
@@ -272,73 +195,20 @@ export default function FormPhotoCamera({
                             </>
                             :
                             <ImageBackground
+                              ref={snapShotRef}
+                              collapsable={false}
                               style={styles.formPhoto}
-                              source={{ uri: item }}
+                              // source={{ uri: item }}
+                              source={{ uri: `data:image/png;base64,${item}` }}
                               resizeMode="cover"
                             >
-                              {/* <GLView
-                                onChange={() => onChangeAsync(item)}
-                                ref={canvasRef}
-                                style={{ flex: 1 }}
-                                // transparent={true}
-                                onContextCreate={async context => {
-                                  const app = new PIXI.Application({ context });
-                                  // console.log(
-                                  //   context
-                                  // )
-                                  if (item) {
-                                    const sprite = await PIXI.Sprite.fromExpoAsync(
-                                      'http://eitanperetz.com/uploads/1GhJshNiH0.png'
-                                      // require('../assets/favicon.png')
-                                    );
-                                  }
-
-                                  app.stage.addChild(sprite);
-
-                                }}
-                              /> */}
                               <ExpoPixi.Sketch
                                 style={styles.formPhoto}
                                 ref={canvasRef}
                                 strokeColor="black"
-                                strokeWidth={10}
-                                strokeAlpha={1}
-                                // transparent={true}
+                                strokeWidth={7}
+                                strokeAlpha={3}
                                 onChange={() => onChangeAsync()}
-
-                              // onReady={async WebGLRenderingContext => {
-                              //   // console.log(
-                              //   //   `--- FPC/ WebGLRenderingContext`,
-                              //   //   // typeof await WebGLRenderingContext,
-                              //   //   // Object.keys(canvasRef.current.stage),
-                              //   //   // canvasRef.current.stage.children.length,
-                              //   //   `file:${item.substr(item.indexOf('/') + 1)}`,
-                              //   //   item
-                              //   // )
-                              //   let uri = item
-
-                              //   let renderer = canvasRef.current.renderer
-
-                              //   let stage = canvasRef.current.stage
-
-                              //   if (stage.children.length > 0) {
-                              //     stage.removeChildren()
-                              //     renderer._update()
-                              //   }
-
-                              //   const background = await PIXI.Sprite.fromExpoAsync(
-                              //     // require('../assets/favicon.png')
-                              //     "http://eitanperetz.com/uploads/1GhJshNiH0.png"
-                              //   )
-
-                              //   background.rotation = 1.5708
-                              //   background.width = renderer.height
-                              //   background.height = renderer.width
-                              //   background.position.set(renderer.width, 0)
-
-                              //   stage.addChild(background);
-                              //   renderer._update();
-                              // }}
                               />
                             </ImageBackground>
                         }
@@ -386,8 +256,6 @@ export default function FormPhotoCamera({
               </TouchableOpacity>
             </>
           }
-
-
           <TouchableOpacity
             style={styles.formPhotoCameraButtonContainer}
             onPress={() => {
@@ -461,3 +329,107 @@ const styles = StyleSheet.create({
     transform: [{ rotate: '90deg' }]
   }
 })
+
+{/* <GLView
+                                onChange={() => onChangeAsync(item)}
+                                ref={canvasRef}
+                                style={{ flex: 1 }}
+                                transparent={false}
+                                onContextCreate={async context => {
+                                  const app = new PIXI.Application({ context });
+
+
+                                  const sprite = await PIXI.Sprite.fromExpoAsync(
+                                    `file:${item.substr(item.indexOf('/') + 1)}`,
+                                    // require('../assets/favicon.png')
+                                  );
+
+
+                                  app.stage.addChild(sprite);
+
+                                }}
+                              /> */}
+
+                                    // onReady={async WebGLRenderingContext => {
+                              //   console.log(
+                              //     `--- FPC/ WebGLRenderingContext`,
+                              //     // `file:${item.substr(item.indexOf('/') + 1)}`,
+                              //   )
+                              //   let uri = item
+
+                              //   let renderer = canvasRef.current.renderer
+
+                              //   let stage = canvasRef.current.stage
+
+                              //   if (stage.children.length > 0) {
+                              //     stage.removeChildren()
+                              //     renderer._update()
+                              //   }
+
+                              //   // var tex = new PIXI.Texture.fromLoader(item);
+
+                              //   const background = await PIXI.Sprite.fromExpoAsync(
+                              //     // require('../assets/favicon.png')
+                              //     uri
+                              //   )
+
+                              //   background.rotation = 1.5708
+                              //   background.width = renderer.height
+                              //   background.height = renderer.width
+                              //   background.position.set(renderer.width, 0)
+
+                              //   stage.addChild(background);
+                              //   renderer._update();
+                              // }}
+
+
+  // const USER_PHOTO_DIR = FileSystem.documentDirectory + 'photos';
+
+  // const handleImageSave = async photo => {
+  //   const imageName = `${Date.now()}.jpg`;
+  //   const photoSource = `${USER_PHOTO_DIR}/${imageName}`;
+
+  //   await FileSystem.copyAsync({
+  //     from: photo.uri,
+  //     to: photoSource,
+  //   });
+
+  //   const image = {
+  //     id: 'imgid-123',
+  //     imageSrc: photoSource,
+  //     createdAt: Date.now(),
+  //   };
+
+  //   return image;
+  // }
+
+     // const dirInfo = await FileSystem.getInfoAsync(USER_PHOTO_DIR);
+      // if (!dirInfo.exists) {
+      //   console.log("directory doesn't exist, creating...");
+      //   await FileSystem.makeDirectoryAsync(USER_PHOTO_DIR, { intermediates: true });
+      // }
+
+      // const image = await handleImageSave(data)
+
+        // const onTouchThumbnail = (index) => {
+  //   setSelected(index)
+  //   carouselRef?.current?.snapToItem(index)
+  // }
+
+      // const { uri } = await canvasRef.current.takeSnapshotAsync(
+    //   {
+    //     x: '100%',
+    //     y: '100%',
+    //     width: '100%',
+    //     height: '100%'
+    //   }
+    // );
+
+    // let layer = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' });
+
+    // let photo = await FileSystem.readAsStringAsync(item, { encoding: 'base64' });
+
+    // const targetPixelCount = 1080; // If you want full HD pictures
+    // const pixelRatio = PixelRatio.get(); // The pixel ratio of the device
+    // // pixels * pixelratio = targetPixelCount, so pixels = targetPixelCount / pixelRatio
+    // const pixels = targetPixelCount / pixelRatio;

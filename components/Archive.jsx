@@ -10,13 +10,18 @@ import fonts from "../utils/fonts";
 import { responsiveWidth } from "../utils/layout";
 import weights from "../utils/weights";
 
-const Archive = () => {
+const Archive = ({
+    reportId
+}) => {
     // const [problemsState, problemsDispatch] = useServerProblems()
 
-    const reportsSelector = useSelector((state) => state.sagaReport.reports, shallowEqual)
+    const reportsSelector = reportId !== undefined && useSelector((state) => state.sagaReport.reports.filter(report => report.id === reportId)[0], shallowEqual)
 
     console.log(
-        `--- Archive/reportsSelector`, reportsSelector
+        `--- Archive/reportsSelector`,
+        reportsSelector,
+        // reportsSelector.timeStamp,
+        reportId
     )
 
     return (
@@ -27,16 +32,26 @@ const Archive = () => {
 
             <View style={styles.archiveList}>
                 {
-                    reportsSelector !== null && reportsSelector.map((problem, i) => (
-                        <View key={i}>
+                    Array.isArray(reportsSelector.timeStamp)
+                        ?
+                        reportsSelector.timeStamp.map((data, i) => (
+                            <View key={i}>
+                                <ArchiveItem
+                                    timeStamp={data}
+                                />
+                                {
+                                    reportsSelector.timeStamp.length - 1 !== i && <Line />
+                                }
+                            </View>
+                        ))
+                        :
+                        <View>
                             <ArchiveItem
-                                timeStamp={problem.timeStamp}
+                                timeStamp={reportsSelector.timeStamp}
                             />
-                            {
-                                reportsSelector.length - 1 !== i && <Line />
-                            }
+                            <Line />
                         </View>
-                    ))
+
                 }
             </View>
         </View>

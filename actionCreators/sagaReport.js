@@ -197,3 +197,36 @@ export const deleteReportFailure = (error) => ({
     //     retry: true,
     // }
 })
+
+export const watchPrintReport = (
+    token,
+    reportId,
+    endpoint
+) => ({
+    type: "WATCH_PRINT_REPORT",
+    payload: {
+        token,
+        reportId,
+        endpoint
+    },
+    meta: {
+        retry: true,
+    }
+})
+export const printReportStart = () => ({
+    type: "PRINT_REPORT_START"
+})
+export const printReportSuccess = (
+    reports
+) => ({
+    type: "PRINT_REPORT_SUCCESS",
+    payload: {
+        reports
+    }
+})
+export const printReportFailure = (error) => ({
+    type: "PRINT_REPORT_ERROR",
+    payload: {
+        error
+    }
+})

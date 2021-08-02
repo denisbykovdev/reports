@@ -9,23 +9,23 @@ import { View } from "react-native"
 const useRadioPair = (pairArray, init) => {
     const [active, setActive] = useState(init)
 
-    console.log(
-        "*** useRadioPair/init:", init
-    )
+    // console.log(
+    //     "*** useRadioPair/init:", init
+    // )
 
-    const RenderRadioPair = ({radioPairContainerStyle}) => {
+    const RenderRadioPair = ({ radioPairContainerStyle }) => {
         return (
             <View style={radioPairContainerStyle}>
                 {
                     pairArray.map(radio => {
-                        console.log(
-                            "*** useRadioPair/pairArray/radio:",
-                            Object.values(radio)[1]
-                        )
+                        // console.log(
+                        //     "*** useRadioPair/pairArray/radio:",
+                        //     Object.values(radio)[1]
+                        // )
                         return (
                             <View key={radio.label} >
                                 <CommonButton
-                                    buttonHeight={responsiveHeight(40)}
+                                    buttonHeight={responsiveWidth(40)}
                                     borderRadius={100}
                                     buttonColor={
                                         active === Object.values(radio)[1] ? colors.azul : colors.white

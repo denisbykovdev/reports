@@ -71,7 +71,6 @@ export const defectsReducer = (
     state = defectsInitial,
     action
 ) => {
-
     switch (action.type) {
         case "CLEAR_AREAS":
             return Update({
@@ -349,7 +348,7 @@ export const defectsReducer = (
                         );
 
                         dispatch({
-                            type: "GET_SAVED_AREA",
+                            type: "UPDATE_SAVED_AREAS",
                             savedAreas: response.data.data
                         })
                     } catch (error) {
@@ -363,7 +362,10 @@ export const defectsReducer = (
 
         case "ADD_REPORT_AREAS":
             console.log(
-                "*** ADD_REPORT_AREAS/action:", action
+                "*** ADD_REPORT_AREAS/action:",
+                action,
+                `*** state.areas:`,
+                state.areas
             )
             return Update({
                 ...state,
@@ -376,7 +378,7 @@ export const defectsReducer = (
                                 ? area.problems.map((problem, i) => {
                                     return {
                                         ...problem,
-                                        id: area.problems.length === 0 ? 1 + i : area.problems.length + 1 + i
+                                        id: i + 1
                                     }
                                 })
                                 : [],
@@ -389,7 +391,7 @@ export const defectsReducer = (
 
         case "ADD_SERVER_AREAS":
             console.log(
-                "*** defectsReducer/ADD_SERVER_AREAS/action:", action
+                "*** ADD_SERVER_AREAS/action:", action
             )
             return Update({
                 ...state,
@@ -417,7 +419,7 @@ export const defectsReducer = (
 
         case "UPDATE_SAVED_AREAS":
             console.log(
-                `-- - UPDATE_SAVED_AREAS / action`, action
+                `*** UPDATE_SAVED_AREAS/action:`, action
             )
             return Update({
                 ...state,
@@ -572,6 +574,9 @@ export const defectsReducer = (
             );
 
         case "ADD_PROBLEMS_TO_ARIA":
+            console.log(
+                "*** ADD_PROBLEMS_TO_ARIA/action:", action
+            )
             return Update({
                 ...state,
                 areas: state.areas.map(area => area.id === action.areaId ? {
@@ -590,6 +595,9 @@ export const defectsReducer = (
             });
 
         case "ADD_SERVER_PROBLEMS_TO_DEFAULT_ARIA":
+            console.log(
+                "*** ADD_SERVER_PROBLEMS_TO_DEFAULT_ARIA/action:", action
+            )
             return Update({
                 ...state,
                 areas: state.areas.map(area => area.id === action.areaId ? {
@@ -609,9 +617,9 @@ export const defectsReducer = (
             });
 
         case "ADD_SERVER_PROBLEM_AS_DEFAULT_PROBLEM_TO_DEFAULT_ARIA":
-            // console.log(
-            //     `--- ADD_SERVER_PROBLEM_AS_DEFAULT_PROBLEM_TO_DEFAULT_ARIA/action:`, action
-            // )
+            console.log(
+                `*** ADD_SERVER_PROBLEM_AS_DEFAULT_PROBLEM_TO_DEFAULT_ARIA/action:`, action
+            )
             return Update({
                 ...state,
                 areas: state.areas.map(area => area.id === action.areaId ? {
@@ -627,6 +635,9 @@ export const defectsReducer = (
             });
 
         case "ADD_STANDARTS_TO_PROBLEM":
+            console.log(
+                "*** ADD_STANDARTS_TO_PROBLEM/action:", action
+            )
             return Update({
                 ...state,
                 areas: state.areas.map(
