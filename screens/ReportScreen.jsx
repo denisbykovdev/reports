@@ -28,7 +28,7 @@ import FormField from "../common/FormField"
 import weights from "../utils/weights"
 import useChecked from "../hooks/useChecked"
 import stringSlicer from "../helpers/stringSlicer"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { watchPostReport, watchUpdateReport } from "../actionCreators/sagaReport"
 import { ReportSchema } from "../constants/validationSchema"
 import Tick from "../icons/Tick"
@@ -87,23 +87,26 @@ const ReportScreen = ({ route }) => {
 
     const [autoMod, setAutoMod] = useState(false)
 
-    const [autoId, setAutoId] = useState(null, 'autoIdState')
+    const [autoId, setAutoId] = useState(null)
 
     const [noEdit, setEdit] = useState(true)
 
     const { token } = authState
 
-    const submitReport = async (values) => {
+    const reportSelector = route.params.reportId !== null && useSelector(state => state.sagaReport.reports.filter(report => report.id === route.params.reportId)[0])
+
+    useEffect(() => {
         console.log(
-            `--- ReportScreen/submit:`,
-            autoId,
-            route.params.reportId === null && autoId === null,
-            route.params.reportId === null && autoId !== null
+            `--- ReportScreen/areasSelector by reportId:`, reportSelector.areas
         )
+    }, [reportSelector])
+
+    const submitReport = async (values) => {
 
         let newValues = { ...values, id: Number(values.id) }
 
         if (route.params.reportId === null && autoId === null) {
+            setAutoId(Number(values.id))
             dispatch(watchPostReport(
                 token,
                 values,
@@ -111,7 +114,6 @@ const ReportScreen = ({ route }) => {
                 defectsState.notes
             ))
             // autoMod === true && 
-            setAutoId(Number(values.id))
         } else if (route.params.reportId === null && autoId !== null) {
             dispatch(watchUpdateReport(
                 token,
@@ -130,6 +132,13 @@ const ReportScreen = ({ route }) => {
             ))
         }
         setChecked(true)
+
+        // console.log(
+        //     `--- ReportScreen/submit:`,
+        //     autoId,
+        //     route.params.reportId === null && autoId === null,
+        //     route.params.reportId === null && autoId !== null
+        // )
     }
 
     function layoutCatcher({ nativeEvent: { layout: { x, y, width, height }, target } }) {
@@ -150,20 +159,57 @@ const ReportScreen = ({ route }) => {
 
     function scrollComponent() {
         switch (true) {
-            case offsetX === 0: return <Details />;
-            case offsetX === viewWidth: return <Defects setEdit={setEdit} areas={route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null} />;
-            case offsetX === (viewWidth) * 2: return <Resume notes={route.params && route.params.report && route.params.report.notes.length >= 0 ? route.params.report.notes : null} />;
-            case offsetX >= (viewWidth) * 3: return <Archive reportId={route.params && route.params.report && route.params.report.id !== null && route.params.report.id} />;
+            case offsetX === 0:
+                return <Details />;
+            case offsetX === viewWidth:
+                return <Defects
+                    setEdit={setEdit}
+                    areas={
+                        // route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null
+                        reportSelector.areas
+                    }
+                />;
+            case offsetX === (viewWidth) * 2:
+                return <Resume
+                    notes={
+                        route.params && route.params.report && route.params.report.notes.length >= 0 ? route.params.report.notes : null
+                    }
+                />;
+            case offsetX >= (viewWidth) * 3:
+                return <Archive
+                    reportId={
+                        route.params && route.params.report && route.params.report.id !== null ? route.params.report.id : autoId !== null ? autoId : null
+                    }
+                />;
         }
     }
 
     const switchComponent = () => {
         switch (active) {
-            case "details": return <Details />;
-            case "defects": return <Defects setEdit={setEdit} areas={route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null} />;
-            case "resume": return <Resume notes={route.params && route.params.report && route.params.report.notes.length >= 0 ? route.params.report.notes : null} />;
-            case "archive": return <Archive reportId={route.params && route.params.report && route.params.report.id !== null && route.params.report.id} />;
-            default: return <Details />;
+            case "details":
+                return <Details />;
+            case "defects":
+                return <Defects s
+                    etEdit={setEdit}
+                    areas={
+                        // route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null
+                        reportSelector.areas
+                    }
+                />;
+            case "resume":
+                return <Resume
+                    notes={
+                        route.params && route.params.report && route.params.report.notes.length >= 0 ? route.params.report.notes : null
+                    }
+                />;
+            case "archive":
+                return <Archive
+                    reportId={
+                        route.params && route.params.report && route.params.report.id !== null ? route.params.report.id : autoId !== null ? autoId : null
+                    }
+                />;
+            default:
+                return <Details />;
         }
     }
 
@@ -180,12 +226,6 @@ const ReportScreen = ({ route }) => {
             })
         }
     }
-
-    // useEffect(() => {
-    //     console.log(
-    //         `--- ReportScreen/defectsstate.areas:`, defectsState.areas
-    //     )
-    // }, [defectsState.areas])
 
     useInterval(() => {
         if (!isChecked) {

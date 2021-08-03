@@ -17,6 +17,7 @@ import FormField from "../common/FormField"
 import useType from "../hooks/useType"
 import ProfsProvider from "../providers/ProfsProvider"
 import FormContainer from "../common/FormContainer"
+import useChecked from "../hooks/useChecked"
 
 export default function Area({
     areaId,
@@ -40,6 +41,8 @@ export default function Area({
     const [editSample, setEditSample] = useState(null)
 
     const [openSample, setOpenSample] = useState(false)
+
+    const { isChecked, setChecked } = useChecked()
 
     const [problemsChoiceOpen, problemsChoiceCLose, ProblemsChoiceModal] = useModal()
 
@@ -80,6 +83,7 @@ export default function Area({
             type: "DELETE_AREA",
             areaId
         })
+        isChecked && setChecked(false)
     }
 
     const addDefaultProblem = () => {
@@ -89,6 +93,7 @@ export default function Area({
             areaId
         })
 
+        isChecked && setChecked(false)
         problemsChoiceCLose()
     }
 
@@ -114,6 +119,8 @@ export default function Area({
                 areaId
             })
         }
+
+        isChecked && setChecked(false)
     }
 
     return (

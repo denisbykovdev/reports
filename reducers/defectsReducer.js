@@ -373,16 +373,16 @@ export const defectsReducer = (
                     ...action.reportAreas.map((area, i) => {
                         return {
                             ...area,
-                            id: state.areas.length === 0 ? 1 + i : state.areas.length + 1 + i,
-                            problems: area.problems && area.problems.length > 0
-                                ? area.problems.map((problem, i) => {
-                                    return {
-                                        ...problem,
-                                        id: i + 1
-                                    }
-                                })
-                                : [],
-                            isSavedToReport: true
+                            // id: state.areas.length === 0 ? 1 + i : state.areas.length + 1 + i,
+                            // problems: area.problems && area.problems.length > 0
+                            //     ? area.problems.map((problem, i) => {
+                            //         return {
+                            //             ...problem,
+                            //             id: i + 1
+                            //         }
+                            //     })
+                            //     : [],
+                            // isSavedToReport: true
                         }
 
                     })

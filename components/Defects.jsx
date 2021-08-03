@@ -9,22 +9,20 @@ import useModal from "../hooks/useModal"
 import useDefects from "../hooks/useDefects";
 import SavedAreas from "../modals/SavedAreas";
 import Area from './Area'
-import useAuth from "../hooks/useAuth";
-import { useCallback } from "react";
+import useChecked from "../hooks/useChecked";
 
 const Defects = ({ areas, setEdit }) => {
     const { defectsState, defectsDispatch } = useDefects()
 
     const [savedAreasModalOpen, savedAreasModalClose, SavedAreasModalContent] = useModal();
 
-    // const { authState } = useAuth()
-
-    // const { token } = authState;
+    const { isChecked, setChecked } = useChecked()
 
     const addArea = () => {
         defectsDispatch({
             type: "ADD_DEFAULT_AREA"
         })
+        isChecked && setChecked(false)
     }
 
     useEffect(() => {

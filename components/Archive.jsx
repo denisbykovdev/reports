@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { shallowEqual, useSelector } from "react-redux";
 import CommonSubHeader from "../common/CommonSubHeader";
@@ -13,16 +13,15 @@ import weights from "../utils/weights";
 const Archive = ({
     reportId
 }) => {
-    // const [problemsState, problemsDispatch] = useServerProblems()
+    const reportsSelector = reportId !== undefined && reportId !== null && useSelector((state) => state.sagaReport.reports.filter(report => report.id === reportId)[0], shallowEqual)
 
-    const reportsSelector = reportId !== undefined && useSelector((state) => state.sagaReport.reports.filter(report => report.id === reportId)[0], shallowEqual)
-
-    console.log(
-        `--- Archive/reportsSelector`,
-        reportsSelector,
-        // reportsSelector.timeStamp,
-        reportId
-    )
+    // useEffect(() => {
+    //     console.log(
+    //         `--- Archive/reportsSelector`,
+    //         reportsSelector,
+    //         reportId
+    //     )
+    // }, [reportsSelector])
 
     return (
         <View style={styles.archive}>
@@ -32,26 +31,33 @@ const Archive = ({
 
             <View style={styles.archiveList}>
                 {
-                    Array.isArray(reportsSelector.timeStamp)
+                    reportsSelector !== undefined
                         ?
-                        reportsSelector.timeStamp.map((data, i) => (
-                            <View key={i}>
+                        Array.isArray(reportsSelector.timeStamp)
+                            ?
+                            reportsSelector.timeStamp.map((data, i) => (
+                                <View key={i}>
+                                    <ArchiveItem
+                                        timeStamp={data}
+                                    />
+                                    {
+                                        reportsSelector.timeStamp.length - 1 !== i && <Line />
+                                    }
+                                </View>
+                            ))
+                            :
+                            <View>
                                 <ArchiveItem
-                                    timeStamp={data}
+                                    timeStamp={reportsSelector.timeStamp}
                                 />
-                                {
-                                    reportsSelector.timeStamp.length - 1 !== i && <Line />
-                                }
+                                <Line />
                             </View>
-                        ))
-                        :
-                        <View>
+                        : <View>
                             <ArchiveItem
-                                timeStamp={reportsSelector.timeStamp}
+                            // timeStamp={reportsSelector.timeStamp}
                             />
                             <Line />
                         </View>
-
                 }
             </View>
         </View>
