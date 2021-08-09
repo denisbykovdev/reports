@@ -93,13 +93,13 @@ const ReportScreen = ({ route }) => {
 
     const { token } = authState
 
-    const reportSelector = route.params.reportId !== null && useSelector(state => state.sagaReport.reports.filter(report => report.id === route.params.reportId)[0])
+    const reportSelector = useSelector(state => state.sagaReport.reports.filter(report => report.id === (route.params.reportId !== null && route.params.reportId || autoId !== null && autoId))[0])
 
     useEffect(() => {
         console.log(
-            `--- ReportScreen/areasSelector by reportId:`, reportSelector.areas
+            `--- ReportScreen/areasSelector by reportId:`, reportSelector && reportSelector.areas
         )
-    }, [reportSelector])
+    }, [])
 
     const submitReport = async (values) => {
 
@@ -166,8 +166,11 @@ const ReportScreen = ({ route }) => {
                     setEdit={setEdit}
                     areas={
                         // route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null
-                        reportSelector.areas
+                        reportSelector && reportSelector.areas
                     }
+                // reportId={
+                //     route.params && route.params.report && route.params.report.id !== null ? route.params.report.id : autoId !== null ? autoId : null
+                // }
                 />;
             case offsetX === (viewWidth) * 2:
                 return <Resume
@@ -193,8 +196,11 @@ const ReportScreen = ({ route }) => {
                     etEdit={setEdit}
                     areas={
                         // route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null
-                        reportSelector.areas
+                        reportSelector && reportSelector.areas
                     }
+                // reportId={
+                //     route.params && route.params.report && route.params.report.id !== null ? route.params.report.id : autoId !== null ? autoId : null
+                // }
                 />;
             case "resume":
                 return <Resume
@@ -232,6 +238,8 @@ const ReportScreen = ({ route }) => {
             formikRef.current.submitForm() && setAutoMod(true)
         }
     }, 120000);
+
+
 
     return (
         <SafeView>

@@ -20,13 +20,16 @@ import useSearch from "../hooks/useSearch"
 import Spinner from "../common/Spinner"
 import fonts from "../utils/fonts"
 import weights from "../utils/weights"
+import useAuth from "../hooks/useAuth"
+import stringSlicer from "../helpers/stringSlicer"
 
 export default function Standarts({
     standartsModalClose,
     areaId,
     problemId,
     problemName,
-    problemsDispatch
+    problemsDispatch,
+    problem
 }) {
     const [standartsState, standartsDispatch] = useStandarts()
 
@@ -37,6 +40,10 @@ export default function Standarts({
     const [newStandartModalOpen, newStandartModalClose, NewStandartModal] = useModal()
 
     const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: standartsState.standarts !== null && standartsState.standarts })
+
+    const { authState } = useAuth()
+
+    const { token } = authState;
 
     const addCheckedStandart = (checkedId) => {
         const newCheckedStandart = standartsState.standarts.find(standart => standart.id === checkedId)
@@ -56,11 +63,13 @@ export default function Standarts({
                 problemId,
                 standarts: checkedStandarts
             })
-        } else if (problemName) {
+        } else if (problem) {
             problemsDispatch({
                 type: "POST_STANDARTS_TO_SAVED_PROBLEM",
+                token,
                 problemName,
-                standarts: checkedStandarts
+                problem: { ...problem, standarts: checkedStandarts }
+                // standarts: checkedStandarts
             })
         }
 
@@ -258,7 +267,7 @@ const StandartItem = ({
                         <View style={styles.standartDescs}>
                             <View style={styles.standartRow}>
                                 <Text style={styles.standartDetails}>
-                                    {standart.profession}
+                                    {stringSlicer(standart.profession, 20)}
                                 </Text>
                                 <Text style={styles.standartTitles}>
                                     {"מקצוע"}
@@ -267,7 +276,7 @@ const StandartItem = ({
 
                             <View style={styles.standartRow}>
                                 <Text style={styles.standartDetails}>
-                                    {standart.fault}
+                                    {stringSlicer(standart.fault, 20)}
                                 </Text>
                                 <Text style={styles.standartTitles}>
                                     {"תקלה"}
@@ -275,7 +284,7 @@ const StandartItem = ({
                             </View>
                             <View style={styles.standartRow}>
                                 <Text style={styles.standartDetails}>
-                                    {standart.whatToDo}
+                                    {stringSlicer(standart.whatToDo, 20)}
                                 </Text>
                                 <Text style={styles.standartTitles}>
                                     {"מה לעשות"}
@@ -283,7 +292,7 @@ const StandartItem = ({
                             </View>
                             <View style={styles.standartRow}>
                                 <Text style={styles.standartDetails}>
-                                    {standart.text}
+                                    {stringSlicer(standart.text, 20)}
                                 </Text>
                                 <Text style={styles.standartTitles}>
                                     {"תקן"}

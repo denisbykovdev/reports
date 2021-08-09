@@ -141,17 +141,16 @@ export const serverProblemsReducer = (
                 }
             )
         case "UPDATE_SERVER_PROBLEM":
+            console.log(
+                `--- serverProblemsReducer/UPDATE_SERVER_PROBLEM/action:`, action
+            )
             return UpdateWithSideEffect(
                 {
                     ...state,
                     posting: true,
                     token: action.token
                 },
-
                 async (state, dispatch) => {
-                    console.log(
-                        `--- serverProblemsReducer/UPDATE_SERVER_PROBLEM/action:`, action
-                    )
                     try {
                         const response = await axios.post(
                             `${updateProblem(action.problemName)}`,
@@ -176,7 +175,7 @@ export const serverProblemsReducer = (
                         })
                     }
                 }
-            )
+            );
         // case "UPDATE_SERVER_PROBLEM_IN_SERVER_AREA":
         //     return UpdateWithSideEffect(
         //         {
@@ -224,16 +223,18 @@ export const serverProblemsReducer = (
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
-                            `http://160.153.254.153/api/problems/store/${action.problemName}`,
-
+                            `${updateProblem(action.problemName)}`,
+                            {
+                                ...action.problem
+                            },
                             {
                                 headers: {
                                     'Authorization': `Bearer ${action.token}`
                                 }
                             },
-                            {
-                                standarts: action.standarts
-                            }
+                            // {
+                            //     standarts: action.standarts
+                            // }
                         );
 
                         dispatch({

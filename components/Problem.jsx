@@ -70,30 +70,21 @@ export default function Problem({
             "--- Problem/submitProblem/problem/isSample:",
             isSample
         )
-        if (isSample) {
+        if (isSample === true) {
+            await problemsDispatch({
+                type: "UPDATE_SERVER_PROBLEM",
+                token,
+                problem: { ...values, standarts: [...problem.standarts] },
+                problemName: problem.name
+            });
             await defectsDispatch({
-                type: "UPDATE_PROBLEM_IN_SAVED_AREA",
+                type: "UPDATE_PROBLEM_IN_SERVER_AREA",
                 token,
                 areaProblem: { ...values, standarts: [...problem.standarts] },
                 problemName: problem.name,
                 areaName
-            })
-                &&
-                await problemsDispatch({
-                    type: "UPDATE_SERVER_PROBLEM",
-                    token,
-                    problem: { ...values, standarts: [...problem.standarts] },
-                    problemName: problem.name
-                })
+            });
         }
-        // else if (isSample) {
-        //     await problemsDispatch({
-        //         type: "UPDATE_SERVER_PROBLEM",
-        //         token,
-        //         problem: { ...values, standarts: [...problem.standarts] },
-        //         problemName: problem.name
-        //     })
-        // }
         else {
             await problemsDispatch({
                 type: "POST_SERVER_PROBLEM",
@@ -434,9 +425,14 @@ export default function Problem({
                                             backgroundColor: colors.paleGrayBg
                                         }}>
                                             {
-                                                standart.image && standart.image.length > 1
+                                                standart.image && standart.image.length >= 1
                                                     ? <Image
-                                                        source={{ uri: standart.image }}
+                                                        // source={{ uri: standart.image }}
+                                                        source={{ uri: `data:image/png;base64,${standart.image}` }}
+                                                        style={{
+                                                            height: responsiveWidth(73),
+                                                            width: responsiveWidth(68),
+                                                        }}
                                                     />
                                                     : <AltImage
                                                         height={responsiveWidth(42)}

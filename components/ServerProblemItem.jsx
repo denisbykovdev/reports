@@ -73,6 +73,7 @@ export default function ServerProblemItem({
                         standartsModalClose={standartsModalClose}
                         problemName={problem.name}
                         problemsDispatch={problemsDispatch}
+                        problem={problem}
                     />
                 </StandartsModal>
 

@@ -133,15 +133,15 @@ function SavedAreas({
     }
 
     const addSavedAreasList = async () => {
-        console.log(
-            `--- SavedAreas/addSavedAreasList/before ADD_SAVED_AREAS/checkedAreasList`,
-            checkedAreasList
-        )
+        // console.log(
+        //     `--- SavedAreas/addSavedAreasList/before ADD_SAVED_AREAS/checkedAreasList`,
+        //     checkedAreasList
+        // )
         await defectsDispatch({
             type: "ADD_SERVER_AREAS",
             serverAreas: checkedAreasList
         })
-        savedAreasModalClose()
+        await savedAreasModalClose()
     }
 
     const createArea = (newAreaName) => defectsDispatch({

@@ -537,7 +537,10 @@ export const defectsReducer = (
                 }
             );
 
-        case "UPDATE_PROBLEM_IN_SAVED_AREA":
+        case "UPDATE_PROBLEM_IN_SERVER_AREA":
+            console.log(
+                "*** UPDATE_PROBLEM_IN_SERVER_AREA/action:", action
+            )
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -548,10 +551,8 @@ export const defectsReducer = (
                     try {
                         const response = await axios.post(
                             `${updateAreaProblem(action.areaName, action.problemName)} `,
-
                             {
-                                // area_name: action.areaName,
-                                area_problem: [...action.areaProblem]
+                                samples: [{ ...action.areaProblem }]
                             },
                             {
                                 headers: {

@@ -10,20 +10,20 @@ import useDefects from "../hooks/useDefects";
 import SavedAreas from "../modals/SavedAreas";
 import Area from './Area'
 import useChecked from "../hooks/useChecked";
+import { shallowEqual, useSelector } from "react-redux";
 
-const Defects = ({ areas, setEdit }) => {
+const Defects = ({
+    areas,
+    setEdit,
+    // reportId
+}) => {
+    // const areas = reportId !== undefined && reportId !== null && useSelector(state => state.sagaReport.reports.filter(report => report.id === reportId)[0].areas, shallowEqual)
+
     const { defectsState, defectsDispatch } = useDefects()
 
     const [savedAreasModalOpen, savedAreasModalClose, SavedAreasModalContent] = useModal();
 
     const { isChecked, setChecked } = useChecked()
-
-    const addArea = () => {
-        defectsDispatch({
-            type: "ADD_DEFAULT_AREA"
-        })
-        isChecked && setChecked(false)
-    }
 
     useEffect(() => {
         if (areas && areas !== null && areas.length > 0) {
@@ -40,7 +40,19 @@ const Defects = ({ areas, setEdit }) => {
                 type: "CLEAR_AREAS"
             })
         }
+
+
+        console.log(
+            `--- Defects/areas:`, areas
+        )
     }, [])
+
+    const addArea = () => {
+        defectsDispatch({
+            type: "ADD_DEFAULT_AREA"
+        })
+        isChecked && setChecked(false)
+    }
 
     return (
         <>
