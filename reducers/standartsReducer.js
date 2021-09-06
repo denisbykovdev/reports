@@ -115,6 +115,19 @@ export const standartsReducer = (
                         })
                     }
                 }
-            )
+            );
+
+        case "CHANGE_STANDART_PROF":
+            return Update({
+                ...state,
+                standarts: state.standarts.map((standart, i) =>
+                    standart.id === action.standartId
+                        ? {
+                            ...standart,
+                            profession: action.professionName
+                        }
+                        : standart
+                )
+            })
     }
 }

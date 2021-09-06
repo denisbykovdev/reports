@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect } from "react"
-import { useRef } from "react"
+import React, { useCallback, useState } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import CommonButton from "../common/CommonButton"
 import CommonHeader from "../common/CommonHeader"
 import CommonSubHeader from "../common/CommonSubHeader"
 import FormButton from "../common/FormButton"
 import FormContainer from "../common/FormContainer"
+import FormErrorMessage from "../common/FormErrorMessage"
 import FormField from "../common/FormField"
 import ItemTitle from "../common/ItemTitle"
 import Line from "../common/Line"
@@ -31,14 +30,24 @@ export default function Proffessions({
 
     const { token } = authState
 
+    const [errorName, setErrorName] = useState(null)
+
     const [searchArray, RenderSearch] = useSearch({ array: profsState && profsState.profs })
 
     const submitNewProf = async (values) => {
-        await profsDispatch({
-            type: "POST_NEW_PROF",
-            token,
-            newProf: values.profName
-        })
+        console.log(
+            `--- Professions modal:`,
+            profsState.profs.includes(values.profName)
+        )
+        if (profsState.profs.includes(values.profName)) {
+            setErrorName('המקצוע הזה כבר בבסיס')
+        } else {
+            await profsDispatch({
+                type: "POST_NEW_PROF",
+                token,
+                newProf: values.profName
+            })
+        }
     }
 
     const deleteProfItem = useCallback((profName) => {
@@ -67,6 +76,10 @@ export default function Proffessions({
                     name="profName"
                     placeholder="רשום שם מקצוע חדש"
                     style={styles.inputContainer}
+                />
+                <FormErrorMessage
+                    error={errorName}
+                    visible={true}
                 />
                 <FormButton
                     title="הוספה"

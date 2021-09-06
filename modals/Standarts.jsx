@@ -96,6 +96,7 @@ export default function Standarts({
                             standart={standart}
                             addCheckedStandart={addCheckedStandart}
                             removeCheckedStandart={removeCheckedStandart}
+                            standartsDispatch={standartsDispatch}
                         />
                     )
                     : standartsState && standartsState.standarts !== null && standartsState.standarts.map((standart, i) =>
@@ -107,6 +108,7 @@ export default function Standarts({
                             standart={standart}
                             addCheckedStandart={addCheckedStandart}
                             removeCheckedStandart={removeCheckedStandart}
+                            standartsDispatch={standartsDispatch}
                         />
                     )
             }
@@ -160,13 +162,16 @@ export default function Standarts({
 const StandartItem = ({
     standart,
     addCheckedStandart,
-    removeCheckedStandart
+    removeCheckedStandart,
+    standartsDispatch
 }) => {
     const [checked, setChecked] = useState(false)
 
     const [isOpen, setOpen] = useState(false)
 
     const { type } = useType()
+
+    const [newStandartModalOpen, newStandartModalClose, NewStandartModal] = useModal()
 
     const checkedHandler = () => {
         if (!checked) {
@@ -200,7 +205,6 @@ const StandartItem = ({
                     onPress={() => setOpen(!isOpen)}
                     style={{
                         // marginStart: responsiveWidth(14),
-
                     }}
                 >
                     {
@@ -234,6 +238,30 @@ const StandartItem = ({
 
                     }
                 </View>
+
+                <CommonButton
+                    title="לַעֲרוֹך"
+                    borderRadius={20}
+                    buttonWidth={responsiveWidth(68)}
+                    buttonHeight={responsiveWidth(33)}
+                    buttonColor={colors.darkSkyBlue}
+                    style={{
+                        padding: 0
+                    }}
+                    titleStyle={{
+                        marginRight: 0
+                    }}
+                    titleColor={colors.white}
+                    onPress={() => newStandartModalOpen()}
+                />
+                <NewStandartModal>
+                    <NewStandart
+                        newStandartModalClose={newStandartModalClose}
+                        standartsDispatch={standartsDispatch}
+                        isEdit={true}
+                        standart={standart}
+                    />
+                </NewStandartModal>
 
                 <TouchableOpacity
                     onPress={() => checkedHandler(standart.id)}
@@ -329,7 +357,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
-        marginStart: responsiveWidth(14)
+        // marginStart: responsiveWidth(14)
     },
     standartRow: {
         flexDirection: "row",
