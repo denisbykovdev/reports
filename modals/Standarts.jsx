@@ -240,7 +240,7 @@ const StandartItem = ({
                 </View>
 
                 <CommonButton
-                    title="לַעֲרוֹך"
+                    title="לערוך"
                     borderRadius={20}
                     buttonWidth={responsiveWidth(68)}
                     buttonHeight={responsiveWidth(33)}
