@@ -26,6 +26,7 @@ import Spinner from "../common/Spinner"
 import { UpdateWithSideEffect, Update } from 'use-reducer-with-side-effects';
 import useReducerWithSideEffects from 'use-reducer-with-side-effects';
 import axios from "axios"
+import { newAreaSchema } from "../constants/validationSchema"
 
 const serverAreasInitial = {
     serverAreas: [],
@@ -182,6 +183,7 @@ function SavedAreas({
             <FormContainer
                 initialValues={{ newAreaName: '' }}
                 onSubmit={(values) => createArea(values.newAreaName)}
+                validationSchema={newAreaSchema}
             >
                 <FormField
                     name="newAreaName"

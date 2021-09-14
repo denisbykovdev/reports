@@ -1,5 +1,10 @@
 import * as Yup from "yup";
 
+export const newAreaSchema = Yup.object().shape({
+  newAreaName: Yup.string()
+    .required(' יש טעות באחד השדות')
+})
+
 export const loginSchema = Yup.object().shape({
   // email: Yup.string()
   //   .required("Please enter valid email address")

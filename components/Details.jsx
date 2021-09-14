@@ -19,21 +19,21 @@ const Details = () => {
             style={{ paddingHorizontal: responsiveWidth(28) }}
         >
 
-                <CommonSubHeader
-                    title={"פרטי הבדיקה"}
-                >
-                    <DetailsTitle />
-                </CommonSubHeader>
-                <TestDetails />
+            <CommonSubHeader
+                title={"פרטי הבדיקה"}
+            >
+                <DetailsTitle />
+            </CommonSubHeader>
+            <TestDetails />
 
-                <CommonSubHeader
-                    title={"תיאור המבנה"}
-                >
-                    <StructureTitle />
-                </CommonSubHeader>
-                <StructureDescription />
+            <CommonSubHeader
+                title={"תיאור המבנה"}
+            >
+                <StructureTitle />
+            </CommonSubHeader>
+            <StructureDescription />
 
-                <ResumeDropDown />
+            {/* <ResumeDropDown /> */}
         </View>
     )
 }
