@@ -8,7 +8,8 @@ import weights from "../utils/weights"
 
 export default function useSearch({
     array,
-    arrayOfObjects
+    arrayOfObjects,
+    withElaboration = false
 }) {
     const [searchArray, setUpdateSearchArray] = useState()
 
@@ -25,16 +26,100 @@ export default function useSearch({
                 filteredArray
             )
         }
-        if (searchText.length > 0 && arrayOfObjects !== undefined) {
+
+        if (searchText.length > 0 && arrayOfObjects !== undefined && withElaboration === false) {
             const filteredArrayOfObjects = arrayOfObjects && arrayOfObjects.filter(item => Object.values(item).some(itemValue => itemValue !== null && itemValue.toString().toLowerCase().includes(searchText.toLowerCase())))
 
             setUpdateSearchArray(filteredArrayOfObjects)
 
-            // console.log(
-            //     "___useSearch/filtered:",
-            //     filteredArrayOfObjects
-            // )
+            console.log(
+                "___useSearch/filtered:",
+                filteredArrayOfObjects
+            )
         }
+
+        if (
+            searchText.length > 0
+            && arrayOfObjects !== undefined
+            && withElaboration === true
+        ) {
+
+            const filteredWithElaboration = arrayOfObjects && arrayOfObjects.map(
+                item => 
+                {
+                    console.log(
+                        `--- useSearch/test:`,
+                        item.area_name.toLowerCase().includes(searchText.toLowerCase()),
+
+                        typeof item.problems.find(problem => problem.name.toLowerCase().includes(searchText.toLowerCase())) === 'object' && {
+                            ...item,
+                            problems: item.problems.filter(problem => problem.name.toLowerCase().includes(searchText.toLowerCase()))
+                        }
+                    )
+
+                    // if(typeof item.problems.find(problem => problem.name.toLowerCase().includes(searchText.toLowerCase())) === 'object') {
+                    //     return {
+                    //         ...item,
+                    //         problems: item.problems.filter(problem => problem.name.toLowerCase().includes(searchText.toLowerCase()))
+                    //     }
+                    // }
+
+                    // if(item.area_name.toLowerCase().includes(searchText.toLowerCase())) {
+                    //     return item
+                    // }
+
+                    return typeof item.problems.find(problem => problem.name.toLowerCase().includes(searchText.toLowerCase())) === 'object'
+                    ? {
+                        ...item,
+                        problems: item.problems.filter(problem => problem.name.toLowerCase().includes(searchText.toLowerCase()))
+                    }
+                    : item.area_name.toLowerCase().includes(searchText.toLowerCase())
+                    && item
+                    
+                }
+
+
+
+
+
+                // {
+                //     if (
+                //         item.area_name.toLowerCase().includes(searchText.toLowerCase())
+                //     ) {
+                //         return item;
+                //     }
+
+                //     if (
+                //         !item.area_name.toLowerCase().includes(searchText.toLowerCase()) &&
+                //         item.problems.find(
+                //             problem => problem.name.toLowerCase().includes(searchText.toLowerCase())
+                //         )
+                //     ) {
+                //         console.log(
+                //             `--- !!!:`,
+                //             {
+                //                 ...item,
+                //                 problems: item.problems.filter(problem => problem.name.toLowerCase().includes(searchText.toLowerCase()))
+                //             }
+                //         );
+
+                //         return {
+                //             ...item,
+                //             problems: item.problems.filter(problem => problem.name.toLowerCase().includes(searchText.toLowerCase()))
+                //         }
+                //     }
+
+                // }
+            )
+
+            setUpdateSearchArray(filteredWithElaboration)
+
+            console.log(
+                "___useSearch/filteredWithElaboration:",
+                filteredWithElaboration
+            )
+        }
+
         if (searchText.length === 0) {
             setUpdateSearchArray(
                 array !== undefined && array || arrayOfObjects !== undefined && arrayOfObjects
@@ -86,7 +171,8 @@ export default function useSearch({
 
     return [
         searchArray,
-        RenderSearch
+        RenderSearch,
+        searchText
     ]
 }
 

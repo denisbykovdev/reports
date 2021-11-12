@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Text, TouchableOpacity, View, StyleSheet, Image } from "react-native"
+import { Text, TouchableOpacity, View, StyleSheet, Image, ScrollView } from "react-native"
 import CommonButton from "../common/CommonButton"
 import Line from "../common/Line"
 import useModal from "../hooks/useModal"
@@ -11,7 +11,7 @@ import Tick from "../icons/Tick"
 import Standarts from "../modals/Standarts"
 import colors from "../utils/colors"
 import fonts from "../utils/fonts"
-import { responsiveHeight, responsiveWidth } from "../utils/layout"
+import layout, { responsiveHeight, responsiveWidth } from "../utils/layout"
 import weights from "../utils/weights"
 import stringSlicer from "../helpers/stringSlicer"
 
@@ -26,7 +26,7 @@ export default function ServerProblemItem({
 
     const [isOpen, setOpen] = useState(false)
 
-    const [standartsModalOpen, standartsModalClose, StandartsModal] = useModal()
+    // const [standartsModalOpen, standartsModalClose, StandartsModal] = useModal()
 
     const { type } = useType()
 
@@ -51,7 +51,7 @@ export default function ServerProblemItem({
 
             <View style={styles.problemHeader}>
 
-                <CommonButton
+                {/* <CommonButton
                     title="הוספת"
                     borderRadius={20}
                     buttonHeight={responsiveWidth(33)}
@@ -66,16 +66,16 @@ export default function ServerProblemItem({
                     }}
                     titleColor={colors.darkSkyBlue}
                     onPress={() => standartsModalOpen()}
-                />
+                /> */}
 
-                <StandartsModal>
+                {/* <StandartsModal>
                     <Standarts
                         standartsModalClose={standartsModalClose}
                         problemName={problem.name}
                         problemsDispatch={problemsDispatch}
                         problem={problem}
                     />
-                </StandartsModal>
+                </StandartsModal> */}
 
                 {
                     type !== 1 && <View
@@ -100,15 +100,18 @@ export default function ServerProblemItem({
                     </View>
                 }
 
-
-
                 <View style={{
                     // flexDirection: 'column-reverse',
                     flexDirection: type === 1 ? 'row' : 'column-reverse',
-                    alignItems: 'flex-end'
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
                 }}>
-                    <Text>
-                        {stringSlicer(problem.name)}
+                    <Text
+                        style={{
+                            width: '67%'
+                        }}
+                    >
+                        {stringSlicer(problem.name, 20)}
                     </Text>
                     <View style={{
                         flexDirection: 'row',
@@ -152,46 +155,133 @@ export default function ServerProblemItem({
                     <>
                         <Line />
 
-
-
                         <View style={styles.problemDescs}>
-                            <View style={styles.problemRow}>
-                                <Text style={styles.problemDetails}>
-                                    {problem.profession_name}
-                                </Text>
+                            <View style={styles.problemColumn}>
+
                                 <Text style={styles.problemTitles}>
                                     {"מקצוע"}
                                 </Text>
-
-
+                                <Text style={styles.problemTitles}>
+                                    {stringSlicer(problem.profession_name, 55)}
+                                </Text>
+                                
                             </View>
 
-                            <View style={styles.problemRow}>
-                                <Text style={styles.problemDetails}>
-                                    {problem.details_of_eclipse}
-                                </Text>
-                                <Text style={styles.problemTitles}>
+                            <View style={styles.problemColumn}>
+
+                            <Text style={styles.problemTitles}>
                                     {"תקלה"}
                                 </Text>
-
-
-                            </View>
-                            <View style={styles.problemRow}>
-                                <Text style={styles.problemDetails}>
-                                    {problem.solution}
+                                <Text style={styles.problemTitles}>
+                                    {stringSlicer(problem.details_of_eclipse, 55)}
                                 </Text>
+                                
+                            </View>
+                            <View style={styles.problemColumn}>
+
                                 <Text style={styles.problemTitles}>
                                     {"מה לעשות"}
                                 </Text>
-
-
+                                <Text style={styles.problemTitles}>
+                                    {stringSlicer(problem.solution, 55)}
+                                </Text>
+                                
                             </View>
-                        </View>
 
+                            <View style={styles.problemColumn}>
+
+                                <Text style={styles.problemTitles}>
+                                    {"מחיר"}
+                                </Text>
+                                <Text style={styles.problemDetails}>
+                                    {stringSlicer(problem.cost, 55)}
+                                </Text>
+                                
+                            </View>
+
+                            <ScrollView
+                            horizontal={type === 2 ? false : true}
+                            contentContainerStyle={{
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            {
+                                problem.standarts && problem.standarts.length >= 0 && problem.standarts.map((standart, i) => (
+                                    <View
+                                        key={i}
+                                        style={[
+                                            styles.problemStandartsContainer,
+                                            {
+                                                flexDirection: type === 2 ? 'row' : 'column-reverse',
+                                                alignItems: type === 2 ? 'center' : 'flex-start',
+                                                width: type === 2 ? '100%' : 'auto'
+                                            }
+                                        ]}
+                                    >
+                                        <View style={{
+                                            height: responsiveWidth(73),
+                                            width: responsiveWidth(68),
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            backgroundColor: colors.paleGrayBg
+                                        }}>
+                                            {
+                                                standart.image && standart.image.length >= 1
+                                                    ? <Image
+                                                        // source={{ uri: standart.image }}
+                                                        source={{ uri: `data:image/png;base64,${standart.image}` }}
+                                                        style={{
+                                                            height: responsiveWidth(73),
+                                                            width: responsiveWidth(68),
+                                                        }}
+                                                    />
+                                                    : <AltImage
+                                                        height={responsiveWidth(42)}
+                                                        width={responsiveWidth(38)}
+                                                    />
+
+                                            }
+                                        </View>
+
+                                        <View
+                                            style={[
+                                                styles.problemStandartBody,
+                                                {
+                                                    flexDirection: 'row',
+                                                    marginVertical: responsiveWidth(22),
+                                                    width: layout.width - responsiveWidth(118)
+                                                }
+                                            ]}
+                                        >
+                                            <Text
+                                                style={[
+                                                    styles.problemStandartText,
+                                                    {
+                                                        width: type === 2 ? '85%' : '90%'
+                                                    }
+                                                ]}
+                                            >
+                                                {standart.text}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    width: '10%',
+                                                    marginLeft: type === 2 ? responsiveWidth(10) : 0
+                                                }}
+                                            >
+                                                {'\u2B24'}
+                                            </Text>
+                                        </View>
+
+                                    </View>
+                                ))
+                            }
+                        </ScrollView>
+                        </View>
                     </>
                 )
             }
-
             <Line />
         </View>
     )
@@ -214,26 +304,27 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginStart: responsiveWidth(14)
     },
-    problemRow: {
-        flexDirection: "row",
-        alignItems: 'baseline',
+    problemColumn: {
+        // flexDirection: "row",
+        // alignItems: 'flex-end',
         width: '100%',
-        marginVertical: responsiveWidth(18),
-        justifyContent: 'flex-end'
+        marginVertical: responsiveWidth(8),
+        justifyContent: 'center'
     },
-    problemDetails: {
-        alignSelf: 'baseline',
-        position: "absolute",
-        left: 0,
+    // problemDetails: {
+    //     alignSelf: 'baseline',
+    //     position: "absolute",
+    //     left: 0,
 
-        fontSize: fonts.small,
-        fontWeight: weights.thin,
-        color: colors.slateGrey
-    },
+    //     fontSize: fonts.small,
+    //     fontWeight: weights.thin,
+    //     color: colors.slateGrey
+    // },
     problemTitles: {
         fontSize: fonts.regular,
         fontWeight: weights.semiBold,
-        color: colors.darkBlueGray
+        color: colors.darkBlueGray,
+        marginVertical: responsiveWidth(4)
     },
     problemImageContainer: {
         height: responsiveWidth(73),

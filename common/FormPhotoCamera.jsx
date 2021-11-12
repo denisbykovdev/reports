@@ -59,6 +59,8 @@ export default function FormPhotoCamera({
 
   const [hasPermission, setHasPermission] = useState(null);
 
+  const [isCameraReady, setCameraReady] = useState(false);
+
   // const [type, setType] = useState(Camera.Constants.Type.back);
 
   const [openCam, setOpenCam] = useState(false)
@@ -75,36 +77,63 @@ export default function FormPhotoCamera({
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
 
-      if (status === 'denied') await Camera.requestCameraPermissionAsync()
+      console.log("--- FormPhoto/status:", status, `:images:`, images)
 
-      console.log("--- FormPhoto/status:", status)
+      // if (status === 'denied') {
+      //   const newStatus = await Camera.requestCameraPermissionAsync()
+
+      //   console.log("--- FormPhoto/status:", newStatus, `:images:`, images)
+      // }
 
       setHasPermission(status);
     })();
   }, []);
 
   const takePhoto = async () => {
-    if (cameraRef.current) {
-      setLoading(true)
-      const data = await cameraRef.current.takePictureAsync({
-        base64: true,
-        skipProcessing: true
-      });
+    console.log(
+      `--- FormPhotoCamera/takePhoto/init:`, 
+      isCameraReady
+    )
+    try {
+      if (cameraRef.current) {
+        setLoading(true)
 
-      setFieldTouched(name)
+        // const ratio = await 
 
-      setImages([...images, data['base64']])
+        // console.log(
+        //   `--- FormPhotoCamera/takePhoto/ratio:`, ratio
+        // )
 
-      setFieldValue(name, [...values[name], data['base64']])
-
-      isChecked && setChecked(false)
-
-      interSepter && interSepter(name, [...values[name], data['base64']])
-
-      setLoading(false)
-
-      setOpenCam(false)
+        const data = await cameraRef.current.takePictureAsync({
+          base64: true,
+          // skipProcessing: true
+          // pictureSize: ratio
+        });
+  
+        setFieldTouched(name)
+  
+        console.log(
+          `--- FormPhotoCamera/takePhoto/data:`, data
+        )
+  
+        setImages([...images, data['base64']])
+  
+        setFieldValue(name, [...values[name], data['base64']])
+  
+        isChecked && setChecked(false)
+  
+        interSepter && interSepter(name, [...values[name], data['base64']])
+  
+        setLoading(false)
+  
+        setOpenCam(false)
+      }
+    } catch (error) {
+      console.log(
+        `--- FormPhotoCamera/error:`, error
+      )
     }
+   
   }
 
   const deleteSavedPhoto = () => {
@@ -223,6 +252,8 @@ export default function FormPhotoCamera({
               style={styles.formCameraContainer}
               type={Camera.Constants.Type.back}
               autoFocus="on"
+              onCameraReady={() => setCameraReady(true)}
+              // useCamera2Api={true}
             />
         }
       </View>

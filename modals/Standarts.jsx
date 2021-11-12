@@ -194,14 +194,14 @@ const StandartItem = ({
             <View
                 style={{
                     flexDirection: 'row',
-                    height: isOpen ? 'auto' : responsiveWidth(73),
+                    // height: isOpen ? 'auto' : responsiveWidth(73),
                     justifyContent: 'space-between',
-                    marginVertical: responsiveWidth(18),
+                    marginVertical: responsiveWidth(8),
                     alignItems: 'center'
                 }}
             >
                 {/* {type !== 2 && */}
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => setOpen(!isOpen)}
                     style={{
                         // marginStart: responsiveWidth(14),
@@ -212,7 +212,7 @@ const StandartItem = ({
                             ? <CircleArrowUp />
                             : <CircleArrowDown />
                     }
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 {/* } */}
 
                 <View style={{
@@ -277,7 +277,19 @@ const StandartItem = ({
                     }
                 </TouchableOpacity>
 
+                
+
             </View>
+
+            <View style={styles.standartRow}>
+                    <Text style={styles.standartDetails}>
+                        {stringSlicer(standart.text, 55)}
+                    </Text>
+                    {/* <Text style={styles.standartTitles}>
+                        {"תקן"}
+                    </Text> */}
+                </View>
+
             {/* {
                 isOpen
                 &&
@@ -287,7 +299,7 @@ const StandartItem = ({
                     {standart.text}
                 </Text>
             } */}
-            {
+            {/* {
                 isOpen && (
                     <>
                         <Line />
@@ -330,7 +342,7 @@ const StandartItem = ({
 
                     </>
                 )
-            }
+            } */}
 
             {/* {
                 type === 2 && <Text
@@ -361,15 +373,16 @@ const styles = StyleSheet.create({
     },
     standartRow: {
         flexDirection: "row",
-        alignItems: 'baseline',
+        // alignItems: 'baseline',
         width: '100%',
-        marginVertical: responsiveWidth(18),
-        justifyContent: 'flex-end'
+        marginBottom: responsiveWidth(8)
+        // marginVertical: responsiveWidth(18),
+        // justifyContent: 'flex-end'
     },
     standartDetails: {
         alignSelf: 'baseline',
-        position: "absolute",
-        left: 0,
+        // position: "absolute",
+        // left: 0,
 
         fontSize: fonts.small,
         fontWeight: weights.thin,

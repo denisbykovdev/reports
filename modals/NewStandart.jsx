@@ -16,6 +16,7 @@ import weights from "../utils/weights"
 import stringSlicer from "../helpers/stringSlicer"
 import FormSelect from "../common/FormSelect"
 import useProfs from "../hooks/useProfs"
+import AltImage from "../icons/AltImage"
 
 export default function NewStandart({
     standartsDispatch,
@@ -27,28 +28,37 @@ export default function NewStandart({
 
     const { token } = authState
 
-    const { profsState, profsDispatch } = useProfs()
+    // const { profsState, profsDispatch } = useProfs()
 
     const submitNewStandart = async (values) => {
         console.log(
-            "___NewStandart/submit/values:", values
+            "___NewStandart/submit/values:", values, `:standart.id:`,standart.id
         )
-        await standartsDispatch({
-            type: "POST_NEW_STANDART",
-            token,
-            standart: values
-        })
-
+        if(isEdit === false) {
+            await standartsDispatch({
+                type: "POST_NEW_STANDART",
+                token,
+                standart: values
+            })
+        }else{
+            await standartsDispatch({
+                type: "UPDATE_SAVED_STANDART",
+                standartId: standart.id,
+                text: values.text,
+                image: values.image
+            })
+        }
+        
         newStandartModalClose()
     }
 
-    const interSepter = (name, text) => {
-        standartsDispatch({
-            type: "CHANGE_STANDART_PROF",
-            standartId: name,
-            professionName: text,
-        })
-    }
+    // const interSepter = (name, text) => {
+    //     standartsDispatch({
+    //         type: "CHANGE_STANDART_PROF",
+    //         standartId: name,
+    //         professionName: text,
+    //     })
+    // }
 
     return (
         <ShadowView>
@@ -60,11 +70,11 @@ export default function NewStandart({
 
             <FormContainer
                 initialValues={{
-                    text: '',
-                    image: '',
-                    profession: '',
-                    fault: '',
-                    whatToDo: ''
+                    text: isEdit ? `${standart.text}` : '',
+                    image: isEdit ? `${standart.image}` : '',
+                    // profession: '',
+                    // fault: '',
+                    // whatToDo: ''
                 }}
                 onSubmit={
                     (values) => submitNewStandart(values)
@@ -72,15 +82,40 @@ export default function NewStandart({
             >
                 <>
                     {
-                        !isEdit
-                            ? <>
-                                <FormImagePicker
-                                    name="image"
-                                    style={{
-                                        marginTop: responsiveWidth(22)
-                                    }}
-                                />
-                                <FormField
+                        // !isEdit
+                        //     ? 
+
+                        <View
+                            style={{
+                                alignItems: 'center',
+                                marginTop: responsiveWidth(18)
+                            }}
+                        >
+
+                            {/* {
+                                isEdit && standart.image !== null && standart.image.length > 1
+                                    ? <Image
+                                        style={{
+                                            height: responsiveWidth(73),
+                                            width: responsiveWidth(68),
+                                        }}
+                                        source={{ uri: `data:image/png;base64,${standart.image}` }}
+                                    />
+                                    : <AltImage
+                                        height={responsiveWidth(42)}
+                                        width={responsiveWidth(38)}
+                                    />
+                            } */}
+
+                            <FormImagePicker
+                                name="image"
+                                style={{
+                                    marginTop: responsiveWidth(22),
+                                    width: '100%'
+                                }}
+                                isModal={true}
+                            />
+                            {/* <FormField
                                     name="profession"
                                     placeholder="מקצוע"
                                     // area={true}
@@ -95,8 +130,8 @@ export default function NewStandart({
                                         marginEnd: 0,
                                         // padding: 0
                                     }}
-                                />
-                                <FormField
+                                /> */}
+                            {/* <FormField
                                     name="fault"
                                     area={true}
                                     placeholder="תקלה"
@@ -109,8 +144,8 @@ export default function NewStandart({
                                     inputStyle={{
                                         marginEnd: 0
                                     }}
-                                />
-                                <FormField
+                                /> */}
+                            {/* <FormField
                                     name="whatToDo"
                                     area={true}
                                     placeholder="מה לעשות"
@@ -123,86 +158,89 @@ export default function NewStandart({
                                     inputStyle={{
                                         marginEnd: 0
                                     }}
-                                />
-                                <FormField
-                                    name="text"
-                                    area={true}
-                                    placeholder="תקן"
-                                    style={{
-                                        height: responsiveWidth(140),
-                                        textAlign: 'right',
-                                        marginBottom: responsiveWidth(22),
-                                        borderRadius: 10,
-                                    }}
-                                    inputStyle={{
-                                        marginEnd: 0
-                                    }}
-                                />
-                                <Line />
-                                <FormButton
-                                    title="שמירה"
-                                    borderRadius={20}
-                                    buttonHeight={responsiveWidth(33)}
-                                    buttonColor={colors.darkSkyBlue}
-                                    style={{
-                                        padding: 0,
-                                        paddingHorizontal: responsiveWidth(70),
-                                        marginTop: responsiveWidth(22)
-                                    }}
-                                    titleStyle={{
-                                        marginRight: 0
-                                    }}
-                                    titleColor={colors.white}
-                                />
-                            </>
-                            : <>
-                                <View style={styles.standartDescs}>
-                                    <View style={styles.standartRow}>
-                                        <Text style={styles.standartDetails}>
-                                            {stringSlicer(standart.profession, 20)}
-                                        </Text>
-                                        <Text style={styles.standartTitles}>
-                                            {"מקצוע"}
-                                        </Text>
-                                    </View>
+                                /> */}
+                            <FormField
+                                name="text"
+                                area={true}
+                                placeholder="תקן"
+                                style={{
+                                    height: responsiveWidth(140),
+                                    textAlign: 'right',
+                                    marginBottom: responsiveWidth(22),
+                                    borderRadius: 10,
+                                }}
+                                inputStyle={{
+                                    marginEnd: 0
+                                }}
+                                isModal={true}
+                            />
+                            <Line />
+                            <FormButton
+                                title="שמירה"
+                                borderRadius={20}
+                                buttonHeight={responsiveWidth(33)}
+                                buttonColor={colors.darkSkyBlue}
+                                style={{
+                                    padding: 0,
+                                    paddingHorizontal: responsiveWidth(70),
+                                    marginTop: responsiveWidth(22),
+                                    width: '100%'
+                                }}
+                                titleStyle={{
+                                    marginRight: 0
+                                }}
+                                titleColor={colors.white}
+                            />
+                        </View>
 
-                                    <>
-                                        <FormSelect
-                                            placeholder="בחר מקצוע"
-                                            array={profsState.profs && profsState.profs}
-                                            name={standart.id}
-                                            interSepter={interSepter}
-                                        />
-                                    </>
+                        // : 
+                        // <>
+                        //     <View style={styles.standartDescs}>
+                        //         <View style={styles.standartRow}>
+                        //             <Text style={styles.standartDetails}>
+                        //                 {stringSlicer(standart.profession, 20)}
+                        //             </Text>
+                        //             <Text style={styles.standartTitles}>
+                        //                 {"מקצוע"}
+                        //             </Text>
+                        //         </View>
 
-                                    <View style={styles.standartRow}>
-                                        <Text style={styles.standartDetails}>
-                                            {stringSlicer(standart.fault, 20)}
-                                        </Text>
-                                        <Text style={styles.standartTitles}>
-                                            {"תקלה"}
-                                        </Text>
-                                    </View>
-                                    <View style={styles.standartRow}>
-                                        <Text style={styles.standartDetails}>
-                                            {stringSlicer(standart.whatToDo, 20)}
-                                        </Text>
-                                        <Text style={styles.standartTitles}>
-                                            {"מה לעשות"}
-                                        </Text>
-                                    </View>
-                                    <View style={styles.standartRow}>
-                                        <Text style={styles.standartDetails}>
-                                            {stringSlicer(standart.text, 20)}
-                                        </Text>
-                                        <Text style={styles.standartTitles}>
-                                            {"תקן"}
-                                        </Text>
-                                    </View>
-                                </View>
-                            </>
+                        //         <>
+                        //             <FormSelect
+                        //                 placeholder="בחר מקצוע"
+                        //                 array={profsState.profs && profsState.profs}
+                        //                 name={standart.id}
+                        //                 interSepter={interSepter}
+                        //             />
+                        //         </>
+
+                        //         <View style={styles.standartRow}>
+                        //             <Text style={styles.standartDetails}>
+                        //                 {stringSlicer(standart.fault, 20)}
+                        //             </Text>
+                        //             <Text style={styles.standartTitles}>
+                        //                 {"תקלה"}
+                        //             </Text>
+                        //         </View>
+                        //         <View style={styles.standartRow}>
+                        //             <Text style={styles.standartDetails}>
+                        //                 {stringSlicer(standart.whatToDo, 20)}
+                        //             </Text>
+                        //             <Text style={styles.standartTitles}>
+                        //                 {"מה לעשות"}
+                        //             </Text>
+                        //         </View>
+                        //         <View style={styles.standartRow}>
+                        //             <Text style={styles.standartDetails}>
+                        //                 {stringSlicer(standart.text, 20)}
+                        //             </Text>
+                        //             <Text style={styles.standartTitles}>
+                        //                 {"תקן"}
+                        //             </Text>
+                        //         </View>
+                        //     </View>
+                        // </>
                     }
-
                 </>
             </FormContainer>
         </ShadowView>

@@ -487,6 +487,7 @@ export const createStandart = standartsStore
 //get all standarts: GET
 export const getAllStandarts = `${standartsStore}/all`
 export const deleteStandart = (standartId) => `${standartsStore}/${standartId}/delete`
+export const updateStandart = (standartId) => `${standartsStore}/${standartId}/update`
 
 export const printEndpoint = (reportId, endpoint) => `${api}/${reportId}/${endpoint}word`
 

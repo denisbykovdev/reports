@@ -8,7 +8,7 @@ import { responsiveWidth } from "../utils/layout";
 import colors from "../utils/colors";
 import useChecked from "../hooks/useChecked";
 
-const FormImagePicker = ({ name, style }) => {
+const FormImagePicker = ({ name, style, isModal = false }) => {
     const [image, setImage] = useState(null);
 
     const {
@@ -38,7 +38,7 @@ const FormImagePicker = ({ name, style }) => {
                     setImage(result.base64);
                     setFieldTouched(name)
                     setFieldValue(name, result.base64)
-                    isChecked && setChecked(false)
+                    isModal === false && isChecked && setChecked(false)
                 }
             }
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-effects';
-import { createStandart, getAllStandarts } from '../constants/api';
+import { createStandart, getAllStandarts, updateStandart } from '../constants/api';
 
 export const standartsInitial = {
     standarts: [],
@@ -117,17 +117,56 @@ export const standartsReducer = (
                 }
             );
 
-        case "CHANGE_STANDART_PROF":
-            return Update({
-                ...state,
-                standarts: state.standarts.map((standart, i) =>
-                    standart.id === action.standartId
-                        ? {
-                            ...standart,
-                            profession: action.professionName
-                        }
-                        : standart
-                )
-            })
+        case "UPDATE_SAVED_STANDART":
+            return UpdateWithSideEffect(
+                {
+                    ...state,
+                    posting: true,
+                    token: action.token
+                },
+                async(
+                    state,
+                    dispatch
+                ) => {
+                    try {
+                        const response = await axios.post(
+                            `${updateStandart(
+                                action.payload.standartId
+                            )}`,
+                            {
+                                text: action.standart.text,
+                                image: action.standart.image
+                            },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+                        )
+                        dispatch({
+                            type: "UPDATE_STANDARTS",
+                            standarts: response.data.data
+                        })
+                    } catch (error) {
+                        dispatch({
+                            type: "ERROR_STANDARTS",
+                            error
+                        })
+                    }
+                }
+            )
+
+        // case "CHANGE_STANDART_PROF":
+        //     return Update({
+        //         ...state,
+        //         standarts: state.standarts.map((standart, i) =>
+        //             standart.id === action.standartId
+        //                 ? {
+        //                     ...standart,
+        //                     profession: action.professionName
+        //                 }
+        //                 : standart
+        //         )
+        //     })
     }
 }

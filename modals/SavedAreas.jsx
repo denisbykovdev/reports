@@ -171,7 +171,8 @@ function SavedAreas({
         <ShadowView>
             <CommonHeader
                 close={savedAreasModalClose}
-                title="הוספת אזור"
+                // title="הוספת אזור"
+                title="הוספת אזורים שמורים"
             />
             <Line />
             <CommonSubHeader

@@ -1,5 +1,5 @@
 import React, { useRef } from "react"
-import { ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
+import { Platform, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import AvoidingView from "../common/AvoidingView"
 import HeaderView from "../common/HeaderView"
 import SafeView from "../common/SafeView"
@@ -233,11 +233,15 @@ const ReportScreen = ({ route }) => {
         }
     }
 
-    useInterval(() => {
-        if (!isChecked) {
-            formikRef.current.submitForm() && setAutoMod(true)
-        }
-    }, 120000);
+    useInterval(
+        () => {
+            if (!isChecked) {
+                formikRef.current.submitForm() && setAutoMod(true)
+            }
+        }, 
+        // 120000
+        Platform.OS === 'ios' ? 120000 : 59000
+    );
 
 
 

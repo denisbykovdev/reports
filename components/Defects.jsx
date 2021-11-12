@@ -11,6 +11,8 @@ import SavedAreas from "../modals/SavedAreas";
 import Area from './Area'
 import useChecked from "../hooks/useChecked";
 import { shallowEqual, useSelector } from "react-redux";
+import Line from "../common/Line";
+import useSearch from "../hooks/useSearch";
 
 const Defects = ({
     areas,
@@ -24,6 +26,8 @@ const Defects = ({
     const [savedAreasModalOpen, savedAreasModalClose, SavedAreasModalContent] = useModal();
 
     const { isChecked, setChecked } = useChecked()
+
+    const [searchArray, RenderSearch, searchText] = useSearch({ arrayOfObjects: defectsState.areas, withElaboration: true })
 
     useEffect(() => {
         if (areas && areas !== null && areas.length > 0) {
@@ -56,9 +60,29 @@ const Defects = ({
 
     return (
         <>
+            <View
+                style={{
+                    paddingHorizontal: responsiveWidth(31),
+                    paddingBottom: responsiveWidth(17)
+                }}
+            >
+                <RenderSearch />
+            </View>
+
+            <Line />
+            
             {
-                defectsState.areas && defectsState.areas.filter((area, i) => area.isSavedToReport === true).map((area, i) => (
-                    <Area
+                searchArray && searchText.length > 0  
+
+                ? searchArray.map((area, i) => area !== false && (
+                    // <View
+                    // key={area.id}
+                    // style={{
+                    //     borderColor: 'yellow',
+                    //     borderWidth: responsiveWidth(3)
+                    // }}
+                    // >
+                        <Area
                         key={area.id}
                         areaId={area.id}
                         areaName={area.area_name}
@@ -68,24 +92,50 @@ const Defects = ({
                         isSavedToReport={area.isSavedToReport}
                         setEdit={setEdit}
                         areaSamples={area.samples}
-                    />
+                        />
+                    // </View>
+                    
                 ))
+
+                :
+                
+                (
+                    <View>
+                    {
+                        defectsState.areas && defectsState.areas.filter((area, i) => area.isSavedToReport === true).map((area, i) => (
+                            <Area
+                                key={area.id}
+                                areaId={area.id}
+                                areaName={area.area_name}
+                                areaProblems={area.problems}
+                                dispatch={defectsDispatch}
+                                // server={area.server ? true : false}
+                                isSavedToReport={area.isSavedToReport}
+                                setEdit={setEdit}
+                                areaSamples={area.samples}
+                            />
+                        ))
+                    }
+                    {
+                        defectsState.areas && defectsState.areas.filter((area, i) => area.isSavedToReport === false).map((area, i) => (
+                            <Area
+                                key={area.id}
+                                areaId={area.id}
+                                areaName={area.area_name}
+                                areaProblems={area.problems}
+                                dispatch={defectsDispatch}
+                                // server={area.server ? true : false}
+                                isSavedToReport={area.isSavedToReport}
+                                setEdit={setEdit}
+                                areaSamples={area.samples}
+                            />
+                        ))
+                    }
+                    </View>
+                )
             }
-            {
-                defectsState.areas && defectsState.areas.filter((area, i) => area.isSavedToReport === false).map((area, i) => (
-                    <Area
-                        key={area.id}
-                        areaId={area.id}
-                        areaName={area.area_name}
-                        areaProblems={area.problems}
-                        dispatch={defectsDispatch}
-                        // server={area.server ? true : false}
-                        isSavedToReport={area.isSavedToReport}
-                        setEdit={setEdit}
-                        areaSamples={area.samples}
-                    />
-                ))
-            }
+
+    
             <View style={{
                 flexDirection: 'row'
             }}>
@@ -95,15 +145,14 @@ const Defects = ({
                     buttonWidth={'50%'}
                     buttonColor={colors.white}
                     titleColor={colors.azul}
-                    title="חיפוש והוספת איזור"
-                    // title="הוספת לחצן מהיר"
+                    // title="חיפוש והוספת איזור"a
+                    title="הוספת אזור לרשימה"
                     titleStyle={{
                         marginRight: 0
                     }}
                     style={{
                         borderBottomStartRadius: 5,
-                        borderBottomWidth: 1,
-
+                        borderBottomWidth: 1
                     }}
                     onPress={() => savedAreasModalOpen()}
                 />
@@ -113,7 +162,7 @@ const Defects = ({
                     buttonWidth={'50%'}
                     buttonColor={colors.paleGrayBg}
                     titleColor={colors.azul}
-                    title="הוספת איזור +"
+                    title="הוספת אזור +"
                     titleStyle={{
                         marginRight: 0
                     }}

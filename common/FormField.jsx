@@ -19,6 +19,7 @@ export default function FormField({
   area = false,
   interSepter,
   height,
+  isModal = false,
   ...otherProps
 }) {
   const {
@@ -49,7 +50,7 @@ export default function FormField({
           onChangeText={(text) => {
             setFieldValue(name, text);
             interSepter && interSepter(name, text)
-            isChecked && setChecked(false)
+            isModal === false && isChecked && setChecked(false)
           }}
           onBlur={() => setFieldTouched(name)}
           style={[
