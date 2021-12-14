@@ -72,6 +72,7 @@ export const usersReducer = (
                             }
 
                         );
+                        console.log(`--- userReducer/FETCH_USERS:`, )
                         dispatch({
                             type: "UPDATE_USERS",
                             users: response.data.data,

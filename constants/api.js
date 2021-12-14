@@ -489,15 +489,12 @@ export const getAllStandarts = `${standartsStore}/all`
 export const deleteStandart = (standartId) => `${standartsStore}/${standartId}/delete`
 export const updateStandart = (standartId) => `${standartsStore}/${standartId}/update`
 
-export const printEndpoint = (reportId, endpoint) => `${api}/${reportId}/${endpoint}word`
+export const printEndpoint = (reportId, endpoint) => `${api}/export_report/${reportId}/${endpoint}`
 
 //print modal endpoints
-export const withProfRegion = `withProfRegion/`
-export const withProf = `withProf/`
-export const withExpenses = `withExpenses/`
-export const withFree = `withFree/`
-
-// export const withPdf = `withPdf/`
-// export const withWord = `withWord/`
+export const withProfRegion = `by_profession_without_money`
+export const withProf = `by_profession_with_money`
+export const withExpenses = `by_areas_with_money`
+export const withFree = `by_areas_without_money`
 
 export const editPhoto = `${api}/editPhoto`

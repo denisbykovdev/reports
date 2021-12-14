@@ -118,6 +118,9 @@ export const standartsReducer = (
             );
 
         case "UPDATE_SAVED_STANDART":
+            console.log(
+                "***standartsReducer/UPDATE_SAVED_STANDART", action
+            )
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -131,11 +134,11 @@ export const standartsReducer = (
                     try {
                         const response = await axios.post(
                             `${updateStandart(
-                                action.payload.standartId
+                                action.standartId
                             )}`,
                             {
-                                text: action.standart.text,
-                                image: action.standart.image
+                                text: action.text,
+                                image: action.image
                             },
                             {
                                 headers: {

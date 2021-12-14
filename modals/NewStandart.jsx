@@ -32,7 +32,12 @@ export default function NewStandart({
 
     const submitNewStandart = async (values) => {
         console.log(
-            "___NewStandart/submit/values:", values, `:standart.id:`,standart.id
+            "___NewStandart/submit/values:", 
+            values, 
+            `:standart:`, 
+            standart,
+            `:isEdit:`,
+            isEdit
         )
         if(isEdit === false) {
             await standartsDispatch({
@@ -43,12 +48,12 @@ export default function NewStandart({
         }else{
             await standartsDispatch({
                 type: "UPDATE_SAVED_STANDART",
+                token,
                 standartId: standart.id,
                 text: values.text,
                 image: values.image
             })
         }
-        
         newStandartModalClose()
     }
 

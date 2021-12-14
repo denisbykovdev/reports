@@ -1,5 +1,5 @@
-import React from "react"
-import { withExpenses, withPdf, withProfRegion } from "../constants/api"
+import React, { useState } from "react"
+import { withExpenses, withFree, withPdf, withProf, withProfRegion } from "../constants/api"
 import { expDetails, printDetails, profDetails } from "../constants/printMadalButtons"
 import useRadioPair from "../hooks/useRadioPair"
 import colors from "../utils/colors"
@@ -12,11 +12,22 @@ import FormErrorMessage from "../common/FormErrorMessage";
 import { useDispatch } from 'react-redux'
 import useAuth from "../hooks/useAuth"
 import { watchPrintReport } from '../actionCreators/sagaReport'
+import PrintButton from "../common/PrintButton"
+import { View } from "react-native"
+
+const selectedArray = [
+    withProfRegion,
+    withProf,
+    withExpenses,
+    withFree
+]
 
 const PrintModal = ({ close, reportId }) => {
-    const [activeProf, RenderRadioPairProf] = useRadioPair(profDetails, withProfRegion)
-    const [activeExp, RenderRadioPairExp] = useRadioPair(expDetails, withExpenses)
+    // const [activeProf, RenderRadioPairProf] = useRadioPair(profDetails, withProfRegion)
+    // const [activeExp, RenderRadioPairExp] = useRadioPair(expDetails, withExpenses)
     // const [activePrint, RenderRadioPairPrint] = useRadioPair(printDetails, withPdf)
+
+    const [selected, setSelected] = useState()
 
     const dispatch = useDispatch()
 
@@ -25,18 +36,18 @@ const PrintModal = ({ close, reportId }) => {
     const { token } = authState
 
     const printHandler = () => {
-        const urlConcat = `${activeProf}${activeExp}`
+        // const urlConcat = `${activeProf}${activeExp}`
 
         // ${ activePrint }
 
         console.log(
-            "---PrintModal/printHandler/urlConcat:", urlConcat
+            "---PrintModal/printHandler/selected:", selected
         )
 
         dispatch(watchPrintReport(
             token,
             reportId,
-            urlConcat
+            selected
         ))
 
         close()
@@ -62,7 +73,29 @@ const PrintModal = ({ close, reportId }) => {
                     marginHorizontal: responsiveWidth(28)
                 }}
             />
-            <RenderRadioPairProf
+            <View
+                style={{
+                    marginHorizontal: responsiveWidth(28),
+                    marginVertical: responsiveWidth(16)
+                }}
+            >
+            {
+                selectedArray.map((select, i) => (
+                    <PrintButton 
+                        key={i}
+                        active={selected === select}
+                        select={
+                            select === `by_profession_without_money` ? 'דוח לפי אזור' 
+                            : select === `by_profession_with_money` ? 'דוח ערוך לפי מקצוע'
+                            : select === `by_areas_with_money` ? 'דוח כולל עלויות'
+                            : select === `by_areas_without_money` ? 'דוח ללא עלויות' : ''
+                        }
+                        onPress={() => setSelected(select)}
+                    />
+                ))
+            }
+            </View>
+            {/* <RenderRadioPairProf
                 radioPairContainerStyle={{
                     paddingHorizontal: responsiveWidth(28),
                     paddingVertical: responsiveWidth(18)
@@ -74,7 +107,7 @@ const PrintModal = ({ close, reportId }) => {
                     backgroundColor: colors.paleGrayThree,
                     paddingVertical: responsiveWidth(18)
                 }}
-            />
+            /> */}
             {/* <RenderRadioPairPrint 
                 radioPairContainerStyle={{
                     paddingHorizontal: responsiveWidth(28),
@@ -93,6 +126,7 @@ const PrintModal = ({ close, reportId }) => {
             <CommonButton
                 title={"יצוא"}
                 borderColor={colors.azul}
+                borderRadius={10}
                 titleColor={colors.azul}
                 onPress={() => printHandler()}
                 style={{

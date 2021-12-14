@@ -8,7 +8,7 @@ export function* printReportSaga(action) {
     yield put(printReportStart());
 
     try {
-        const { data } = yield call(() => axios.post(
+        const { data } = yield call(() => axios.get(
             `${printEndpoint(
                 action.payload.reportId,
                 action.payload.endpoint

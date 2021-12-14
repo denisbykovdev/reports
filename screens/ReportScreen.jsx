@@ -288,9 +288,12 @@ const ReportScreen = ({ route }) => {
                         com_areas_in_test: route.params && route.params.report ? route.params.report.com_areas_in_test : null,
                         exam_comm_areas: route.params && route.params.report ? route.params.report.exam_comm_areas : null,
                         resume: route.params && route.params.report ? route.params.report.resume : null,
-                        is_resume_template: route.params && route.params.report ? route.params.report.is_resume_template : null,
-                        // areas: route.params && route.params.report ? route.params.report.areas : '',
-                        // notes: route.params && route.params.report ? route.params.report.notes : ''
+                        is_resume_template: route.params && route.params.report 
+                            ? route.params.report.is_resume_template 
+                            : null,
+                        more_systems: route.params && route.params.report
+                            ? route.params.report.more_systems 
+                            : null
                     }}
                     onSubmit={
                         (values) => submitReport(values)
