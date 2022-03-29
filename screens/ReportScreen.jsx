@@ -93,13 +93,17 @@ const ReportScreen = ({ route }) => {
 
     const { token } = authState
 
+    console.log(
+        `--- ReportScreen/route.params.reportId:`, typeof route.params.reportId
+    )
+
     const reportSelector = useSelector(state => state.sagaReport.reports.filter(report => report.id === (route.params.reportId !== null && route.params.reportId || autoId !== null && autoId))[0])
 
     useEffect(() => {
         console.log(
-            `--- ReportScreen/areasSelector by reportId:`, reportSelector && reportSelector.areas
+            `--- ReportScreen/reportSelector:`, reportSelector && reportSelector, route.params.reportId
         )
-    }, [])
+    }, [reportSelector])
 
     const submitReport = async (values) => {
 
@@ -192,8 +196,8 @@ const ReportScreen = ({ route }) => {
             case "details":
                 return <Details />;
             case "defects":
-                return <Defects s
-                    etEdit={setEdit}
+                return <Defects 
+                    setEdit={setEdit}
                     areas={
                         // route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null
                         reportSelector && reportSelector.areas

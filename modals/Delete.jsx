@@ -11,6 +11,9 @@ export default function Delete({
     deleteNote,
     id
 }) {
+    console.log(
+        `--- Delete/props/id:`, id
+    )
     return (
         <View style={{
             // height: responsiveWidth(200),

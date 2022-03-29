@@ -75,7 +75,8 @@ export default function FormPhotoCamera({
 
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
+      // const { status } = await Camera.requestPermissionsAsync();
+      const { status } = await Camera.requestCameraPermissionsAsync()
 
       console.log("--- FormPhoto/status:", status, `:images:`, images)
 
@@ -105,8 +106,9 @@ export default function FormPhotoCamera({
         // )
 
         const data = await cameraRef.current.takePictureAsync({
+          quality: 0,
           base64: true,
-          // skipProcessing: true
+          skipProcessing: true
           // pictureSize: ratio
         });
   
@@ -157,7 +159,7 @@ export default function FormPhotoCamera({
       result: 'base64',
       // height: pixels,
       // width: pixels,
-      quality: 1,
+      quality: 0,
       format: 'png',
     });
 

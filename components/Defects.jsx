@@ -46,9 +46,9 @@ const Defects = ({
         }
 
 
-        console.log(
-            `--- Defects/areas:`, areas
-        )
+        // console.log(
+        //     `--- Defects/areas:`, areas
+        // )
     }, [])
 
     const addArea = () => {

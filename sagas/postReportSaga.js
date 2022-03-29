@@ -5,6 +5,9 @@ import { addReportOffline, postReportFailure, postReportStart, postReportSuccess
 import { createReport } from "../constants/api";
 
 export function* postReportSaga(action) {
+    console.log(
+        `--- postReportSaga/action:`, action
+    )
     yield put(postReportStart());
 
     try {
@@ -26,19 +29,6 @@ export function* postReportSaga(action) {
             data.data
         ))
 
-        // yield put(offlineActionCreators.connectionChange(false))
-
-        // yield put(addReportOffline(
-        //     {
-        //         ...action.payload.report,
-        //         areas: action.payload.areas,
-        //         notes: action.payload.notes.map(note => note.isSavedToReport === true && note),
-        //         pending: true
-        //     }
-        // ))
-
-        // yield put(offlineActionCreators.fetchOfflineMode(action));
-
     } catch (error) {
         yield put(postReportFailure(error))
 
@@ -56,3 +46,16 @@ export function* postReportSaga(action) {
         }
     }
 }
+
+  // yield put(offlineActionCreators.connectionChange(false))
+
+        // yield put(addReportOffline(
+        //     {
+        //         ...action.payload.report,
+        //         areas: action.payload.areas,
+        //         notes: action.payload.notes.map(note => note.isSavedToReport === true && note),
+        //         pending: true
+        //     }
+        // ))
+
+        // yield put(offlineActionCreators.fetchOfflineMode(action));

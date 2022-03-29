@@ -30,16 +30,17 @@ function FormMaskedField({
         {
             screen: "Report",
             params: {
-                reportId: itemId.toString(),
+                reportId: itemId,
                 report: itemData
             }
         }
     )
 
+      console.log(
+            `--- FormMasked/props`, itemId
+        )
+
     useEffect(() => {
-        // console.log(
-        //     `--- FormMasked/effect[close]`, close
-        // )
         close === true && setOpenFieled(false)
     }, [close])
 
@@ -69,7 +70,11 @@ function FormMaskedField({
                     ]}
                 >
                     <TouchableOpacity
-                        onPress={fieldName !== 'id' ? () => setOpenFieled(true) : () => openReportHandler(itemId)}
+                        onPress={
+                            fieldName !== 'id' 
+                            ? () => setOpenFieled(true) 
+                            : () => openReportHandler(itemId)
+                        }
                     >
                         {
                             openField

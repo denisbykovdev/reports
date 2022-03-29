@@ -45,71 +45,78 @@ export default function useSearch({
         ) {
 
             const filteredWithElaboration = arrayOfObjects && arrayOfObjects.map(
-                item => 
-                {
+                item => {
                     console.log(
                         `--- useSearch/test:`,
-                        item.area_name.toLowerCase().includes(searchText.toLowerCase()),
+                        searchText.toLowerCase(),
+                        // item.problems,
 
-                        typeof item.problems.find(problem => problem.name.toLowerCase().includes(searchText.toLowerCase())) === 'object' && {
+                        // item.area_name.toLowerCase().includes(searchText.toLowerCase())
+                        // ,
+
+                        typeof item.problems.find(
+                            problem =>
+                                Object.values(problem).find(
+                                    item =>
+                                        (typeof item === 'number'
+                                            || typeof item === 'string')
+                                        && item.toString().toLowerCase().includes(searchText.toString().toLowerCase())
+                                )
+                        ) === 'object' 
+                            && {
                             ...item,
-                            problems: item.problems.filter(problem => problem.name.toLowerCase().includes(searchText.toLowerCase()))
+                            problems: item.problems.filter(
+                                problem =>
+                                    Object.values(problem).find(
+                                        item =>
+                                            (typeof item === 'number'
+                                                || typeof item === 'string')
+                                            && item.toString().toLowerCase().includes(searchText.toString().toLowerCase())
+                                    )
+                            )
                         }
+                        ,
+
+                        // typeof item.problems.find(
+                        //     problem =>           
+                        //     problem.name.toLowerCase().includes(searchText.toLowerCase())
+                        //     ) === 'object' 
+                        //     && {
+                        //     ...item,
+                        //     problems: item.problems.filter(problem => problem.name.toLowerCase().includes(searchText.toLowerCase()))
+                        // }
                     )
 
-                    // if(typeof item.problems.find(problem => problem.name.toLowerCase().includes(searchText.toLowerCase())) === 'object') {
-                    //     return {
+                    // return typeof item.problems.find(problem => problem.name.toLowerCase().includes(searchText.toLowerCase())) === 'object'
+                    //     ? {
                     //         ...item,
                     //         problems: item.problems.filter(problem => problem.name.toLowerCase().includes(searchText.toLowerCase()))
                     //     }
-                    // }
+                    return typeof item.problems.find(
+                        problem =>
+                            Object.values(problem).find(
+                                item =>
+                                    (typeof item === 'number'
+                                        || typeof item === 'string')
+                                    && item.toString().toLowerCase().includes(searchText.toString().toLowerCase())
+                            )
+                    ) === 'object'
+                        ? {
+                            ...item,
+                            problems: item.problems.filter(
+                                problem =>
+                                    Object.values(problem).find(
+                                        item =>
+                                            (typeof item === 'number'
+                                                || typeof item === 'string')
+                                            && item.toString().toLowerCase().includes(searchText.toString().toLowerCase())
+                                    )
+                            )
+                        }
+                        : item.area_name.toLowerCase().includes(searchText.toLowerCase())
+                        && item
 
-                    // if(item.area_name.toLowerCase().includes(searchText.toLowerCase())) {
-                    //     return item
-                    // }
-
-                    return typeof item.problems.find(problem => problem.name.toLowerCase().includes(searchText.toLowerCase())) === 'object'
-                    ? {
-                        ...item,
-                        problems: item.problems.filter(problem => problem.name.toLowerCase().includes(searchText.toLowerCase()))
-                    }
-                    : item.area_name.toLowerCase().includes(searchText.toLowerCase())
-                    && item
-                    
                 }
-
-
-
-
-
-                // {
-                //     if (
-                //         item.area_name.toLowerCase().includes(searchText.toLowerCase())
-                //     ) {
-                //         return item;
-                //     }
-
-                //     if (
-                //         !item.area_name.toLowerCase().includes(searchText.toLowerCase()) &&
-                //         item.problems.find(
-                //             problem => problem.name.toLowerCase().includes(searchText.toLowerCase())
-                //         )
-                //     ) {
-                //         console.log(
-                //             `--- !!!:`,
-                //             {
-                //                 ...item,
-                //                 problems: item.problems.filter(problem => problem.name.toLowerCase().includes(searchText.toLowerCase()))
-                //             }
-                //         );
-
-                //         return {
-                //             ...item,
-                //             problems: item.problems.filter(problem => problem.name.toLowerCase().includes(searchText.toLowerCase()))
-                //         }
-                //     }
-
-                // }
             )
 
             setUpdateSearchArray(filteredWithElaboration)

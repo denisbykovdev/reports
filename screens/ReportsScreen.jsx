@@ -52,7 +52,7 @@ function ReportsScreen({ route, navigation }) {
 
   const dispatch = useDispatch();
 
-  const reportsSelector = useSelector((state) => state.sagaReport.reports, shallowEqual)
+  const reportsSelector = useSelector((state) => state.sagaReport.reports)
 
   const networkSelector = useSelector((state) => state.network, shallowEqual)
 

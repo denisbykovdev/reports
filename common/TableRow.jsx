@@ -50,13 +50,14 @@ const TableRow = ({ itemData, dispatchMethod, itemWidth, tableTitles }) => {
         console.log(
             "--- TableRow/submitItem/itemData/report:", itemData.hasOwnProperty('status')
         )
-        // console.log(
-        //     "--- DDI/submitItem/values:", values
-        // )
+        console.log(
+            "--- DDI/submitItem/values:", values
+        )
 
         if (itemData.hasOwnProperty('status')) {
             await dispatchMethod(watchUpdateReport(
                 token,
+                itemData.id,
                 values,
                 itemData.areas,
                 itemData.notes

@@ -117,7 +117,6 @@ export const serverProblemsReducer = (
                     try {
                         const response = await axios.post(
                             `${createProblem}`,
-
                             {
                                 ...action.problem
                             },

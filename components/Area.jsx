@@ -128,6 +128,7 @@ export default function Area({
             <View style={[styles.areaHeader, {
                 backgroundColor: isAreaOpen ? colors.paleGrayBg : colors.white,
                 flexDirection: type === 2 ? 'row-reverse' : 'column',
+                // flexDirection: 'row',
                 justifyContent: 'space-between',
                 // alignItems: 'center'
             }]}>
@@ -137,7 +138,11 @@ export default function Area({
                         <View style={{
                             flexDirection: 'row',
                             alignItems: 'center',
-                            paddingLeft: responsiveWidth(30)
+                            // paddingLeft: responsiveWidth(30),
+                            // backgroundColor: 'yellow',
+                            justifyContent: 'flex-end',
+                            width: '50%',
+                            height: responsiveWidth(31)
                         }}>
                             <TouchableOpacity onPress={() => setOpenName(!openName)}>
                                 {
@@ -157,7 +162,8 @@ export default function Area({
                                                     borderRadius: 20,
                                                     alignSelf: 'flex-end'
                                                 }}
-                                                width="80%"
+                                                // width="80%"
+                                                // width="60%"
                                                 name="area_name"
                                                 interSepter={interSepter}
                                             />
@@ -329,7 +335,8 @@ const styles = StyleSheet.create({
     areaHeaderTitle: {
         fontSize: fonts.medium,
         fontWeight: weights.semiBold,
-        textAlign: 'right'
+        textAlign: 'right',
+        // height: responsiveWidth(31)
     },
     areaHeaderId: {
         fontSize: fonts.small,

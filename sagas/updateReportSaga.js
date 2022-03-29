@@ -5,6 +5,9 @@ import { updateReportFailure, updateReportOffline, updateReportStart, updateRepo
 import { updateReport } from "../constants/api";
 
 export function* updateReportSaga(action) {
+    console.log(
+        `--- updateReportSaga/action:`, action
+    )
     yield put(updateReportStart());
 
     try {

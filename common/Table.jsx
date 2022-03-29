@@ -23,27 +23,37 @@ const Table = ({
 
     const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: array })
 
+    console.log(
+        `--- Table/props:`, arrayProp, array
+    )
+
     useEffect(() => {
-        if (
-            array === undefined
-            || array === false
-            || array !== arrayProp
-            || arrayProp === undefined
-        ) {
-            setArray(arrayProp)
-        }
+        // if (
+        //     array === undefined
+        //     || array === false
+        //     || array !== arrayProp
+        //     || arrayProp === undefined
+        //     || array != arrayProp
+        // ) {
+        //     setArray(arrayProp)
+        // }
+        setArray(arrayProp)
+
+        console.log(
+            `--- Table/effect:`, arrayProp, array
+        )
     }, [arrayProp])
 
-    useEffect(() => {
-        if (inputText && inputText.length > 1) {
-            const filtered = arrayProp.filter(report => Object.values(report).some(reportValue => reportValue !== null && reportValue.toString().toLowerCase().includes(inputText.toLowerCase())))
+    // useEffect(() => {
+    //     if (inputText && inputText.length > 1) {
+    //         const filtered = arrayProp.filter(report => Object.values(report).some(reportValue => reportValue !== null && reportValue.toString().toLowerCase().includes(inputText.toLowerCase())))
 
-            setArray(filtered)
-        }
-        if (inputText.length === 0) {
-            setArray(arrayProp)
-        }
-    }, [inputText])
+    //         setArray(filtered)
+    //     }
+    //     if (inputText.length === 0) {
+    //         setArray(arrayProp)
+    //     }
+    // }, [inputText])
 
     const widthHandler = (tableTitles) => 100 / Object.keys(tableTitles).length
 
@@ -98,9 +108,27 @@ const Table = ({
                 </View>
                 <View style={styles.tableRows}>
                     {
-                        searchArray && searchArray.length >= 0
-                            ? searchArray.map((element, index) => (
-                                <View key={index}>
+                        // searchArray && searchArray.length > 0
+                        //     ? 
+                        //     searchArray && searchArray.map((element, index) => (
+                        //         <View key={index}>
+                        //             <View style={{
+                        //                 backgroundColor: colors.whiteTwo,
+                        //                 height: responsiveWidth(1),
+                        //                 display: index === 0 ? 'none' : "flex"
+                        //             }}></View>
+                        //             <TableRow
+                        //                 itemData={element}
+                        //                 dispatchMethod={dispatchMethod}
+                        //                 itemWidth={itemWidth}
+                        //                 key={index}
+                        //                 tableTitles={tableTitles}
+                        //             />
+                        //         </View>
+                        //     ))
+                        //     : 
+                            arrayProp && arrayProp.map((element, index) => (
+                                <View key={element.id}>
                                     <View style={{
                                         backgroundColor: colors.whiteTwo,
                                         height: responsiveWidth(1),
@@ -110,23 +138,7 @@ const Table = ({
                                         itemData={element}
                                         dispatchMethod={dispatchMethod}
                                         itemWidth={itemWidth}
-                                        key={index}
-                                        tableTitles={tableTitles}
-                                    />
-                                </View>
-                            ))
-                            : array && array.map((element, index) => (
-                                <View key={index}>
-                                    <View style={{
-                                        backgroundColor: colors.whiteTwo,
-                                        height: responsiveWidth(1),
-                                        display: index === 0 ? 'none' : "flex"
-                                    }}></View>
-                                    <TableRow
-                                        itemData={element}
-                                        dispatchMethod={dispatchMethod}
-                                        itemWidth={itemWidth}
-                                        key={index}
+                                        // key={index}
                                         tableTitles={tableTitles}
                                     />
                                 </View>

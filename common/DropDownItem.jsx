@@ -156,9 +156,13 @@ const DropDownItem = ({ itemData, dispatchMethod }) => {
                     }
 
                     {
-                        itemData && itemData.status === null
-                            || itemData.status
-                            || !itemData.hasOwnProperty('deleted')
+                        // itemData && itemData.status === null
+                        //     || itemData.status
+                        //     || !itemData.hasOwnProperty('deleted')
+                        //     || 
+                            !itemData.hasOwnProperty('password')
+                            &&
+                            itemData.hasOwnProperty('status')
                             ?
                             (
                                 <TouchableOpacity

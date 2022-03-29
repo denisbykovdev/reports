@@ -24,7 +24,12 @@ const DropDown = ({
 
     // connect prop to update render
     useEffect(() => {
-        if (array === undefined || array === false || array !== arrayProp || arrayProp === undefined) {
+        if (
+            array === undefined 
+            || array === false 
+            || array !== arrayProp 
+            || arrayProp === undefined
+        ) {
             setArray(arrayProp)
         }
     }, [arrayProp])
