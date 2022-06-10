@@ -94,23 +94,37 @@ export default function FormPhotoCamera({
 
   useEffect(() => {
     if (routeImage) {
-      setImages([...images, routeImage]);
+      setImages([
+        ...images.map(
+          (im, i) => i === images.length -1
+            ? routeImage.toString()
+            : im
+        )
+      ]);
 
-      carouselRef.current.snapToNext();
-
-      console.log(
-        `--- images/routeImage:true:`, 
-        images, 
-        values[name].length
-      );
+      setSelected(routeImage.toString());
     };
   }, [routeImage]);
 
   useEffect(() => {
-    if (routeBase64) {
-      setFieldValue(name, [...values[name], routeBase64]);
+    if (routeBase64 && values.image) {
+      setFieldValue(name, [
+        ...values[name].map(
+          (im, i) => i === values[name].length -1
+            ? routeBase64.toString()
+            : im
+        )
+      ]);
     };
   }, [routeBase64]);
+
+  // useEffect(() => {
+  //   console.log(
+  //     `--- images:`, 
+  //     images,
+  //     values.image && values.image.length > 0 && values.image[values.image.length -1] === routeBase64.toString()
+  //   );
+  // }, [images])
 
   useEffect(() => {
     (async () => {

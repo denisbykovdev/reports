@@ -412,9 +412,9 @@ export const defectsReducer = (
             });
 
         case "UPDATE_SAVED_AREAS":
-            console.log(
-                `*** UPDATE_SAVED_AREAS/action:`, action
-            )
+            // console.log(
+            //     `*** UPDATE_SAVED_AREAS/action:`, action
+            // )
             return Update({
                 ...state,
                 posting: false,
