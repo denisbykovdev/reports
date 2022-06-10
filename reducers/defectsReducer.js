@@ -60,7 +60,7 @@ const staticSavedAreas = [
 
 export const defectsInitial = {
     areas: [],
-    savedAreas: null,
+    savedAreas: [],
     error: null,
     notes: [],
     saveNotes: [],
@@ -349,7 +349,7 @@ export const defectsReducer = (
 
                         dispatch({
                             type: "UPDATE_SAVED_AREAS",
-                            savedAreas: response.data.data
+                            savedAreas: response.data
                         })
                     } catch (error) {
                         dispatch({
@@ -361,59 +361,53 @@ export const defectsReducer = (
             );
 
         case "ADD_REPORT_AREAS":
-            console.log(
-                "*** ADD_REPORT_AREAS/action:",
-                action,
-                `*** state.areas:`,
-                state.areas
-            )
+            // console.log(
+            //     "*** ADD_REPORT_AREAS/action:",
+            //     action,
+            //     // `*** state.areas:`,
+            //     // state.areas
+            // )
             return Update({
                 ...state,
                 areas: [
-                    ...action.reportAreas.map((area, i) => {
-                        return {
-                            ...area,
-                            // id: state.areas.length === 0 ? 1 + i : state.areas.length + 1 + i,
-                            // problems: area.problems && area.problems.length > 0
-                            //     ? area.problems.map((problem, i) => {
-                            //         return {
-                            //             ...problem,
-                            //             id: i + 1
-                            //         }
-                            //     })
-                            //     : [],
-                            // isSavedToReport: true
-                        }
-
-                    })
+                    ...action.reportAreas.map(
+                        ({
+                            report_id,
+                            ...rest
+                        }) =>
+                        ({
+                            ...rest,
+                            isSavedToReport: true,
+                            problems: rest.problems ? rest.problems : [],
+                            samples: rest.samples ? rest.samples : []
+                        })
+                    )
                 ]
             });
 
         case "ADD_SERVER_AREAS":
-            console.log(
-                "*** ADD_SERVER_AREAS/action:", action
-            )
+            // console.log(
+            //     "*** ADD_SERVER_AREAS/action:", action
+            // )
             return Update({
                 ...state,
                 areas: [
                     ...state.areas,
-                    ...action.serverAreas.map((area, i) => {
-                        return {
-                            ...area,
+                    ...action.serverAreas.map(
+                        (
+                            { 
+                                report_id,
+                                ...rest 
+                            },
+                            i
+                        ) => ({
+                            ...rest,
                             id: state.areas.length === 0 ? 1 + i : state.areas.length + 1 + i,
-                            // problems: area.problems && area.problems.length > 0
-                            //     ? area.problems.map((problem, i) => {
-                            //         return {
-                            //             ...problem,
-                            //             id: area.problems.length === 0 ? 1 + i : area.problems.length + 1 + i
-                            //         }
-                            //     })
-                            //     : [],
-                            // server: true,
                             isSavedToReport: true,
-                        }
-
-                    })
+                            problems: rest.problems ? rest.problems : [],
+                            samples: rest.samples ? rest.samples : []
+                        })
+                    )
                 ]
             });
 

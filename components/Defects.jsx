@@ -13,14 +13,12 @@ import useChecked from "../hooks/useChecked";
 import { shallowEqual, useSelector } from "react-redux";
 import Line from "../common/Line";
 import useSearch from "../hooks/useSearch";
+import useAuth from "../hooks/useAuth";
 
 const Defects = ({
-    areas,
-    setEdit,
-    // reportId
+    // areas,
+    setEdit
 }) => {
-    // const areas = reportId !== undefined && reportId !== null && useSelector(state => state.sagaReport.reports.filter(report => report.id === reportId)[0].areas, shallowEqual)
-
     const { defectsState, defectsDispatch } = useDefects()
 
     const [savedAreasModalOpen, savedAreasModalClose, SavedAreasModalContent] = useModal();
@@ -29,27 +27,37 @@ const Defects = ({
 
     const [searchArray, RenderSearch, searchText] = useSearch({ arrayOfObjects: defectsState.areas, withElaboration: true })
 
+    const { authState } = useAuth()
+
+    const { token } = authState;
+
     useEffect(() => {
-        if (areas && areas !== null && areas.length > 0) {
-            defectsDispatch({
-                type: "CLEAR_AREAS"
-            })
+        // if (areas && areas !== null && areas.length > 0) {
+        //     // defectsDispatch({
+        //     //     type: "CLEAR_AREAS"
+        //     // })
 
-            defectsDispatch({
-                type: "ADD_REPORT_AREAS",
-                reportAreas: areas
-            })
-        } else {
-            defectsDispatch({
-                type: "CLEAR_AREAS"
-            })
-        }
+        //     // defectsDispatch({
+        //     //     type: "ADD_REPORT_AREAS",
+        //     //     reportAreas: areas
+        //     // })
+        //     // return;
+        // } else {
+        //     defectsDispatch({
+        //         type: "CLEAR_AREAS"
+        //     })
+        // };
 
+        defectsDispatch({
+            type: "FETCH_SAVED_AREAS",
+            token
+        });
 
-        // console.log(
-        //     `--- Defects/areas:`, areas
-        // )
-    }, [])
+        console.log(
+            `--- Defects/areas:`, 
+            defectsState.areas
+        );
+    }, []);
 
     const addArea = () => {
         defectsDispatch({
@@ -68,74 +76,71 @@ const Defects = ({
             >
                 <RenderSearch />
             </View>
-
             <Line />
-            
             {
-                searchArray && searchText.length > 0  
-
-                ? searchArray.map((area, i) => area !== false && (
-                    // <View
-                    // key={area.id}
-                    // style={{
-                    //     borderColor: 'yellow',
-                    //     borderWidth: responsiveWidth(3)
-                    // }}
-                    // >
-                        <Area
-                        key={area.id}
-                        areaId={area.id}
-                        areaName={area.area_name}
-                        areaProblems={area.problems}
-                        dispatch={defectsDispatch}
-                        // server={area.server ? true : false}
-                        isSavedToReport={area.isSavedToReport}
-                        setEdit={setEdit}
-                        areaSamples={area.samples}
-                        />
-                    // </View>
-                    
-                ))
-
-                :
-                
-                (
-                    <View>
-                    {
-                        defectsState.areas && defectsState.areas.filter((area, i) => area.isSavedToReport === true).map((area, i) => (
-                            <Area
-                                key={area.id}
-                                areaId={area.id}
-                                areaName={area.area_name}
-                                areaProblems={area.problems}
-                                dispatch={defectsDispatch}
-                                // server={area.server ? true : false}
-                                isSavedToReport={area.isSavedToReport}
-                                setEdit={setEdit}
-                                areaSamples={area.samples}
-                            />
-                        ))
-                    }
-                    {
-                        defectsState.areas && defectsState.areas.filter((area, i) => area.isSavedToReport === false).map((area, i) => (
-                            <Area
-                                key={area.id}
-                                areaId={area.id}
-                                areaName={area.area_name}
-                                areaProblems={area.problems}
-                                dispatch={defectsDispatch}
-                                // server={area.server ? true : false}
-                                isSavedToReport={area.isSavedToReport}
-                                setEdit={setEdit}
-                                areaSamples={area.samples}
-                            />
-                        ))
-                    }
-                    </View>
-                )
+                searchArray &&
+                    searchText.length > 0
+                    ? searchArray.map(
+                        (area, i) =>
+                            area !== false
+                            && (
+                                <Area
+                                    key={area.id}
+                                    areaId={area.id}
+                                    areaName={area.area_name}
+                                    areaProblems={area.problems}
+                                    dispatch={defectsDispatch}
+                                    // server={area.server ? true : false}
+                                    isSavedToReport={area.isSavedToReport}
+                                    setEdit={setEdit}
+                                    areaSamples={area.samples}
+                                />
+                            ))
+                    :
+                    (
+                        <View>
+                            {
+                                defectsState.areas && 
+                                defectsState.areas.filter(
+                                    (area, i) => 
+                                        area.isSavedToReport === true
+                                ).map(
+                                    (area, i) => 
+                                        <Area
+                                            key={area.id}
+                                            areaId={area.id}
+                                            areaName={area.area_name}
+                                            areaProblems={area.problems}
+                                            dispatch={defectsDispatch}
+                                            areaSamples={area.samples}
+                                            isSavedToReport={area.isSavedToReport}
+                                            setEdit={setEdit}
+                                            
+                                        />
+                                )
+                            }
+                            {
+                                defectsState.areas && 
+                                defectsState.areas.filter(
+                                    (area, i) => 
+                                        area.isSavedToReport === false
+                                ).map(
+                                    (area, i) => 
+                                        <Area
+                                            key={area.id}
+                                            areaId={area.id}
+                                            areaName={area.area_name}
+                                            areaProblems={area.problems}
+                                            dispatch={defectsDispatch}
+                                            areaSamples={area.samples}
+                                            isSavedToReport={area.isSavedToReport}
+                                            setEdit={setEdit}
+                                        />
+                                )
+                            }
+                        </View>
+                    )
             }
-
-    
             <View style={{
                 flexDirection: 'row'
             }}>
@@ -173,7 +178,6 @@ const Defects = ({
                     onPress={() => addArea()}
                 />
             </View>
-
             <SavedAreasModalContent>
                 <SavedAreas
                     savedAreasModalClose={savedAreasModalClose}
@@ -181,10 +185,9 @@ const Defects = ({
                     defectsDispatch={defectsDispatch}
                 />
             </SavedAreasModalContent>
-
         </>
     )
-}
+};
 
 const styles = StyleSheet.create({
     defectsAreasSearch: {
@@ -204,6 +207,6 @@ const styles = StyleSheet.create({
         color: colors.darkBlueGray,
         textAlign: 'right'
     }
-})
+});
 
-export default Defects
+export default Defects;

@@ -1,4 +1,5 @@
-import React, { createContext, useCallback } from "react"
+import React, { createContext, useCallback, useMemo } from "react"
+import { State } from "react-native-gesture-handler"
 import useReducerWithSideEffects from 'use-reducer-with-side-effects'
 import useAuth from "../hooks/useAuth"
 import {defectsReducer, defectsInitial} from "../reducers/defectsReducer"
@@ -11,10 +12,12 @@ export default function DefectsProvider({children}) {
         defectsInitial
     )
 
-    return <DefectsContext.Provider value={{
-        defectsState,
-        defectsDispatch
-    }}>
+    return <DefectsContext.Provider 
+        value={{
+            defectsState,
+            defectsDispatch
+        }}
+    >
         {children}
     </DefectsContext.Provider>
 }

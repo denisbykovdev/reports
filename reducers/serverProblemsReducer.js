@@ -83,7 +83,7 @@ export const serverProblemsReducer = (
 
                         dispatch({
                             type: "SET_SERVER_PROBLEMS",
-                            problems: response.data.data,
+                            problems: response.data,
                         })
 
                     } catch (error) {

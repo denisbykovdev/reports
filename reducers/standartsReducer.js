@@ -65,7 +65,7 @@ export const standartsReducer = (
                         )
                         dispatch({
                             type: "UPDATE_STANDARTS",
-                            standarts: response.data.data,
+                            standarts: response.data,
                         })
                     } catch (error) {
                         dispatch({

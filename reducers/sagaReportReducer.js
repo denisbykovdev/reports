@@ -59,7 +59,7 @@ export const sagaReportReducer = (state = sagaReportInitial,
             return {
                 ...state,
                 posting: false,
-                reports: action.payload.reports
+                reports: [ ...state.reports, action.payload.reports]
             }
         case "POST_REPORT_FAILURE":
             return {
@@ -76,7 +76,7 @@ export const sagaReportReducer = (state = sagaReportInitial,
             return {
                 ...state,
                 posting: false,
-                reports: action.payload.reports
+                reports: [ ...state.reports, action.payload.reports]
             }
         case "UPDATE_REPORT_FAILURE":
             return {

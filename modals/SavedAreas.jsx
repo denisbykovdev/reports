@@ -75,11 +75,11 @@ const serverAreasReducer = (
                         );
                         console.log(
                             `--- serverAreasReducer/GET_SERVER_AREAS/response:`,
-                            response.data.data
+                            response.data
                         )
                         dispatch({
                             type: "SET_SERVER_AREAS",
-                            serverAreas: response.data.data
+                            serverAreas: response.data
                         })
                     } catch (error) {
                         dispatch({
@@ -95,18 +95,18 @@ const serverAreasReducer = (
 
 function SavedAreas({
     savedAreasModalClose,
-    defectsDispatch
+    // defectsDispatch
 }) {
     const [serverAreasState, serverAreasDispatch] = useReducerWithSideEffects(
         serverAreasReducer,
         serverAreasInitial
     );
 
-    // const { defectsState, defectsDispatch } = useDefects()
+    const { defectsState, defectsDispatch } = useDefects()
 
     const [checkedAreasList, setUpdateAreasList] = useState([])
 
-    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: serverAreasState.serverAreas })
+    const [searchArray, RenderSearch] = useSearch({ arrayOfObjects: defectsState.savedAreas })
 
     const { authState } = useAuth()
 
@@ -117,10 +117,10 @@ function SavedAreas({
         console.log(
             `--- SavedAreas/addCheckedArea/name:`,
             name,
-            serverAreasState
+            defectsState
         )
 
-        const newSavedArea = serverAreasState.serverAreas.find(savedArea => savedArea.area_name === name)
+        const newSavedArea = defectsState.savedAreas.find(savedArea => savedArea.area_name === name)
 
         console.log(
             `--- SavedAreas/addCheckedArea/newSavedArea:`, newSavedArea
@@ -158,14 +158,14 @@ function SavedAreas({
         })
     }
 
-    useEffect(() => {
-        (function getAreas() {
-            serverAreasDispatch({
-                type: "GET_SERVER_AREAS",
-                token
-            })
-        })()
-    }, [])
+    // useEffect(() => {
+    //     (async function getAreas() {
+    //         await serverAreasDispatch({
+    //             type: "GET_SERVER_AREAS",
+    //             token
+    //         })
+    //     })()
+    // }, [])
 
     return (
         <ShadowView>
@@ -227,8 +227,8 @@ function SavedAreas({
                             deleteSavedArea={deleteSavedArea}
                         />
                     ))
-                    : serverAreasState.serverAreas.map((savedArea, i) => (
-                        serverAreasState.loading
+                    : defectsState.savedAreas.map((savedArea, i) => (
+                        defectsState.loading
                             ? <Spinner key={i} />
 
                             :

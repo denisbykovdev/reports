@@ -3,6 +3,8 @@ export const domain = `http://eitanperetz.com`
 
 export const api = `${domain}/api`
 
+const nodeDomain = `https://reports-server.herokuapp.com`;
+
 //auth : POST
 // export const auth = `${api}/auth/register`
 export const auth = `${api}/auth/login`
@@ -133,7 +135,8 @@ export const reportsStore = `${api}/reports/store`
 
 //use cases:
 //get all reports: GET
-export const reportsAll = `${reportsStore}/all`
+// export const reportsAll = `${reportsStore}/all`
+export const reportsAll = `${nodeDomain}/reports`
 // request:
 // {
 //   headers: {
@@ -245,7 +248,8 @@ export const areasStore = `${api}/area/store`
 //use cases:
 
 //get all areas: GET
-export const areasAll = `${areasStore}/all`
+// export const areasAll = `${areasStore}/all`
+export const areasAll = `${nodeDomain}/areas`
 // request:
 // {
 //   headers: {
@@ -464,7 +468,8 @@ export const problemsStore = `${api}/problems/store`
 //create problem: POST
 export const createProblem = problemsStore
 //get all problemss: GET
-export const getAllProblems = `${problemsStore}/all`
+// export const getAllProblems = `${problemsStore}/all`
+export const getAllProblems = `${nodeDomain}/problems`
 export const updateProblem = (problemName) => `${problemsStore}/${problemName}/update`
 
 //professions endpoints
@@ -485,7 +490,8 @@ export const standartsStore = `${api}/standart/store`
 //create standart: POST
 export const createStandart = standartsStore
 //get all standarts: GET
-export const getAllStandarts = `${standartsStore}/all`
+// export const getAllStandarts = `${standartsStore}/all`
+export const getAllStandarts = `${nodeDomain}/standarts`
 export const deleteStandart = (standartId) => `${standartsStore}/${standartId}/delete`
 export const updateStandart = (standartId) => `${standartsStore}/${standartId}/update`
 

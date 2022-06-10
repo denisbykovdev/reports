@@ -30,7 +30,7 @@ export function* getReportsSaga(action) {
             }));
 
         yield put(getReportsSuccess(
-            data.data
+            data
         ))
 
         // yield call(() => {

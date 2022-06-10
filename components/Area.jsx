@@ -67,16 +67,16 @@ export default function Area({
         setEditSample(sample)
     }
 
-    useEffect(() => {
-        console.log(
-            "--- Area/effect/areaProblems:",
-            areaProblems,
-            areaSamples
-        )
-    }, [
-        areaProblems,
-        areaSamples
-    ])
+    // useEffect(() => {
+    //     console.log(
+    //         "--- Area/effect/areaProblems:",
+    //         areaProblems.length,
+    //         areaSamples.length
+    //     )
+    // }, [
+    //     areaProblems,
+    //     areaSamples
+    // ])
 
     const deleteArea = () => {
         dispatch({

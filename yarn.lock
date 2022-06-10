@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@archireport/react-native-svg-draw@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@archireport/react-native-svg-draw/-/react-native-svg-draw-1.0.2.tgz#9100e3c0a7ea03045aa46c012236dafef31ae8f6"
+  integrity sha512-AekOvyCi22eH896Y43E5aAvDvK54lx5OMnlkRL//Tdaeymr9MsL+16lSAO9VYJPNBOcu0LWLTmd1C51fmAG7gg==
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.14.5":
   version "7.14.5"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.14.5.tgz#23b08d740e83f49c5e59945fbf1b43e80bbf4edb"
@@ -3958,6 +3963,13 @@ expo-keep-awake@~10.0.0:
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-10.0.1.tgz#9f1176216c41eee20843c8232acfdca2bc32d334"
   integrity sha512-kcBtoDGkm3RRe6BpKDvR7gof/ErajEia38u92pRvNRctdh+p8AFO7GQuiipyg3iMfhcCFVTCIV7h3tuA0g/yDw==
+
+expo-linear-gradient@~10.0.3:
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-10.0.3.tgz#06ad72e164f5bf36c4afcfc8ccd31138a3a78d6e"
+  integrity sha512-zKkBhHvTvDywpb0y5BJDHTbxX5/2C60qW/M8uyZXKIZcTUwY7j/9Kcx0YzoNNglq7p6aQ/DWO7sM8LHr93985Q==
+  dependencies:
+    expo-modules-core "~0.4.4"
 
 expo-media-library@~13.0.3:
   version "13.0.3"

@@ -93,17 +93,26 @@ const ReportScreen = ({ route }) => {
 
     const { token } = authState
 
-    console.log(
-        `--- ReportScreen/route.params.reportId:`, typeof route.params.reportId
-    )
+    // console.log(
+    //     `--- ReportScreen/route.params.reportId:`, route.params?.reportId, defectsState !== undefined && defectsState
+    // )
+    // route.params.reportId !== null || autoId !== null &&
 
-    const reportSelector = useSelector(state => state.sagaReport.reports.filter(report => report.id === (route.params.reportId !== null && route.params.reportId || autoId !== null && autoId))[0])
 
-    useEffect(() => {
-        console.log(
-            `--- ReportScreen/reportSelector:`, reportSelector && reportSelector, route.params.reportId
-        )
-    }, [reportSelector])
+    const selector = useSelector(state => state.sagaReport.reports);
+
+    const reportSelector = selector !== null
+        && (route.params.reportId !== null || autoId !== null)
+        && selector.filter(
+            report =>
+                report.id === (route.params.reportId ?? autoId)
+        )[0];
+
+    // useEffect(() => {
+    //     console.log(
+    //         `--- ReportScreen/reportSelector:`, reportSelector && reportSelector, route.params.reportId, autoId
+    //     )
+    // }, [reportSelector, autoId])
 
     const submitReport = async (values) => {
 
@@ -114,8 +123,8 @@ const ReportScreen = ({ route }) => {
             dispatch(watchPostReport(
                 token,
                 values,
-                defectsState.areas,
-                defectsState.notes
+                defectsState && defectsState.areas,
+                defectsState && defectsState.notes
             ))
             // autoMod === true && 
         } else if (route.params.reportId === null && autoId !== null) {
@@ -123,16 +132,16 @@ const ReportScreen = ({ route }) => {
                 token,
                 autoId,
                 newValues,
-                defectsState.areas,
-                defectsState.notes
+                defectsState && defectsState.areas,
+                defectsState && defectsState.notes
             ))
         } else if (route.params.reportId !== null) {
             dispatch(watchUpdateReport(
                 token,
                 route.params.reportId,
                 newValues,
-                defectsState.areas,
-                defectsState.notes
+                defectsState && defectsState.areas,
+                defectsState && defectsState.notes
             ))
         }
         setChecked(true)
@@ -171,6 +180,7 @@ const ReportScreen = ({ route }) => {
                     areas={
                         // route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null
                         reportSelector && reportSelector.areas
+                            && reportSelector.areas
                     }
                 // reportId={
                 //     route.params && route.params.report && route.params.report.id !== null ? route.params.report.id : autoId !== null ? autoId : null
@@ -196,11 +206,12 @@ const ReportScreen = ({ route }) => {
             case "details":
                 return <Details />;
             case "defects":
-                return <Defects 
+                return <Defects
                     setEdit={setEdit}
                     areas={
                         // route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null
                         reportSelector && reportSelector.areas
+                            && reportSelector.areas
                     }
                 // reportId={
                 //     route.params && route.params.report && route.params.report.id !== null ? route.params.report.id : autoId !== null ? autoId : null
@@ -224,30 +235,43 @@ const ReportScreen = ({ route }) => {
     }
 
     const pushPrintHandler = () => {
-        setToPrint(!toPrint)
+        setToPrint(!toPrint);
 
         if (toPrint) {
             defectsDispatch({
                 type: "PUSH_FROM_PRINT"
-            })
+            });
         } else {
             defectsDispatch({
                 type: "PUSH_TO_PRINT"
-            })
-        }
-    }
+            });
+        };
+    };
 
     useInterval(
         () => {
             if (!isChecked) {
-                formikRef.current.submitForm() && setAutoMod(true)
+                formikRef.current.submitForm() 
+                && setAutoMod(true)
             }
-        }, 
+        },
         // 120000
-        Platform.OS === 'ios' ? 120000 : 59000
+        Platform.OS === 'ios' 
+            ? 120000 
+            : 59000
     );
 
+    useEffect(() => {
+        defectsDispatch({
+            type: "CLEAR_AREAS"
+        });
 
+        defectsDispatch({
+            type: "ADD_REPORT_AREAS",
+            reportAreas: reportSelector.areas
+        });
+
+    }, []);
 
     return (
         <SafeView>
@@ -292,11 +316,11 @@ const ReportScreen = ({ route }) => {
                         com_areas_in_test: route.params && route.params.report ? route.params.report.com_areas_in_test : null,
                         exam_comm_areas: route.params && route.params.report ? route.params.report.exam_comm_areas : null,
                         resume: route.params && route.params.report ? route.params.report.resume : null,
-                        is_resume_template: route.params && route.params.report 
-                            ? route.params.report.is_resume_template 
+                        is_resume_template: route.params && route.params.report
+                            ? route.params.report.is_resume_template
                             : null,
                         more_systems: route.params && route.params.report
-                            ? route.params.report.more_systems 
+                            ? route.params.report.more_systems
                             : null
                     }}
                     onSubmit={
@@ -312,7 +336,6 @@ const ReportScreen = ({ route }) => {
                         }}
                         scrollEnabled={noEdit}
                     >
-
                         <HeaderView>
                             <ShadowView
                                 shadowStyle={{
