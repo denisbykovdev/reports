@@ -498,9 +498,9 @@ export const updateStandart = (standartId) => `${standartsStore}/${standartId}/u
 export const printEndpoint = (reportId, endpoint) => `${api}/export_report/${reportId}/${endpoint}`
 
 //print modal endpoints
-export const withProfRegion = `by_profession_without_money`
-export const withProf = `by_profession_with_money`
-export const withExpenses = `by_areas_with_money`
-export const withFree = `by_areas_without_money`
+export const byProfWithout = `by_profession_without_money`
+export const byProfWith = `by_profession_with_money`
+export const byAreasWith = `by_areas_with_money`
+export const byAreasWithout = `by_areas_without_money`
 
 export const editPhoto = `${api}/editPhoto`

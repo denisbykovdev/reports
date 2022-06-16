@@ -4,15 +4,12 @@ import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-ef
 export const resumesInitial = {
     resumes: [],
     error: null,
-}
+};
 
 const resumesStatic = [
-
     'testResume1',
-
     'testResume2'
-
-]
+];
 
 export const resumesReducer = (
     state = resumesInitial,
@@ -25,14 +22,14 @@ export const resumesReducer = (
                 fetching: false,
                 posting: false,
                 resumes: action.resumes
-            })
+            });
         case "ERROR_RESUMES":
             return Update({
                 ...state,
                 fetching: false,
                 posting: false,
                 error: action.error
-            })
+            });
         case "FETCH_RESUMES":
             return UpdateWithSideEffect(
                 {
@@ -49,29 +46,20 @@ export const resumesReducer = (
                                     'Authorization': `Bearer ${action.token}`
                                 }
                             }
-                        )
+                        );
                         dispatch({
                             type: "UPDATE_RESUMES",
-                            resumes: response.data.data,
-                        })
+                            resumes: response.data.data
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_RESUMES",
                             error
                         });
-                    }
+                    };
                 }
-            )
-        // case "FETCH_RESUMES":
-        //     return Update({
-        //         ...state,
-        //         token: action.token,
-        //         resumes: resumesStatic
-        //     })
+            );
         case "POST_NEW_RESUME":
-            console.log(
-                "***resumesReducer/POST_NEW_RESUME", action.newResume
-            )
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -90,24 +78,21 @@ export const resumesReducer = (
                             {
                                 name: action.newResume
                             }
-                        )
+                        );
                         dispatch({
                             type: "UPDATE_RESUMES",
-                            resumes: response.data.data
-                        })
+                            resumes: [
+                                ...state.resumes,
+                                response.data.data
+                            ]
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_RESUMES",
                             error
-                        })
-                    }
+                        });
+                    };
                 }
-            )
-
-        // case "DELETE_RESUME":
-        //     return Update({
-        //         ...state,
-        //         resumes: state.resumes.filter(resume => resume === action.resumeName)
-        //     })
-    }
-}
+            );
+    };
+};

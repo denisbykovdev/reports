@@ -5,7 +5,7 @@ import { createProblem, getAllProblems, updateProblem } from '../constants/api';
 export const serverProblemsInitial = {
     problems: [],
     error: null,
-}
+};
 
 const problemsStatic = [
     {
@@ -33,15 +33,13 @@ const problemsStatic = [
         solution: 'secondSolution1',
         standarts: []
     }
-]
+];
 
 export const serverProblemsReducer = (
     state = serverProblemsInitial,
     action
 ) => {
-
     switch (action.type) {
-
         case "SET_SERVER_PROBLEMS":
             return Update({
                 ...state,
@@ -49,15 +47,12 @@ export const serverProblemsReducer = (
                 posting: false,
                 problems: action.problems
             });
-
         case "ERROR_SERVER_PROBLEMS":
             return Update({
                 ...state,
                 fetching: false,
-                error: action.error,
-
+                error: action.error
             });
-
         case "GET_SERVER_PROBLEMS":
             return UpdateWithSideEffect(
                 {
@@ -77,31 +72,19 @@ export const serverProblemsReducer = (
                             }
 
                         );
-                        // console.log(
-                        //     `--- serverProblemsReducer/GET_SERVER_PROBLEMS/response:`, response.data.data
-                        // )
 
                         dispatch({
                             type: "SET_SERVER_PROBLEMS",
                             problems: response.data,
-                        })
-
+                        });
                     } catch (error) {
-
                         dispatch({
                             type: "ERROR_SERVER_PROBLEMS",
                             error
                         });
-                    }
+                    };
                 }
             );
-        // case "GET_SERVER_PROBLEMS":
-        //     return Update({
-        //         ...state,
-        //         token: action.payload,
-        //         problems: problemsStatic
-        //     })
-
         case "POST_SERVER_PROBLEM":
             return UpdateWithSideEffect(
                 {
@@ -111,9 +94,6 @@ export const serverProblemsReducer = (
                 },
 
                 async (state, dispatch) => {
-                    console.log(
-                        `--- serverProblemsReducer/POST_SERVER_PROBLEM/action`, action.problem
-                    )
                     try {
                         const response = await axios.post(
                             `${createProblem}`,
@@ -129,16 +109,19 @@ export const serverProblemsReducer = (
 
                         dispatch({
                             type: "SET_SERVER_PROBLEMS",
-                            problems: response.data.data
-                        })
+                            problems: [
+                                ...state.problems,
+                                response.data.data
+                            ]
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_SERVER_PROBLEMS",
                             error
-                        })
-                    }
+                        });
+                    };
                 }
-            )
+            );
         case "UPDATE_SERVER_PROBLEM":
             console.log(
                 `--- serverProblemsReducer/UPDATE_SERVER_PROBLEM/action:`, action
@@ -165,7 +148,12 @@ export const serverProblemsReducer = (
 
                         dispatch({
                             type: "SET_SERVER_PROBLEMS",
-                            problems: response.data.data
+                            problems: [...state.problems.map(
+                                problem =>
+                                    problem.name === response.data.data.name
+                                        ? response.data.data
+                                        : problem
+                            )]
                         })
                     } catch (error) {
                         dispatch({
@@ -175,6 +163,45 @@ export const serverProblemsReducer = (
                     }
                 }
             );
+        case "POST_STANDARTS_TO_SAVED_PROBLEM":
+            return UpdateWithSideEffect({
+                ...state,
+                token: action.token,
+                posting: true
+            },
+                async (state, dispatch) => {
+                    try {
+                        const response = await axios.post(
+                            `${updateProblem(action.problemName)}`,
+                            {
+                                ...action.problem
+                            },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${action.token}`
+                                }
+                            }
+                        );
+
+                        dispatch({
+                            type: "SET_SERVER_PROBLEMS",
+                            problems: [...state.problems.map(
+                                problem =>
+                                    problem.name === response.data.data.name
+                                        ? response.data.data
+                                        : problem
+                            )]
+                        });
+                    } catch (error) {
+                        dispatch({
+                            type: "ERROR_SERVER_PROBLEMS",
+                            error
+                        });
+                    };
+                });
+    };
+};
+
         // case "UPDATE_SERVER_PROBLEM_IN_SERVER_AREA":
         //     return UpdateWithSideEffect(
         //         {
@@ -212,40 +239,3 @@ export const serverProblemsReducer = (
         //             }
         //         }
         //     )
-
-        case "POST_STANDARTS_TO_SAVED_PROBLEM":
-            return UpdateWithSideEffect({
-                ...state,
-                token: action.token,
-                posting: true
-            },
-                async (state, dispatch) => {
-                    try {
-                        const response = await axios.post(
-                            `${updateProblem(action.problemName)}`,
-                            {
-                                ...action.problem
-                            },
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${action.token}`
-                                }
-                            },
-                            // {
-                            //     standarts: action.standarts
-                            // }
-                        );
-
-                        dispatch({
-                            type: "SET_SERVER_PROBLEMS",
-                            problems: response.data.data
-                        })
-                    } catch (error) {
-                        dispatch({
-                            type: "ERROR_SERVER_PROBLEMS",
-                            error
-                        })
-                    }
-                })
-    }
-}

@@ -5,7 +5,7 @@ import { deleteReport, reportsAll, updateReport } from '../constants/api';
 export const reportsInitial = {
     reports: null,
     error: null
-}
+};
 
 const reportsData = [
     {
@@ -26,35 +26,25 @@ const reportsData = [
         date: "13.02.21",
         editorsName: "secondEditor"
     }
-]
+];
 
 export const reportsReducer = (
     state = reportsInitial,
     action
 ) => {
-
     switch (action.type) {
-
         case "GET_REPORTS":
             return Update({
                 ...state,
                 fetching: false,
                 reports: action.reports
             });
-
         case "ERROR_REPORTS":
             return Update({
                 ...state,
                 fetching: false,
                 error: action.error
             });
-
-        // case "FETCH_REPORTS":
-        //     return Update({
-        //         ...state,
-        //         reports: reportsData
-        //     });
-
         case "FETCH_REPORTS":
             return UpdateWithSideEffect(
                 {
@@ -63,9 +53,6 @@ export const reportsReducer = (
                     token: action.token
                 },
                 async (state, dispatch) => {
-                    // console.log(
-                    //     "***ReportsReducer/FETCH_REPORTS/async/token", typeof action.payload
-                    // );
                     try {
                         const response = await axios.get(
                             `${reportsAll}`,
@@ -74,36 +61,20 @@ export const reportsReducer = (
                                     'Authorization': `Bearer ${action.token}`
                                 }
                             }
-
                         );
-
                         dispatch({
                             type: "GET_REPORTS",
                             reports: response.data.data,
-                        })
-
-                        // console.log("***reportsReducer/GET_REPORTS:", response.data.data);
-
+                        });
                     } catch (error) {
-
                         dispatch({
                             type: "ERROR_REPORTS",
                             error
                         });
-
-                        // console.log("***reportsReducer/ERROR_REPORTS:", error);
-                    }
+                    };
                 }
             );
-
         case "DELETE_ITEM":
-            // console.log(
-            //     ":::reportsReducer:", action.itemId
-            // );
-            // return Update({
-            //     ...state,
-            //     reports: state.reports.filter(report => report.id !== action.itemId)
-            // });
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -119,26 +90,31 @@ export const reportsReducer = (
                                     'Authorization': `Bearer ${action.token}`
                                 }
                             }
-                        )
-
+                        );
                         dispatch({
                             type: "GET_REPORTS",
-                            reports: response.data.data,
-                        })
+                            reports: [
+                                ...state.reports.filter(
+                                    report =>
+                                        report.id === response.data.data.id
+                                )
+                            ]
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_REPORTS",
                             error
-                        })
-                    }
+                        });
+                    };
                 }
             );
-
         case "CHANGE_ITEM_VALUE":
-            console.log(
-                ":::reportsReducer:", action.itemId, action.itemKey, action.itemNewValue
-            );
-
+            // console.log(
+            //     ":::reportsReducer:", 
+            //     action.itemId, 
+            //     action.itemKey, 
+            //     action.itemNewValue
+            // );
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -161,31 +137,18 @@ export const reportsReducer = (
                                     'Authorization': `Bearer ${action.token}`
                                 }
                             }
-                        )
-
+                        );
                         dispatch({
                             type: "GET_REPORTS",
                             users: response.data.data,
-                        })
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_REPORTS",
                             error
-                        })
-                    }
+                        });
+                    };
                 }
             );
-    }
-}
-
-   // return Update({
-            //     ...state,
-            //     reports: state.reports.map(report =>
-            //         report.id === action.itemId ?
-            //             {
-            //                 ...report,
-            //                 [action.itemKey]: action.itemNewValue
-            //             } :
-            //             report
-            //     )
-            // });
+    };
+};

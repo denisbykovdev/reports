@@ -91,7 +91,8 @@ const TestDetails = () => {
                     title="שם הלקוח"
                 />
                 <FormField
-                    name="customer_name"
+                    // name="customer_name"
+                    name="test_address"
                     inputStyle={styles.input}
                     style={styles.inputContainer}
                 />
@@ -139,7 +140,8 @@ const TestDetails = () => {
                     }}
                 />
                 <FormField
-                    name="test_address"
+                    name="customer_name"
+                    // name="test_address"
                     inputStyle={styles.input}
                     style={styles.inputContainer}
                 />

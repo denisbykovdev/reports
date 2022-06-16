@@ -229,7 +229,7 @@ const StandartItem = ({
                                     height: responsiveWidth(73),
                                     width: responsiveWidth(68),
                                 }}
-                                source={{ uri: `data:image/png;base64,${standart.image}` }}
+                                source={{ uri: `${standart.image}` }}
                             />
                             : <AltImage
                                 height={responsiveWidth(42)}

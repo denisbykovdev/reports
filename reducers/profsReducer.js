@@ -1,19 +1,16 @@
 import axios from 'axios';
-import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-effects';
+import { UpdateWithSideEffect, Update } from 'use-reducer-with-side-effects';
 import { createProfession, deleteProfession, getAllProfessions } from '../constants/api';
 
 export const profsInitial = {
     profs: [],
-    error: null,
-}
+    error: null
+};
 
 const profsStatic = [
-
     'testProf1',
-
     'testProf2'
-
-]
+];
 
 export const profsReducer = (
     state = profsInitial,
@@ -26,14 +23,14 @@ export const profsReducer = (
                 fetching: false,
                 posting: false,
                 profs: action.profs
-            })
+            });
         case "ERROR_PROFS":
             return Update({
                 ...state,
                 fetching: false,
                 posting: false,
                 error: action.error
-            })
+            });
         case "FETCH_PROFS":
             return UpdateWithSideEffect(
                 {
@@ -62,17 +59,8 @@ export const profsReducer = (
                         });
                     }
                 }
-            )
-        // case "FETCH_PROFS":
-        //     return Update({
-        //         ...state,
-        //         token: action.token,
-        //         profs: profsStatic
-        //     })
+            );
         case "POST_NEW_PROF":
-            console.log(
-                "***profsReducer/POST_NEW_PROF", action.newProf
-            )
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -91,25 +79,23 @@ export const profsReducer = (
                                     'Authorization': `Bearer ${action.token}`
                                 }
                             }
-                        )
+                        );
                         dispatch({
                             type: "UPDATE_PROFS",
-                            profs: response.data.data
-                        })
+                            profs: [
+                                ...state.profs,
+                                response.data.data
+                            ]
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_PROFS",
                             error
-                        })
-                    }
+                        });
+                    };
                 }
-            )
-
+            );
         case "DELETE_PROF":
-            // return Update({
-            //     ...state,
-            //     profs: state.profs.filter(prof => prof === action.profName)
-            // })
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -125,18 +111,24 @@ export const profsReducer = (
                                     'Authorization': `Bearer ${action.token}`
                                 }
                             }
-                        )
+                        );
                         dispatch({
                             type: "UPDATE_PROFS",
-                            profs: response.data.data
-                        })
+                            profs: [
+                                ...state.profs.filter(
+                                    prof =>
+                                        prof.name ===
+                                        response.data.data.name
+                                )
+                            ]
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_PROFS",
                             error
-                        })
-                    }
+                        });
+                    };
                 }
-            )
-    }
-}
+            );
+    };
+};

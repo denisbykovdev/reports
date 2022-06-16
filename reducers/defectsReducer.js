@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { UpdateWithSideEffect, Update, NoUpdate } from 'use-reducer-with-side-effects';
-import { areasAll, createReport, deleteArea, createArea, updateAreaProblems, updateReport, updateAreaProblem } from '../constants/api';
+import { areasAll, deleteArea, createArea, updateAreaProblems, updateAreaProblem } from '../constants/api';
 
 const staticSavedAreas = [
     {
@@ -56,7 +56,7 @@ const staticSavedAreas = [
             }
         ]
     }
-]
+];
 
 export const defectsInitial = {
     areas: [],
@@ -65,7 +65,7 @@ export const defectsInitial = {
     notes: [],
     saveNotes: [],
     activeReport: null
-}
+};
 
 export const defectsReducer = (
     state = defectsInitial,
@@ -77,7 +77,6 @@ export const defectsReducer = (
                 ...state,
                 areas: []
             });
-
         case "ADD_DEFAULT_AREA":
             return Update({
                 ...state,
@@ -86,8 +85,16 @@ export const defectsReducer = (
                     // defaultArea
                     {
                         // id: state.areas !== null && state.areas.length > 0 ? state.areas.length + 1 : 1,
-                        id: state.areas !== null && state.areas.length > 0 && state.areas.filter(area => area.isSavedToReport === true).length > 0
-                            ? state.areas.filter(area => area.isSavedToReport == true).length + 1
+                        id: state.areas !== null
+                            && state.areas.length > 0
+                            && state.areas.filter(
+                                area =>
+                                    area.isSavedToReport === true
+                            ).length > 0
+                            ? state.areas.filter(
+                                area =>
+                                    area.isSavedToReport == true
+                            ).length + 1
                             : 1,
                         area_name: "אזור",
                         problems: [],
@@ -96,65 +103,75 @@ export const defectsReducer = (
                     }
                 ]
             });
-
         case "ADD_DEFAULT_PROBLEM":
             return Update({
                 ...state,
-                areas: state.areas.map(area => area.id === action.areaId ? {
-                    ...area,
-                    problems: [
-                        ...area.problems,
-
-                        {
-                            id: area.problems.length > 0 ? area.problems.length + 1 : 1,
-                            name: "ליקוי",
-                            profession_name: null,
-                            details_of_eclipse: null,
-                            cost: null,
-                            // image: null,
-                            image: [],
-                            standarts: [],
-                            isSavedToReport: true
-                        }
-                    ]
-                } : area
+                areas: state.areas.map(
+                    area =>
+                        area.id === action.areaId
+                            ? {
+                                ...area,
+                                problems: [
+                                    ...area.problems,
+                                    {
+                                        id: area.problems.length > 0
+                                            ? area.problems.length + 1
+                                            : 1,
+                                        name: "ליקוי",
+                                        profession_name: null,
+                                        details_of_eclipse: null,
+                                        cost: null,
+                                        // image: null,
+                                        image: [],
+                                        standarts: [],
+                                        isSavedToReport: true,
+                                        solution: null
+                                    }
+                                ]
+                            }
+                            : area
                 )
             });
-
         case "DELETE_AREA":
             return Update({
                 ...state,
-                areas: state.areas.filter(area => area.id !== action.areaId).map(
-                    (area, i) => area.id + 1 !== i
-                        ? {
-                            ...area,
-                            id: i + 1
-                        }
-                        : area
+                areas: state.areas.filter(
+                    area =>
+                        area.id !== action.areaId
+                ).map(
+                    (area, i) =>
+                        area.id + 1 !== i
+                            ? {
+                                ...area,
+                                id: i + 1
+                            }
+                            : area
                 )
-
             });
-
         case "DELETE_PROBLEM":
             return Update({
                 ...state,
-                areas: state.areas.map(area => area.id === action.areaId ? {
-                    ...area,
-                    problems:
-                        area.problems.filter(
-                            problem => problem.id !== action.problemId
-                        ).map(
-                            (problem, i) => problem.id + 1 !== i
-                                ? {
-                                    ...problem,
-                                    id: i + 1
-                                }
-                                : problem
-                        )
-
-                } : area)
+                areas: state.areas.map(
+                    area =>
+                        area.id === action.areaId
+                            ? {
+                                ...area,
+                                problems:
+                                    area.problems.filter(
+                                        problem =>
+                                            problem.id !== action.problemId
+                                    ).map(
+                                        (problem, i) =>
+                                            problem.id + 1 !== i
+                                                ? {
+                                                    ...problem,
+                                                    id: i + 1
+                                                }
+                                                : problem
+                                    )
+                            }
+                            : area)
             });
-
         case "CHANGE_AREA_VALUE":
             console.log(
                 `--- CHANGE_AREA_VALUE/action:`, action
@@ -173,22 +190,28 @@ export const defectsReducer = (
                             area
                     )
             });
-
         case "PUSH_AREA_FROM_PRINT":
             console.log(
                 `--- PUSH_AREA_FROM_PRINT/action:`,
                 action,
                 state.areas.length,
                 `::: false:`,
-                state.areas.filter(area => area.isSavedToReport === false).length,
+                state.areas.filter(
+                    area =>
+                        area.isSavedToReport === false
+                ).length,
                 `::: true:`,
-                state.areas.filter(area => area.isSavedToReport === true).length
+                state.areas.filter(
+                    area =>
+                        area.isSavedToReport === true
+                ).length
             )
             return Update({
                 ...state,
                 areas: state.areas.map(
                     (area, index) =>
-                        area.id !== action.areaId && area.isSavedToReport === true
+                        area.id !== action.areaId &&
+                            area.isSavedToReport === true
                             ?
                             {
                                 ...area,
@@ -196,21 +219,25 @@ export const defectsReducer = (
                                     ? area.id - 1
                                     : area.id
                             }
-                            : area.id !== action.areaId && area.isSavedToReport === false
+                            : area.id !== action.areaId &&
+                                area.isSavedToReport === false
                                 ? area
                                 :
                                 {
                                     ...area,
                                     isSavedToReport: false,
-                                    id: state.areas.filter(area => area.isSavedToReport === false).length > 0
-                                        ? Number(`0.${state.areas.filter(area => area.isSavedToReport === false).length + 1}`)
+                                    id: state.areas.filter(
+                                        area =>
+                                            area.isSavedToReport === false
+                                    ).length > 0
+                                        ? Number(
+                                            `0.${state.areas.filter(area =>
+                                                area.isSavedToReport === false).length + 1}`
+                                        )
                                         : 0.1
                                 }
-
-
                 )
             });
-
         case "PUSH_AREA_FOR_PRINT":
             console.log(
                 `--- PUSH_AREA_FROM_PRINT/action:`,
@@ -225,9 +252,11 @@ export const defectsReducer = (
                 ...state,
                 areas: state.areas.map(
                     (area, index) =>
-                        area.id !== action.areaId && area.isSavedToReport === true
+                        area.id !== action.areaId
+                            && area.isSavedToReport === true
                             ? area
-                            : area.id !== action.areaId && area.isSavedToReport === false
+                            : area.id !== action.areaId
+                                && area.isSavedToReport === false
                                 ?
                                 {
                                     ...area,
@@ -239,38 +268,42 @@ export const defectsReducer = (
                                 {
                                     ...area,
                                     isSavedToReport: true,
-                                    id: state.areas.filter(area => area.isSavedToReport === true).length > 0
-                                        ? state.areas.filter(area => area.isSavedToReport === true).length + 1
+                                    id: state.areas.filter(
+                                        area =>
+                                            area.isSavedToReport === true
+                                    ).length > 0
+                                        ? state.areas.filter(
+                                            area =>
+                                                area.isSavedToReport === true
+                                        ).length + 1
                                         : 1
                                 }
 
 
                 )
             });
-
         case "CHANGE_PROBLEM_VALUE":
-            // console.log(
-            //     "***defectsReducer/intersepter callback(prevState):", state
-            // )
             return Update({
                 ...state,
                 areas: state.areas.map(area =>
-                    area.id === action.areaId ?
+                    area.id === action.areaId
+                        ?
                         {
                             ...area,
-                            problems: area.problems.map(problem => problem.id === action.problemId ? {
-                                ...problem,
-                                [action.problemKey]: action.problemNewValue
-                            } : problem)
-                        } :
+                            problems: area.problems.map(
+                                problem =>
+                                    problem.id === action.problemId
+                                        ? {
+                                            ...problem,
+                                            [action.problemKey]: action.problemNewValue
+                                        }
+                                        : problem)
+                        }
+                        :
                         area
                 )
             });
-
         case "PUSH_FROM_PRINT":
-            // console.log(
-            //     `-- - PUSH_FROM_PRINT / action: `, action
-            // )
             return Update({
                 ...state,
                 areas: state.areas.map(
@@ -289,11 +322,7 @@ export const defectsReducer = (
                     }
                 )
             });
-
         case "PUSH_TO_PRINT":
-            // console.log(
-            //     `-- - PUSH_TO_PRINT / action: `, action
-            // )
             return Update({
                 ...state,
                 areas: state.areas.map(
@@ -302,24 +331,22 @@ export const defectsReducer = (
                             ...area,
                             isSavedToReport: true,
                             id: index + 1,
-                            problems: area.problems.map(problem => {
-                                return {
+                            problems: area.problems.map(
+                                problem => ({
                                     ...problem,
                                     isSavedToReport: true
-                                }
-                            })
+                                })
+                            )
                         }
                     }
                 )
             });
-
         case "GET_SAVED_AREA":
             return Update({
                 ...state,
                 fetching: false,
                 savedAreas: action.savedAreas
             });
-
         case "ERROR_SAVED_AREA":
             return Update({
                 ...state,
@@ -327,7 +354,6 @@ export const defectsReducer = (
                 posting: false,
                 error: action.error
             });
-
         case "FETCH_SAVED_AREAS":
             return UpdateWithSideEffect(
                 {
@@ -344,29 +370,20 @@ export const defectsReducer = (
                                     'Authorization': `Bearer ${action.token}`
                                 }
                             }
-
                         );
-
                         dispatch({
                             type: "UPDATE_SAVED_AREAS",
                             savedAreas: response.data
-                        })
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_SAVED_AREA",
                             error
-                        })
-                    }
+                        });
+                    };
                 }
             );
-
         case "ADD_REPORT_AREAS":
-            // console.log(
-            //     "*** ADD_REPORT_AREAS/action:",
-            //     action,
-            //     // `*** state.areas:`,
-            //     // state.areas
-            // )
             return Update({
                 ...state,
                 areas: [
@@ -378,49 +395,50 @@ export const defectsReducer = (
                         ({
                             ...rest,
                             isSavedToReport: true,
-                            problems: rest.problems ? rest.problems : [],
-                            samples: rest.samples ? rest.samples : []
+                            problems: rest.problems
+                                ? rest.problems
+                                : [],
+                            samples: rest.samples
+                                ? rest.samples
+                                : []
                         })
                     )
                 ]
             });
-
         case "ADD_SERVER_AREAS":
-            // console.log(
-            //     "*** ADD_SERVER_AREAS/action:", action
-            // )
             return Update({
                 ...state,
                 areas: [
                     ...state.areas,
                     ...action.serverAreas.map(
                         (
-                            { 
+                            {
                                 report_id,
-                                ...rest 
+                                ...rest
                             },
                             i
                         ) => ({
                             ...rest,
-                            id: state.areas.length === 0 ? 1 + i : state.areas.length + 1 + i,
+                            id: state.areas.length === 0
+                                ? 1 + i
+                                : state.areas.length + 1 + i,
                             isSavedToReport: true,
-                            problems: rest.problems ? rest.problems : [],
-                            samples: rest.samples ? rest.samples : []
+                            problems: rest.problems
+                                ? rest.problems
+                                : [],
+                            samples: rest.samples
+                                ? rest.samples
+                                : []
                         })
                     )
                 ]
             });
-
         case "UPDATE_SAVED_AREAS":
-            // console.log(
-            //     `*** UPDATE_SAVED_AREAS/action:`, action
-            // )
             return Update({
                 ...state,
                 posting: false,
                 savedAreas: action.savedAreas
             });
-
         case "POST_NEW_AREA":
             return UpdateWithSideEffect(
                 {
@@ -445,8 +463,11 @@ export const defectsReducer = (
                         );
                         dispatch({
                             type: "UPDATE_SAVED_AREAS",
-                            savedAreas: response.data.data
-                        })
+                            savedAreas: [
+                                ...state.savedAreas,
+                                response.data.data
+                            ]
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_SAVED_AREA",
@@ -455,7 +476,6 @@ export const defectsReducer = (
                     }
                 }
             );
-
         case "POST_SAVED_AREA_TO_DELETE":
             return UpdateWithSideEffect(
                 {
@@ -479,17 +499,21 @@ export const defectsReducer = (
                         );
                         dispatch({
                             type: "UPDATE_SAVED_AREAS",
-                            savedAreas: response.data.data
-                        })
+                            savedAreas: [
+                                ...state.savedAreas.filter(
+                                    saved =>
+                                        saved.name === response.data.data.name
+                                )
+                            ]
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_SAVED_AREA",
                             error
-                        })
-                    }
+                        });
+                    };
                 }
             );
-
         case "POST_SERVER_PROBLEMS_TO_SERVER_AREA":
             return UpdateWithSideEffect(
                 {
@@ -498,15 +522,10 @@ export const defectsReducer = (
                     token: action.token
                 },
                 async (state, dispatch) => {
-                    console.log(
-                        `-- - defectsReducer / POST_PROBLEMS_TO_SAVED_AREA / action`,
-                        action
-                    )
                     try {
                         const response = await axios.post(
                             `${updateAreaProblems(action.areaName)
                             }`,
-
                             {
                                 // problems: [...action.problems]
                                 samples: [...action.problems]
@@ -517,11 +536,17 @@ export const defectsReducer = (
                                 }
                             }
                         );
-
                         dispatch({
                             type: "UPDATE_SAVED_AREAS",
-                            savedAreas: response.data.data
-                        })
+                            savedAreas: [
+                                ...state.savedAreas.map(
+                                    saved =>
+                                        saved.name === response.data.data.name
+                                            ? response.data.data
+                                            : saved
+                                )
+                            ]
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_SAVED_AREA",
@@ -530,11 +555,7 @@ export const defectsReducer = (
                     }
                 }
             );
-
         case "UPDATE_PROBLEM_IN_SERVER_AREA":
-            console.log(
-                "*** UPDATE_PROBLEM_IN_SERVER_AREA/action:", action
-            )
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -554,85 +575,93 @@ export const defectsReducer = (
                                 }
                             }
                         );
-
                         dispatch({
                             type: "UPDATE_SAVED_AREAS",
-                            savedAreas: response.data.data
-                        })
+                            savedAreas: [
+                                ...state.savedAreas.map(
+                                    saved =>
+                                        saved.name === response.data.data.name
+                                            ? response.data.data
+                                            : saved
+                                )
+                            ]
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_SAVED_AREA",
                             error
-                        })
-                    }
+                        });
+                    };
                 }
             );
-
         case "ADD_PROBLEMS_TO_ARIA":
-            console.log(
-                "*** ADD_PROBLEMS_TO_ARIA/action:", action
-            )
             return Update({
                 ...state,
-                areas: state.areas.map(area => area.id === action.areaId ? {
-                    ...area,
-                    problems: [
-                        ...area.problems,
-
-                        ...action.problems.map((problem, i) => {
-                            return {
-                                ...problem,
-                                id: area.problems.length === 0 ? 1 + i : area.problems.length + 1 + i
+                areas: state.areas.map(
+                    area =>
+                        area.id === action.areaId
+                            ? {
+                                ...area,
+                                problems: [
+                                    ...area.problems,
+                                    ...action.problems.map(
+                                        (problem, i) =>
+                                        ({
+                                            ...problem,
+                                            id: area.problems.length === 0
+                                                ? 1 + i
+                                                : area.problems.length + 1 + i
+                                        })
+                                    )
+                                ]
                             }
-                        })
-                    ]
-                } : area)
+                            : area)
             });
-
         case "ADD_SERVER_PROBLEMS_TO_DEFAULT_ARIA":
-            console.log(
-                "*** ADD_SERVER_PROBLEMS_TO_DEFAULT_ARIA/action:", action
-            )
             return Update({
                 ...state,
-                areas: state.areas.map(area => area.id === action.areaId ? {
-                    ...area,
-                    samples: [
-                        ...area.samples,
-                        ...action.problems.map((problem, i) => {
-                            return {
-                                ...problem,
-                                id: area.problems.length === 0 ? 1 + i : area.problems.length + 1 + i
+                areas: state.areas.map(
+                    area =>
+                        area.id === action.areaId
+                            ? {
+                                ...area,
+                                samples: [
+                                    ...area.samples,
+                                    ...action.problems.map(
+                                        (problem, i) =>
+                                        ({
+                                            ...problem,
+                                            id: area.problems.length === 0
+                                                ? 1 + i
+                                                : area.problems.length + 1 + i
+                                        })
+                                    )
+                                ]
                             }
-
-                        })
-                    ]
-                } : area)
-
+                            : area)
             });
-
         case "ADD_SERVER_PROBLEM_AS_DEFAULT_PROBLEM_TO_DEFAULT_ARIA":
-            console.log(
-                `*** ADD_SERVER_PROBLEM_AS_DEFAULT_PROBLEM_TO_DEFAULT_ARIA/action:`, action
-            )
             return Update({
                 ...state,
-                areas: state.areas.map(area => area.id === action.areaId ? {
-                    ...area,
-                    problems: [
-                        ...area.problems,
-                        {
-                            ...action.serverProblem,
-                            id: area.problems.length > 0 ? area.problems.length + 1 : 1,
-                        }
-                    ]
-                } : area)
+                areas: state.areas.map(
+                    area =>
+                        area.id === action.areaId
+                            ? {
+                                ...area,
+                                problems: [
+                                    ...area.problems,
+                                    {
+                                        ...action.serverProblem,
+                                        id: area.problems.length > 0
+                                            ? area.problems.length + 1
+                                            : 1
+                                    }
+                                ]
+                            }
+                            : area
+                )
             });
-
         case "ADD_STANDARTS_TO_PROBLEM":
-            console.log(
-                "*** ADD_STANDARTS_TO_PROBLEM/action:", action
-            )
             return Update({
                 ...state,
                 areas: state.areas.map(
@@ -640,62 +669,67 @@ export const defectsReducer = (
                         ? {
                             ...area,
                             problems: area.problems.map(
-                                problem => problem.id === action.problemId
-                                    ? {
-                                        ...problem,
-                                        standarts: problem.standarts
-                                            && problem.standarts.length >= 0
-                                            ? [
-                                                ...problem.standarts,
-                                                ...action.standarts
-                                            ]
-                                            : [...action.standarts]
-                                    }
-                                    : problem
+                                problem =>
+                                    problem.id === action.problemId
+                                        ? {
+                                            ...problem,
+                                            standarts: problem.standarts
+                                                && problem.standarts.length >= 0
+                                                ? [
+                                                    ...problem.standarts,
+                                                    ...action.standarts
+                                                ]
+                                                : [...action.standarts]
+                                        }
+                                        : problem
                             )
                         }
                         : area
                 )
             });
-
         case "ADD_NEW_NOTE":
             return Update({
                 ...state,
                 notes: [
                     ...state.notes,
                     {
-                        id: state.notes !== null && state.notes.length > 0 ? state.notes.length + 1 : 1,
+                        id: state.notes !== null
+                            && state.notes.length > 0
+                            ? state.notes.length + 1
+                            : 1,
                         note: '',
                         isSavedToReport: false
                     }
                 ]
             });
-
         case "ADD_SERVER_NOTES":
             return Update({
                 ...state,
                 notes: [...action.notes]
             });
-
         case "DELETE_NOTE":
             return Update({
                 ...state,
-                notes: state.notes.filter(note => note.id !== action.noteId)
+                notes: state.notes.filter(
+                    note =>
+                        note.id !== action.noteId
+                )
             });
-
         case "CHANGE_NOTE_VALUE":
             return Update({
                 ...state,
-                notes: state.notes.map(note =>
-                    note.id === action.noteId ?
-                        {
-                            ...note,
-                            note: action.noteNewValue
-                        } :
-                        note
+                notes: state.notes.map(
+                    note =>
+                        note.id === action.noteId
+                            ?
+                            {
+                                ...note,
+                                note: action.noteNewValue
+                            }
+                            :
+                            note
                 )
             });
-
         case "SAVE_NOTE_TO_REPORT":
             return Update({
                 ...state,
@@ -708,7 +742,6 @@ export const defectsReducer = (
                         : note
                 )
             });
-
         case "REMOVE_NOTE_FROM_REPORT":
             return Update({
                 ...state,
@@ -721,5 +754,5 @@ export const defectsReducer = (
                         : note
                 )
             });
-    }
-}
+    };
+};

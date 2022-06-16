@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import SafeView from "../common/SafeView";
 import HeaderView from "../common/HeaderView";
 import ButtomView from "../common/BottomView";
@@ -17,26 +17,35 @@ import Reports from "../icons/Reports";
 import DropDown from "../common/DropDown";
 import ShadowView from "../common/ShadowView";
 import AvoidingView from "../common/AvoidingView";
-import useReports from "../hooks/useReports";
 import Table from "../common/Table";
 import useType from "../hooks/useType";
 import { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { setReports, watchDeleteReport, watchGetReports, watchPostReport, watchUpdateReport } from "../actionCreators/sagaReport";
+import { watchDeleteReport, watchGetReports, watchPostReport, watchUpdateReport } from "../actionCreators/sagaReport";
 import useAuth from "../hooks/useAuth";
-import { useState } from "react";
-import Line from "../common/Line";
-import * as SecureStore from 'expo-secure-store';
+
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs([
+  "ViewPropTypes will be removed",
+  "ColorPropType will be removed",
+]);
+LogBox.ignoreLogs([
+  "exported from 'deprecated-react-native-prop-types'.",
+]);
+LogBox.ignoreLogs(['EventEmitter.removeListener']);
 
 const reportsTitles = {
-  tester_name: "שם העורך",
-  examination_date: "תאריך",
-  report_adress: "כתובת",
-  customer_full_name: "לקוח",
-  customer_name: "מספר לקוח",
-  status: "סטטוס",
+  tester_name: "לקוח",
+  examination_date: "שם הבודק",
+  report_adress: "מס' לקוח",
+  customer_full_name: "תאריך",
+  customer_name: "סטטוס",
+  status: "שם הפרויקט",
   id: "מזהה בדיקה"
-}
+};
+
+// debugger;
 
 function ReportsScreen({ route, navigation }) {
 
@@ -131,15 +140,12 @@ function ReportsScreen({ route, navigation }) {
           showsVerticalScrollIndicator={false}
         >
           <>
-
-
             <HeaderView>
               <ShadowView
                 shadowStyle={{
                   paddingHorizontal: 0
                 }}
               >
-
                 <CommonHeader
                   closeButton={false}
                   title={"מערכת דוחות"}
@@ -152,57 +158,15 @@ function ReportsScreen({ route, navigation }) {
                     height={responsiveWidth(46)}
                   />
                 </CommonHeader>
-
-                {/* <View style={{
-                  width: '100%',
-                  backgroundColor: 'red',
-                  height: 'auto'
-                }}>
-                  {
-                    networkSelector.actionQueue && networkSelector.actionQueue.length >= 0
-                      ? networkSelector.actionQueue.map((queue, i) =>
-                        <View key={i}>
-                          <Text>
-                            {JSON.stringify(queue?.payload?.report?.report_adress)}
-                          </Text>
-                          <Text>
-                            {JSON.stringify(queue.type)}
-                          </Text>
-                          <Text>
-                            {JSON.stringify(queue.payload.reportId)}
-                          </Text>
-                          <Line />
-                        </View>
-                      )
-                      : <Text>no queues</Text>
-                  }
-                </View> */}
-
-                {/* <View style={{
-                  width: '100%',
-                  backgroundColor: 'yellow',
-                  height: 'auto'
-                }}>
-                  {
-                    networkSelector.actionQueue && networkSelector.actionQueue.length >= 0
-                      ? queues && queues.map(queue => <Text>
-                        {JSON.stringify(queue.payload.report)}
-                      </Text>)
-                      : <Text>no queues</Text>
-                  }
-                </View> */}
-
                 {
                   type === 2 ?
                     (
                       <Table
                         arrayProp={
-                          // reportsState.reports !== null &&
-                          // reportsState.reports
-                          reportsSelector !== null && reportsSelector
+                          reportsSelector !== null
+                          && reportsSelector
                         }
                         searchTitle={"מזהה בדיקה"}
-                        // dispatchMethod={reportsDispatch}
                         dispatchMethod={dispatch}
                         tableTitles={reportsTitles}
                       >
@@ -210,12 +174,10 @@ function ReportsScreen({ route, navigation }) {
                     ) : (
                       <DropDown
                         arrayProp={
-                          // reportsState.reports !== null &&
-                          // reportsState.reports
-                          reportsSelector !== null && reportsSelector
+                          reportsSelector !== null
+                          && reportsSelector
                         }
                         searchTitle={"מזהה בדיקה"}
-                        // dispatchMethod={reportsDispatch}
                         dispatchMethod={dispatch}
                       >
                       </DropDown>
@@ -223,7 +185,6 @@ function ReportsScreen({ route, navigation }) {
                 }
               </ShadowView>
             </HeaderView>
-
             <ButtomView>
               <CommonButton
                 title={"הוסף בדיקה חדשה"}
@@ -231,7 +192,6 @@ function ReportsScreen({ route, navigation }) {
                 titleFontSize={fonts.large}
                 buttonColor={colors.darkSkyBlue}
                 buttonHeight={responsiveWidth(51)}
-                // buttonWidth={responsiveWidth(300)}
                 buttonWidth={type === 2 ? "27%" : "100%"}
                 buttonShadow={true}
                 buttonShadowColor={colors.clearBlue}
@@ -254,7 +214,6 @@ function ReportsScreen({ route, navigation }) {
                   <Plus />
                 </View>
               </CommonButton>
-
               {isAdmin && (
                 <>
                   <CommonButton
@@ -296,6 +255,6 @@ function ReportsScreen({ route, navigation }) {
       </AvoidingView>
     </SafeView >
   );
-}
+};
 
 export default ReportsScreen;

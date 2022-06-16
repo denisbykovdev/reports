@@ -3,7 +3,7 @@ export const authInitial = {
     isAdmin: false,
     loading: false,
     error: null
-}
+};
 
 export const authReducer = (
     state = authInitial,
@@ -16,9 +16,6 @@ export const authReducer = (
                 loading: true
             };
         case "SET_TOKEN":
-            // console.log(
-            //     "***authReducer/SET_TOKEN:", action.token
-            // )
             return {
                 ...state,
                 token: action.token,
@@ -39,5 +36,5 @@ export const authReducer = (
                 loading: false,
                 error: action.payload
             };
-    }
-}
+    };
+};

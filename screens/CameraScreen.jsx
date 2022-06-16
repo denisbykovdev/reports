@@ -8,6 +8,17 @@ import colors from '../utils/colors';
 import SafeView from '../common/SafeView';
 import * as FileSystem from 'expo-file-system';
 
+import {LogBox} from "react-native";
+
+LogBox.ignoreLogs([
+"ViewPropTypes will be removed",
+"ColorPropType will be removed",
+]);
+LogBox.ignoreLogs([
+  "exported from 'deprecated-react-native-prop-types'.",
+]);
+LogBox.ignoreLogs(['EventEmitter.removeListener']);
+
 export default function CameraScreen() {
     useStatusBar("dark-content", colors.paleGrayBg);
 
@@ -15,6 +26,10 @@ export default function CameraScreen() {
     const route = useRoute();
 
     const routeImage = route?.params?.image;
+
+    console.log(
+        `--- edit/routeImage:`, routeImage
+    );
 
     const takeSnap = async(value) => {
         try {
@@ -32,7 +47,7 @@ export default function CameraScreen() {
                           screen: "Report",
                           params: {
                               image,
-                              base64
+                              base64: `data:image/png;base64,${base64}`
                           }
                       }
               );
@@ -50,8 +65,8 @@ export default function CameraScreen() {
                 <DrawWithOptions
                     linearGradient={LinearGradient}
                     image={{ uri: routeImage }}
-                    // image={{ uri: `data:image/png;base64,${routeImage}` }}
                     takeSnapshot={(value) => takeSnap(value)}
+                    close={() => navigation.goBack()}
                 />
             </View>
         </SafeView>

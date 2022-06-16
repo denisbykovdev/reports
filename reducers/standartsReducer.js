@@ -4,8 +4,8 @@ import { createStandart, getAllStandarts, updateStandart } from '../constants/ap
 
 export const standartsInitial = {
     standarts: [],
-    error: null,
-}
+    error: null
+};
 
 const standartsStatic = [
     {
@@ -15,7 +15,6 @@ const standartsStatic = [
         whatToDo: '',
         fault: '',
         profession: ''
-
     },
     {
         id: 2,
@@ -25,7 +24,7 @@ const standartsStatic = [
         fault: '',
         profession: ''
     }
-]
+];
 
 export const standartsReducer = (
     state = standartsInitial,
@@ -38,14 +37,14 @@ export const standartsReducer = (
                 fetching: false,
                 posting: false,
                 standarts: action.standarts
-            })
+            });
         case "ERROR_STANDARTS":
             return Update({
                 ...state,
                 fetching: false,
                 posting: false,
                 error: action.error
-            })
+            });
         case "FETCH_STANDARTS":
             return UpdateWithSideEffect(
                 {
@@ -62,29 +61,20 @@ export const standartsReducer = (
                                     'Authorization': `Bearer ${action.token}`
                                 }
                             }
-                        )
+                        );
                         dispatch({
                             type: "UPDATE_STANDARTS",
                             standarts: response.data,
-                        })
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_STANDARTS",
                             error
                         });
-                    }
+                    };
                 }
-            )
-        // case "FETCH_STANDARTS":
-        //     return Update({
-        //         ...state,
-        //         token: action.token,
-        //         standarts: standartsStatic
-        //     })
+            );
         case "POST_NEW_STANDART":
-            console.log(
-                "***standartsReducer/POST_NEW_STANDART", action.standart
-            )
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -103,31 +93,30 @@ export const standartsReducer = (
                                     'Authorization': `Bearer ${action.token}`
                                 }
                             }
-                        )
+                        );
                         dispatch({
                             type: "UPDATE_STANDARTS",
-                            standarts: response.data.data
-                        })
+                            standarts: [
+                                ...state.standarts,
+                                response.data.data
+                            ]
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_STANDARTS",
                             error
-                        })
-                    }
+                        });
+                    };
                 }
             );
-
         case "UPDATE_SAVED_STANDART":
-            console.log(
-                "***standartsReducer/UPDATE_SAVED_STANDART", action
-            )
             return UpdateWithSideEffect(
                 {
                     ...state,
                     posting: true,
                     token: action.token
                 },
-                async(
+                async (
                     state,
                     dispatch
                 ) => {
@@ -148,28 +137,23 @@ export const standartsReducer = (
                         )
                         dispatch({
                             type: "UPDATE_STANDARTS",
-                            standarts: response.data.data
-                        })
+                            standarts: [
+                                ...state.standarts.map(
+                                    standart =>
+                                        standart.id ===
+                                            response.data.data.id
+                                            ? response.data.data
+                                            : standart
+                                )
+                            ]
+                        });
                     } catch (error) {
                         dispatch({
                             type: "ERROR_STANDARTS",
                             error
-                        })
-                    }
+                        });
+                    };
                 }
-            )
-
-        // case "CHANGE_STANDART_PROF":
-        //     return Update({
-        //         ...state,
-        //         standarts: state.standarts.map((standart, i) =>
-        //             standart.id === action.standartId
-        //                 ? {
-        //                     ...standart,
-        //                     profession: action.professionName
-        //                 }
-        //                 : standart
-        //         )
-        //     })
-    }
-}
+            );
+    };
+};

@@ -5,7 +5,8 @@ import {
   View,
   TouchableOpacity,
   Image,
-  LogBox
+  LogBox,
+  Platform
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import { useFormikContext } from 'formik';
@@ -21,7 +22,6 @@ import CircleArrowUp from '../icons/CircleArrowUp'
 import weights from '../utils/weights';
 import fonts from '../utils/fonts';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import * as FileSystem from 'expo-file-system';
 
 LogBox.ignoreAllLogs();
 
@@ -53,50 +53,16 @@ export default function FormPhotoCamera({
 
   const [openCam, setOpenCam] = useState(false);
 
-  // const [images, setImages] = useState(values[name] ? [...values[name]] : []);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(values[name] ? [...values[name]] : []);
+  // const [images, setImages] = useState([]);
 
   const [selected, setSelected] = useState(0);
-
-  const uploadBase64 = async (base64String) => {
-    const base64Data = base64String.replace("data:image/png;base64,","");
-
-    try {
-      const image = await FileSystem.readAsStringAsync(base64Data);
-
-      return image;
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    console.log(
-      `--- FormPhotoCamera/props: values[name]:`,
-      typeof values[name]
-    );
-
-    if(Array.isArray(values[name])){
-      const promises = values[name].map(
-        async item => 
-          await uploadBase64(item)
-      );
-
-      (
-        async () => {
-          for await (const item of promises){
-            setImages([...images, item]);
-          };
-        }
-      )();
-    }
-  }, [])
 
   useEffect(() => {
     if (routeImage) {
       setImages([
         ...images.map(
-          (im, i) => i === images.length -1
+          (im, i) => i === images.length - 1
             ? routeImage.toString()
             : im
         )
@@ -110,7 +76,7 @@ export default function FormPhotoCamera({
     if (routeBase64 && values.image) {
       setFieldValue(name, [
         ...values[name].map(
-          (im, i) => i === values[name].length -1
+          (im, i) => i === values[name].length - 1
             ? routeBase64.toString()
             : im
         )
@@ -118,13 +84,14 @@ export default function FormPhotoCamera({
     };
   }, [routeBase64]);
 
-  // useEffect(() => {
-  //   console.log(
-  //     `--- images:`, 
-  //     images,
-  //     values.image && values.image.length > 0 && values.image[values.image.length -1] === routeBase64.toString()
-  //   );
-  // }, [images])
+  useEffect(() => {
+    if (values[name] && values[name].length > 0) {
+      setSelected(values[name][0])
+    }
+    console.log(
+      `--- images:`
+    );
+  }, [])
 
   useEffect(() => {
     (async () => {
@@ -152,20 +119,21 @@ export default function FormPhotoCamera({
 
         console.log(
           `--- FormPhotoCamera/takePhoto/data:`,
-          data['uri']
+          data
         );
 
         setImages([...images, data['uri']]);
 
         setSelected(data['uri']);
 
-        setFieldValue(name, [...values[name], data['base64']]);
+        setFieldValue(name, [...values[name], `data:image/png;base64,${data['base64']}`]);
 
         isChecked && setChecked(false);
 
-        interSepter && interSepter(name, [...values[name], data['base64']]);
+        interSepter && interSepter(name, [...values[name], `data:image/png;base64,${data['base64']}`]);
 
         setOpenCam(false);
+        setEdit(true);
       }
     } catch (error) {
       console.log(
@@ -256,7 +224,6 @@ export default function FormPhotoCamera({
                         <Image
                           style={styles.formPhoto}
                           source={{ uri: item }}
-                        // source={{ uri: `data:image/png;base64,${item}` }}
                         />
                         <TouchableOpacity
                           onPress={() => nextHandler()}
@@ -274,7 +241,9 @@ export default function FormPhotoCamera({
               type={Camera.Constants.Type.back}
               autoFocus="on"
               onCameraReady={() => setCameraReady(true)}
-              // useCamera2Api={true}
+              // useCamera2Api={
+              //   Platform.OS === 'android' ? true : false
+              // }
             />
         }
       </View>
@@ -311,8 +280,8 @@ export default function FormPhotoCamera({
           <TouchableOpacity
             style={styles.formPhotoCameraButtonContainer}
             onPress={() => {
-              openCam 
-                ? takePhoto() 
+              openCam
+                ? takePhoto()
                 : setOpenCam(true)
             }}>
             <Add />
@@ -336,7 +305,6 @@ const styles = StyleSheet.create({
   },
   formPhotoCameraFunctionsContainer: {
     flexDirection: 'row',
-    // justifyContent: 'flex-end',
     justifyContent: 'space-between',
     marginVertical: responsiveWidth(18)
   },
@@ -349,10 +317,7 @@ const styles = StyleSheet.create({
   formCameraContainer: {
     height: '100%',
     width: '100%',
-    // padding: responsiveWidth(8),
-    // flex: 1,
     position: "absolute",
-    // zIndex: 1,
     top: 0,
     bottom: 0,
     right: 0,
@@ -376,12 +341,10 @@ const styles = StyleSheet.create({
   photoArrow: {
     position: 'absolute',
     top: '45%',
-    // marginHorizontal: responsiveWidth(8),
     height: responsiveWidth(40),
     width: responsiveWidth(40),
     alignItems: 'center',
-    justifyContent: 'center',
-    // backgroundColor: 'yellow'
+    justifyContent: 'center'
   },
   photoArrowLeft: {
     zIndex: 1,

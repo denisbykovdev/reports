@@ -4,7 +4,6 @@ import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
 import AppStack from "./AppStack";
 import AuthStack from "./AuthStack";
 import { createStackNavigator } from "@react-navigation/stack";
-import { StateInspector } from "reinspect";
 import { Text, Platform, StyleSheet } from 'react-native'
 
 const typography = () => {
@@ -29,13 +28,11 @@ export default function Router() {
   const RouterStack = createStackNavigator();
 
   return (
-    <StateInspector>
       <NavigationContainer>
         <RouterStack.Navigator headerMode="none">
           <RouterStack.Screen name="AuthStack" component={AuthStack} />
           <RouterStack.Screen name="AppStack" component={AppStack} />
         </RouterStack.Navigator>
       </NavigationContainer>
-    </StateInspector>
   );
 }

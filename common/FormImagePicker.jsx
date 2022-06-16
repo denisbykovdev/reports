@@ -35,9 +35,9 @@ const FormImagePicker = ({ name, style, isModal = false }) => {
                 // console.log(result.base64);
 
                 if (result) {
-                    setImage(result.base64);
+                    setImage( `data:image/png;base64,${result.base64}`);
                     setFieldTouched(name)
-                    setFieldValue(name, result.base64)
+                    setFieldValue(name, `data:image/png;base64,${result.base64}`)
                     isModal === false && isChecked && setChecked(false)
                 }
             }

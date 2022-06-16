@@ -6,10 +6,10 @@ export default {
     name: "שם",
 
     id: "מזהה בדיקה",
-    status: "סטטוס",
-    customer_name: "מספר לקוח",
-    customer_full_name: "לקוח",
-    report_adress: "כתובת",
-    examination_date: "תאריך",
-    tester_name: "שם העורך"
+    status: "שם הפרויקט",
+    customer_name: "סטטוס",
+    customer_full_name: "תאריך",
+    report_adress: "מס' לקוח",
+    examination_date: "שם הבודק",
+    tester_name: "לקוח"
 };

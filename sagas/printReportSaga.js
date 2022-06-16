@@ -21,7 +21,7 @@ export function* printReportSaga(action) {
         );
 
         yield put(printReportSuccess(
-            data.data
+            data.data.url
         ))
 
         // yield put(offlineActionCreators.connectionChange(false))

@@ -12,7 +12,17 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './store';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import AppLoading from 'expo-app-loading';
+import {LogBox} from "react-native";
+
+LogBox.ignoreLogs([
+"ViewPropTypes will be removed",
+"ColorPropType will be removed",
+]);
+LogBox.ignoreLogs([
+  "exported from 'deprecated-react-native-prop-types'.",
+]);
+LogBox.ignoreLogs(['EventEmitter.removeListener']);
+
 import {
   useFonts,
   Roboto_100Thin,
@@ -50,23 +60,20 @@ export default function App() {
     Roboto_900Black_Italic,
   });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  } else {
-    return (
-      <TypeProvider>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <AuthProvider>
-              <CheckedProvider>
-                <DefectsProvider>
-                  <Router />
-                </DefectsProvider>
-              </CheckedProvider>
-            </AuthProvider>
-          </PersistGate>
-        </Provider >
-      </TypeProvider>
-    )
-  }
-}
+  return (
+    <TypeProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <AuthProvider>
+            <CheckedProvider>
+              <DefectsProvider>
+                <Router />
+              </DefectsProvider>
+            </CheckedProvider>
+          </AuthProvider>
+        </PersistGate>
+      </Provider >
+    </TypeProvider>
+  )
+};
+

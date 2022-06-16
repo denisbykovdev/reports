@@ -101,16 +101,16 @@ export default function Problem({
             problemId: problem.id,
             problemKey: name,
             problemNewValue: text
-        })
-    }
+        });
+    };
 
     const deleteProblem = () => {
         defectsDispatch({
             type: "DELETE_PROBLEM",
             areaId,
             problemId: problem.id
-        })
-    }
+        });
+    };
 
     const setProblemForPrintHandler = () => {
         setProblemForPrint(!isProblemForPrint)
@@ -132,7 +132,7 @@ export default function Problem({
                 problemNewValue: true
             })
         }
-    }
+    };
 
     return (
         // <ProfsProvider>
@@ -428,7 +428,7 @@ export default function Problem({
                                                 standart.image && standart.image.length >= 1
                                                     ? <Image
                                                         // source={{ uri: standart.image }}
-                                                        source={{ uri: `data:image/png;base64,${standart.image}` }}
+                                                        source={{ uri: `${standart.image}` }}
                                                         style={{
                                                             height: responsiveWidth(73),
                                                             width: responsiveWidth(68),

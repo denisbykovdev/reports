@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useRef, useState } from "react"
 import { Platform, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import AvoidingView from "../common/AvoidingView"
 import HeaderView from "../common/HeaderView"
@@ -34,7 +34,17 @@ import { ReportSchema } from "../constants/validationSchema"
 import Tick from "../icons/Tick"
 import { useEffect } from "react"
 import useInterval from "../hooks/useInterval"
-import { useState } from "reinspect"
+
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs([
+    "ViewPropTypes will be removed",
+    "ColorPropType will be removed",
+]);
+LogBox.ignoreLogs([
+    "exported from 'deprecated-react-native-prop-types'.",
+]);
+LogBox.ignoreLogs(['EventEmitter.removeListener']);
 
 const menuTitles = [
     {
@@ -180,7 +190,7 @@ const ReportScreen = ({ route }) => {
                     areas={
                         // route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null
                         reportSelector && reportSelector.areas
-                            && reportSelector.areas
+                        && reportSelector.areas
                     }
                 // reportId={
                 //     route.params && route.params.report && route.params.report.id !== null ? route.params.report.id : autoId !== null ? autoId : null
@@ -211,7 +221,7 @@ const ReportScreen = ({ route }) => {
                     areas={
                         // route.params && route.params.report && route.params.report.areas.length >= 0 ? route.params.report.areas : null
                         reportSelector && reportSelector.areas
-                            && reportSelector.areas
+                        && reportSelector.areas
                     }
                 // reportId={
                 //     route.params && route.params.report && route.params.report.id !== null ? route.params.report.id : autoId !== null ? autoId : null
@@ -251,13 +261,13 @@ const ReportScreen = ({ route }) => {
     useInterval(
         () => {
             if (!isChecked) {
-                formikRef.current.submitForm() 
-                && setAutoMod(true)
+                formikRef.current.submitForm()
+                    && setAutoMod(true)
             }
         },
         // 120000
-        Platform.OS === 'ios' 
-            ? 120000 
+        Platform.OS === 'ios'
+            ? 120000
             : 59000
     );
 
@@ -266,11 +276,15 @@ const ReportScreen = ({ route }) => {
             type: "CLEAR_AREAS"
         });
 
-        defectsDispatch({
-            type: "ADD_REPORT_AREAS",
-            reportAreas: reportSelector.areas
-        });
-
+        if (
+            route.params.reportId !== null &&
+            reportSelector.areas.length > 0
+        ) {
+            defectsDispatch({
+                type: "ADD_REPORT_AREAS",
+                reportAreas: reportSelector.areas
+            });
+        };
     }, []);
 
     return (
