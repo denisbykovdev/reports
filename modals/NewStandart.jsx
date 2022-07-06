@@ -43,7 +43,8 @@ export default function NewStandart({
             await standartsDispatch({
                 type: "POST_NEW_STANDART",
                 token,
-                standart: values
+                text: values.text,
+                image: values.image
             })
         }else{
             await standartsDispatch({

@@ -54,7 +54,6 @@ export default function FormPhotoCamera({
   const [openCam, setOpenCam] = useState(false);
 
   const [images, setImages] = useState(values[name] ? [...values[name]] : []);
-  // const [images, setImages] = useState([]);
 
   const [selected, setSelected] = useState(0);
 
@@ -73,7 +72,7 @@ export default function FormPhotoCamera({
   }, [routeImage]);
 
   useEffect(() => {
-    if (routeBase64 && values.image) {
+    if (routeBase64 && values.images) {
       setFieldValue(name, [
         ...values[name].map(
           (im, i) => i === values[name].length - 1
@@ -85,13 +84,12 @@ export default function FormPhotoCamera({
   }, [routeBase64]);
 
   useEffect(() => {
+    console.log("--- FormPhoto/values[name]:", values[name]);
+
     if (values[name] && values[name].length > 0) {
       setSelected(values[name][0])
-    }
-    console.log(
-      `--- images:`
-    );
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -147,13 +145,16 @@ export default function FormPhotoCamera({
     // setImages([...images.filter((image, i) => i !== selected)])
     setImages([...images.filter((image, i) => i !== carouselRef?.current?.currentIndex)]);
 
-    setFieldValue(name, [...values.slice(0, values.length - 1)]);
+    // setFieldValue(name, [...values.slice(0, values.length - 1)]);
+    setFieldValue(name, [...values[name].filter((image, i) => i !== carouselRef?.current?.currentIndex)]);
 
-    interSepter && interSepter(name, [...values.slice(0, values.length - 1)]);
+    interSepter && interSepter(name, [...values[name].filter((image, i) => i !== carouselRef?.current?.currentIndex)]);
 
-    setSelected(selected + 1);
+    
+    setSelected(images[images.length - 2]);
 
-    carouselRef?.current?.onSnapToItem(selected);
+    console.log(`DELETE PHOTO`, selected, images)
+    // carouselRef?.current.onSnapToItem(2);
   };
 
   const editPhoto = () => {
@@ -247,15 +248,12 @@ export default function FormPhotoCamera({
             />
         }
       </View>
-
       <View style={styles.formPhotoCameraFunctionsContainer}>
-
         <View style={styles.photoCounterContainer}>
           <Text style={styles.photoCounterText}>
             {carouselRef?.current?.currentIndex === undefined || 0 || null || images.length === 0 ? 0 : carouselRef.current.currentIndex + 1} / {images.length}
           </Text>
         </View>
-
         <View style={styles.formPhotoCameraButtonsContainer}>
           {
             values[name] &&

@@ -2,7 +2,7 @@
   "expo": {
     "name": "reports",
     "slug": "reports",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "splash": {
@@ -20,7 +20,7 @@
       "supportsTablet": true,
       "usesAppleSignIn": true,
       "bundleIdentifier": "com.eitanperetz.reports",
-      "buildNumber": "1.0.3"
+      "buildNumber": "1.0.4"
     },
     "android": {
       "adaptiveIcon": {
@@ -33,7 +33,7 @@
         "WRITE_EXTERNAL_STORAGE"
       ],
       "package": "com.eitanperetz.reports",
-      "versionCode": 3
+      "versionCode": 4
     },
     "web": {
       "favicon": "./assets/favicon.png"

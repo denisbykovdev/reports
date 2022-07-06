@@ -122,7 +122,7 @@ export const defectsReducer = (
                                         details_of_eclipse: null,
                                         cost: null,
                                         // image: null,
-                                        image: [],
+                                        images: [],
                                         standarts: [],
                                         isSavedToReport: true,
                                         solution: null

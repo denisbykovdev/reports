@@ -75,6 +75,7 @@ export const standartsReducer = (
                 }
             );
         case "POST_NEW_STANDART":
+            // console.log(`***POST_NEW_STANDART/action:`, action.standart.text)
             return UpdateWithSideEffect(
                 {
                     ...state,
@@ -86,7 +87,8 @@ export const standartsReducer = (
                         const response = await axios.post(
                             `${createStandart}`,
                             {
-                                ...action.standart
+                                text: action.text,
+                                image: action.image
                             },
                             {
                                 headers: {

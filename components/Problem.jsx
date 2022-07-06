@@ -11,9 +11,8 @@ import CircleArrowUp from "../icons/CircleArrowUp"
 import Tick from "../icons/Tick"
 import colors from "../utils/colors"
 import fonts from "../utils/fonts"
-import layout, { responsiveHeight, responsiveWidth } from "../utils/layout"
+import layout, { responsiveWidth } from "../utils/layout"
 import weights from "../utils/weights"
-import Copy from "../icons/Copy"
 import FormPhotoCamera from "../common/FormPhotoCamera"
 import FormContainer from "../common/FormContainer"
 import FormButton from "../common/FormButton"
@@ -25,22 +24,15 @@ import Professions from "../modals/Professions"
 import useProfs from "../hooks/useProfs"
 import useType from "../hooks/useType"
 import useAuth from "../hooks/useAuth"
-import { useEffect } from "react"
-import { useCallback } from "react"
-import ProfsProvider from "../providers/ProfsProvider"
-
-const testArray = ['one', 'two', 'three']
 
 export default function Problem({
     problem,
     areaId,
     areaName,
-    // serverArea,
     defectsDispatch,
     isSample = false,
     setEdit
 }) {
-
     const [isProblemOpen, setProblemOpen] = useState(false)
 
     const [isProblemForPrint, setProblemForPrint] = useState(problem.isSavedToReport)
@@ -59,7 +51,7 @@ export default function Problem({
 
     const { authState } = useAuth()
 
-    const { token } = authState;
+    const { token } = authState
 
     const submitProblem = async (values) => {
         console.log(
@@ -75,13 +67,15 @@ export default function Problem({
                 type: "UPDATE_SERVER_PROBLEM",
                 token,
                 problem: { ...values, standarts: [...problem.standarts] },
-                problemName: problem.name
+                problemName: problem.name,
+                isSavedToReport: false
             });
             await defectsDispatch({
                 type: "UPDATE_PROBLEM_IN_SERVER_AREA",
                 token,
                 areaProblem: { ...values, standarts: [...problem.standarts] },
                 problemName: problem.name,
+                isSavedToReport: false,
                 areaName
             });
         }
@@ -89,7 +83,7 @@ export default function Problem({
             await problemsDispatch({
                 type: "POST_SERVER_PROBLEM",
                 token,
-                problem: { ...values, standarts: [...problem.standarts] }
+                problem: { ...values, standarts: [...problem.standarts], isSavedToReport: false }
             })
         }
     }
@@ -135,7 +129,6 @@ export default function Problem({
     };
 
     return (
-        // <ProfsProvider>
         <View
             style={styles.problemContainer}
         >
@@ -149,8 +142,8 @@ export default function Problem({
                     details_of_eclipse: problem.details_of_eclipse,
                     profession_name: problem.profession_name,
                     solution: problem.solution,
-                    image: problem.image,
-                    cost: problem.cost,
+                    images: problem.images,
+                    cost: problem.cost
                 }}
                 onSubmit={
                     (values) => submitProblem(values)
@@ -160,9 +153,10 @@ export default function Problem({
                     style={[
                         styles.problemHeader,
                         {
-                            backgroundColor: isProblemOpen ? colors.paleGrayBg : colors.white,
-                            borderRadius: 5,
-                            // flexDirection: 'column',
+                            backgroundColor: isProblemOpen
+                                ? colors.paleGrayBg
+                                : colors.white,
+                            borderRadius: 5
                         }
                     ]}
                 >
@@ -176,7 +170,6 @@ export default function Problem({
                         </TouchableOpacity>}
 
                     </View>
-
                     <View style={[styles.problemHeaderActions, {
                         flexDirection: type === 2 ? 'row-reverse' : 'column',
                         alignItems: type === 2 ? 'center' : 'flex-end',
@@ -189,7 +182,9 @@ export default function Problem({
                                 style={[
                                     styles.tickContainer,
                                     {
-                                        backgroundColor: problem.isSavedToReport ? colors.paleGrayBg : colors.white
+                                        backgroundColor: problem.isSavedToReport
+                                            ? colors.paleGrayBg
+                                            : colors.white
                                     }
                                 ]}
                             >
@@ -211,10 +206,8 @@ export default function Problem({
                                 }
                             </TouchableOpacity>
                         </View>
-
                         <TouchableWithoutFeedback onPress={() => setOpenName(!openName)}>
                             <View style={styles.problemHeaderActionsTitleGroup}>
-
                                 <TouchableOpacity onPress={() => setOpenName(!openName)}>
                                     {
                                         openName && isSample === false
@@ -250,20 +243,16 @@ export default function Problem({
                                 }
                             </View>
                         </TouchableWithoutFeedback>
-
                     </View>
                 </View>
-
                 {
                     isProblemOpen &&
                     <View>
-
                         <View style={{
                             flexDirection: type === 2 ? 'row-reverse' : 'column',
                             justifyContent: type === 2 ? 'space-between' : 'flex-start',
                             marginBottom: type === 2 ? responsiveWidth(18) : 0
                         }}>
-
                             <View style={{
                                 width: type === 2 ? '50%' : '100%'
                             }}>
@@ -329,7 +318,6 @@ export default function Problem({
                                     interSepter={interSepter}
                                 />
                             </View>
-
                             <View style={{
                                 width: type === 2 ? '40%' : '100%',
                                 alignItems: 'flex-end'
@@ -339,16 +327,15 @@ export default function Problem({
                                     title="תמונות"
                                 />
                                 <FormPhotoCamera
-                                    name="image"
+                                    name="images"
                                     interSepter={interSepter}
                                     setEdit={setEdit}
                                 />
                             </View>
-
                         </View>
-
-                        {type !== 2 && <Line />}
-
+                        {
+                            type !== 2 && <Line />
+                        }
                         <View
                             style={{
                                 width: type === 2 ? '50%' : '100%',
@@ -364,7 +351,6 @@ export default function Problem({
                                 name="cost"
                                 interSepter={interSepter}
                             />
-
                             <CommonButton
                                 title="הוספת תקן"
                                 borderRadius={20}
@@ -374,7 +360,9 @@ export default function Problem({
                                     padding: 0,
                                     paddingHorizontal: responsiveWidth(70),
                                     marginVertical: responsiveWidth(22),
-                                    paddingHorizontal: type === 2 ? responsiveWidth(18) : 0
+                                    paddingHorizontal: type === 2
+                                        ? responsiveWidth(18)
+                                        : 0
                                 }}
                                 titleStyle={{
                                     marginRight: 0
@@ -383,12 +371,7 @@ export default function Problem({
                                 onPress={() => standartsModalOpen()}
                                 buttonWidth={type === 2 ? 'auto' : '100%'}
                             />
-
-                            <StandartsModal
-                            // modalContentStyle={{
-                            //     width: type === 2 ? responsiveWidth(600) : 'auto'
-                            // }}
-                            >
+                            <StandartsModal>
                                 <Standarts
                                     standartsModalClose={standartsModalClose}
                                     areaId={areaId}
@@ -396,24 +379,35 @@ export default function Problem({
                                 />
                             </StandartsModal>
                         </View>
-
                         <ScrollView
-                            horizontal={type === 2 ? false : true}
+                            horizontal={
+                                type === 2
+                                    ? false
+                                    : true
+                            }
                             contentContainerStyle={{
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}
                         >
                             {
-                                problem.standarts && problem.standarts.length >= 0 && problem.standarts.map((standart, i) => (
+                                problem.standarts &&
+                                problem.standarts.length >= 0 &&
+                                problem.standarts.map((standart, i) => (
                                     <View
                                         key={i}
                                         style={[
                                             styles.problemStandartsContainer,
                                             {
-                                                flexDirection: type === 2 ? 'row' : 'column-reverse',
-                                                alignItems: type === 2 ? 'center' : 'flex-start',
-                                                width: type === 2 ? '100%' : 'auto'
+                                                flexDirection: type === 2
+                                                    ? 'row'
+                                                    : 'column-reverse',
+                                                alignItems: type === 2
+                                                    ? 'center'
+                                                    : 'flex-start',
+                                                width: type === 2
+                                                    ? '100%'
+                                                    : 'auto'
                                             }
                                         ]}
                                     >
@@ -425,9 +419,9 @@ export default function Problem({
                                             backgroundColor: colors.paleGrayBg
                                         }}>
                                             {
-                                                standart.image && standart.image.length >= 1
+                                                standart.image
+                                                    && standart.image.length >= 1
                                                     ? <Image
-                                                        // source={{ uri: standart.image }}
                                                         source={{ uri: `${standart.image}` }}
                                                         style={{
                                                             height: responsiveWidth(73),
@@ -438,10 +432,8 @@ export default function Problem({
                                                         height={responsiveWidth(42)}
                                                         width={responsiveWidth(38)}
                                                     />
-
                                             }
                                         </View>
-
                                         <View
                                             style={[
                                                 styles.problemStandartBody,
@@ -456,7 +448,9 @@ export default function Problem({
                                                 style={[
                                                     styles.problemStandartText,
                                                     {
-                                                        width: type === 2 ? '85%' : '90%'
+                                                        width: type === 2
+                                                            ? '85%'
+                                                            : '90%'
                                                     }
                                                 ]}
                                             >
@@ -465,7 +459,9 @@ export default function Problem({
                                             <Text
                                                 style={{
                                                     width: '10%',
-                                                    marginLeft: type === 2 ? responsiveWidth(10) : 0
+                                                    marginLeft: type === 2
+                                                        ? responsiveWidth(10)
+                                                        : 0
                                                 }}
                                             >
                                                 {'\u2B24'}
@@ -476,7 +472,6 @@ export default function Problem({
                                 ))
                             }
                         </ScrollView>
-
                         <FormButton
                             title="הוספת הליקוי והפתרון לארכיון"
                             borderRadius={20}
@@ -494,12 +489,10 @@ export default function Problem({
                             }}
                             titleColor={colors.darkSkyBlue}
                         />
-
                     </View>
                 }
             </FormContainer>
         </View>
-        // </ProfsProvider>
     )
 }
 
@@ -521,13 +514,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     problemHeaderActions: {
-        // alignItems: 'flex-end',
         maxWidth: '75%',
         justifyContent: "space-between"
     },
     problemHeaderActionsButtons: {
-        flexDirection: 'row',
-        // marginBottom: responsiveWidth(8)
+        flexDirection: 'row'
     },
     tickContainer: {
         height: responsiveWidth(24),
@@ -566,13 +557,10 @@ const styles = StyleSheet.create({
         marginBottom: responsiveWidth(24)
     },
     inputContainerArea: {
-        // padding: 0,
         height: responsiveWidth(69),
         borderColor: colors.darkWhite,
         borderWidth: responsiveWidth(2),
         borderRadius: 10,
-        // marginVertical: responsiveWidth(24),
-        // minHeight: responsiveHeight(69),
         textAlign: 'right'
     }
 })

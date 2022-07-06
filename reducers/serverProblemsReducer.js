@@ -7,34 +7,6 @@ export const serverProblemsInitial = {
     error: null,
 };
 
-const problemsStatic = [
-    {
-        id: 1,
-        name: "first",
-        profession_name: 'firstProfession1',
-        details_of_eclipse: 'firstDetails1',
-        cost: '1',
-        // image: 'https://reactnative.dev/img/tiny_logo.png',
-        image: [
-            'https://reactnative.dev/img/tiny_logo.png',
-
-            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
-        ],
-        solution: 'firstSolution1',
-        standarts: []
-    },
-    {
-        id: 2,
-        name: "second",
-        profession_name: 'secondProfession1',
-        details_of_eclipse: 'secondDetails1',
-        cost: '1',
-        image: [],
-        solution: 'secondSolution1',
-        standarts: []
-    }
-];
-
 export const serverProblemsReducer = (
     state = serverProblemsInitial,
     action
@@ -92,7 +64,6 @@ export const serverProblemsReducer = (
                     posting: true,
                     token: action.token
                 },
-
                 async (state, dispatch) => {
                     try {
                         const response = await axios.post(
@@ -106,7 +77,6 @@ export const serverProblemsReducer = (
                                 }
                             },
                         );
-
                         dispatch({
                             type: "SET_SERVER_PROBLEMS",
                             problems: [
@@ -201,41 +171,3 @@ export const serverProblemsReducer = (
                 });
     };
 };
-
-        // case "UPDATE_SERVER_PROBLEM_IN_SERVER_AREA":
-        //     return UpdateWithSideEffect(
-        //         {
-        //             ...state,
-        //             posting: true,
-        //             token: action.token
-        //         },
-
-        //         async (state, dispatch) => {
-        //             try {
-        //                 const response = await axios.post(
-        //                     `${updateAreaProblems(action.areaName)}`,
-
-        //                     {
-        //                         headers: {
-        //                             'Authorization': `Bearer ${action.token}`
-        //                         }
-        //                     },
-        //                     {
-        //                         area_name: action.areaName,
-        //                         // problem_name: action.problem.problemName,
-        //                         problems: action.problem
-        //                     }
-        //                 );
-
-        //                 dispatch({
-        //                     type: "SET_SERVER_PROBLEMS",
-        //                     problems: response.data.data
-        //                 })
-        //             } catch (error) {
-        //                 dispatch({
-        //                     type: "ERROR_SERVER_PROBLEMS",
-        //                     error
-        //                 })
-        //             }
-        //         }
-        //     )

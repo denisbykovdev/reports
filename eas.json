@@ -6,11 +6,7 @@
         "base": {
             "env": {}
         },
-        "development": {
-            "extends": "base",
-            "developmentClient": true,
-            "distribution": "internal",
-            "releaseChannel": "default",
+        "emulator": {
             "android": {
                 "buildType": "apk"
             }
